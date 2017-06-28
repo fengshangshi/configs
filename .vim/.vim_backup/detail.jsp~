@@ -1,0 +1,430 @@
+<%
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Cache-Control","no-store");
+	response.setDateHeader("Expires", 0);
+	response.setHeader("Pragma","no-cache");
+%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="com.quhuhu.apt.http.ds.outter.HotelOutter" %>
+<%@ page import="com.quhuhu.apt.http.ds.outter.RoomInfoOutter" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%
+	Map dataMap = (Map)request.getAttribute("data");
+	Map date = (Map)request.getAttribute("date");
+	String wts =(String) request.getAttribute("wts");
+	HotelOutter hotel = new HotelOutter() ;
+	RoomInfoOutter roomInfo = new RoomInfoOutter() ;
+	String hotelName = ""; // 酒店名称
+	if(dataMap != null && dataMap.get("hotel") != null) {
+		hotel = (HotelOutter)dataMap.get("hotel");
+		hotelName = hotel.getHotelName().replace("\'", "\\\'");
+	}
+	String roomTypeName = ""; // 公寓名称
+	if(dataMap != null && dataMap.get("roomInfo") != null) {
+		roomInfo = (RoomInfoOutter)dataMap.get("roomInfo");
+		roomTypeName = roomInfo.getRoomTypeName().replace("\'", "\\\'");
+	}
+	// 个性化房型名
+	String specialRoomTypeName = ""; 
+	if (roomInfo.getSpecialRoomTypeName() != null) {
+	    specialRoomTypeName = roomInfo.getSpecialRoomTypeName().trim();
+	    specialRoomTypeName = specialRoomTypeName.replace("\'", "\\\'");
+	}
+	// 获得当前detail的request_id
+	String detailRequestId = request.getAttribute("_APT_DETAIL_REQUESTID").toString();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>${data.hotel.hotelName}${data.roomInfo.roomTypeName}-${data.hotel.cityName}公寓短租预订-去哪儿网Qunar.com</title>
+		<meta name="keywords" content="${data.hotel.cityName}${data.hotel.hotelName}${data.roomInfo.roomTypeName},${data.hotel.cityName}${data.hotel.hotelName}${data.roomInfo.roomTypeName}预订,${data.hotel.cityName}${data.hotel.hotelName}${data.roomInfo.roomTypeName}价格" />
+		<meta name="description" content="${data.hotel.cityName}${data.hotel.hotelName}${data.roomInfo.roomTypeName}${data.hotel.feature}" />
+		<link rel="stylesheet" href="http://qunarzz.com/apt_web/prd/styles/detail@<%@include file="ver/styles/detail.css.ver" %>.css" />
+		<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?1dac56f5532e14d5fd9e94b9f306d334";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+		</script>
+		<script>
+		var _apt_home_request_id = '';
+		var _apt_search_request_id = '';
+		var _apt_detail_request_id = '<%=detailRequestId%>';
+		</script>
+		<!--[if IE 6]>
+			<script type="text/javascript" src="http://qunarzz.com/js/compatibilityUtils/build/DD_belatedPNG-min.js"></script>
+			<script type="text/javascript">
+			DD_belatedPNG.fix('.png24');
+			</script>
+		<![endif]-->
+	</head>
+	<body class="page page-detail">
+	
+        <div class="g-header">
+			<%@include file="/include_html/prd/gongyu/header_styles.html"%>
+			<div class="q_header q_header_gongyu page_header_gongyu">
+			<%@include file="/include_html/prd/gongyu/header_main.html"%>
+			</div>
+		</div>
+		
+		<div class="g-wrapper">
+		
+			<!-- breadcrumb:s -->
+			<div class="g-breadcrumb">
+				<ul class="fn-clear">
+					<li><a href="/" class="blue" id="linkHome" target="_blank" >公寓首页</a></li>
+					<li><span>&gt;</span></li>
+					<li><a target="_blank" href="/roomType/t/list?cityName=${data.hotel.cityName}&cityCode=${data.hotel.cityCode}&checkInTime=${date.checkInTime}&checkOutTime=${date.checkOutTime}" class="blue j-cityName">${data.hotel.cityName}公寓</a></li>
+					<li><span>&gt;</span></li>
+					<li><a href="/roomType/t/list?cityName=${data.hotel.cityName}&cityCode=${data.hotel.cityCode}&checkInTime=${date.checkInTime}&checkOutTime=${date.checkOutTime}&areaNameGlobal=${data.hotel.area}_2" class="blue" target="_blank" >${data.hotel.areaName}</a></li>
+					<li><span>&gt;</span></li>
+					<c:if test="${!empty data.roomInfo.specialRoomTypeName }">
+						<li>${data.roomInfo.specialRoomTypeName }</li>
+					</c:if>
+					<c:if test="${empty data.roomInfo.specialRoomTypeName }">
+						<li>${data.hotel.hotelName}${data.roomInfo.roomTypeName}</li>
+					</c:if>
+				</ul>
+			</div>
+			<!-- breadcrumb:e -->
+	
+			<!-- hotelinfo:s -->
+			<div class="g-hotelinfo">
+				<div class="g-hotelinfo-title">
+					<c:if test="${!empty data.roomInfo.specialRoomTypeName }">
+						<span class="title" title="${data.roomInfo.specialRoomTypeName }">${data.roomInfo.specialRoomTypeName }</span>
+					</c:if>
+					<c:if test="${empty data.roomInfo.specialRoomTypeName }">
+						<span class="title" title="${data.hotel.hotelName}${data.roomInfo.roomTypeName}">${data.hotel.hotelName}${data.roomInfo.roomTypeName}</span>
+					</c:if>
+					
+					<c:if test="${data.roomInfo.goldenRoom == '1'}">
+						<span class="icon-choiceness" title="该房源符合我们的精选房源标准，能够为您提供优质的服务和硬件设施，我们特别为您推荐该房源。"></span>
+					</c:if>
+					<c:if test="${!empty data.roomInfo.hasLock && data.roomInfo.hasLock == '1'}">
+						<span class="icon-smartLock" title="本房间配置有去呼呼智能门锁，实时监控房态，保障您的预订成功率。"></span>
+					</c:if>
+		
+				</div>
+				<div class="g-hotelinfo-param" id="g-hotelinfo-param">
+					<ul class="fn-clear" id="g_hotelinfo_top">
+						<!-- 
+						<c:if test="${!empty data.hotel.tradingName}">
+							<li>[<a  target="_blank" href="/roomType/t/list?cityName=${data.hotel.cityName}&cityCode=${data.hotel.cityCode}&checkInTime=${date.checkInTime}&checkOutTime=${date.checkOutTime}&areaNameGlobal=${data.hotel.trading}_1" class="blue">${data.hotel.tradingName}</a>]</li>
+						</c:if>
+						<c:if test="${empty data.hotel.tradingName}">
+							<li>[<a  target="_blank" href="/roomType/t/list?cityName=${data.hotel.cityName}&cityCode=${data.hotel.cityCode}&checkInTime=${date.checkInTime}&checkOutTime=${date.checkOutTime}&areaNameGlobal=${data.hotel.area}_2" class="blue">${data.hotel.areaName}</a>]</li>
+						</c:if>
+						<li class="g-hotelinfo-param-li" title="${data.hotel.address}">${data.hotel.address}</li>
+						 -->
+						<c:if test="${!empty data.roomInfo.specialRoomTypeName }">
+							<li><span>${data.hotel.hotelName} • ${data.roomInfo.roomTypeName}</span></li>
+						</c:if>
+						<c:if test="${empty data.roomInfo.specialRoomTypeName }">
+							<li><span>${data.hotel.hotelName}</span></li>
+						</c:if>
+					</ul>
+					<!--<c:if test="${(fn:length(data.hotel.address) + fn:length(data.hotel.tradingName)) > 35 }">
+						<ul class="fn-clear g-hotelinfo-bottom"  id="g_hotelinfo_bottom">
+							<c:if test="${data.roomInfo.goldenRoom == '1'}">
+								<li>
+									<span class="icon-choiceness" title="该房源符合我们的精选房源标准，能够为您提供优质的服务和硬件设施，我们特别为您推荐该房源。"></span>
+								</li>
+							</c:if>
+							<c:if test="${!empty data.roomInfo.hasLock && data.roomInfo.hasLock == '1'}">
+								<li>
+									<span class="icon-smartLock" title="本房间配置有去呼呼智能门锁，实时监控房态，保障您的预订成功率。"></span>
+								</li>
+							</c:if>
+						</ul>
+					</c:if>	-->
+				</div>
+				<div class="g-totil-booking fn-clear" id="g-totil-booking">
+					
+				</div>
+			</div>
+			<!-- hotelinfo:e -->
+	
+			<!-- hotelwrapper:s -->
+			<div class="g-hotelwrapper fn-clear">
+	
+				<!-- left:s -->
+				<div class="g-left">
+	
+					<!-- hotel-photo:s -->
+					<div class="g-hotel-photo" id="hotelPhoto" ms-controller="hotelphoto" ms-include-src="'hotelphoto'">
+						<div class="loading"></div>
+					</div>
+					<!-- hotel-photo:e -->
+					<!-- preferential:sgy -->
+					<div class="preferential" id="preferential">
+						<div id="preferential-content-left"></div>
+						<div id="preferential-content-right">
+							<span>更多优惠</span>
+							<div class="preferential-ceng" id="preferential-ceng">
+								<div class="preferential-ceng-content" id="preferential-ceng-content"></div>
+								<div class="preferential-ceng-xia"></div>
+							</div>
+						</div>
+					</div>
+					<!-- end:sgy -->
+				</div>
+				<!-- left:e -->
+	
+				<!-- right:s -->
+				<div class="g-right">
+	
+					<!-- booking:s -->
+					<div class="g-booking-simple g-booking-simple-query" id="_booking">
+						<div class="booking-wrapper fn-clear" id="_booking-wrapper"></div>
+						<div class="rightInfo fn-clear" id="rightInfo"></div>
+					</div>
+					<!-- booking:e -->
+					
+					<!-- likereason:s -->
+					<div id="likereason"></div>
+					<!-- likereason:e -->
+					
+					<!-- 原来的地址移到这个位置 -->
+					<p class="css-origin-addr">
+						<c:if test="${!empty data.hotel.tradingName}">
+							[<a  target="_blank" href="/roomType/t/list?cityName=${data.hotel.cityName}&cityCode=${data.hotel.cityCode}&checkInTime=${date.checkInTime}&checkOutTime=${date.checkOutTime}&areaNameGlobal=${data.hotel.trading}_1" class="blue">${data.hotel.tradingName}</a>]
+						</c:if>
+						<c:if test="${empty data.hotel.tradingName}">
+							[<a  target="_blank" href="/roomType/t/list?cityName=${data.hotel.cityName}&cityCode=${data.hotel.cityCode}&checkInTime=${date.checkInTime}&checkOutTime=${date.checkOutTime}&areaNameGlobal=${data.hotel.area}_2" class="blue">${data.hotel.areaName}</a>]
+						</c:if>
+						<span title="${data.hotel.address}">${data.hotel.address}</span>
+					</p>
+					<!-- likereason:s -->
+					<!-- landlord:s -->
+					<div class="rightMapWrapper">
+						<div id="rightMap" class="rightMap"></div>
+						<a class="jumpToMap" href="#toMap" id="jumpToMap"></a>
+						<!-- <div class="rightMapIcon"></div> -->
+						<!-- <div class="rightMaptext">查看位置与周边</div> -->
+					</div>
+	
+				</div>
+				<!-- right:e -->
+
+				<!-- price:s -->
+				<div class="g-price">
+					<!-- booking:s -->
+					<div class="g-booking g-booking-query" id="booking">
+						<form action="${wts}order/orderForm.do" method="get" target="_blank"  id="bookingForm">
+							<input type="hidden" name="hotelNo" value="" id="qhotelNO">
+							<input type="hidden" name="roomTypeNo" id="qroomTypeNo">
+							<input type="hidden" name="from" id="qfrom">
+							<input type="hidden" name="checkinTime" id="qcheckinTime">
+							<input type="hidden" name="checkoutTime" id="qcheckoutTime">
+							<input type="hidden" name="price" id="qprice">
+							<input type="hidden" name="pricecut" id="qpricecut">
+							<input type="hidden" name="deposits" id="qdeposits">
+							<input type="hidden" name="scale" id="qscale">
+							<input type="hidden" name="pricePlanCode" id="qpricePlanCode">
+							<input type="hidden" name="cityCode" id="qcityCode" value="${data.hotel.cityCode}">
+							<input type="hidden" name="searchQuery" id="qsearchQuery">
+							<input type="hidden" name="aptHomeId" id="qaptHomeId">
+							<input type="hidden" name="aptSearchId" id="qaptSearchId">
+							<input type="hidden" name="aptDetailId" id="qaptDetailId">
+							<input type="hidden" name="type" id="qtype">
+							<input type="hidden" name="pricePlanType" id="qpricePlanType">
+							<input type="hidden" name="cityName" id="qcityName" value="${data.hotel.cityName}">
+						</form>
+							<div class="booking-wrapper" id="toBooking">
+								<div class="booking-date">
+									<div class="booking-date-text">入住</div>
+									<div class="booking-date-item">
+										<input type="text" class="input-date" value="${date.checkInTime}" readonly="readonly" id="checkInDate">
+									</div>
+									<div class="booking-date-text">退房</div>
+									<div class="booking-date-item">
+										<input type="text" class="input-date" value="${date.checkOutTime}" readonly="readonly" id="checkOutDate">
+									</div>
+									<div class="subDate" id="subDate">
+										确认
+									</div>
+									<div class="booking-date-longago png24" id="booking-date-longago">
+										
+									</div>
+								</div>
+								<div class="booking-handle" id="booking-handle">
+									<div class="booking-loading">查询中...</div>
+								</div>
+								<div class="booking-preferential-wrapper fn-clear" id="booking-preferential-wrapper">
+								
+								</div>
+							</div>
+					</div>
+					<!-- booking:e -->
+				</div>
+				<!-- price:e -->
+
+				<!-- bottom:s -->
+				<div class="g-bottom">
+					<div class="g-bottom-left">
+						<!-- hotel-nav:s -->
+						<div class="g-hotel-nav-wrapper" id="hotelNavWrapper">
+							<div class="g-hotel-nav" id="hotelNav">
+								<ul class="fn-clear">
+									<li><a href="#landlordContent" class="active">房东及房源描述</a></li>
+									<li><a class="toDetail" href="#toDetail" class="active">入住须知</a></li>
+									<li><a href="#toFacility">设施及服务</a></li>
+									<li><a href="#toMap">位置及周边</a></li>
+									<li><a href="#toComment">客人评价</a></li>
+								</ul>
+								<div class="right-scroll-wrapper" id="right-scroll-wrapper">
+								
+								</div>
+							</div>
+						</div>
+						<!-- hotel-nav:e -->
+
+						<!-- landlord:s -->
+						<div id="landlordContent"></div>
+						<!-- landlord:e -->
+		
+						<!-- hotel-detail:s -->
+
+						<!-- stayNotice:s -->
+						<div id="stayNotice"></div>
+						<!-- stayNotice:e -->
+
+						<!-- <div class="g-hotel-panel" id="hotelDetail">
+							<div class="panel-body-border">
+								<div class="panel-body fn-clear">
+									<div id="hotelDetailContent"></div>
+								</div>
+							</div>
+						</div> -->
+						<!-- hotel-detail:e -->
+		
+						<!-- hotel-facility:s -->
+						<div class="g-hotel-panel" id="hotelFacility">
+							<div class="panel-head">设施</div>
+							<div class="panel-body-border">
+								<div class="panel-body">
+									<div id="hotelFacilityIcon" class="hotelFacilityIcon"></div>
+									<div id="hotelFacilityContent"></div>
+								</div>
+							</div>
+						</div>
+						<!-- hotel-facility:e -->
+		
+						<!-- hotel-map:s -->
+						<div class="g-hotel-panel" id="hotelMap">
+							<div class="panel-head">位置与周边</div>
+							<div class="panel-body-border">
+								<div class="panel-body  fn-clear">
+									<div class="g-hotel-map">
+										<div class="baidu-map" id="map">
+											<div class="loading"></div>
+										</div>
+										<a class="toHotelMap" id="toHotelMap" href="#" target="_blank">查看交通详情</a>
+										<div class="toHotelMapBg"></div>
+									</div>
+									<div class="map-button-wrapper">
+										<div class="map-button" id="map-button">
+											<ul class="fn-clear">
+												<li><a href="javascript:;" class="traffic" data-name="公交、地铁"></a></li>
+												<li><a href="javascript:;" class="scenic" data-name="景点"></a></li>
+												<li><a href="javascript:;" class="cate" data-name="餐饮"></a></li>
+											</ul>
+											<div class="around">附近3.0公里内的<i></i></div>
+										</div>
+										<div class="map-round-icon fn-clear" id="map-round-icon">
+											<ul class="fn-clear"></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="getAddress" id="getAddress">
+								
+							</div>
+							
+						</div>
+						<!-- hotel-map:e -->
+		
+						<!-- hotel-comment:s -->
+						<div class="g-hotel-panel" id="hotelComment">
+							<div class="panel-head">客人评价</div>
+							<div class="panel-body-border">
+								<div class="panel-body">
+									<div id="hotelCommentContent"></div>
+								</div>
+							</div>
+						</div>
+						<!-- hotel-comment:e -->
+						
+						<!-- other-rooms:s -->
+						<div id="otherRoomsB" class="otherRoomsB"></div>
+						<!-- other-rooms:e -->
+					</div>
+					<div class="g-bottom-right">
+						<!-- other-rooms:s -->
+						<div id="otherRoomsA"></div>
+						<!-- other-rooms:e -->
+	
+						<!-- record:s -->
+						<div id="record"></div>
+						<!-- record:e -->
+					</div>
+				</div>
+				<!-- bottom:e -->
+			</div>
+			<!-- hotelwrapper:e -->
+			
+		</div>
+ 		<div class="g-icons g-icons-list">
+			<ul>
+				<li class="g-icons-text">智能安心住，乐享去呼呼</li>
+				<li class="g-icons-weixin" id="g-icons-weixin"><a><span></span></a></li>
+				<li class="g-icons-weibo"><a href="http://weibo.com/quhuhu" target="_blank" title="去呼呼的微博"><span></span></a></li>
+				<li class="g-icons-youku"><a href="http://i.youku.com/u/UMTYyNjk3Njg3Mg==" target="_blank" title="去呼呼梦想家"><span></span></a></li>
+			</ul>
+			<div class="g-icons-weixinpng" id="g-icons-weixinpng"></div>
+		</div>
+		
+  	   	<div class="g-footer-partner">去呼呼是去哪儿网旗下非标准住宿品牌，致力于打造全国最大的住宿预订平台，该平台由北京云端漫行软件科技有限公司负责运营</div>
+		  <div class="qn_footer">
+		<%@include file="/include_html/footer/footer_public.html"%>
+		</div>
+
+		<!-- script:s -->
+		<script type="text/javascript">
+			var BASE_PATH = '<%=request.getContextPath()%>';
+			var SERVER_DATE = '<%=date.get("current")%>';
+			var HOTEL_INFO = {};
+			HOTEL_INFO['realHotelNo'] = '<%=hotel.getRealHotelNo()%>';
+			HOTEL_INFO['hotelSeq'] = '<%=hotel.getqHotelSeq()%>';
+			HOTEL_INFO['bigMapUrl'] = 'http://hotel.qunar.com/hbmap/index.jsp?tab=position&seq=<%=hotel.getqHotelSeq()%>&q=&haspoi=0';
+			HOTEL_INFO['hotelNo'] = '<%=hotel.getHotelNo()%>';
+			HOTEL_INFO['hotelName'] = '<%=hotelName%>';
+			HOTEL_INFO['roomTypeName'] = '<%=roomTypeName%>';
+			HOTEL_INFO['specialRoomTypeName'] = '<%=specialRoomTypeName%>';
+			HOTEL_INFO['roomTypeNo'] = '<%=roomInfo.getRoomTypeNo()%>';
+			HOTEL_INFO['cityCode'] = '<%=hotel.getCityCode()%>';
+			HOTEL_INFO['baiduPoint'] = '<%=hotel.getBaiduPonit()%>';
+			HOTEL_INFO['photoData'] = [];
+			<c:forEach items="${data.photoData}" var="item" varStatus="status">
+			HOTEL_INFO['photoData'][${status.index}] = { imgId : ${status.index}, smallUrl : '${item.smallUrl}', middleUrl : '${item.middleBigUrl}', fullUrl : '${item.fullUrl}', tag : '${item.tag}'};
+			</c:forEach>
+		</script>
+
+		<script>
+			var realHotel = '${data.roomInfo.realHotelNo}';
+		</script>
+		<script type="text/javascript" src="http://qunarzz.com/apt_web/prd/scripts/base@<%@include file="ver/scripts/base.js.ver" %>.js"></script>
+		<script src="/te/render/te"></script>
+		<script type="text/javascript" src="http://te.qunarzz.com/apt_web/prd/scripts/detail@<%@include file="ver/scripts/detail.js.ver" %>.js"></script>
+		
+		<!-- script:e -->
+	</body>
+</html>

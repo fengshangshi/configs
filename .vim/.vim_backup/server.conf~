@@ -1,0 +1,6 @@
+template ^\/sky-mobile\/?$ sky-mobile/page/index.tpl
+
+rewrite ^\/api\/get_flight_info_list_by_search /test/sky-mobile/ajax/get_flight_list_by_search.json
+rewrite ^\/api\/get_flight_info_by_no /test/sky-mobile/ajax/get_flight_info_by_no.json
+rewrite ^\/api\/get_flight_active_by_no /test/sky-mobile/ajax/get_flight_active_by_no.json
+rewrite ^\/api\/get_flight_active_list_by_coordinate /test/sky-mobile/ajax/get_flight_active_list_by_coordinate.json

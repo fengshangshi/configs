@@ -1,0 +1,104 @@
+fis.config.set("modules.postprocessor.tpl", "amd");
+fis.config.set("modules.postprocessor.js", "amd");
+fis.config.set('modules.packager', 'depscombine');
+
+fis.config.merge({
+	namespace: "sky-mobile",
+	pack: {
+		"static/pkg/aio.css": [
+			"static/libs/base.css",
+			"static/layout/layout.css",
+			"static/index/**.css",
+			/\/widget\/.*\.css$/i
+		],
+		"static/pkg/aio.js": [
+			"static/libs/mod-amd.js",
+			"static/index/index.js",
+			"static/layout/index.js",
+			/\/widget\/.*\.js$/i
+		]
+	},
+    deploy: {
+        //使用fis release --dest static来使用这个配置
+        online: [
+            {
+                //如果配置了receiver，fis会把文件逐个post到接收端上
+				receiver: 'http://nj02-bdg-skyeye-odp03.nj02.baidu.com:8678/static/receive.php',
+                //从产出的结果的static目录下找文件
+                from: '/static',
+                //上传目录从static下一级开始不包括static目录
+                subOnly: true,
+                //保存到远端机器的/home/fis/www/static目录下
+                //这个参数会跟随post请求一起发送
+                to: '/home/work/odp/webroot/static/',
+                //某些后缀的文件不进行上传
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+				receiver: 'http://nj02-bdg-skyeye-odp03.nj02.baidu.com:8678/static/receive.php',
+                from: '/config',
+                to: '/home/work/odp/data/smarty/config/',
+                subOnly: true,
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+				receiver: 'http://nj02-bdg-skyeye-odp03.nj02.baidu.com:8678/static/receive.php',
+                from: '/template',
+                to: '/home/work/odp/template/',
+                subOnly: true,
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }
+        ],
+        linhao: [
+            {
+                //如果配置了receiver，fis会把文件逐个post到接收端上
+				receiver: 'http://cq01-2012h1-rptest23.vm.baidu.com:8678/static/receive.php',
+                //从产出的结果的static目录下找文件
+                from: '/static',
+                //上传目录从static下一级开始不包括static目录
+                subOnly: true,
+                //保存到远端机器的/home/fis/www/static目录下
+                //这个参数会跟随post请求一起发送
+                to: '/home/huanglinhao/odp/webroot/static/',
+                //某些后缀的文件不进行上传
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+				receiver: 'http://cq01-2012h1-rptest23.vm.baidu.com:8678/static/receive.php',
+                from: '/config',
+                to: '/home/huanglinhao/odp/data/smarty/config/',
+                subOnly: true,
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+				receiver: 'http://cq01-2012h1-rptest23.vm.baidu.com:8678/static/receive.php',
+                from: '/template',
+                to: '/home/huanglinhao/odp/template/',
+                subOnly: true,
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }
+        ],
+        renxin: [
+            {
+                //如果配置了receiver，fis会把文件逐个post到接收端上
+				receiver: 'http://cq01-2012h1-3-nlptest1.vm.baidu.com:8099/upload/receiver.php',
+                //从产出的结果的static目录下找文件
+                from: '/static',
+                //上传目录从static下一级开始不包括static目录
+                subOnly: true,
+                //保存到远端机器的/home/fis/www/static目录下
+                //这个参数会跟随post请求一起发送
+                to: '/home/work/odp/webroot/static/',
+                //某些后缀的文件不进行上传
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+				receiver: 'http://cq01-2012h1-3-nlptest1.vm.baidu.com:8099/upload/receiver.php',
+                from: '/config',
+                to: '/home/work/odp/data/smarty/config/',
+                subOnly: true,
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+				receiver: 'http://cq01-2012h1-3-nlptest1.vm.baidu.com:8099/upload/receiver.php',
+                from: '/template',
+                to: '/home/work/odp/template/',
+                subOnly: true,
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }
+        ]}
+});

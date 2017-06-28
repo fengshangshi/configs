@@ -1,0 +1,9 @@
+<h3>常用卡</h3>
+<p>
+	<span>信用卡<strong>
+		{{cardCountHelper data.creditCount}}
+	</strong>张</span>
+	<span>借记卡<strong>
+		{{cardCountHelper data.debitCount}}
+	</strong>张</span>
+</p>

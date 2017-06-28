@@ -1,0 +1,9 @@
+var fs = require('fs');
+var rs = fs.createReadStream('chinese.md', {bufferSize: 2});
+var data = '';
+rs.on('data', chunk => {
+	data += chunk;
+});
+rs.on('end', function() {
+	console.log(data);
+});

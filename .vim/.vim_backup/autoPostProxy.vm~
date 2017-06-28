@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】信任付签约代理</title>
+</head>
+<body>
+	<form id="iousForm" method="post" action="${map.payUrl}">
+		#foreach($param in ${map.keySet()})
+			#if ($param != "payUrl")
+				<input type="hidden" name="$param" value='$!{map.get($param)}' />
+			#end
+		#end
+	</form>
+	<script>
+		var form = document.getElementById("iousForm");
+		form.submit();
+	</script>
+</body>
+</html>
+

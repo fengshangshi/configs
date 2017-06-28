@@ -1,0 +1,32 @@
+/**
+ *@file 信任付的分页逻辑
+ * 信任付账单列表没有采用ajax请求，是一个历史原因，后端采用同步机制
+ * 这里的分页实现机制会有所不同
+ *@author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var pageHtml = require("module/page/page.js");
+
+message.register("page", function(e) {
+	var page = e.args;
+	$("input[name=pageNo]", "#iousPage-form").val(page);
+
+	$("#iousPage-form").submit();
+});
+
+function pageRender() {
+	var pageCount = $("input[name=pageCount]", "#iousPage-form").val(),
+		pageNum = $("input[name=pageNo]", "#iousPage-form").val(),
+		pageSize = $("input[name=pageSize]", "#iousPage-form").val();
+
+	var pageOpts = {
+		pageCount: pageCount,
+		pageSize: pageSize,
+		pageNum: pageNum
+	};
+
+	$(".order-wrap .iousPage-wrap").empty().html(pageHtml(pageOpts));
+}
+
+pageRender();

@@ -1,0 +1,44 @@
+<div id="dialog-bankList">
+    <div class="dialog-header">
+        <div class="dialog-tab-title">
+            <strong>选择银行卡</strong>
+            <a data-id="1" class="dialog-tab-title-credit current" href="###">信用卡</a>
+            <a data-id="2" class="dialog-tab-title-debit" href="###">储蓄卡</a>
+        </div>
+        <a class="dialog-close-button" href="###"></a>
+    </div>
+    <div class="dialog-tab-content">
+        <ol class="dialog-tab-content-credit current clearfix tab-content1">
+            {{#each data.CAUTH}}
+            <li>
+                <a href="###" 
+						data-username="{{../username}}"
+						data-idCard = "{{../idCard}}"
+                        data-bankType="credit"
+						data-picUrl="https://source.qunarzz.com{{picUrl}}"
+                        data-pmCode="{{pmCode}}"
+                        data-bankCode="{{bankCode}}">
+                    <img src="https://source.qunarzz.com{{picUrl}}" 
+						alt="{{bankName}}" />
+                </a>
+            </li>
+            {{/each}}
+        </ol>
+        <ol class="dialog-tab-content-debit clearfix tab-content2">
+            {{#each data.DAUTH}}
+            <li>
+                <a href="###" 
+						data-username="{{../username}}"
+						data-idCard = "{{../idCard}}"
+                        data-bankType="debit"
+						data-picUrl="https://source.qunarzz.com{{picUrl}}"
+                        data-pmCode="{{pmCode}}"
+                        data-bankCode="{{bankCode}}">
+                    <img src="https://source.qunarzz.com{{picUrl}}" 
+						alt="{{bankName}}" />
+                </a>
+            </li>
+            {{/each}}
+        </ol>
+    </div>
+</div>

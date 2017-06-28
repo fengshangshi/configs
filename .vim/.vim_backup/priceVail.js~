@@ -1,0 +1,140 @@
+$.fn.extend({
+	priceVail : function() {
+		var e = event || window.event;
+		var reg = /^\d{1,}\.\d*$/;
+		var reg2 = /^[0-9](\d{0,5}\.\d{2})$/;
+		var flag = true;
+		var $this = $(this);
+		var inputVal = $this.val();
+		var keyCode = e.which ? e.which : e.keyCode;
+		// _flag确定是是否在小数点的情况下相应的位置输入数字
+		var _flag = isInput(e, inputVal);
+		if ((inputVal.length >= 9 && keyCode != 8 && !isCursor(this)) ||
+			(reg2.test(inputVal) && !_flag && keyCode != 8 && !isCursor(this)) ||
+			!inputVal && keyCode == 46 || keyCode == 46 &&
+			reg.test(inputVal)) {
+			flag = false;
+		} else {
+			flag = true;
+		}
+		if (!isNumber(keyCode) || !flag)
+			return false;
+	},
+
+	priceVailMinus: function() {
+		var e = event || window.event;
+		var reg = /^\d{1,}\.\d*$/;
+		var reg2 = /^[0-9](\d{0,5}\.\d{2})$/;
+		var flag = true;
+		var $this = $(this);
+		var inputVal = $this.val();
+		var keyCode = e.which ? e.which : e.keyCode;
+		// _flag确定是是否在小数点的情况下相应的位置输入数字
+		var _flag = isInput(e, inputVal);
+		if ((inputVal.length >= 9 && keyCode != 8 && !isCursor(this)) ||
+			(reg2.test(inputVal) && !_flag && keyCode != 8 && !isCursor(this)) ||
+			!inputVal && keyCode == 46 || keyCode == 46 &&
+			reg.test(inputVal)) {
+			flag = false;
+		} else {
+			flag = true;
+		}
+
+		if ((keyCode == 45 && inputVal.indexOf("-") >= 0) || !isNumber2(keyCode) || !flag)
+			return false;
+	}
+});
+
+/* ###################### 金额校验方法 ###################### */
+
+/**
+ * [按键仅能输入数字]
+ * @param  {[type]}  keyCode [键盘code]
+ */
+function isNumber(keyCode) {
+    // 数字
+    if (keyCode >= 48 && keyCode <= 57) return true;
+    // Backspace键
+    if (keyCode == 8) return true;
+    //小数点
+    if (keyCode == 46) return true;
+    return false;
+}
+
+function isNumber2(keyCode) {
+    // 数字
+    if (keyCode >= 48 && keyCode <= 57) return true;
+    // Backspace键
+    if (keyCode == 8) return true;
+    //小数点
+    if (keyCode == 46) return true;
+    //负号
+    if (keyCode == 45) return true;
+    return false;
+}
+/**
+ * [确定光标与小数点的位置，当两位小数时候，只允许在整数位加数字]
+ * @param  {[type]}  e   [description]
+ * @param  {[type]}  str [description]
+ */
+function isInput(e, str) {
+    var len = str.length;
+    // 获取光标的位置
+    var cusorIndex = getCursorPos(e);
+    // 获取小数点的位置
+    var decimalIndex = str.indexOf('.');
+    // 计算小数点的位置
+    var decimalDiffer = len - decimalIndex - 1;
+    // 计算光标与小数点的差值
+    var cusorDiffer = decimalIndex - cusorIndex;
+    if (decimalDiffer == 2 && cusorDiffer >= 0 && len < 9) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * [获取输入框光标的位置]
+ * @param  {[type]} event [description]
+ * @return {[type]}       [description]
+ */
+function getCursorPos(event) {
+    var obj = event.target || event.srcElement;
+    if (document.selection) {
+        if (obj.tagName != undefined && obj.tagName == 'INPUT') {
+            var s = document.selection.createRange();
+            s.setEndPoint("StartToStart", obj.createTextRange());
+            var pos = s.text.length;
+        } else {
+            var rng = obj.createTextRange();
+            rng.moveToPoint(event.x, event.y);
+            rng.moveStart("character", -obj.value.length);
+            var pos = rng.text.length;
+        }
+    } else {
+        var pos = obj.selectionStart;
+    }
+    return pos;
+}
+
+// 判断光标是否选中文本
+function isCursor(e) {
+	var selectedText = "";
+	//ie利用Range，这个和非文本框的是一样的!
+	if (document.selection && (document.selection.type == "Text")) {
+		selectedText = document.selection.createRange().text;
+	}
+	//ff、chrome，用getSelection
+	else if (e.selectionStart != undefined && e.selectionEnd != undefined) {
+		var start = e.selectionStart;
+		var end = e.selectionEnd;
+		selectedText = e.value.substring(start, end);
+	}
+	if (selectedText != "") {
+		return true;
+	}
+
+	return false;
+}
+
+/* ###################### 金额校验方法 ###################### */

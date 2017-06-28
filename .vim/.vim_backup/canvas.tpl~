@@ -1,0 +1,2 @@
+<canvas id="flight" width="320" height="427"></canvas>
+{%script%}require("./canvas.js");{%/script%}

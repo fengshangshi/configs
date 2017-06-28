@@ -1,0 +1,341 @@
+﻿﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/context/mytags.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>【去哪儿网】保险商城-投保信息填写-去哪儿网Qunar.com</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+	<meta name="generator" content="editplus" />
+	<meta name="author" content="" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link href="http://qunarzz.com/insurance_mall/prd/styles/safe-fill-order@<%@include file='/include/ver/styles/safe-fill-order.css.ver'%>.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="q_header">
+  <%@include file='/include/prd/deposite/header_mini_styles.html'%>
+  <%@include file='/include/prd/deposite/header_main_mini.html'%>
+ </div>
+<div class="safe-warp">
+       <!-- 头部 -->
+        <div class="clearfix">
+			<a class="qn_page_logo" href="/"></a>
+			<div class="qn_tit">保险</div>
+		</div>
+		<!-- 进度 -->
+		<div class="safe-process">
+		   <span>选择保险</span><span class="cur">填写保单信息</span><span class="tail">支付完成</span>
+		</div>
+		<!-- 订单内容 -->
+		<form name="orderForm" action="../insure/insure.do" method="post" id="orderForm">
+			<!--隐藏域信息-->
+			<div class="hide">
+				<input type="hidden" name="prdId" value="${param.prdId}"/>
+				<input type="hidden" name="planId" value="${param.planId}"/>
+				<input type="hidden" name="dangerActivity" value="${param.dangerActivity}"/>
+				<input type="hidden" name="insurBeginDate" value="${param.insurBeginDate}"/>
+				<input type="hidden" name="insurEndDate" value="${param.insurEndDate}"/>
+				<input type="hidden" name="destinationCode" value="${prdDetail.destinationCode}"/>
+				<input type="hidden" name="insurTypeCode" value="${prdDetail.insurTypeCode}"/>
+				<input type="hidden" name="insurePeriod" value="${insuredInputDto.period}"/>
+			</div>
+			<div class="safe-order">
+					<!-- 投保人信息 -->
+					<div class="safe-order-box">
+					    <h4 class="safe-order-title">投保人信息</h4>
+						<ul class="safe-order-info">
+							<c:if test="${not empty insurContactList}">
+								<li class="clearfix">
+								    <span class="safe-order-textl">常用投保人</span>
+									<div class="safe-order-input" id="pepleList" data-fill="true">
+									<c:forEach var="insurContactInfo" items="${insurContactList}"  varStatus="s">
+									    <a href="javascript:;" title="" data-id="${insurContactInfo.id}"><span><i>${insurContactInfo.insurNm}</i></span></a>
+									</c:forEach>
+									</div>
+								</li>
+							</c:if>
+							<li class="clearfix">
+							    <div class="clearfix">
+								    <span class="safe-order-textl">姓名</span>
+								    <input class="safe-input input-273" type="" name="applicant.insurNm" value="" data-jvalidator-pattern="required" maxlength="30" data-placeholder="请输入姓名" data-name="insurNm">
+									<span class="safe-prom-c" data-tip="msgBox"><i></i></span>							   	
+							    </div>
+								<p class="safe-order-prompt clearfix">
+									<input class="safe-inputchek" type="checkbox" name="commonInsurant" id="nameFore" value="1" checked=""><label class="safe-order-prompttext" for="nameFore">保存为常用投保人 （未满18周岁不可投保，请其监护人代为投保）</label>
+								</p>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">电子邮件</span>
+								<div class="safe-order-input">
+								    <input class="safe-input input-273" type="" name="applicant.insurEmail" value="" data-jvalidator-pattern="email" maxlength="30" data-placeholder="请输入有效的邮件地址" data-name="insurEmail">
+									<span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+								</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">证件号码</span>
+								<div class="safe-order-input">
+								    <p class="f_l">
+									   <select name="applicant.insurIdType" autocomplete="off" data-select="type" data-name="insurIdType">
+											<option value="0" selected>身份证
+											<option value="1">护照
+											<option value="20">其他
+									   </select>
+									</p>
+									<input class="safe-input input-273" type="" name="applicant.insurIdNo" value="" data-jvalidator-pattern="idcard" data-placeholder="请输入正确的证件号" data-type="card" data-name="insurIdNo" data-autofill="true">
+									<span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+								</div>
+							</li>
+							<li class="clearfix" data-change="date">
+							    <span class="safe-order-textl">出生日期</span>
+								<div class="safe-order-input clearfix">
+								    <p class="f_l">
+										<select name="" data-year="year" autocomplete="off">
+									   </select>
+									</p>
+									<p class="f_l">
+										<select name="" data-month="month" autocomplete="off">
+									   </select>
+									</p>
+									<p class="f_l">
+										<select name="" data-day="day" autocomplete="off">
+									   </select>
+									</p>
+									<input name="applicant.insurBirth" type="hidden" value="" data-name="insurBirth" data-type='birth'/>									
+								</div>
+							</li>
+							<li class="clearfix" data-change="sex">
+							    <span class="safe-order-textl">性别</span>
+								<div class="safe-order-input clearfix">
+								    <p class="safe-order-gender"><input type="radio" checked="checked" name="applicant.insurGender" id="inputMale" value="1" data-name="insurGender"><label for="inputMale">男</label></p>
+									<p class="safe-order-gender"><input type="radio" name="applicant.insurGender" id="inputFemale" value="0" data-name="insurGender"><label for="inputFemale">女</label></p>
+								</div>
+							</li>
+							<li class="clearfix" data-change="area">
+							    <span class="safe-order-textl">居住地</span>
+								<div class="safe-order-input clearfix">
+								    <p class="f_l">
+										<select class="safe-select" name="applicant.insurProv" data-area="provice" data-name="insurProv" autocomplete="off" style="width:auto;" data-jvalidator-pattern="required" data-placeholder="请选择省" >
+									   </select>
+								
+										<select class="safe-select" name="applicant.insurCity" data-area="city" autocomplete="off" style="width:auto;" data-jvalidator-pattern="required" data-placeholder="请选择市" >
+											<option value="">请选择城市</option>
+									   </select>
+									   <span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+									</p>									
+								</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">手机号码</span>
+								<div class="safe-order-input">
+								    <input class="safe-input input-273" type="" name="applicant.insurPhone" value="" data-jvalidator-pattern="length[11]" maxlength="11" data-placeholder="请输入正确的手机号" data-name="insurPhone">
+									<span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- 被保险人信息 -->
+					<div class="safe-order-box" data-box='orderBox'>
+					    <h4 class="safe-order-title">被保险人信息</h4>
+					    <div class="safe-order-peple" id="insuredBox">
+							<div class="safe-order-be" data-box="insuredBox">
+								<span class="safe-order-betext">01</span>
+								<ul class="safe-order-info">
+								    <li class="clearfix">
+                                        <div class="safe-order-input">
+                                            <span class="safe-order-textl" style="width:200px">被保险人是投保人的</span>
+                                            <div class="f_1">
+                                                 <select class="safe-select" name="insuredNatural[0].insureRelation" data-name="insuredRelation" data-jvalidator-pattern="required" data-placeholder="请选择被保险人和投保人之间的关系">
+                                                      <option value="">请选择</option>
+                                                      <c:if test = "${prdDetail.supportMultiPeople==2}">
+                                                           <option value="1" selected>本人</option>
+                                                      </c:if>
+                                                      <c:if test = "${prdDetail.supportMultiPeople!=2}">
+                                                          <option value="1">本人</option>
+                                                          <option value="2">父母</option>
+                                                          <option value="3">配偶</option>
+                                                          <option value="4">子女</option>
+                                                       </c:if>
+                                                  </select>
+                                                <span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+                                            </div>
+                                       </div>
+                                    </li>
+									<li class="clearfix">
+										<div class="safe-order-input">
+											<span class="safe-order-textl">姓名</span>
+											<div class="f_l">
+												<input class="safe-input input-273" type="" name="insuredNatural[0].insurNm" value="" data-jvalidator-pattern="required" maxlength="30" data-placeholder="请输入姓名" data-name="insurNm">
+												<span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+											</div>						   
+									   </div>
+									</li>
+									<li class="clearfix">
+									   <div class="safe-order-input">
+											<span class="safe-order-textl">拼音</span>
+											<div class="f_l">
+												<input class="safe-input input-198" type="" name="insuredNatural[0].insurNmPy" value="" data-jvalidator-pattern="alpha" maxlength="50" data-placeholder="请输入正确的拼音" data-name="pinyin">
+												<span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+											</div>						   
+									   </div>
+									</li>
+									<li class="clearfix" id="cards">
+										<c:if test="${not empty idTypes && not empty idTypes[0] && empty idTypes[1]}">
+											<span class="safe-order-textl">护照</span>
+											<input class="insurIdType" type="hidden" name="insuredNatural[0].insurIdType" value="1">
+											<div class="safe-order-input">
+											<input class="safe-input input-273" type="" name="insuredNatural[0].insurIdNo" value="" data-placeholder="请输入正确的证件号" data-type="card" data-autoFill="true">
+										</c:if>
+										<c:if test="${not empty idTypes && not empty idTypes[0] && not empty idTypes[1]}">
+											<span class="safe-order-textl">证件号码</span>
+											<div class="safe-order-input">
+												<p class="f_l">
+												<select class="insurIdType" name="insuredNatural[0].insurIdType" data-select="type" data-name="insurIdType" autocomplete="off">
+												<c:forEach var="idType" items="${idTypes}"  varStatus="s">
+													<option value="${idType.ruleName}" ${s.first ?'selected':''}>${idType.ruleValue}
+												</c:forEach>
+												</select>
+												</p>
+												<input class="safe-input input-273" type="" name="insuredNatural[0].insurIdNo" value="" data-jvalidator-pattern="idcard" data-placeholder="请输入正确的证件号" data-type="card" data-name="insurIdNo" data-autoFill="true">
+										</c:if>
+											<span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+										</div>
+									</li>
+									
+									<li class="clearfix" data-change="date">
+										<span class="safe-order-textl">出生日期</span>
+										<div class="safe-order-input clearfix">
+											<p class="f_l">
+												<select name="" data-year="year">
+											   </select>
+											</p>
+											<p class="f_l">
+												<select name="" data-month="month">
+											   </select>
+											</p>
+											<p class="f_l">
+												<select name="" data-day="day">
+											   </select>
+											</p>
+											<input name="insuredNatural[0].insurBirth" type="hidden" value="" data-name="insurBirth" data-type='birth'/>								
+										</div>
+									</li>
+									<li class="clearfix" data-change="sex">
+										<span class="safe-order-textl">性别</span>
+										<div class="safe-order-input clearfix">
+											<p class="safe-order-gender"><input type="radio" checked="checked" name="insuredNatural[0].insurGender" id="inputMale1" value="1" data-name="insurGender"><label for="inputMale1">男</label></p>
+											<p class="safe-order-gender"><input type="radio" name="insuredNatural[0].insurGender" id="inputFemale1" value="0" data-name="insurGender"><label for="inputFemale1">女</label></p>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="safe-order-bepor clearfix">
+							<c:if test = "${prdDetail.supportMultiPeople==1}">
+						    	<a href="javascript:;" title="" id="addInsured"><i></i>添加被保险人</a>（&nbsp;最大被保险人数为10人）</a>
+						    </c:if>
+						    <c:if test = "${prdDetail.supportMultiPeople==2}">
+						    	&nbsp;您所投保的意外险，需投保人与被保险人为同一人，否则将投保失败。
+						    </c:if>
+						</div>
+					</div>
+					<!-- 受益人信息 -->
+					<div class="safe-order-box">
+					    <h4 class="safe-order-title">受益人信息</h4>
+						<p class="safe-order-center">受益人默认为法定受益人</p>
+					</div>
+					<!-- 旅行信息 -->
+					<div class="safe-order-box">
+					    <h4 class="safe-order-title">旅行信息</h4>
+						<ul class="safe-order-info" style="z-index:1;">
+							<li class="clearfix city-box-main">
+							    <span class="safe-order-textl">目的地</span>
+								<div class="safe-order-input">
+								<c:if test = "${prdDetail.destinationCode=='00'}">
+							    	<input class="safe-input input-273 dest" type="text" name="destination" value="" data-jvalidator-pattern="required" maxlength="50" data-placeholder="请输入目的地">
+							    </c:if>
+							    <c:if test = "${prdDetail.destinationCode!='00'}">
+							    	<input class="safe-input input-273 dest" type="text"  readonly="readonly" value="" maxlength="50" data-placeholder="请输入目的地">
+							    	<input type="hidden" name="destination" value=""/>
+							    </c:if>
+							    <span class="safe-prom-c" data-tip="msgBox"><i></i></span>
+								</div>
+								<div class="safe-destcity-box" data-type="destcitytmp" style="display:none;">
+									
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- 发票信息 -->
+					<div class="safe-order-box">
+					    <h4 class="safe-order-title">发票信息</h4>
+						<div class="safe-invoice clearfix">
+						    <input type="checkbox" name="needInvoice" id="ifInvoice" value="0" autocomplete="off"><label for="ifInvoice">开具发票</label>（发票将在保单生效后7日内为您邮寄）
+						</div>
+						<ul class="safe-order-info safe-invoice-info hide" id="invoicesBox">
+						</ul>
+					</div>
+					<!-- 重要提示 -->
+					<!-- //暂时隐藏重要提示
+					<div class="safe-order-box">
+					    <h4 class="safe-order-title">重要提示</h4>
+					</div>
+					-->
+					<!-- 保单详情 -->
+					<div class="safe-order-box">
+					    <h4 class="safe-order-title">保单详情</h4>
+						<ul class="safe-order-info">
+							<li class="clearfix">
+							    <span class="safe-order-textl">产品名称</span>
+								<div class="safe-order-input">${prdDetail.prdNm}</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">保障时间</span>
+							    <div class="safe-order-input"><fmt:formatDate value="${insuredInputDto.insurBeginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>&nbsp;至&nbsp;${insEndDate}</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">被保人数</span>
+								<div class="safe-order-input"><span data-count="people">1</span>人</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">购买份数</span>
+								<div class="safe-order-input"><span>1</span>份（意外险每人只能购买一份）</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">投保天数</span>
+								<div class="safe-order-input">${insuredInputDto.securityDays}天</div>
+							</li>
+							<li class="clearfix">
+							    <span class="safe-order-textl">包含高危项目</span>
+								<div class="safe-order-input"><c:choose><c:when test="${insuredInputDto.dangerActivity eq 1 }">是</c:when><c:otherwise>否</c:otherwise></c:choose></div>
+							</li>
+					</div>
+					<!-- 总价 -->
+					<div class="safe-order-price">
+					    保单总价：<span class="" id="totalAmount" data-price="${param.insurPremium}">${param.insurPremium}</span>元 <input type="hidden" value="${param.insurPremium}" id="amountInput" name="insurPremium"/>
+					</div>
+					<!-- 条款 -->
+					<div class="safe-order-clause clearfix">
+                        <input type="checkbox" name="" id="isAgreen" value="1"><label for="isAgreen">我已阅读<a href='/insurePrd/prdDetail.do?id=${param.prdId}#insureProductDetailClause' class="font-link" target='_blank'>保险条款</a>的全部内容，了解并接受保险公司相关事项。我同意以上告知和声明，以及
+                        <a class="font-link" href="/agreement.jsp" target="_blank">《保险经纪委托协议》</a>。</label>
+                    </div>
+					<!-- 立即支付 -->
+					<a href="##" title="" data-name="order_${prdDetail.prdNm}" class="safe-btn" style="display:none;" id="submitBtn">立即支付</a>
+					<a href="javascript:;" title="" class="safe-btn safe-btn-no" id="cannotBtn">立即支付</a>
+			</div>
+	</form>
+	
+</div>
+<div class="qn_footer">
+   <div class="inner">
+   <%@include file='/include/footer/footer_public_hotel.html'%>
+   </div>
+</div>
+<a href="#" title="返回顶部" class="safe-gptop" id="goTop"></a>
+<script> var beaconed = '1606'; </script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/gaInit@<%@include file='/include/ver/scripts/gaInit.js.ver'%>.js"></script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/fillOrder@<%@include file='/include/ver/scripts/fillOrder.js.ver'%>.js"></script>
+</body>
+</html>
+
+
+

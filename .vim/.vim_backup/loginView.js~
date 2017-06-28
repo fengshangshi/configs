@@ -1,0 +1,113 @@
+var html = require('./view.string');
+var pmsDialog = require('common/pmsDialog.js');
+var flag = true;
+var nativeBackButton = require('common/nativeBackButton.js');
+var closeKeyboard = require('common/closeKeyboard.js');
+// require('./dialog/dialog.js');
+QApp.defineView('login', {
+  html: html,
+  plugins : [{
+    name: 'engine.avalon',
+    options: function(vm) {
+      vm.phoneNum = QApp.util.storage('phoneNum') || '';
+      vm.password = '';
+      vm.clearPhoneNo = function() {
+        vm.phoneNum = '';
+      };
+      vm.login = function() {
+        closeKeyboard();
+        var phoneNum = vm.phoneNum.replace(/(^\s+)|(\s+$)/g, ''),
+            password = vm.password;
+        if(phoneNum.length === 0) return;
+        if(password.length === 0) return;
+        ajaxSubmit(phoneNum, password);
+        // QApp.util.blur.auto();//fix不自动回收键盘的bug
+      }
+    }
+  }],
+  ready: function() {
+    var me = this;
+    this.broadcast.on('router.backToRoot',function(data){
+      nativeBackButton.backButtonHandler();
+      var vm = me.getVM();
+      vm.password = '';
+    });
+    var vm = this.getVM();
+    vm.password = '';
+  }
+});
+
+
+function resetFlag(){
+  flag = true;
+}
+
+
+function ajaxSubmit(phoneNum, password){
+  if(flag) {
+    flag = false;
+    avalon.ajax({
+      'type': 'POST',
+      'url': 'http://www.kemanman.com/customer/login',
+      'cache': false,
+      'xhrFields': {
+        'withCredentials': true
+      },
+      'data': {
+        id: phoneNum,
+        password: password,
+        saveStatus : true
+      },
+      success: function(res){
+        switch(res.status){
+          case 0:
+            QApp.util.storage('phoneNum',phoneNum);
+            PMSEvent.trigger('login.loginSuccess');
+            PMSEvent.trigger('getGlobalConst.go');
+            resetFlag();
+            break;
+          case 1:
+            showDialog('手机号或密码错误',resetFlag);
+            break;
+          case 4:
+            showDialog('系统异常',resetFlag);
+            break;
+          default:
+            showDialog('登录失败',resetFlag);
+        }
+
+      },
+      error: function(){
+        // showDialog('登录请求失败');
+        // avalon.log('登录请求失败');
+        PMSEvent.trigger('request.requestFail');
+        resetFlag();
+      }
+    });
+  }
+}
+
+// function showTips(text){
+//     QApp.showWidget('tips',{ content : text })
+// }
+
+function showDialog(content,callback) {
+  setTimeout(function(){
+    // QApp.showWidget('dialog', {
+    //   view: 'login.dialog',
+    //   param: {
+    //     content: content
+    //   },
+    //   width : 198,
+    //   height : 119
+    // });
+    // QApp.showWidget('alert',{
+    //   'title' : '登录失败',
+    //   'content' : content
+    // });
+    pmsDialog.alert('登录失败', content);
+    callback && callback();
+  },500);
+}
+
+// module.exports = {}

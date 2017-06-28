@@ -1,0 +1,5 @@
+<a href="###" class="links-feedback">
+	<span>意见反馈</span>
+</a>
+{%require name="realestate:widget/header/feedback/feedback.css"%}
+{%require name="realestate:widget/header/feedback/feedback.js"%}

@@ -1,0 +1,14 @@
+/**
+ * @file controller demo
+ */
+
+var GET_index = function(req, res) {
+		var User = sugar.model['user_mysql'];
+		console.log(User);
+		console.log(sugar.model);
+
+		console.log(User.find);
+		res.end('11');
+};
+
+exports.GET_index = GET_index;

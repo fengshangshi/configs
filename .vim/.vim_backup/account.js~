@@ -1,0 +1,10 @@
+var config = require('../config');
+
+module.exports = {
+	mapping: {
+
+	},
+	Hello: function(req, res) {
+
+	}
+};

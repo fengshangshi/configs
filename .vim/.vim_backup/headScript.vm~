@@ -1,0 +1,8 @@
+<script>
+window.G = {
+	pageData: {},
+	metaData: {
+		username: "冯尚实"
+	}
+};
+</script>

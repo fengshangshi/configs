@@ -1,0 +1,20 @@
+/**
+ * @file 发布版本
+ * @author ss.feng
+ */
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var releaseSchema = new Schema({
+		userName: String,
+		moduleVersion: String,
+		updateType: String,
+		updateTitle: String,
+		updateContent: String,
+		updateSpecialTip: String,
+		updateSpecialColor: String,
+		url: String,
+		date: {type: Date, default: Date.now}
+}, {collection: 'versions'});
+
+module.exports = mongoose.model('Versions', releaseSchema);

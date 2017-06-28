@@ -1,0 +1,66 @@
+/**
+ * 退回申请
+ * @author water.li@qunar.com
+ */
+require("handlebars/handlebars.js");
+var $ = require("zepto/zepto.js");
+var message = require("libs/message/message.js");
+var dialog = require("./dialog.js");
+var service = require("module/service/ajax");
+var getPos = require("utils/getPosition");
+
+function refundApplySubmit( opts ){
+	var ajaxUrl = "/mobile/member/asset/balance/refundApplySubmitApi.htm";
+	service.ajax({
+		url: ajaxUrl,
+		data: opts,
+		onsuccess: function(data) {
+			if(data.errorCode == "0"){
+				message.fire("fetchRefundtradeList");
+				$(".nav_two div[data-id='2']").trigger("click");
+				dialog.close();
+			}else{
+				$(opts.self).html("确认").css("background","#1ba9ba");
+				$(".errmsg-con").empty().append(data.errorMsg);
+			}
+		}
+	});
+}
+
+
+message.register("refundApply", function(e) {
+	var args = e.args,
+		orderNo = args.orderNo,
+		account = args.account,
+		amount = args.amount;
+	var self = args.self;
+
+	dialog.show({
+		orderNo: orderNo,
+		account: account,
+		amount: amount,
+		submitBtn: "refund_ok"
+	});
+
+	var height = parseInt( getPos(self).y );
+	$(".dialog_refund").css("top",(height - 100) + "px");
+});
+
+message.register("refundApplyOK", function(e) {
+	var args = e.args,
+		orderNo = args.orderNo,
+		amount = args.amount,
+		that = args.self;
+
+		refundApplySubmit( {
+			orderNo: orderNo,
+			amount: amount,
+			self: that
+		} );
+	
+});
+
+message.register("refundApplyCancel", function(e) {
+	dialog.close();
+});
+

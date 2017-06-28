@@ -1,0 +1,119 @@
+/**
+ * 封装ajax
+ * @author ss.feng@qunar.com
+ */
+
+var local = '/*[local]*/',
+    dataSource = '/*[dataSource]*/';
+
+var native = require('common/service/hyNative.js');
+var logger = require('common/module/logger.js');
+
+module.exports = function(options) {
+
+    var url = dataSource + options.url,
+        noValidateLogin = options.noValidateLogin,
+        data = options.data || {},
+        type = options.type || "POST",
+        dataType = options.dataType || "json",
+        jsonp = options.jsonp || "callback",
+        async = options.async || true,
+        timeout = options.timeout || 30000,
+        success = options.success || function() {},
+        error = options.error || function() {};
+
+    var userInfo = G.ls('login.userInfo') || {},
+        userData = {
+            loginNo: userInfo.loginNo || '',
+            userId: userInfo.userId || '',
+            userName: userInfo.userName || '',
+            _t: userInfo.token || ''
+        };
+
+    var deviceInfo = local == '1' ? {
+            platform: 'ios',
+            osVersion: '7.1.2',
+            appVersion: '2.1',
+            moduleVersion: '3.0.0',
+            model: 'iPod touch',
+            dpi: '326',
+            size: '640 x 1136',
+            deviceId: 'ebd685f194fea04f5334971a3602f2a88c9542bd',
+            _m: 'ebd685f194fea04f5334971a3602f2a88c9542bd'
+        } : G.ls('common.deviceInfo'),
+        deviceData = {
+            platform: deviceInfo.platform || '',
+            osVersion: deviceInfo.osVersion || '',
+            appVersion: deviceInfo.appVersion || '',
+            moduleVersion: deviceInfo.moduleVersion || '',
+            model: deviceInfo.model || '',
+            dpi: deviceInfo.dpi || '',
+            size: deviceInfo.size || '',
+            deviceId: deviceInfo.deviceId || '',
+            _m: deviceInfo.deviceId || ''
+        };
+
+    var ajaxData = $.extend(userData, deviceData, data);
+
+    //如果需要检验登录的接口没有登录信息,则不发送请求
+    if (local == '0' && (deviceData.platform.toLowerCase() === 'ios' ||
+            deviceData.platform.toLowerCase() === 'android') &&
+        !noValidateLogin &&
+        !G.ls.has('common.deviceInfo')) return;
+
+    var ajaxOptions = {
+        url: url,
+        data: ajaxData,
+        type: type,
+        dataType: dataType,
+        cache: false,
+        async: async,
+        timeout: timeout,
+        success: function(data, status, xhr) {
+
+            //强制升级
+            if (data.code === '8006') {
+                native.invokeNative('update', data.data);
+                return false;
+            }
+
+            //重新登录
+            if (data.code === '8001') {
+                //清除登录信息, 跳到登陆页
+                G.ls.remove('login.userInfo');
+                G.toast('您的账号权限发生了变化,请重新登录');
+
+                setTimeout(function() {
+                    //告诉app用户登出, 关闭当前webview, 打开新的webview
+                    native.invokeNative('logout');
+
+                    native.invokeNative('openWebView', {
+                        url: '/srm_hy/html/login.html'
+                    })
+                }, 600);
+
+                return false;
+            }
+
+            success.call(xhr, data);
+        },
+        error: function(xhr, err) {
+            G.toast('网络异常，请检查网络后重试');
+            error.call(xhr, err);
+
+			if (err) {
+				// 记录ajax错误日志 by ss.feng
+				logger({ 
+					url: url,
+					error: JSON.stringify(err) 
+				});
+			}
+        }
+    };
+
+    if (dataType === "jsonp") {
+        ajaxOptions["jsonp"] = jsonp;
+    }
+
+    $.ajax(ajaxOptions);
+};

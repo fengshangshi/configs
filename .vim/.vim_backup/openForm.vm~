@@ -1,0 +1,78 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付激活</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/openForm.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content ious-open-form">
+				<h3 class="title">
+					<a class="parent" href="/member/asset/ious/">信任付</a>
+					&nbsp;&gt;&nbsp;
+					<span class="current">激活信任付</span>
+				</h3>
+				#set($amount =  "$!{tplData.iousUserInfo.creditAmount}")
+				#set($len = $!{amount.length()})
+				#set($intlen = $len - 3)
+				#set($int = $!{amount.substring(0,$intlen)})
+				#set($digit = $!{amount.substring($intlen,$len)})
+				
+				<div class="lender">
+					<div class="name">贷款提供商: $!{tplData.iousUserInfo.tppName}</div>
+					<div class="creditLine">预计信用额度
+						<span class="numbric">$!{int}</span><span 
+							class="numbric-small">$!{digit}</span>
+						<span class="unit">元</span>
+					</div>
+					<div class="freeDays"><span class="numbric">$!{tplData.iousUserInfo.intFreeDays}</span>
+						天免息期-随你花</div>
+					<div class="stageFee"><span class="numbric">$!{tplData.iousUserInfo.loanRate}</span>
+						%分期手续费-为您省</div>
+				</div>
+				<div class="open-form">
+					#set($pre = $!{tplData.iousUserInfo.maskMobile.substring(0,3)})
+					#set($last = $!{tplData.iousUserInfo.maskMobile.substring(7,11)})
+					<dl>
+						<dt>手机号码</dt>
+						<dd class="maskMobile">$!{pre}<span class="mask">****</span>$!{last}</dd>
+						<dt>短信验证码</dt>
+						<dd>
+							<input class="vcode" type="text" placeholder="请输入验证码" disabled="disabled" />
+							<span class="sms-send-btn">免费获取</span>
+						</dd>
+						<dt>&nbsp;</dt>
+						<dd>
+							<label target="agree" class="protocol">
+								<input type="checkbox" name="agree" ></input>
+								已经阅读并同意<a  href="/member/asset/ious/contract.htm">《服务协议》</a>
+							</label>
+						</dd>
+						<dt>&nbsp;</dt>
+						<dd>
+							<span class="submit submit-disable">立即激活</span>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script 
+		src="${qzzUrl}${jsPath}/asset/ious/openForm/entry.js">
+	</script>
+	<!-- ${tplData} -->
+</body>
+</html>

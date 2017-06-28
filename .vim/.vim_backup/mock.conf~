@@ -1,0 +1,33 @@
+module.exports = {
+	/\/(resource)\/(api)\/fetchHouseList(\?=.*)?/: "./data/fetchHouseList.json",
+	/\/resource\/api\/fetchHouseList(\?=.*)?/: "./data/fetchHouseList.json",
+	/\/resource\/api\/getImage(\?=.*)?/: "./data/fetchImageList.json",
+	/\/resource\/api\/uploadImage(\?=.*)?/: "./data/uploadImage.json",
+	/\/resource\/api\/deleteImage(\?=.*)?/: "./data/deleteImage.json",
+	/\/resource\/api\/fetchLabel(\?=.*)?/: "./data/fetchLabel.json",
+	/\/resource\/api\/saveLabel(\?=.*)?/: "./data/saveLabel.json",
+	/\/resource\/api\/saveRemark(\?=.*)?/: "./data/saveRemark.json",
+	/\/resource\/api\/saveHouseInfo(\?=.*)?/: "./data/saveHouseInfo.json",
+	/\/resource\/api\/sendAuth(\?=.*)?/: "./data/sendAuth.json",
+	/\/resource\/api\/saveRoomType(\?=.*)?/: "./data/saveRoomType.json",
+	/\/resource\/api\/searchRTX(\?=.*)?/: "./data/searchRTX.json",
+	/\/resource\/api\/saveDistribution(\?=.*)?/: "./data/saveDistribution.json",
+	"/resource/api/testForFunction": function(req, res) {
+		// 接口请使用POST通信方式
+		// req 请求头 res 响应头
+		// 从req.body中获取参数
+		var query = req.body.query;
+		// 响应给浏览器端的数据
+		var data = {
+			"ret": "0",
+			"errMsg": "",
+			"data": {
+				"query": query
+			}
+		};
+		// 响应参数字符创化
+		data = JSON.stringify(data);
+		// 通过res对象end响应
+		res.end(data);
+	}
+};

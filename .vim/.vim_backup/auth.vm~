@@ -1,0 +1,222 @@
+## @Describe: 审核页面
+## @wiki: http://wiki.corp.qunar.com/pages/viewpage.action?pageId=88019828
+## @author ming.zhou@qunar.com
+
+#parse("widget/_include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/_include/headMeta.vm")
+    <title>CRM</title>
+    <link rel="stylesheet" href="${qzzUrl}/${cssPath}/resource/auth@
+	#include('')
+	${auth.ver}
+	.css" />
+    #parse("widget/_include/headScript.vm")
+</head>
+<body>
+    #set($data = $tplData.authData)
+    <div class="crm-container js-crm-container">
+        <header class="crm-header">
+            <a href="/resource/detail.htm?houseId=$!{data.houseId}"
+             class="yo-ico regret" id="backBtn">&#xf07d;</a>
+            <h2 class="title">
+                <span class="title-txt">上传审核资料</span>
+            </h2>
+        </header>
+        <div class="crm-content">
+            ##查看上传资料
+            #if($!{data.houseCertifyState} == 2
+                || $!{data.houseCertifyState} == 5)
+            <section class="detail-wrap">
+                <a class="crm-list-item">
+                    <span class="item-label">房型</span>
+                    <div class="item-cont" >
+                        <span class="js-room-type-name">
+                            $!{data.roomSelectedName}
+                        </span>
+                    </div>
+                </a>
+                #if($!{data.qualifCertifyStatus} == 5)
+                <a href="/resource/image.htm?houseId=$!{data.houseId}&authType=1"
+                 class="crm-list-item js-qualif-num" data-num="$!{data.qualifCertification}">
+                    <span class="item-label">资质审核</span>
+                    #if($!{data.qualifCertification} == 0)
+                    <div class="item-cont">
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont">
+                        已上传$!{data.qualifCertification}张
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+                #else
+                <a class="crm-list-item">
+                    <span class="item-label">资质审核</span>
+                    <div class="item-cont">
+                        已上传$!{data.qualifCertification}张
+                    </div>
+                </a>
+                #end
+                #if($!{data.detailCertifyStatus} == 5)
+                <a href="/resource/houseInfo.htm?houseId=$!{data.houseId}"
+                 class="crm-list-item js-house-detail" data-detail="$!{data.houseDetail}">
+                    <span class="item-label">
+                        房屋信息审核
+                    </span>
+                    #if($!{data.houseDetail} == 0)
+                    <div class="item-cont">
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont">已保存
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+                #else
+                <a class="crm-list-item">
+                    <span class="item-label">
+                        房屋信息审核
+                    </span>
+                    <div class="item-cont">已保存
+                    </div>
+                </a>
+                #end
+                #if($!{data.imgCertifyStatus} == 5)
+                <a href="/resource/image.htm?houseId=$!{data.houseId}&authType=2"
+                 class="crm-list-item js-image-num" data-num="$!{data.houseImage}">
+                    <span class="item-label">房源图片审核</span>
+                    #if($!{data.houseImage} == 0)
+                    <div class="item-cont">
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont">
+                        已上传$!{data.houseImage}张
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+                #else
+                <a class="crm-list-item">
+                    <span class="item-label">房源图片审核</span>
+                    <div class="item-cont">
+                        已上传$!{data.houseImage}张
+                    </div>
+                </a>
+                #end
+            </section>
+            #else
+            <section class="detail-wrap">
+                <a href="javascript:;" data-name="$!{data.roomSelectedName}"
+                class="crm-list-item js-roomtype">
+                    <span class="item-label">房型</span>
+                    #if($!{data.roomSelectedName} == '')
+                    <div class="item-cont">
+                        <span class="js-room-type-name">
+                        </span>
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont" >
+                        <span class="js-room-type-name">
+                            $!{data.roomSelectedName}
+                        </span>
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+                <a href="/resource/image.htm?houseId=$!{data.houseId}&authType=1"
+                 class="crm-list-item js-qualif-num" data-num="$!{data.qualifCertification}">
+                    <span class="item-label">资质审核</span>
+                    #if($!{data.qualifCertification} == 0)
+                    <div class="item-cont">
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont">
+                        已上传$!{data.qualifCertification}张
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+                <a href="/resource/houseInfo.htm?houseId=$!{data.houseId}"
+                 class="crm-list-item js-house-detail" data-detail="$!{data.houseDetail}">
+                    <span class="item-label">
+                        房屋信息审核
+                    </span>
+                    #if($!{data.houseDetail} == 0)
+                    <div class="item-cont">
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont">已保存
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+                <a href="/resource/image.htm?houseId=$!{data.houseId}&authType=2"
+                 class="crm-list-item js-image-num" data-num="$!{data.houseImage}">
+                    <span class="item-label">房源图片审核</span>
+                    #if($!{data.houseImage} == 0)
+                    <div class="item-cont">
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #else
+                    <div class="item-cont">
+                        已上传$!{data.houseImage}张
+                        <i class="yo-ico">&#xf03e;</i>
+                    </div>
+                    #end
+                </a>
+            </section>
+            #end
+            #if($!{data.roomSelectedName} == ''
+                ||$!{data.qualifCertification} == 0
+                || $!{data.houseDetail} == 0
+                || $!{data.houseImage} == 0
+                || ($!{data.houseCertifyState} == 2)
+            )
+            <div class="btn-wrap">
+                #if($!{data.houseCertifyState} == 2)
+                #else
+                <span id="authConfirm" data-type="1"
+                class="crm-btn crm-btn-stacked crm-btn-disabled js-auth-btn">
+                    提交审核
+                </span>
+                #end
+            </div>
+            #else
+            <div class="btn-wrap">
+                <span id="authConfirm" class="crm-btn crm-btn-stacked"
+                data-type="1">提交审核</span>
+            </div>
+            #end
+        </div>
+    </div>
+    <div class="crm-dialog-wrap js-dialog-roomtype" style="display:none">
+        <div class="crm-dialog">
+            <div class="bd">
+                <ul class="dialog-item-list js-type-list">
+                    #foreach ($list in $data.roomTypeList)
+                    <li data-name="$!{list.roomName}">
+                        $!{list.roomName}
+                        <i class="yo-ico ico-selected">&#xf056;</i>
+                    </li>
+                    #end
+                </ul>
+            </div>
+            <footer class="ft">
+                <span class="crm-btn crm-btn-dialog crm-btn-l" id="cancelBtn">取消</span>
+                <span class="crm-btn crm-btn-dialog crm-btn-l" id="sureBtn">确定</span>
+            </footer>
+        </div>
+    </div>
+    <input id="houseId" type="hidden" value="$!{data.houseId}">
+    <script src="${qzzUrl}/${jsPath}/resource/auth/entry.js"></script>
+    #parse("widget/_include/footScript.vm")
+</body>
+</html>

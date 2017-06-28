@@ -1,0 +1,52 @@
+/**
+ * 显示dialog tips
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+require("jquery/jquery.ui.js");
+require("handlebars/handlebars.js");
+var template = require("template/dialogSimpleTips.handlebars");
+
+// 配置dialog
+var dialogTipsConfig = {
+	modal: true,
+	draggable: false,
+	resizable: false,
+	width: 300,
+	height: 130,
+	closeText: ""
+};
+
+var timer = null;
+var dialog = "#dialog-simple-tips";
+
+exports.showDialogTips = function(args) {
+	$(dialog).remove();
+
+	var data = {
+		dialogTitle: args.title || "提示",
+		dialogContent: args.content,
+		dialogTime: args.time
+	};
+
+	Handlebars.registerHelper("time", function(time) {
+		if (time) {
+			return time + "秒后自动关闭";
+		}
+	});
+
+	if (args.time) {
+		clearTimeout(timer);
+		timer = setTimeout(function() {
+			$(dialog).dialog("close");
+		}, args.time * 1000);
+	}
+
+	$("body").append(template(data));
+	$(dialog).dialog(dialogTipsConfig);
+};
+
+$(document).delegate(".dialog-submit", "click",function(){
+	$(dialog).dialog("close");
+});
+

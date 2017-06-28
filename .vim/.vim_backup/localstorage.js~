@@ -1,0 +1,49 @@
+/**
+ *@file 本地存储
+ *@author
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+
+	var storage = window.localStorage;
+
+	var isSupportLocalStorage = function() {
+		return !!storage;
+	};
+
+	var getRaw = function(key) {
+		return storage.getItem(key);
+	};
+
+	var get = function(key) {
+		return $.parseJSON(getRaw(key));
+	};
+
+	var setRaw = function(key, values) {
+		return storage.setItem(key, values);
+	};
+
+	var set = function(key, values) {
+		return setRaw(key, JSON.stringify(values));
+	};
+
+	var remove = function(key) {
+		return storage.removeItem(key);
+	};
+
+	var clear = function() {
+		return storage.clear();
+	};
+
+	var localStorage = {};
+	if (isSupportLocalStorage) {
+		localStorage["get"] = get;
+		localStorage["set"] = set;
+		localStorage["getRaw"] = getRaw;
+		localStorage["setRaw"] = setRaw;
+		localStorage["remove"] = remove;
+		localStorage["clear"] = setRaw;
+		localStorage["isSupport"] = isSupportLocalStorage;
+	}
+	exports.localStorage = localStorage;
+});

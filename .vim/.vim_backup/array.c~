@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+void printS(char s[])
+{
+	printf("s reads: %s\n", s);
+}
+
+int main()
+{
+	char s[] = "How big is it?";
+	printS(s);
+
+
+	char *t = s;
+
+	printf("s %c\n", *s);
+	printf("t %c\n", *t);
+	/*
+	printf("s %lu\n", sizeof(s));
+	printf("t %lu\n", sizeof(t));
+	printf("&s == s %d\n", &s == s);
+	printf("&t == t %d\n", &t == t);
+	printf("&s %i\n", &s);
+	printf("&t %i\n", &t);
+	*/
+
+	return 0;
+}

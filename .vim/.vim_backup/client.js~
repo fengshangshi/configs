@@ -1,0 +1,16 @@
+var net = require('net');
+
+var socket = net.connect({port: 8088}, () => {
+	console.log('链接服务器成功!');
+	process.stdin.on('data', str => {
+		if (str.toString('utf8').trim() == 'quit') {
+			process.exit(1);
+		} else {
+			socket.write(str);
+		}
+	});
+});
+
+socket.on('data', function(data) {
+	console.log(data.toString());
+});

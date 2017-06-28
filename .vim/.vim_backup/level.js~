@@ -1,0 +1,37 @@
+/**
+ * @file 日志级别类
+ * @author ss.feng
+ */
+'use strict'
+
+class Level {
+	constructor(code, level) {
+		this.code = code;
+		this.level = level;
+	}
+
+	toString() {
+		return this.level;
+	}
+
+	toValue() {
+		return this.code;
+	}
+
+	// 等于
+	isEqualTo(level) {
+		return this.code === level.code;
+	}
+
+	// 大于等于
+	isGreaterThanOrEqualTo(level) {
+		return this.code >= level.code;
+	}
+
+	// 小于等于
+	isLessThanOrEqualTo(level) {
+		return this.code <= level.code;
+	}
+}
+
+module.exports = Level;

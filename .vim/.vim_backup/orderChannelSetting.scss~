@@ -1,0 +1,223 @@
+.channel-settings {
+    position: relative;
+    padding-right: 20px;
+    .palette {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        padding: 10px 9px 3px 0;
+        // height: 40px;
+        border-radius: 3px;
+        background: #ffffff;
+        border: 1px solid #d9d9d9;
+        box-shadow: 0px 1px 5px #eee;
+        .color-item {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 9px;
+            border-radius: 3px;
+            cursor: pointer;
+            &.none {
+                border: 1px solid #d9d9d9;
+            }
+        }
+    }
+    ul.channel-list {
+        li {
+            width: 180px;
+            height: 36px;
+            padding: 3px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            float: left;
+            background: #def0e2;
+            border-radius: 2px;
+            position: relative;
+            cursor: default;
+
+            .channel-color {
+				vertical-align: middle;
+                display: inline-block;
+                width: 14px;
+                height: 14px;
+                border: 1px solid #d9d9d9;
+                background-color: #ffffff;
+                margin: 8px 5px 8px 7px;
+                cursor: pointer;
+                box-shadow: 0px 1px 5px #eee;
+                &.ChinaRed {
+                    background-color: #ffc5c4;
+                }
+                &.SunshineOrange {
+                    background-color: #ffb86a;
+                }
+                &.LemonYellow {
+                    background-color: #fff2b4;
+                }
+                &.GrassGreen {
+                    background-color: #d5fc8f;
+                }
+                &.BottleGreen {
+                    background-color: #c6f1d9;
+                }
+                &.BlueGreen {
+                    background-color: #53e6de;
+                }
+                &.CtripBlue {
+                    background-color: #cbeeff;
+                }
+                &.Violet {
+                    background-color: #b6c5ff;
+                }
+                &.RoseRed {
+                    background-color: #e2c3ff;
+                }
+                &.Drab {
+                    background-color: #ffe0f5;
+                }
+            }
+            input {
+                width: 95px;
+                height: 30px;
+                line-height: 28px;
+                padding: 1px 3px 1px 13px;
+                border: none;
+                background: transparent;
+                outline: 0 none;
+            }
+
+            .channel-name{
+                width: 120px;
+                height: 30px;
+                line-height: 28px;
+                padding: 1px 3px;
+                border: none;
+                background: transparent;
+                outline: 0 none;
+                display: inline-block;
+            }
+
+            .edit-ico,
+            .delete-ico {
+                display: block;
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+                line-height: 30px;
+                text-align: center;
+                background: transparent;
+                color: #666;
+                position: absolute;
+                top: 3px;
+                cursor: pointer;
+
+                &:hover,
+                &:active{
+                    color: #53b071;
+                    background: #fff;
+                    box-shadow: -1px 1px 3px #cad9ce;
+                    background: #fff;
+                    border-radius: 2px;
+                }
+            }
+
+            .edit-ico {
+                right: 30px;
+            }
+
+            .delete-ico {
+                right: 3px;
+            }
+
+            .confirm-btn,
+            .cancel-btn {
+                display: none;
+            }
+        }
+
+        //处于编辑状态
+        .is-edit {
+
+            input {
+                padding: 0 2px 0 12px;
+                border: 1px solid #ddd;
+                background: #fff;
+            }
+
+            .edit-ico,
+            .delete-ico {
+                display: none;
+            }
+
+            .confirm-btn,
+            .cancel-btn {
+                display: block;
+                width: 40px;
+                height: 30px;
+                line-height: 30px;
+                position: absolute;
+                top: 3px;
+                text-align: center;
+            }
+
+            .confirm-btn {
+                right: 43px;
+                color: #fff;
+                border-radius: 0 2px 2px 0;
+                background: #58bc62;
+
+            }
+
+            .cancel-btn {
+                right: 3px;
+                color: #666;
+            }
+        }
+
+        //不可删除
+        .can-not-delete {
+            .delete-ico {
+                display: none;
+            }
+        }
+
+        //最后一个
+        .last-one {
+            .delete-ico {
+                display: none;
+            }
+
+            .edit-ico {
+                right: 3px;
+            }
+        }
+
+        .add-btn {
+            width: auto;
+            height: 30px;
+            line-height: 30px;
+            color: #fff;
+            padding: 0 10px;
+            margin-top: 3px;
+            background: #58bc62;
+            font-size: 14px;
+            cursor: pointer;
+
+            i, span{
+
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            i {
+                font-size: 18px;
+            }
+        }
+
+        .disabled {
+            background: #eee;
+            color: #9a9a9a;
+        }
+    }
+}

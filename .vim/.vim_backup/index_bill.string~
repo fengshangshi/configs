@@ -1,0 +1,62 @@
+<table class="table table-hover dialog-table" id="detailDialog">
+	<thead><thead>
+	<tbody>
+		<tr>
+			<td width="12.5%"><strong>业务类型:</strong></td>
+			<td width="18.5%">{{orderTypeName}}</td>
+			<td width="12.5%"><strong>账户名称:</strong></td>
+			<td width="18.5%">{{accountName}}</td>
+			<td width="12.5%"><strong>门店名称:</strong></td>
+			<td width="18.5%">{{hotelName}}</td>
+		</tr>
+		<tr>
+			<td><strong>门店ID:</strong></td>
+			<td>{{hotelNo}}</td>
+			<td><strong>订单号:</strong></td>
+			<td>{{channelOrderNo}}</td>
+			<td><strong>渠道:</strong></td>
+			<td>{{channelName}}</td>
+		</tr>
+		<tr>
+			<td><strong>客人名称:</strong></td>
+			<td>{{customerName}}</td>
+			<td><strong>预定时间:</strong></td>
+			<td>{{orderTime|dateFormat 'yyyy-MM-dd'}}</td>
+			<td><strong>入住日期:</strong></td>
+			<td>{{checkInTime|dateFormat 'yyyy-MM-dd'}}</td>
+		</tr>
+		<tr>
+			<td><strong>离店日期:</strong></td>
+			<td>{{checkOutTime|dateFormat 'yyyy-MM-dd'}}</td>
+			<td><strong>城市:</strong></td>
+			<td>{{cityName}}</td>
+			<td><strong>订单状态:</strong></td>
+			<td>{{orderStatus}}</td>
+		</tr>
+		<tr>
+			<td><strong>交易状态:</strong></td>
+			<td>{{tradingStatus}}</td>
+			<td><strong>订单金额:</strong></td>
+			<td>{{orderAmount}}</td>
+			<td><strong>退款金额:</strong></td>
+			<td>{{refundAmount}}</td>
+		</tr>
+		<tr>
+			<td><strong>收入:</strong></td>
+			<td>{{income}}</td>
+			<td><strong>发生时间:</strong></td>
+			<td>{{createTime|dateFormat 'yyyy-MM-dd'}}</td>
+			<td><strong>退款时间:</strong></td>
+			<td>{{refundTime|dateFormat 'yyyy-MM-dd'}}</td>
+		</tr>
+		<tr>
+			<td><strong>BD:</strong></td>
+			<td>{{bdName}}</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+

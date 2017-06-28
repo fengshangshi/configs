@@ -1,0 +1,106 @@
+/**
+ * @file 下载hybrid资源包
+ * @author ss.feng
+ */
+var fs = require('fs');
+var path = require('path');
+var fse = require('fs-extra');
+
+var CACHEROOT = path.join(CACHE, '/download');
+var URL = s.config['yum']['url'];
+
+// 判断是否存在缓存目录
+// 程序启动时判断
+fs.existsSync(CACHEROOT) || fs.mkdirSync(CACHEROOT);
+
+// 下载资源包处理逻辑
+var GET_index = exports.GET_index = function(req, res) {
+	var ver = this.PARAM['version'];
+	var zip = ver + '.zip';
+	var cache = path.join(CACHEROOT, zip);
+
+	// 响应给客户端统一的名称: hy.zip
+	var hybrid = path.join(CACHEROOT, 'hy.zip');
+
+	// 没有版本号 或者 版本号不符合规则
+	if (!validVersion(ver)) {
+		logger.error('version不符合规则, version: ' + ver);
+		res.sendStatus(503);
+		return false;
+	}
+
+	// 判断本地硬盘中存在
+	if (fs.existsSync(cache)) {
+		logger.info('下载资源包成功, 目标本地 GET zip: ' + zip);
+		setHybridNameUnified(cache, hybrid, function(err, file) {
+			if (err) {
+				return logger.error('重命名资源包错误，错误信息: ' + err);
+			}
+			logger.info('存在缓存，资源包重命名成功');
+			res.download(file);
+		});
+		return false;
+	}
+
+	var url = URL + '/srm_hy-v' + zip;
+	var options = {
+		url: url
+	};
+
+	// ral请求yum服务器获取资源包
+	ral('yum', function(err, ress) {
+		if (err) {
+			logger.error('下载资源包失败，GET url: ' + url + ' error: ' + err);
+			res.sendStatus(503);
+			return false;
+		}
+
+		// 创建写入流
+		var ws = fs.createWriteStream(cache);
+
+		// 监听ral响应头变化，将数据写入到ws中
+		ress.on('data', function(chunk) {
+			ws.write(chunk);
+		});
+
+		// ral响应结束，等待ws写入完成，响应给客户端
+		ress.on('end', function() {
+			ws.on('finish', function() {
+				logger.info('下载资源包成功, 目标yum源 GET url: ' + url);
+				setHybridNameUnified(cache, hybrid, function(err, file) {
+					if (err) {
+						return logger.error('重命名资源包错误，错误信息: ' + err);
+					}
+					logger.info('下载完成,资源包重命名成功');
+					res.download(file);
+				});
+			});
+
+			ws.end();
+		});
+	}, options);
+};
+
+// 指定version参数
+GET_index.params = 'version';
+
+// 版本号有效性检查
+function validVersion(ver) {
+	if (!ver) {
+		return false;
+	}
+
+	var re = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
+	var isValidVersion = re.test(ver);
+	return isValidVersion;
+}
+
+// 统一hybrid.zip的名称
+function setHybridNameUnified(src, dst, cb) {
+	fse.copy(src, dst, function(err) {
+		if (err) {
+			return cb(err, null);
+		}
+		cb(null, dst);
+	});
+}

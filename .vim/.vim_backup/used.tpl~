@@ -1,0 +1,4 @@
+{%*继承layout.tpl*%}
+{%extends file="realestate/page/layout.tpl"%}
+
+{%*二手房页面*%}

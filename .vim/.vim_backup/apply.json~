@@ -1,0 +1,40 @@
+{
+	"tplData": {
+		"claimInfo": {
+			"policyNo": "234242",
+			"insurOrderNo": "2232423424",
+			"rules": [
+				{
+					"title": "",
+					"time": "2",
+					"timeText": "起飞前2小时之前",
+					"changeFee": "201",
+					"signText": "不可签转"
+				},
+				{
+					"title": "",
+					"time": "2",
+					"timeText": "起飞前2小时之后",
+					"changeFee": "335",
+					"signText": "不可签转"
+				}
+			]
+		},
+		
+		"orderInfo": {
+			"departureCity": "北京",
+			"arrivalCity": "上海",
+			"busNo": "23423424234",
+			"departureDate": "2014-02-20"
+		},
+
+		"beneficiaryInfo": {
+			"name": "冯尚实",
+			"idNum": "331003**************1933"
+		},
+
+		"metaInfo": {
+
+		}
+	}
+}

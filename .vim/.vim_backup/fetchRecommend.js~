@@ -1,0 +1,29 @@
+/**
+ * 获取用户中心推荐产品列表
+ * @author ss.feng@qunar.com
+ */
+require("handlebars/handlebars.js");
+var $ = require("jquery/jquery.js");
+var service = require("module/service/ajax.js");
+var template = require("../template/recommendList.handlebars");
+
+var data = {
+	code: "HotTheme"
+};
+
+service.ajax({
+	url: "https://piao.qunar.com/api/utils/cms.json",
+	data: data,
+	type: "GET",
+	dataType: "jsonp",
+	jsonp: "callback",
+	onsuccess: function(data) {
+		if (data.ret) {
+			Handlebars.registerHelper("cut", function(str) {
+				return str.substring(0, 14);
+			});
+
+			$(".recommend-wrap .module-bd").html(template(data));
+		}
+	}
+});

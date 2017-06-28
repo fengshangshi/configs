@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>登录</title>
+<link rel="stylesheet" type="text/css" href="/css/libs/semantic.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<style type="text/css">
+body > .grid {
+  height: 100%;
+}
+.column {
+  max-width: 450px;
+}
+</style>
+</head>
+<body>
+
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2 class="ui teal image header">
+      <div class="content">
+        登录APP发布平台
+      </div>
+    </h2>
+    <form class="ui large form">
+      <div class="ui stacked segment">
+				<div class="ui small negative message fn-hide" id="message"></div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input id="userId" type="text" placeholder="用户名">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input id="password" type="password" placeholder="密码">
+          </div>
+        </div>
+        <div id="submit" class="ui fluid large teal submit button">登录</div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/scripts/libs/jquery.min.js"></script>
+<script src="/scripts/libs/semantic.js"></script>
+<script src="/scripts/page/account/login.js"></script>
+</body>
+</html>

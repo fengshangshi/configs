@@ -1,0 +1,23 @@
+console.log("test");
+var fs = require("fs"),
+	path = require("path");
+
+var file = "./fekit.config",
+	p = path.normalize(file);
+
+console.log(EXPORT_LIST.length);
+
+var jsArr = [];
+for (var i = 0, l = EXPORT_LIST.length; i < l; i++) {
+	if (path.extname(EXPORT_LIST[i].url) === ".js") {
+		jsArr.push(EXPORT_LIST[i].url);
+	}
+}
+
+/*
+var content = fs.readFile(p, "utf-8", function(err, data) {
+	var re = /(scripts)/ig;
+	data = data.replace(re, "//$1");
+	console.log(data);
+});
+*/

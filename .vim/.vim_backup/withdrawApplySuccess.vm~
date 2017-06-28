@@ -1,0 +1,41 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】我的账户-账户资产-提现-提现申请成功</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+        href="${qzzUrl}${cssPath}/asset/balance/withdrawApply.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-bank-card">
+    #parse("widget/header/header.vm")
+    #parse("widget/nav/nav.vm")
+    <div class="container clearfix">
+        <div class="side-bar">
+            #parse("widget/menu/menuForAsset.vm")
+        </div>
+        <div class="main">
+            <div class="main-content">
+                <div class="result-tips">
+                    <div class="result-tips-content tips-success">
+                        <h2>您的提现申请提交成功。</h2>
+                        <p>去哪儿网将对您的提现进行审核，您可以在 交易记录 查看提现订单状态。
+审核通过后，该笔资金将于3-5个工作日退还至您填写的银行卡中；若提现失败，资金将归还至您的账户中。</p>
+                        <p>
+                            您可以继续
+                            <a href="/member/asset/balance/withdrawApply.htm">提现</a>
+                            或返回
+                            <a href="/member/">我的账户</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("widget/footer/footer.vm")
+</body>
+</html>
+

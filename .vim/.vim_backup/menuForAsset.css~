@@ -1,0 +1,29 @@
+.asset-menu-wrap {
+	width: 142px;
+	height: 416px;
+	border: 1px solid #ecf0f3;
+}
+
+.asset-menu-wrap li {
+	padding-left: 15px;
+}
+
+.asset-menu-wrap a {
+	display: block;
+	border-bottom: 1px solid #ecf0f3;
+	padding: 15px;
+	text-decoration: none;
+	color: #333;
+}
+
+.asset-menu-wrap a:hover {
+	color: #1a8599;
+}
+
+.asset-balance .page-balance,
+.asset-bank-card .page-bank-card,
+.asset-qunar-card .page-qunar-card,
+.asset-coupon .page-coupon,
+.asset-balance .page-ious {
+	color: #1a8599;
+}

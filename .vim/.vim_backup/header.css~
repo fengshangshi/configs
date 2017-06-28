@@ -1,0 +1,811 @@
+/* header icons h = header */
+.ico-h-item {
+    display: block;
+    margin: 0 auto;
+    width: 16px;
+    height: 16px;
+    background: url(http://source.qunarzz.com/srm/common/header/icons-v7.png) -9999px -9999px no-repeat;
+}
+.ico-h-score {
+    height: 18px;
+    margin-top: -2px;
+    background: url(http://source.qunarzz.com/srm/common/header/icon-coin-v6.png) 0 -32px no-repeat;
+}
+.active .ico-h-score,
+a:hover .ico-h-score {
+    background-position: 0 1px;
+}
+.ico-h-channel {
+    background-position: 0 0;
+}
+.active .ico-h-channel,
+a:hover .ico-h-channel {
+    background-position: -26px 0;
+}
+.ico-h-help {
+    width: 18px;
+    height: 17px;
+    background-position: -52px 0;
+}
+.ico-h-home {
+    background-position: -80px 0;
+}
+.active .ico-h-home,
+a:hover .ico-h-home {
+    background-position: -106px 0;
+}
+.ico-h-hotelmanage {
+    background-position: -132px 0;
+}
+.active .ico-h-hotelmanage,
+a:hover .ico-h-hotelmanage {
+    background-position: -158px 0;
+}
+.ico-h-msg {
+    width: 17px;
+    height: 17px;
+    background-position: -184px 0;
+}
+.ico-h-order {
+    background-position: -211px 0;
+}
+.active .ico-h-order,
+a:hover .ico-h-order {
+    background-position: -237px 0;
+}
+.ico-h-phone {
+    width: 13px;
+    height: 17px;
+    background-position: -263px 0;
+}
+.ico-h-pot {
+    display: none;
+    position: absolute;
+    right: 6px;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    background-position: -286px 0;
+}
+.new-msg {
+    display: block;
+}
+.ico-h-report {
+    background-position: -304px 0;
+}
+.active .ico-h-report,
+a:hover .ico-h-report {
+    background-position: -330px 0;
+}
+.ico-h-roomState {
+    background-position: -356px 0;
+}
+.active .ico-h-roomState,
+a:hover .ico-h-roomState {
+    background-position: -382px 0;
+}
+.ico-h-setting {
+    width: 17px;
+    height: 17px;
+    background-position: -408px 0;
+}
+.ico-h-tally {
+    background-position: -435px 0;
+}
+.active .ico-h-tally,
+a:hover .ico-h-tally {
+    background-position: -461px 0;
+}
+
+/*修改icon*,单独放在git上*/
+.ico-h-shop {
+    width: 14px;
+		background-image: url(http://s.qunarzz.com/srm/navigation/direct_selling_icon.png);
+		background-position: 0 0;
+}
+.active .ico-h-shop,
+a:hover .ico-h-shop {
+		background-position: 0 -36px;
+}
+
+.ico-h-manage {
+    width: 19px;
+    background-position: -516px 0;
+}
+.active .ico-h-autoshow,
+a:hover .ico-h-autoshow{
+    background: url(http://source.qunarzz.com/srm/comment/ico-autosale2.png) 0 0 no-repeat;
+}
+.ico-h-autoshow{
+    background: url(http://source.qunarzz.com/srm/comment/ico-autosale2.png) 0 -17px no-repeat;
+}
+/*去呼呼分销*/
+.active .ico-h-discat,
+a:hover .ico-h-discat{
+    background: url(http://source.qunarzz.com/srm/discat/discat_bg.png) 0 0 no-repeat;
+}
+.ico-h-discat{
+    background: url(http://source.qunarzz.com/srm/discat/discat_bg.png) -70px 0 no-repeat;
+}
+
+.active .ico-h-manage,
+a:hover .ico-h-manage {
+    background-position: -487px 0;
+}
+
+.ico-h-comment {
+    background: url(http://source.qunarzz.com/srm/common/header/icon-comment.png) -30px 0 no-repeat;
+    width: 22px;
+}
+.active .ico-h-comment,
+a:hover .ico-h-comment {
+    background-position: 0 0px;
+}
+
+.ico-h-more {
+    width: 19px;
+    background-position: -595px 0;
+}
+.ico-h-more.gap {
+    padding-bottom: 17px;
+}
+.active .ico-h-more,
+a:hover .ico-h-more {
+    background-position: -487px 0;
+}
+
+/* header */
+.srm-header {
+    background: #005ba6 url(http://source.qunar.com/srm/common/header/bg.png) top right no-repeat;
+    height: 50px;
+    min-width: 1200px;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+}
+.srm-logo {
+    float: left;
+    margin: 0px 25px 0 20px;
+}
+.srm-logo img {
+    display: block;
+    width: 150px;
+    height: 50px;
+}
+.room-select {
+    float: left;
+    margin-top: 10px;
+    max-width: 263px;
+}
+.w1024 .room-select{
+    max-width:250px;
+}
+.room-select .ui-select{
+    display: inline-block;
+}
+.room-select .dropdown-toggle {
+    height: 30px;
+    max-width: 255px;
+    border-radius: 3px;
+    color: #fff;
+}
+.room-select .dropdown-value {
+    max-width:212px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 5px;
+    font-size: 14px;
+    font-family: "Microsoft Yahei";
+}
+.room-select .open .dropdown-toggle {
+    border-radius: 3px 3px 0 0;
+    background: #fff;
+    color: #333;
+
+}
+.room-select .open .dropdown-value {
+    width: 202px;
+    max-width: 202px;
+    font-size: 12px;
+    font-family: simsun;
+}
+.room-select .icon-arrowSelect {
+    position: static;
+    vertical-align: -5px;
+    background: url(http://source.qunarzz.com/srm/iconUi/icon-white-arrow.png) no-repeat;
+}
+.room-select .open .icon-arrowSelect {
+    position: absolute;
+    right: 10px;
+    background: url(http://source.qunarzz.com/srm/iconUi/icon-arrow-select.png) 0 -5px no-repeat;
+}
+.room-select .ui-select-items {
+    border: 1px solid #D3D2D2;
+}
+.header-nav {
+    float: right;
+}
+
+/* main nav */
+.main-nav-box {
+    float: right;
+}
+.main-nav li {
+    float: left;
+    margin-right: 2px;
+}
+.main-nav a {
+    color: #fff;
+    display: block;
+    /*width: 60px;*/
+    height: 38px;
+    padding-top: 10px;
+    text-align: center;
+    line-height: 18px;
+    line-height: 20px\9;
+    position: relative;
+}
+@media screen and (min-width: 1201px) {
+    .main-nav a {
+        width: 60px;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .main-nav a {
+        width: 46px;
+    }
+}
+.main-nav a:hover {
+    color: #2da1ee;
+}
+.main-nav .active,
+.main-nav .active:hover {
+    height: 40px;
+    background: #fff;
+    color: #2da1ee;
+}
+
+/* ribbon nav */
+.ribbon-nav-box {
+    float: right;
+    margin-left: 20px;
+}
+.ribbon-nav {
+    float: left;
+    margin-left: 10px;
+}
+.ribbon-nav-item {
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin-top: 10px;
+    margin-left: 6px;
+    position: relative;
+    cursor: pointer;
+}
+.ribbon-nav-item:first-child {
+    margin-left: 0;
+}
+.ribbon-nav-item:hover {
+    background: #003061;
+    border-radius: 2px 2px 0 0;
+}
+.ribbon-nav-item-hover:hover{
+    background: none;
+    border-radius: 0;
+}
+.ribbon-nav i {
+    margin-top: 7px;
+}
+.ribbon-nav .nav-account {
+    margin: 8px 10px 0 0;
+}
+/* 导航下拉菜单 */
+.ribbon-nav-item:hover  .pull-down-menu {
+    display: block;
+}
+.pull-down-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 40px;
+    z-index: 9;
+}
+
+.nav-account .pull-down-menu {
+    background: #003061;
+    padding:0px 23px;
+}
+
+.pull-down-menu .sub-menu-item {
+    display: block;
+    background: #003061;
+    color: #f5f5f5;
+    padding: 8px 10px;
+    white-space: nowrap;
+    border-bottom: 1px dotted #4F5A61;
+}
+
+.pull-down-menu .account-menu {
+     position: relative;
+     background: #003061;
+     color: #f5f5f5;
+     white-space: nowrap;
+     overflow: hidden;
+     text-align: center;
+     padding: 15px 0 0;
+}
+.pull-down-menu .mar-bottom {
+    border-bottom: 1px dotted #4F5A61;
+    text-align: left;
+}
+.account-menu img {
+    width: 65px;
+    height:65px;
+    display: block;
+}
+.pull-down-menu .account-item {
+    display: inline-block;
+    border-bottom: 0;
+    background: #003061;
+    color: #f5f5f5;
+    padding: 0 0 8px;
+    white-space: nowrap;
+}
+.pull-down-menu .account-other .account-item {
+    margin: 0 10px
+}
+.at-nav .line {
+    margin: 0 3px 0 10px;
+    color: #245c95;
+}
+.pull-down-menu .account-item.item-out {
+    padding: 8px 3px 8px 0;
+}
+
+.pull-down-menu .sub-menu-item:last-child,
+.pull-down-menu .sub-menu-item:hover:last-child {
+    border: none 0;
+    border-radius: 0 0 2px 2px;
+}
+.pull-down-menu .sub-menu-item:hover {
+    background: #004a8d;
+    color: #fff;
+}
+.nav-account .pull-down-menu .at-nav{
+    margin: 0 0 8px 80px;
+}
+.nav-account .pull-down-menu .item-username {
+    display: block;
+}
+.account-avatar {
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-block;
+    border: 1px solid #fff;
+}
+.at-avatar {
+    float: left;
+}
+.menu-txt {
+    display: inline-block;
+    width: 5em;
+}
+.menu-num {
+    display: inline-block;
+    /*width: 40px;*/
+    text-align: right;
+}
+.fixed-right {
+    left: auto;
+    right: 0;
+}
+.pull-down-menu .account-other {
+    padding: 5px 0 0;
+}
+/* 呼豆信息 */
+.coins-info {
+}
+.coins-info a {
+    color: #fff;
+}
+/* 个人头像信息 */
+.nav-avatar {
+    width: 23px;
+    height: 23px;
+    display: block;
+    margin: 4px auto 0;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.nav-avatar img {
+    width: 23px;
+}
+/* 导航搜索 */
+.h-search-enter {
+    float: left;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    margin: 10px -10px 0 10px;
+}
+.h-search-enter.open,
+.h-search-enter.open:hover{
+    display: block;
+    background: #003061;
+    border-radius: 2px 2px 0 0;
+}
+.open .pull-down-menu {
+    display: block;
+}
+.h-search-enter:hover {
+    background: transparent;
+}
+.h-search-enter.open:hover .pull-down-menu{
+    display: block;
+}
+.h-search-enter:hover .pull-down-menu {
+    display: none;
+}
+.ico-h-search {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    background: url(http://source.qunarzz.com/srm/common/header/icon-search.png) center 8px no-repeat;
+}
+/* h=header */
+.pull-down-menu .h-search-item,
+.pull-down-menu .h-search-item:hover {
+    width: 215px;
+    padding: 0;
+    background: #003061;
+    color: #f5f5f5;
+    border-bottom: 1px dotted #4F5A61;
+}
+.h-search-box {
+    position: relative;
+    padding: 5px;
+}
+.h-search-item .h-search-box .h-search-txt {
+    width: 164px;
+    padding: 2px 5px;
+    height: 20px;
+    line-height: 20px;
+    border: none 0;
+    outline: none;
+    vertical-align: top;
+}
+.h-search-btn {
+    background: #2da1ee;
+    color: #fff;
+    border: none 0;
+    line-height: 24px;
+    height: 24px;
+    width: 32px;
+}
+.h-search-tip {
+    padding: 2px 10px 6px;
+}
+/*修改组件*/
+.h-search-item .ui-textbox {
+    float: left;
+    line-height: normal;
+    border: none;
+}
+.h-search-item .ui-textbox .ui-textbox-placeholder {
+    line-height: 22px;
+}
+/*hsr = header search result*/
+.hsr-item {
+    border-top: 1px dotted #4F5A61;
+    padding: 5px 0;
+}
+.hsr-item  em {
+    color: #2da1ee;
+}
+.hsr-item:hover {
+    background: #004a8d;
+    cursor: pointer;
+}
+.hsr-item li {
+    clear: both;
+    width: auto;
+    padding: 0 10px;
+    line-height: 20px;
+}
+.hsr-name {
+    float: left;
+    max-width: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+/*    word-break:auto;
+    word-wrap:normal;*/
+}
+.hsr-em-font {
+    color: #2da1ee;
+    margin: 0 2px;
+}
+.hsr-source {
+    float: right;
+}
+.hsr-state {
+    padding-left: 5px;
+}
+.hsr-state-notin {
+    color: #9DE762;
+}
+.hsr-state-in {
+    color: #62D6E7;
+}
+.hsr-state-leave {
+    color: #F5F5F5;
+}
+.hsr-pager {
+    overflow: hidden;
+    background: #194572;
+    padding: 5px;
+}
+/* 搜索结果pager,pager的代码需要重构 */
+.hsr-pager {
+    text-align: center;
+}
+.hsr-pager li {
+    display: inline-block;
+    *display: inline;
+    zoom:1;
+    float: none;
+}
+.hsr-pager a,
+.hsr-pager span {
+    padding: 3px 0;
+    width: 18px;
+}
+.hsr-pager .next {
+    background-color: #fff;
+    margin: 0;
+    padding-right: 12px;
+    padding-left: 6px;
+    width: auto;
+}
+.hsr-pager  .prev {
+    width: auto;
+    background-color: #fff;
+    padding-left: 12px;
+    padding-right: 6px;
+    background-position: 0 3px;
+}
+.hsr-pager .ellipse {
+    padding: 3px 0;
+}
+.hsr-item .comment {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* 新年导航 */
+.header-new-year{
+    background: #de1c3b;
+}
+.header-new-year .ico-h-item{
+    background-image: url(http://source.qunarzz.com/srm/common/header/icons-v6.png);
+}
+.header-new-year .ico-h-score {
+    background: url(http://source.qunarzz.com/srm/common/header/icons-v6.png) no-repeat;
+    background-position: -601px 0;
+}
+.header-new-year .ico-h-search{
+    background-image: url(http://source.qunarzz.com/srm/common/header/icon-search.png);
+}
+.header-new-year .active .ico-h-score,
+.header-new-year a:hover .ico-h-score {
+    background-position: -627px 0;
+}
+.header-new-year .ico-h-shop{
+    background-position: -547px 0;
+}
+.header-new-year .active .ico-h-shop{
+    background-position: -573px 0;
+}
+.header-new-year .ico-h-manage{
+    background-position: -519px 0;
+}
+.header-new-year a:hover .ico-h-home{
+    background-position: -80px 0;
+}
+.header-new-year a:hover .ico-h-roomState{
+    background-position: -356px 0;
+}
+.header-new-year a:hover .ico-h-channel{
+    background-position: 0 0;
+}
+.header-new-year a:hover .ico-h-order{
+    background-position: -211px 0;
+}
+.header-new-year a:hover .ico-h-tally{
+    background-position: -435px 0;
+}
+.header-new-year a:hover .ico-h-manage{
+    background-position: -519px 0;
+}
+.header-new-year a:hover .ico-h-report{
+    background-position: -304px 0;
+}
+.header-new-year a:hover .ico-h-shop{
+    background-position: -547px 0;
+}
+.header-new-year a:hover .ico-h-score{
+    background-position: -601px 0;
+}
+.header-new-year .main-nav .active .ico-h-home{
+    background-position: -106px 0;
+}
+.header-new-year .main-nav .active .ico-h-roomState{
+    background-position: -382px 0;
+}
+.header-new-year .main-nav .active .ico-h-channel{
+    background-position: -26px 0;
+}
+.header-new-year .main-nav .active .ico-h-order{
+    background-position: -237px 0;
+}
+.header-new-year .main-nav .active .ico-h-tally{
+    background-position: -461px 0;
+}
+.header-new-year .main-nav .active .ico-h-manage{
+    background-position: -487px 0;
+}
+.header-new-year .main-nav .active .ico-h-report{
+    background-position: -330px 0;
+}
+.header-new-year .main-nav .active .ico-h-shop{
+    background-position: -573px 0;
+}
+.header-new-year .main-nav .active .ico-h-score{
+    background-position: -627px 0;
+}
+.header-new-year .main-nav .active, .header-new-year .main-nav .active:hover {
+    height: 40px;
+    background: #fff;
+    color: #de1c3b;
+}
+.header-new-year .main-nav a:hover{
+    color: #fff;
+    opacity: 0.8;
+    filter:alpha(opacity=80);
+}
+.logo-monkey{
+    width: 47px;
+    height: 48px;
+    position: absolute;
+    top: 0px;
+    left: 153px;
+    background: url(http://simg1.qunarzz.com/srm/common/header/monkey.png) no-repeat;
+    z-index: 1;
+}
+.skin-change{
+    float: left;
+    width: 43px;
+    height: 18px;
+    background: url(http://simg1.qunarzz.com/srm/common/header/skin-bg.png) no-repeat;
+    line-height: 13px;
+    color: #de1c3b;
+    text-align: center;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.header-new-year .main-nav .active:hover{
+    opacity: 1;
+    filter:alpha(opacity=100);
+    color: #de1c3b;
+}
+
+.header-new-year .ribbon-nav-item:hover{
+    background-color: #b2172f;
+}
+.header-new-year .pull-down-menu .sub-menu-item{
+    background-color: #b2172f;
+    border-bottom: 1px dotted #fff;
+}
+.header-new-year .pull-down-menu .sub-menu-item:hover{
+    background-color: #de1c3b;
+}
+.header-new-year .h-search-enter.open, .header-new-year  .h-search-enter.open:hover{
+    background-color: #b2172f;
+}
+.header-new-year .nav-account .pull-down-menu{
+    background-color: #b2172f;
+}
+.header-new-year .pull-down-menu .account-menu{
+    background-color: #b2172f;
+}
+.header-new-year .pull-down-menu .account-item{
+    background-color: #b2172f;
+}
+.header-new-year .at-nav .line{
+    color: #fff;
+}
+.header-new-year .pull-down-menu .mar-bottom{
+    border-bottom: 1px dotted #fff;
+}
+.header-new-year .pull-down-menu .sub-menu-item:last-child, .header-new-year .pull-down-menu .sub-menu-item:hover:last-child {
+    border: none 0;
+    border-radius: 0 0 2px 2px;
+}
+
+.main-nav-item{
+    position: relative;
+}
+.DP_NET{
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    width: 10px;
+    height: 10px;
+    background: url(http://source.qunarzz.com/apt_q_web/list/sebPriceOptimize/smallRedPoint.png) no-repeat;   
+}
+
+/*网上开店改名直销提示文案*/
+.main-nav-item-DP_NET .smui-tip {
+		width: 210px;
+		left: -76px;
+		top: 40px;
+}
+
+.main-nav-item-DP_NET .smui-tip .smui-tip-inner {
+		text-align: left;
+}
+
+.main-nav-item-DP_NET .DP_NET-close-button {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		font-size: 18px;
+}
+
+.main-nav-item-DP_NET .smui-tip .smui-tip-inner span {
+		font-weight: 700;
+}
+
+.smui-tip .DP_NET-before,
+.smui-tip .DP_NET-after {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		background-repeat: no-repeat;
+		margin-right: 2px;
+		vertical-align: -4px;
+}
+
+.smui-tip .DP_NET-before {
+		background-image: url(http://s.qunarzz.com/srm/navigation/direct_selling_icon_old.png);
+		background-position: 0 0;
+}
+
+.smui-tip .DP_NET-after {
+		background-image: url(http://s.qunarzz.com/srm/navigation/direct_selling_icon.png);
+		background-position: 0 -36px;
+		width: 14px;
+		vertical-align: -3px;
+}
+
+
+/* 新年活动 channel icon start*/
+.new-activity-channel{
+    z-index: 100;
+    position: absolute;
+    top: 4px;
+    left: 24px;
+    display: block;
+    margin: 0 auto;
+    width: 32px;
+    height: 15px;
+    background: url(http://source.qunar.com/srm/common/double-icon.gif) no-repeat;
+}
+/* 新年活动 channel icon end*/

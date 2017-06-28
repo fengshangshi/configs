@@ -1,0 +1,143 @@
+body{
+    background: #fff;
+}
+.order-list {
+    margin-left: 190px;
+    position: relative;
+    .yo-loading {
+        position: absolute;
+    }
+}
+.q-order{
+    padding:0 20px;
+    min-height: 400px;
+    .search{
+        padding: 10px 0;
+        .list{
+            padding: 10px 0;
+            .more-btn{
+                display: inline-block;
+                line-height: 30px;
+                vertical-align: middle;
+                cursor: pointer;
+            }
+        }
+        .more{
+            label{
+                line-height: 30px;
+            }
+        }
+        .search-control{
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .result{
+            span{
+                color:#4fad71;
+            }
+        }
+    }
+    .order-table-wrap{
+        width: 100%;
+        .order-table{
+            table-layout: fixed;
+            width:100%;
+            th{
+                text-align: center;
+                height: 36px;
+                background: #deefe2;
+                padding: 0 5px;
+            }
+            td{
+                text-align: center;
+                height: 34px;
+                border-bottom: 1px solid #eee;
+                padding: 0 5px;
+                &.td-grey{
+                    color: #b6b6b6;
+                }
+            }
+
+            .order-list-tr{
+                &:hover{
+                    background: #f8f8f8;
+                }
+            }
+            .text-left{
+                text-align: left;
+            }
+            .select-td{
+                padding-left: 15px;
+                text-align: left;
+            }
+            .order-list-select{
+                .dropdown-toggle{
+                    border:none
+                }
+				.special-channel-type {
+					max-width: 70px;
+				}
+                .icon-arrowSelect{
+                    position: static;
+                    padding-left: 2px;
+                }
+                &.open .dropdown-toggle{
+                    border: 1px solid #64be6c;
+                    border-bottom: 0;
+                    border-radius: 2px 2px 0 0;
+                }
+                &.open .icon-arrowSelect{
+                    position: absolute;
+                }
+            }
+            .look-order{
+                width: 61px;
+                height: 22px;
+                line-height: 22px;
+                text-align: center;
+                border: 1px solid #ddd;
+                display: inline-block;
+                cursor: pointer;
+                &:hover{
+                    border: 1px solid #4fad71;
+                }
+                i{
+                    font-size: 16px;
+                    color:#4fad71;
+                }
+                span{
+                    display: inline-block;
+                    vertical-align: top;
+                }
+            }
+        }
+    }
+    .export{
+        float: right;
+        width: 96px;
+        height: 28px;
+        font-size: 14px;
+        line-height: 28px;
+        border: 1px solid #ddd;
+        text-align: center;
+        cursor: pointer;
+        &:hover{
+            border: 1px solid #4fad71;
+        }
+        i{
+            font-size: 18px;
+            color: #4fad71;
+        }
+        span{
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+    .no-order{
+        text-align: center;
+        padding-top: 40px;
+    }
+    .pageing{
+        padding: 10px 0;
+    }
+}

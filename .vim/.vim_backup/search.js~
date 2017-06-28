@@ -1,0 +1,137 @@
+/**
+ *@file 搜索
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+	var storage = require("libs/localstorage/localstorage").localStorage;
+	var storageConfig = require("libs/config/storage-conf").config;
+	var util = require("libs/util/util");
+
+	require("./events");
+
+	$(".search-box-wrap").delegate(".go-prev-button", "click", function(e) {
+		e.preventDefault();
+		message.fire("search-box-hide", {
+			target: e.target
+		});
+	});
+
+	$(".search-box-wrap")
+	.delegate(".search-close-button", "click", function(e) {
+		e.preventDefault();
+		message.fire("search-box-hide", {
+			target: e.target
+		});
+	});
+
+	$(".search-box-wrap")
+	.delegate(".search-history-list-clear-button", "click", function(e) {
+		e.preventDefault();
+		message.fire("search-history-list-clear");
+	});
+
+	$(".search-box-wrap").delegate(".search-submit", "click", function(e) {
+		e.preventDefault();
+		message.fire("search-error-message-hide");
+		var query = $(".search-input").val();
+		query = $.trim(query);
+
+		if (query.length < 4) {
+			message.fire("search-error-message", {
+				message: "航班号输入错误：至少需要4个字符"
+			});
+			return false;
+		}
+
+		var regex = /^[a-zA-Z0-9]+$/i;
+		if (!regex.test(query)) {
+			message.fire("search-error-message", {
+				message: "航班号输入错误：只能输入字符+数字"
+			});
+			return false;
+		}
+
+		var storageKey = storageConfig.key,
+			storageMaxCount = storageConfig.maxCount,
+			storageData = storage.get(storageKey);
+
+		//数据格式为列表
+		if (util.type(storageData) !== "array") {
+			storageData = [];
+		}
+
+		//去重逻辑
+		var index = util.arrayIndexOf(storageData, query);
+		if (index != -1) {
+			storageData.splice(index, 1);
+		}
+
+		//控制存储数量
+		if (storageData.length >= storageMaxCount) {
+			storageData.shift();
+			storageData.push(query);
+		} else {
+			storageData.push(query);
+		}
+
+		storage.set(storageKey, storageData);
+
+		message.fire("search-result-list-show", {
+			target: e.target,
+			query: query
+		});
+	});
+
+	$(".search-list-wrap").delegate(".go-prev-button", "click", function(e) {
+		e.preventDefault();
+		message.fire("search-result-list-hide", {
+			target: e.target
+		});
+	});
+
+	$(".search-list-wrap")
+	.delegate(".search-result-list li", "click", function(e) {
+		e.preventDefault();
+		var flight_no = $(this).attr("data-flight-no");
+		message.fire("flight-show-by-flight-no", {
+			flight_no: flight_no,
+			is_page_location: "flight-search"
+		});
+	});
+
+	$(".search-box-wrap")
+	.delegate(".search-history-list a", "click", function(e) {
+		e.preventDefault();
+		var query = $(this).find("span").text();
+		message.fire("search-result-list-show", {
+			target: e.target,
+			query: query
+		});
+	});
+
+	$(".search-box-wrap").delegate(".search-clear", "click", function(e) {
+		e.preventDefault();
+		message.fire("search-input-empty", {
+			target: e.target
+		});
+	});
+
+	$(".search-box-wrap").delegate(".search-input", "input", function(e) {
+		e.preventDefault();
+
+		var input = $(".search-input").val();
+		input = $.trim(input);
+
+		if (input.length > 0) {
+			message.fire("search-clear-button-show", {
+				target: e.target
+			});
+		} else {
+			message.fire("search-clear-button-hide", {
+				target: e.target
+			});
+		}
+	});
+});

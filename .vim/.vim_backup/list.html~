@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>用户管理</title>
+<link rel="stylesheet" type="text/css" href="/css/libs/semantic.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+
+<% include ../include/header.html %>
+<div class="ui main container">
+	<h1 class="ui horizontal divider header">用户管理</h1>
+	<table class="ui selectable table">
+		<thead>
+		<tr>
+			<th>姓名</th>
+			<th class="center aligned">登录名</th>
+			<th class="center aligned">类型</th>
+			<th class="center aligned">创建时间</th>
+			<th class="center aligned">操作</th>
+		</tr>
+		</thead>
+		<tbody>
+			<%users.forEach(function(u) { %>
+					<% if (username != u.nickname) { %>
+							<tr>
+								<td><%=u.nickname%></td>
+								<td class="center aligned"><%=u.username%></td>
+								<td class="center aligned"><%=types[u.usertype]%></td>
+								<td class="center aligned"><%=s.boot['utils']['moment'](u.createtime).format('YYYY-MM-DD HH:mm:ss')%></td>
+								<td class="center aligned">
+									<% if (u.usertype == 2) { %>
+										<div data-id="<%=u._id%>" class="ui button deleteButton"><i class="remove icon"></i>删除</div>
+									<% } %>
+								</td>
+							</tr>
+					<% } %>
+			<% }) %>
+		</tbody>
+	</table>
+
+	<div class="fn-clear">
+		<!-- <div class="ui right floated pagination menu">
+			<a class="icon item">
+			<i class="left chevron icon"></i>
+			</a>
+			<a class="item">1</a>
+			<a class="item">2</a>
+			<a class="item">3</a>
+			<a class="item">4</a>
+			<a class="icon item">
+			<i class="right chevron icon"></i>
+			</a>
+		</div> -->
+	</div>
+
+</div>
+<% include ../include/footer.html %>
+
+<script src="/scripts/libs/jquery.min.js"></script>
+<script src="/scripts/libs/semantic.js"></script>
+<script src="/scripts/page/account/list.js"></script>
+</body>
+</html>

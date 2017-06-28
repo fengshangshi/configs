@@ -1,0 +1,27 @@
+var log4js = require('log4js');
+log4js.configure({
+	appenders: [
+		{type: 'console'},
+		{
+			type: 'file',
+			filename: 'logs/log.log',
+			maxLogSize: 1024,
+			backups: 3,
+			category: 'normal'
+		}
+	]
+});
+var logger = log4js.getLogger('normal');
+logger.setLevel('INFO');
+
+
+var express = require('express');
+var app = express();
+
+app.use(log4js.connectLogger(logger, {level: log4js.levels.INFO}));
+app.use(function(req, res, next) {
+	logger.info('Cheese is Gouda');
+	res.end("1");	
+});
+
+app.listen(3000);

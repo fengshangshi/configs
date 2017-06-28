@@ -1,0 +1,57 @@
+/**
+ * 充值骆驼卡
+ * @author water.li@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var dialog = require("module/dialogTips/dialogTips.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+//充值失败处理
+var rechargeFailHandle = function(data){
+	var rechargeEle = $(".recharge-form .form-item-submit"),
+		len = rechargeEle.find(".form-other").length;
+	if(len == 0){
+		rechargeEle.append("<span class='form-other'><i class='err'></i>"+data+"</span>");
+	}
+	else{
+		rechargeEle.find(".form-other").empty().append("<i class='err'></i>"+data);
+	}
+};
+
+message.register("rechargeCard", function(e) {
+	var args = e.args,
+		cardNo = args.cardNo,
+		password = args.password;
+
+	if (cardNo.length > 0 && password.length > 0) {
+		var data = {
+			cardNo: cardNo,
+			password: password
+		};
+
+		service.ajax({
+			url: "/member/asset/card/rechargeCardApi.htm",
+			data: data,
+			onsuccess: function(data) {
+				var errorCode = parseInt(data.errorCode);
+				switch (errorCode) {
+					case 0:
+						//隐藏dialog
+						$("#dialog-recharge").dialog("close");
+						//刷新余额和卡明细列表
+						message.fire("fetchCardList");
+						break;
+					case 2:
+						window.location.href = "/member/security/";
+					default:
+						//显示errorMsg信息
+						$(".recharge-form .button").addClass("button-o dialog-recharge-button").removeClass("button-disabled").html("领用");
+						//$("#dialog-recharge .form-other").remove();
+						rechargeFailHandle(data.errorMsg);
+
+				}
+			}
+		});
+	}
+});

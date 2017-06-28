@@ -1,0 +1,25 @@
+{{#if data.houseList}}
+	{{#each this.data.houseList}}
+	<a href="/resource/detail.html?houseId={{houseId}}" class="list-item">
+		<h4 class="list-hd">
+			<span class="apt-name">{{hotelName}}</span>
+		</h4>
+		<div class="list-bd">
+			<span>{{owner}}</span>
+			{{#ifSurplus certifyRemainingDays}}
+			<span class="tag-remind-time">还剩{{certifyRemainingDays}}天</span>
+			{{/ifSurplus}}
+		</div>
+		<div class="list-ft">
+			<span class="apt-adress">{{address}}</span>
+		</div>
+		<div class="list-info">
+			<p class="status-default">被退回</p>
+			<p class="info-time">2015-01-03</p>
+			<span class="crm-btn">分配</span>
+		</div>
+	</a>
+	{{/each}}
+{{else}}
+
+{{/if}}

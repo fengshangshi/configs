@@ -1,0 +1,271 @@
+﻿<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/context/mytags.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+<title>【去哪儿网】保险商城-保险订单详情-去哪儿网Qunar.com</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="http://qunarzz.com/insurance_mall/prd/styles/safe-detail@<%@include file='/include/ver/styles/safe-detail.css.ver'%>.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="q_header">
+	<%@include file='/include/prd/deposite/header_mini_styles.html'%>
+ 	<%@include file='/include/prd/deposite/header_main_mini.html'%>
+ </div>
+<div class="safe-box">
+<div class="safe-warp">
+       <!-- 头部 -->
+        <div class="clearfix">
+			<a class="qn_page_logo" href="http://www.qunar.com"></a>
+			<div class="qn_tit">保险</div>
+		</div>
+		<!-- 进度 -->
+		<div class="safe-process safe-process-ok">
+		   <span>选择保险</span><span class="">填写保单信息</span><span class="cur">支付完成</span>
+		</div>
+		<!-- 订单内容 -->
+		<div class="safe-details">
+		     <!-- 订单详情头部 -->
+			 <div class="clearfix">
+			       <!-- 供应商信息 -->
+				   <div class="safe-supplier">
+				         <h4 class="safe-supplier-title">供应商信息</h4>
+						 <dl class="safe-supplier-main">
+							<dt><i>
+							   <c:if test="${fn:startsWith(orderDetail.entiLogo, 'http')==false}">
+						       <img src="/resources/imgs/${orderDetail.entiCode}/${orderDetail.entiLogo}" alt="">
+						       </c:if>
+						       <c:if test="${fn:startsWith(orderDetail.entiLogo, 'http')==true}">
+						       <img src="${orderDetail.entiLogo}" alt="">
+						       </c:if>
+							   </i>${orderDetail.entiNm}</dt>
+							<dd>
+							    <span>服务热线</span>
+								<b>${orderDetail.entiHotLine}</b>
+							</dd>
+							<dd>
+							    <span>工作时间</span>
+								<b class="">${orderDetail.entiWorkTime}</b>
+							</dd>
+							<dd>
+							    <span>去哪儿服务热线</span>
+								<b class="">010-10101234</b>
+							</dd>
+							<dd>
+							    <span>工作时间</span>
+								<b class="">7*24小时</b>
+							</dd>
+						 </dl>
+				   </div>
+				   <!-- 订单状态 -->
+				   <div class="safe-state">
+				      <div class="clearfix">
+						   <i class="safe-state-icon"></i>
+						   <ul class="safe-state-main clearfix">
+								<li>
+									<span class="font-14-bold">订单状态 &nbsp;&nbsp;</span><span class="font-14-red">${orderDetail.mainStatus.desc}</span>
+								</li>
+								<li>
+								   总金额&nbsp;&nbsp;<span class="font-16-org">${orderDetail.orderTotalAmt}</span>&nbsp;元
+								</li>
+								<li>
+									订单号&nbsp;&nbsp;${orderDetail.insurOrderNo}
+								</li>
+								<li>
+									保单号&nbsp;&nbsp;${orderDetail.policyNo}
+								</li>
+								<li>
+									下单日期&nbsp;&nbsp;<fmt:formatDate value="${orderDetail.generateOrderTime}" pattern="yyyy-MM-dd"/>
+								</li>
+								<li>
+									保障时间&nbsp;&nbsp;<fmt:formatDate value="${orderDetail.insurBeginDate}" pattern="yyyy-MM-dd"/>至<fmt:formatDate value="${orderDetail.insurEndDate}" pattern="yyyy-MM-dd"/>
+								</li>
+						   </ul>	
+					  </div>
+					  	<c:if test="${orderDetail.displayAction}">			   
+						<div class="safe-btn-box">
+							  <a href="/insure/pay.do?insurOrderNo=${orderDetail.insurOrderNo}" title="" class="safe-btn-fk">立即付款</a>
+							  <a href="javascript:;" title="" class="safe-btn-qxbig" id="cancleBtn">取消订单</a>
+						</div>
+						</c:if>
+					  	<c:if test="${orderDetail.showSurrenderAction}">			   
+						<div class="safe-btn-box">
+							  <a href="javascript:;" title="" class="safe-btn-qxbig" id="tuibao">退保</a>
+						</div>
+						</c:if>
+				   </div>
+			 </div>
+			 <!-- 订单详情内容 -->
+			 <div class="safe-details-center">
+			     <p class="safe-detmin-title">订单详情</p>
+				 <ul class="safe-detmin-main">
+					<li>
+					    <h4>产品信息</h4>
+						<p class="safe-details-text"><a href="${orderDetail.productUrl}" title="" class="font-link">${orderDetail.prdNm}</a> <c:if test="null != orderDetail.planNm">（${orderDetail.planNm}）</c:if></p>
+					</li>
+					<c:if test="${orderDetail.hasPolicyHolder}">
+					<li>
+					    <h4>投保人信息</h4>
+						<div class="safe-details-text clearfix">
+							<p class="safe-details-ctit clearfix">
+								<span class="">姓名</span><b>${orderDetail.inusrNm}</b>
+							</p>
+							<p class="safe-details-ctit clearfix">
+								<span class="">证件号码</span><b>${orderDetail.insurIdNo}</b>
+							</p>
+							<p class="safe-details-ctit clearfix">
+								<span class="">电子邮箱</span><b>${orderDetail.insurEmail}</b>
+							</p>
+							<p class="safe-details-ctit clearfix">
+								<span class="">手机号码</span><b>${orderDetail.insurPhone}</b>
+							</p>						
+						</div>
+					</li>
+					</c:if>
+					<li>
+					    <h4>被保险人信息</h4>
+						<div class="safe-details-text clearfix">
+						<c:forEach var="detail" items="${orderDetail.insurInsurantList }" varStatus="s">
+							<p class="safe-details-ctit clearfix">
+								<span class="">姓名</span><b>${detail.natName}</b>
+							</p>
+							<p class="safe-details-ctit clearfix">
+								<span class="">证件号码</span><b>${detail.natIdNum}</b>
+							</p>
+							</c:forEach>						
+						</div>
+					</li>
+          <c:if test="${ orderDetail.needInvoice}">
+					<li>
+					    <h4>发票信息</h4>
+						<div class="safe-details-text">
+						   <div class="clearfix">
+								<p class="safe-details-ctit clearfix">
+									<span class="">收件人</span><b>${orderDetail.assignee}</b>
+								</p>
+								<p class="safe-details-ctit clearfix">
+									<span class="">电话号码</span><b>${orderDetail.assigneePhone}</b>
+								</p>
+								<p class="safe-details-ctit clearfix">
+									<span class="">邮编</span><b>${orderDetail.assigneePostCd}</b>
+								</p>
+								<p class="safe-details-ctit clearfix">
+									<span class="">邮寄地址</span><b>${orderDetail.assigneeProv} ${orderDetail.assigneeCity} ${orderDetail.assigneeAddr}</b>
+								</p>		
+						   </div>
+							<p class="safe-details-prompt">* 发票将在保单生效后7日内为您邮寄，您的快递信息请咨询去哪儿网服务热线10101234</p>
+						</div>						
+					</li>
+          </c:if>
+					  <c:if test="${insurTypeId == 12}">
+							<li>
+								<h4>理赔信息</h4>
+								<div class="safe-details-text">
+									<c:choose>
+										<c:when test="${claimInfos[0] != null}">
+											<style>
+											.claim-data-table {
+												width: 100%;
+											}
+											</style>
+											<table class="claim-data-table">
+												<thead>
+													<tr>
+														<th>申请时间</th>
+														<th>赔付时间</th>
+														<th>理赔金额</th>
+														<th>联系电话</th>
+														<th>理赔状态</th>
+														<th>操作</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>${claimInfos[0].applyDate}</td>
+														<td>${claimInfos[0].claimDate}</td>
+														<td><strong>${claimInfos[0].amount}</strong></td>
+														<td>${claimInfos[0].phone}</td>
+														<td>${claimInfos[0].status}</td>
+														<td><a href="${claimUrl}">理赔详情</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</c:when>
+										<c:otherwise>
+											<style>
+											.claim-info-wrap {
+
+											}
+
+											.claim-info-wrap a,
+											.claim-info-wrap .claim-tips {
+												display: inline-block;
+												*display: inline;
+												*zoom: 1;
+											}
+
+											.claim-info-wrap .claim-tips {
+												position: relative;
+											}
+											</style>
+											<div class="claim-info-wrap">
+												<a href="${claimUrl}" class="claim-submit-button">立即申请理赔</a>
+												<div class="claim-tips">
+													理赔规则: 赔付金额将以您的机票<em>改签费用标准</em>全额赔付(上限1000元)，未通过去哪儿网改签按最低金额赔付。
+												</div>
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</li>
+					</c:if>
+				 </ul>
+			 </div>
+		</div>
+</div>
+
+<div class="safe-mask hide" id="mask"></div>
+<div class="safe-popup hide" id="popBox">
+     <div class="safe-popup-title">
+	       <a href="javascript:;" title="" data-item="closeBtn">&nbsp;</a>提示
+	 </div>
+	 <div class="safe-popup-main">
+	     <h4>您确定要取消订单？</h4>
+		 <h5>订单成功取消后无法恢复</h5>
+	 </div>
+	 <div class="safe-popup-btn clearfix">
+	     <a href="/insure/cancel.do?insurOrderNo=${orderDetail.insurOrderNo}" title="" class="safe-popup-btnok">确&nbsp;定</a><a href="javascript:;" title="" class="safe-popup-btnqx" data-item="closeBtn">取&nbsp;消</a>
+	 </div>
+</div>
+
+<div class="safe-popup hide" id="tuibaoPanel">
+     <div class="safe-popup-title">
+	       <a href="javascript:;" title="" data-item="closeBtn">&nbsp;</a>提示
+	 </div>
+	 <div class="safe-popup-main">
+	     <h4>您确认退保？</h4>
+		 <h5>退保后保单无法恢复</h5>
+	 </div>
+	 <div class="safe-popup-btn clearfix">
+	     <a href="/surrender/surrender?orderNo=${orderDetail.insurOrderNo}" title="" class="safe-popup-btnok">确&nbsp;定</a><a href="javascript:;" title="" class="safe-popup-btnqx" data-item="closeBtn">取&nbsp;消</a>
+	 </div>
+</div>
+
+</div>
+ <div class="qn_footer">
+   <div class="inner">
+   <%@include file='/include/footer/footer_public_hotel.html'%>
+   </div>
+ </div>
+<script> var beaconed = '1607'; </script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/gaInit@<%@include file='/include/ver/scripts/gaInit.js.ver'%>.js"></script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/orderDetail@<%@include file='/include/ver/scripts/orderDetail.js.ver'%>.js"></script>
+</body>
+</html>
+
+

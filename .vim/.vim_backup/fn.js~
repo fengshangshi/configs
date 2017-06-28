@@ -1,0 +1,354 @@
+var fn = {};
+
+/**
+ * 将 2014-01-01 格式日期转换成日期对象
+ */
+fn.newDate = function(str) {
+    var data = str.replace(/\-/gi,"/");
+    return new Date(data);
+}
+
+/**
+ * 日期比较函数
+ */
+fn.dateCompare = function(date1, date2) {
+    var time1 = fn.newDate(date1).getTime();
+    var time2 = fn.newDate(date2).getTime();
+    if (time1 > time2) {
+        return 1;
+    } else if (time1 == time2) {
+        return 2;
+    } else {
+        return 3;
+    }
+}
+
+/**
+ * [获取日期 T+1]
+ * @param  {[type]} data [日期]
+ * @return {[type]}      [日期]
+ */
+fn.getNextDate = function(date) {
+    var newDate = fn.newDate(date);
+    var newNextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() + 1);
+    return fn.dateTimeFormat(newNextDate, 'yyyy-MM-dd');
+}
+
+/**
+ * [获取日期 T-1]
+ * @param  {[type]} data [日期]
+ * @return {[type]}      [日期]
+ */
+fn.getPrevDate = function(date) {
+    var newDate = fn.newDate(date);
+    var newNextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() - 1);
+    return fn.dateTimeFormat(newNextDate, 'yyyy-MM-dd');
+}
+
+/**
+ * [获取日期 T+1]
+ * @param  {[type]} data [日期]
+ * @return {[type]}      [日期]
+ */
+fn.getNextDate = function(date) {
+    var newDate = fn.newDate(date);
+    var newNextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() + 1);
+    return fn.dateTimeFormat(newNextDate, 'yyyy-MM-dd');
+}
+
+/**
+ * [获取日期 T-1]
+ * @param  {[type]} data [日期]
+ * @return {[type]}      [日期]
+ */
+fn.getPrevDate = function(date) {
+    var newDate = fn.newDate(date);
+    var newNextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() - 1);
+    return fn.dateTimeFormat(newNextDate, 'yyyy-MM-dd');
+}
+
+/**
+ * 判断是否当天
+ */
+fn.isToday = function(date, serverDate) {
+    var nowDate = fn.newDate(serverDate);
+    if (nowDate.getFullYear() == date.getFullYear() && nowDate.getMonth() == date.getMonth() && nowDate.getDate() == date.getDate()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * [检测是否为当天]
+ * @param  {[type]} date [日期]
+ * @return {[type]}      [布尔值]
+ */
+fn.checkIsToday = function(date) {
+    var todayDate = fn.newDate(CONFIG.DATE).getTime();
+    var newDate = fn.newDate(date).getTime();
+    if (newDate == todayDate) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * [检测是否为周末]
+ * @param  {[type]}  date          [日期]
+ * @param  {Boolean} isHasSaturday [是否包含周六]
+ * @return {[type]}                [布尔值]
+ */
+fn.checkIsWeekend = function(date, isHasSaturday) {
+    var week = fn.newDate(date).getDay();
+    if (isHasSaturday) {
+        if (week == 0 || week == 6) {
+            return true;
+        }
+    } else {
+        if (week == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * 转换成双数
+ */
+fn.toTwoNumber = function(num) {
+    if (num < 10) {
+        return '0' + num;
+    } else {
+        return num;
+    }
+}
+
+/**
+ * [转换成时间]
+ * @param  {[type]} num [12]
+ * @return {[type]}     [12:00]
+ */
+fn.toTime = function(num) {
+    return fn.toTwoNumber(num) + ':00';
+}
+
+/**
+ * [转换成时间]
+ * @param  {[type]} num [12]
+ * @return {[type]}     [12:00]
+ */
+fn.toTime = function(num) {
+    return fn.toTwoNumber(num) + ':00';
+}
+
+/**
+ * 根据指定天数获取一组日期
+ */
+fn.createDateArray = function(date, days) {
+    var date = date.split('-');
+    var y = date[0];
+    var m = date[1];
+    var d = date[2];
+
+    var dateArr = [];
+
+    for (var i = 0; i < days; i++) {
+        if (d > new Date(y, m, 0).getDate()) {
+            d = 1;
+            m++;
+            if (m > 12) {
+                m = 1;
+                y++;
+            }
+        }
+        dateArr.push(y + '-' + m + '-' + d);
+        d++;
+    }
+        
+    return dateArr;
+}
+/**
+ * 根据指定天数获取某一个日期（比如在当前日期的基础上向后推迟30天）
+ */
+ fn.getPostponeDate  = function (date,days) {
+    var now = this.newDate(date),
+        seconds = now.getTime(),
+        resultSeconds = seconds + days*24*60*60*1000;
+    var resultDate = new Date(resultSeconds);
+    return resultDate;
+ }
+ /**
+ * 根据指定天数获取某一个日期（比如在当前日期的基础上向后推迟30天）
+ */
+ fn.getFormatDate  = function (date) {
+    var now = new Date(date);
+    var resultDate = now.getFullYear() + '-' + this.toTwoNumber(now.getMonth()+1) + '-' + this.toTwoNumber(now.getDate());
+    return resultDate;
+ }
+
+ /**
+ * 将日期格式化为指定格式字符串
+ * @param date {Date} 日期
+ * @param format {String} 格式化依据字符串
+ * @param lang {String|Undefined} 语言 只有两个值 GB | US
+ * @return {String} 格式化后日期字符串
+ */
+fn.dateFormat = function(date, format, lang) {
+    var parts = {},rrg = /(?:\b|%)([dMyHhaAmsz]+|ap|AP)(?:\b|%)/g,
+        temp;
+
+    parts['d']     = date.getDate();
+    parts['dd']    = datePad(parts['d'], 2);
+    temp           = date.getDay();
+    parts['M']     = date.getMonth() + 1;
+    temp           = parts['M'],
+    parts['MM']    = datePad(temp, 2);
+    parts['yyyy']  = date.getFullYear();
+    temp           = parts['yyyy'];
+    parts['yy']    = datePad(temp, 2);
+
+    return format.replace(rrg, function(match, $1) {
+        var _ = parts[$1];
+        return _ == undefined ? $1 : _
+    });
+}
+/**
+ * 格式化为多少位数字--03
+ * @param val {Number|String} 数字或者数字字符串
+ * @param len {Number} 格式化后的位数 整数
+ * @param cut {Boolean|Undefined} 是否裁剪
+ * @return {String} 格式化后数字字符串
+ */
+function datePad(val, len, cut) {
+    if (len < 1) return '';
+    if (getDateType(cut, 'undefined')) cut = true;
+    val = '' + val;
+    for (var i = 0 ; i < len; i++) {
+        val = '0' + val;
+    }
+    i = val.length - len;
+    return val.substring(cut ? i : i > 0 ? len : i);
+}
+function getDateType (obj, typeVal) {
+    var ret = '';
+    if (obj == null) ret = String(obj);
+    ret = typeof obj;
+    if (ret === 'object' || ret === 'function') {
+        ret = toStr.call(obj).slice(8, -1).toLowerCase();
+    }
+    return (typeVal && typeof typeVal === 'string' && (typeVal = typeVal.toLowerCase())) ?
+           typeVal === ret :
+           ret;
+}
+
+/**
+ * 计算日期差
+ * @param  {[type]} checkInDate  [开始日期]
+ * @param  {[type]} checkOutDate [结束日期]
+ * @return {[type]}              [相差天数]
+ */
+fn.dateDiff = function(startDate, endDate) {
+    var aDate, oDate1, oDate2, iDays;  
+    aDate = startDate.split("-");  
+    oDate1 = new Date(aDate[0], aDate[1] - 1, aDate[2]);  
+    aDate = endDate.split("-");  
+    oDate2 = new Date(aDate[0], aDate[1] - 1, aDate[2]);  
+    iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);  
+    if ((oDate1 - oDate2) < 0) {  
+        return -iDays;  
+    }  
+    return iDays;   
+}
+/** 
+ * @说明 对Date的扩展，将 Date 转化为指定格式的String，
+ * 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+ * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   *
+ * @param fmt  * @author LWZ  * @returns
+ */
+ 
+fn.dateTimeFormat  =   function(date,fmt)  {  
+    var  o  =   {  
+        "M+" :  date.getMonth()  +  1,// 月份   
+        "d+" :  date.getDate(), // 日   
+        "h+" :  date.getHours(),// 小时   
+        "m+" :  date.getMinutes(), // 分   
+        "s+" :  date.getSeconds(), // 秒 
+        "q+" :  Math.floor((date.getMonth()  +  3)  /  3),// 季度   
+        "S" :  date.getMilliseconds()  // 毫秒    
+    };  
+    if  (/(y+)/.test(fmt))  fmt  =  fmt.replace(RegExp.$1,   (date.getFullYear()  +  "").substr(4  -  RegExp.$1.length));  
+    for  ( var  k  in  o)   
+        if  (new  RegExp("("  +  k  +  ")").test(fmt))  fmt  =  fmt.replace(RegExp.$1,   (RegExp.$1.length  ==  1)  ?  (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
+/**
+*根据弹出框的宽度计算弹出框的padding值
+*param ： width（弹出框的宽度）
+*/
+fn.dialogPaddingByWidth = function (width) {
+    width = parseInt(width,10);
+    var paddingV = (250 - width)/2;
+    paddingV = paddingV < 20 ? 20 : paddingV;
+    return paddingV;
+}
+
+/**
+ * [计算晚数]
+ * @param  {[type]} checkInDate  [2015-04-23]
+ * @param  {[type]} checkInTime  [12:00]
+ * @param  {[type]} checkOutDate [2015-04-24]
+ * @param  {[type]} checkOutTime [12:00]
+ * @return {[type]}              [1]
+ */
+fn.countDays = function(checkInDate, checkInTime, checkOutDate, checkOutTime) {
+    var days = 0,
+        dateNum = 0,
+        ciTimeNum = 0,
+        coTimeNum = 0;
+    // 处理像17:00这种格式的checkInTime、checkOutTime
+    if (checkInTime.toString().indexOf(':') > 0) {
+        checkInTime = parseInt(checkInTime.toString().split(':')[0]);
+    }
+    if (checkOutTime.toString().indexOf(':') > 0) {
+        checkOutTime = parseInt(checkOutTime.toString().split(':')[0]);
+    }
+    if (checkInTime < 12) {
+        ciTimeNum = 1;
+    }
+    if (checkOutTime > 12) {
+        coTimeNum = 1;
+    }
+    if (checkInDate != checkOutDate) {
+        dateNum = qfn.dateDiff(checkOutDate, checkInDate)
+    }
+    days = dateNum + ciTimeNum + coTimeNum;
+
+    if (days == 0) {
+        days = 1;
+    }
+    return days;
+}
+
+/**
+ * [处理Server订单状态]
+ * @param  {[type]} status [server状态码]
+ * 返回前端自定义状态码  1: 未入住 2：已入住 3：已离店 4：已取消
+ */
+fn.getOrderStatus = function(status) {
+    if (status == '01' || status == '02' || status == '13' || status == '08') {
+        return 1;
+    }
+    if (status == '03') {
+        return 2;
+    }
+    if (status == '04' || status == '05' || status == '07') {
+        return 3;
+    }
+    if (status == '06') {
+        return 4;
+    }
+}
+
+module.exports = fn;

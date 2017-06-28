@@ -1,0 +1,25 @@
+<div id="dialog-{{dialogType}}" class="dialog"
+		data-card-id="{{cardId}}"
+		data-card-name="{{cardName}}"
+		data-card-no="{{cardNo}}"
+		title="{{dialogTitle}}">
+	<form>
+		<p>
+			<label>手机号</label>
+			<strong>{{if_true areaCode}}{{mobile}}</strong>
+		</p>
+		<p>
+			<label for="mobileCode">验证码</label>
+			<input type="text" 
+				data-jvalidator-pattern="required"
+				id="mobileCode" name="mobileCode" value="" />
+			<a href="###" 
+				class="dialog-button dialog-button-mobile">免费获取</a>
+		</p>
+		<p>
+			<label></label>
+			<a href="###" 
+				class="dialog-button dialog-button-submit">确定</a>
+		</p>
+	</form>
+</div>

@@ -1,0 +1,11 @@
+/**
+ * @desc Vue过滤器
+ * @author ss.feng
+ */
+
+var utils = require('utils/date');
+
+// 日期过滤器
+Vue.filter('dateFormat', function(date, format) {
+	return date ? utils.format(date, format) : '';
+});

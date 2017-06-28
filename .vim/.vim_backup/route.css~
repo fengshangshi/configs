@@ -1,0 +1,347 @@
+#sky-route-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: none;
+}
+
+#sky-route-top-inner {
+    height: 60px;
+    line-height: 60px;
+    margin: 10px 82px 0 320px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+}
+
+#sky-back-to-index {
+    float: left;
+    width: 15%;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    color: #a3a3a3;
+}
+
+#sky-route-top-info {
+    float: left;
+    width: 85%;
+}
+
+#sky-route-top-info li {
+    float: left;
+    width: 25%;
+    overflow: hidden;
+    position: relative;
+}
+
+#sky-route-top-info li img {
+    vertical-align: middle;
+}
+
+#sky-route-top-info li span {
+    float: left;
+    width: 40px;
+    height: 60px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+#sky-route-top-info li div {
+    float: left;
+    width: calc(100% - 65px);
+    overflow: hidden;
+    padding-top: 12px;
+}
+
+#sky-route-top-info li strong,
+#sky-route-top-info li i {
+    display: block;
+    font-size: 14px;
+    height: 16px;
+    line-height: 16px;
+    color: #a3a3a3
+}
+
+#sky-route-top-info li i {
+    font-style: normal;
+    font-size: 16px;
+    color: #fff;
+    padding-top: 5px;
+}
+
+#sky-back-to-index .back-arrow {
+    padding: 0 16px;
+    background: url("/static/images/flight/arrow.png") no-repeat 0 center;
+    color: #a3a3a3;
+    font-style: normal;
+}
+
+#sky-route-relocate {
+    position: absolute;
+    top: 80px;
+    left: 320px;
+    width: 50px;
+    height: 65px;
+    background: url("/static/images/flight/relocate.png") no-repeat 0 0;
+    cursor: pointer;
+    display: none;
+}
+
+.flight-summary-data-wrap {
+	position: fixed;
+	left: 420px;
+	bottom: 10px;
+	background: rgba(0, 0, 0, 0.8);
+	height: 190px;
+	width: calc(100% - 530px);
+	color: #fff;
+}
+
+.flight-start-city,
+.flight-end-city {
+	position: absolute;
+	top: 160px;
+	width: 120px;
+	overflow:hidden;
+	font-size: 14px;
+}
+
+.flight-start-city {
+	left: 0;
+	padding-left: 20px;
+}
+
+.flight-end-city {
+	right: 0;
+	padding-right: 20px;
+	text-align: right;
+}
+
+.flight-start-time,
+.flight-end-time {
+	position: absolute;
+	top: 20px;
+	width: 100px;
+	overflow: hidden;
+	font-size: 12px;
+	text-align: center;
+}
+
+.flight-start-time span,
+.flight-start-time em,
+.flight-end-time span,
+.flight-end-time em {
+	display: block;
+	line-height: 16px;
+}
+
+.flight-start-time span,
+.flight-end-time span {
+	color: #919598;
+}
+
+.flight-start-time em,
+.flight-end-time em {
+	font-family: Arial;
+	font-size: 14px;
+}
+
+.flight-start-time {
+	left: 0;
+}
+
+.flight-end-time {
+	right: 0;
+}
+
+.flight-start-icon-wrap,
+.flight-end-icon-wrap {
+	position: absolute;
+	top: 55px;
+	width: 17px;
+	height: 95px;
+	background: url(./circel-icon.png);
+}
+
+.flight-start-icon-wrap {
+	left: 40px;
+}
+
+.flight-end-icon-wrap {
+	right: 40px;
+}
+
+.flight-voyage-wrap {
+	position: absolute;
+	top: 111px;
+	left: 57px;
+	right: 57px;
+	height: 32px;
+}
+
+.flight-voyage-start-wrap,
+.flight-voyage-end-wrap {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background: url(./dashed-icon.png);
+}
+
+.flight-voyage-start-wrap {
+	left: 0;
+	right: calc(100% / 2);
+	background-position: left top;
+}
+
+.flight-voyage-end-wrap {
+	right: 0;
+	left: calc(100% / 2);
+	background-position: right top;
+}
+
+.flight-voyage-process-wrap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 32px;
+}
+
+.flight-voyage-process-bar,
+.flight-voyage-process-end-bar {
+	float: left;
+	height: 32px;
+}
+
+.flight-voyage-process-bar {
+	background: url(./line-icon.png);
+}
+
+.flight-voyage-process-end-bar {
+	background: url(./line-end-icon.png);
+}
+
+.flight-voyage-processer {
+	position: absolute;
+	top: -4px;
+	left: 0;
+	width: 12px;
+	height: 56px;
+	background: url(./processer-icon.png);
+}
+
+.flight-altitude {
+	position: absolute;
+	top: 8px;
+	left: 0;
+	width: 120px;
+}
+
+.flight-altitude span,
+.flight-altitude em {
+	display: block;
+}
+
+.flight-altitude span {
+	color: #b4b2b3;
+	font-size: 12px;
+}
+
+.flight-altitude em {
+	font-size: 14px;
+	font-family: Arial;
+}
+
+.flight-altitude em span {
+	display: inline-block;
+}
+
+.flight-time-wrap {
+	position: absolute;
+	left: 56px;
+	right: 56px;
+	top: 50px;
+	height: 50px;
+}
+
+.flight-time,
+.flight-start-time-wrap,
+.flight-end-time-wrap {
+	float: left;
+}
+
+.flight-time {
+	width: 80px;
+	font-size: 12px;
+	text-align: center;
+}
+
+.flight-time span,
+.flight-time em {
+	display: block;
+}
+
+.flight-time em {
+	font-weight: 700;
+	font-size: 14px;
+	font-family: Arial;
+}
+
+.flight-start-time-wrap,
+.flight-end-time-wrap {
+	width: calc((100% - 80px) / 2);
+	height: 40px;
+}
+
+.flight-start-time-wrap {
+	background: url(./line-voyage-icon.png) no-repeat left 10px;
+}
+
+.flight-end-time-wrap {
+	background: url(./line-voyage-icon.png) no-repeat right 10px;
+}
+
+.flight-distance-wrap {
+	position: absolute;
+	left: 56px;
+	right: 56px;
+	top: 80px;
+	height: 50px;
+}
+
+.flight-distance,
+.flight-start-distance-wrap,
+.flight-end-distance-wrap {
+	float: left;
+}
+
+.flight-distance {
+	width: 80px;
+	font-size: 12px;
+	text-align: center;
+}
+
+.flight-distance span,
+.flight-distance em {
+	display: block;
+}
+
+.flight-distance em {
+	font-weight: 700;
+	font-size: 14px;
+	font-family: Arial;
+}
+
+.flight-start-distance-wrap,
+.flight-end-distance-wrap {
+	width: calc((100% - 80px) / 2);
+	height: 40px;
+}
+
+.flight-start-distance-wrap {
+	background: url(./line-voyage-icon.png) no-repeat left 10px;
+}
+
+.flight-end-distance-wrap {
+	background: url(./line-voyage-icon.png) no-repeat right 10px;
+}

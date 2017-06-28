@@ -1,0 +1,316 @@
+/**
+ *@file 跟数据端交互的数据中心逻辑
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+    var env = require('common/environment');
+	var requestConfig = require("libs/config/request-url-conf").config;
+    var events = require('common/events');
+    var eventsConfig = require('config/events');
+    var util = require('common/util');
+	var request = require("libs/request/request").request;
+
+	window.common.timer = [];
+	//按照经纬度获取航班列表
+	window.common.flights_timer = null;
+	var _isFirstRequest = true;
+	message.register("get-flight-list-by-location", function(e) {
+		var args = e.args,
+			southWest = args.southWest,
+			northEast = args.northEast,
+			coords = [];
+		
+		coords.push(southWest.lat, southWest.lng);
+		coords.push(northEast.lat, northEast.lng);
+		coords = coords.join(",");
+
+		var url = requestConfig.get_flight_list_by_coordinate
+				+ "?bounds=" + encodeURIComponent(coords)
+				+ "&_=" + new Date().getTime();
+
+		if (_isFirstRequest) {
+			url += "&_isFirstRequest=" + _isFirstRequest;
+			_isFirstRequest = false;
+		}
+
+		request({
+			url: url,
+			success: "flight-list-data-is-ready"
+		});
+	});
+
+	//飞机列表数据获取完成
+	message.register("flight-list-data-is-ready", function(e) {
+		var args = e.args,
+			data = args.data,
+			params = args.params;
+		message.fire("laoding-status-hide");
+
+		if (!data.data.flight_list) {
+			message.fire("show-message", {
+				message: "数据请求失败"
+			});
+			return false;
+		}
+
+		if (data.data.flight_list && data.data.flight_list.length <= 0) {
+			message.fire("show-message", {
+				message: "该范围没有飞机"
+			});
+			return false;
+		}
+
+		message.fire("hide-message");
+
+        require(['overlay/Flights'], function(Flights) {
+            var flightsOverlay = env.get('flightsOverlay');
+            var mapInstance = window.common.map;
+            if (!flightsOverlay) {
+                flightsOverlay = new Flights({
+                    flightList: data.data.flight_list
+                });
+                mapInstance.addOverlay(flightsOverlay);
+                flightsOverlay.on('flightclick', function(e) {
+					message.fire("flight-show-by-flight-no", {
+						flight_no: e.flightNo,
+						from_click: "index"
+					});
+                });
+                env.set('flightsOverlay', flightsOverlay);
+            } else {
+                flightsOverlay.changeProperty('flightList', 
+					data.data.flight_list, true);
+            }
+
+			console.log(flightsOverelay);
+
+            flightsOverlay.show();
+
+			var airlineOverlay = env.get('airlineOverlay');
+			if (airlineOverlay) {
+				airlineOverlay.hide();
+			}
+			var singleFlightOverlay = env.get('singleFlightOverlay');
+			if (singleFlightOverlay) {
+				singleFlightOverlay.hide();
+			}
+
+        });
+
+		window.common.flights_timer = setTimeout(function() {
+			message.fire("get-map-viewport");
+		}, 10 * 1000);
+	});
+
+	//按照搜索query获取飞机数据
+	message.register("get-flight-list-by-search", function(e) {
+		var args = e.args,
+			query = args.query;
+
+		var url = requestConfig.get_flight_list_by_search
+				+ "?flight_no=" + encodeURIComponent(query)
+				+ "&_=" + new Date().getTime();
+
+		request({
+			url: url,
+			success: "flight-search-list-data-is-ready"
+		});
+	});
+
+	//搜索飞机列表数据获取完成
+	message.register("flight-search-list-data-is-ready", function(e) {
+		var args = e.args,
+			data = args.data,
+			params = args.params;
+		if (data.error == 0) {
+			message.fire("search-flight-list-show", {
+				data : data.data
+			});
+		}
+		message.fire("loading-status-hide");
+	});
+
+	//按照航班号获取飞机详情
+	message.register("get-flight-info-by-flight-no", function(e) {
+		var args = e.args,
+			flight_no = args.flight_no;
+		
+		//var url = requestConfig.get_flight_info_by_no
+		var url = requestConfig.get_flight_by_flight_no
+				+ "?flight_no=" + encodeURIComponent(flight_no)
+				+ "&_=" + new Date().getTime();
+
+		request({
+			url: url,
+			success: "flight-info-data-is-ready"
+		});
+
+	});
+
+	message.register("get_flight_active_list_by_no", function(e) {
+		var args = e.args,
+			flight_no = args.flight_no;
+
+		var url = requestConfig.get_flight_active_by_no
+				+ "?flight_no=" + encodeURIComponent(flight_no)
+				+ "&_=" + new Date().getTime();
+
+		request({
+			url: url,
+			success: "flight-active-info-list-data-is-ready"
+		});
+	});
+	
+	//飞机详情获取完成
+	message.register("flight-info-data-is-ready", function(e) {
+		var args = e.args,
+			data = args.data,
+			params = args.params;
+
+	
+		if (data.error == 0) {
+			if (data.data.status == 1) {
+				message.fire("flight-detail-show", {
+					data: data.data
+				});
+				message.fire("get_flight_active_list_by_no", {
+					flight_no: data.data.flight_no
+				});
+			} else {
+				message.fire("show-airline", {
+					data: data.data
+				});
+			}
+		}
+	});
+
+	message.register("flight-active-info-list-data-is-ready", function(e) {
+		var args = e.args,
+			data = args.data,
+			params = args.params;
+	
+		if (data.error == 0) {
+			require(['overlay/SingleFlight'], function(SingleFlight) {
+				var singleFlightOverlay = env.get('singleFlightOverlay');
+				var mapInstance = window.common.map;
+				window.common.is_single = true;
+				var coords = data.data.active_info.current_position,
+					lng = coords.lng,
+					lat = coords.lat;
+
+				var point = new BMap.Point(lng, lat);
+				var zoom = window.common.init_map_zoom;
+				if (!zoom) {
+					zoom = 13;
+				}
+				window.common.map_zoom = mapInstance.getZoom();
+				window.common.init_map_zoom = zoom;
+				mapInstance.setZoom(zoom);
+				mapInstance.panTo(point);
+				if (!singleFlightOverlay) {
+					singleFlightOverlay = new SingleFlight({flight: data.data});
+					mapInstance.addOverlay(singleFlightOverlay);
+					env.set('singleFlightOverlay', singleFlightOverlay);
+				} else {
+					singleFlightOverlay.changeProperties({flight: data.data}, true);
+				}
+
+				var airlineOverlay = env.get('airlineOverlay');
+				if (airlineOverlay) {
+					airlineOverlay.hide();
+				}
+				var flightsOverlay = env.get('flightsOverlay');
+				if (flightsOverlay) {
+					flightsOverlay.hide();
+				}
+				singleFlightOverlay.show();
+				if (window.common.is_data_detail_show) {
+					message.fire("flight-data-detail-show", {
+						data: data.data
+					});
+				}
+			});
+			var single_flight_timer = setTimeout(function() {
+				message.fire("get_flight_active_list_by_no", {
+					flight_no: data.data.flight_no
+				});
+			}, data.data.active_info.interval * 1000);
+
+			window.common.timer.push(single_flight_timer);
+		}
+	});
+
+
+	message.register("show-airline", function(e) {
+		var args = e.args,
+			data = args.data;
+
+		message.fire([
+				"search-layer-hide",
+				"flight-detail-header-show"
+			], {
+				flight_no: data.flight_no,
+				company: data.base_info.company.name
+		});
+
+        require(['overlay/Airline'], function(Airline) {
+            var airlineOverlay = env.get('airlineOverlay');
+            var mapInstance = window.common.map;
+            if (!airlineOverlay) {
+                airlineOverlay = new Airline({flight: data});
+                mapInstance.addOverlay(airlineOverlay);
+                env.set('airlineOverlay', airlineOverlay);
+            } else {
+                airlineOverlay.changeProperties({flight: data}, true);
+            }
+
+			clearTimeout(window.common.flights_timer);
+			
+			var flightsOverlay = env.get('flightsOverlay');
+			if (flightsOverlay) {
+				flightsOverlay.hide();
+			}
+			var singleFlightOverlay = env.get('singleFlightOverlay');
+			if (singleFlightOverlay) {
+				singleFlightOverlay.hide();
+			}
+			window.common.isAirlineShow = true;
+            airlineOverlay.show();
+			
+			var poi = data.take_off_and_land[0].destination.point;
+			var point = new BMap.Point(poi.lng, poi.lat);
+			var map = window.common.map;
+			map.panTo(point);
+        });
+		
+	});
+	
+	//按照航班号获取飞机运动轨迹数据
+	message.register("get_flight_active_by_no", function(e) {
+		var args = e.args,
+			flight_no = args.flight_no;
+
+		var url = requestConfig.get_flight_active_by_no
+				+ "?flight_no=" + encodeURIComponent(flight_no)
+				+ "&_=" + new Date().getTime();
+
+		request({
+			url: url,
+			success: "flight-active-info-data-is-ready"
+		});
+	});
+
+	message.register("flight-active-info-data-is-ready", function(e) {
+		var args = e.args,
+			data = args.data,
+			params = args.params;
+
+		if (data.error == 0) {
+			message.fire("flight-data-detail-show", {
+				data: data.data
+			});
+		}
+	});
+});

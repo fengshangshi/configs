@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>联系我们-客满满</title>
+    <link rel="stylesheet" href="http://qunarzz.com/pms/prd/styles/usage/page/base@dev.css" media="screen">
+    <link rel="stylesheet" href="http://qunarzz.com/pms/prd/styles/usage/page/contact@dev.css" media="screen">
+</head>
+<body>
+<div ms-controller="page" ms-include-src="layoutTpl" data-include-rendered="render"></div>
+<script src="http://qunarzz.com/pms/prd/scripts/exports/base@dev.js"></script>
+<script src="http://qunarzz.com/pms/prd/scripts/exports/contact@dev.js"></script>
+</body>
+</html>
+
+

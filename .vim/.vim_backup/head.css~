@@ -1,0 +1,252 @@
+/**
+ * header.css
+ * @author ss.feng
+ */
+.top-bar {
+	width: 100%;
+	height: 29px;
+	border-bottom: 1px solid #ebebeb;
+	background-color: #f8f8f8;
+}
+
+.top-bar-content {
+	width: 1200px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+.top-bar a,
+.top-bar h2 span {
+	color: #666;
+	line-height: 32px;
+}
+
+.top-bar .global-nav,
+.top-bar .global-account {
+	height: 30px;
+}
+
+.top-bar .global-nav {
+	float: left;
+	width: 780px;
+}
+
+.top-bar .global-account {
+	margin-left: 800px;
+	text-align: right;
+}
+
+.top-bar h2 {
+	float: left;
+	background: 
+		url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150108-01/top-bar-logo.png)
+		no-repeat 5px 8px;
+	padding-left: 30px;
+	height: 30px;
+}
+
+.top-bar h2 a:hover {
+	text-decoration: none;
+}
+
+.top-bar ol {
+	margin-left: 156px;
+}
+
+.top-bar ol li {
+	float: left;
+	margin-right: 15px;
+}
+
+.top-bar ul {
+	
+}
+
+.top-bar ul li {
+	display: inline-block;
+	vertical-align: top;
+	*display: inline;
+	*zoom: 1;
+}
+
+.top-bar ul li a {
+	*display: inline-block;
+	*vertical-align: top;
+}
+
+.top-bar ul li.order-list-li{
+	position: relative;
+	z-index: 3;
+}
+
+.top-bar ul  li dl {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	_position: relative;
+	_top: -2px;
+}
+
+.top-bar .sp-line {
+	padding-left: 5px;
+	margin-right: 5px;
+	font-size: 12px;
+	*margin-right: 10px;
+	color: #666;
+	display: inline-block;
+	padding-top: 6px;
+	*vertical-align: top;
+}
+
+/**
+ * logo.css
+ */
+.logo-bar {
+	width: 100%;
+	height: 70px;
+}
+
+.logo-bar-content {
+	width: 1200px;
+	height: 70px;
+	margin: 0 auto;
+}
+
+h1 {
+	float: left;
+	vertical-align: top;
+}
+
+h1 * {
+	display: inline-block;
+	vertical-align: top;
+}
+
+h1 a {
+	width: 126px;
+	height: 48px;
+	background:
+		url(http://source.qunarzz.com/site/images/pay/useraccount/common/logo.png)
+		no-repeat;
+	overflow: hidden;
+	line-height: 999em;
+	margin: 11px 0 11px 5px;
+}
+
+h1 strong {
+	font-size: 24px;
+	margin: 30px 0 0 20px;
+	color: #666;
+}
+
+.logo-bar ol {
+	float: left;
+	margin:20px 0 0 40px;
+}
+
+.logo-bar ol li {
+	float: left;
+	margin: 0 35px;
+}
+
+.logo-bar ol strong,
+.logo-bar ol a {
+	display: block;
+	width: 80px;
+	text-align: center;
+	font-size: 14px;
+	padding: 10px 0;
+	color: #333;
+}
+
+.logo-bar ol a:hover {
+
+}
+
+.logo-bar ol strong.current,
+.logo-bar ol a.current {
+	color: #1a8599;
+	font-weight: 700;
+}
+
+#userMessage {
+	position: relative;
+}
+
+.messageCount {
+	display: inline-block;
+	font-size: 12px;
+	background: #f60;
+	color: #fff;
+	width: 20px;
+	height: 13px;
+	line-height: 12px;
+	padding:1px 4px;
+	text-align: center;
+}
+
+.messageCount i {
+	display:  inline-block;
+	border-top: 5px solid #f60;
+	border-right: 5px solid #fff;
+	font-size: 0;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+}
+
+#userMessage .messageCount {
+	position: absolute;
+	top: -5px;
+}
+
+.top-bar .order-list-title {
+	display: inline-block;
+	background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/arrows.png)
+		no-repeat 66px 9px;
+	_background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-005/arrows.png)
+		no-repeat 66px 9px;
+	padding: 0 10px;
+	width: 66px;
+	height: 22px;
+	text-align: left;
+	line-height: 22px;
+	margin-top: 5px;
+	border: 1px solid #f8f8f8;
+	border-bottom: none;
+}
+
+.top-bar .current .order-list-title {
+	border: 1px solid #ccc;
+	background-position: 66px -36px;
+}
+
+.top-bar .order-list dd {
+	position: absolute;
+	background: #f8f8f8;
+	border: 1px solid #ccc;
+	border-top: 0;
+	*width: 86px;
+	*text-align: left;
+	display: none;
+}
+
+.top-bar .order-list dd a {
+	display: block;
+	line-height: 20px;
+	text-align: left;
+	padding: 2px 13px;
+}
+
+.top-bar .order-list dd a:hover {
+	background: #4878dd;
+	color: #fff;
+	text-decoration: none;
+}
+
+.top-bar .current .order-list dd {
+	display: block;
+}

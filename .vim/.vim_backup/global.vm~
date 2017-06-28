@@ -1,0 +1,7 @@
+## website
+#set($website = "结算系统")
+
+## static
+#set($qzzUrl = "http://q.qunarzz.com")
+#set($jsPath = "sivir/prd/scripts")
+#set($cssPath = "sivir/prd/styles")

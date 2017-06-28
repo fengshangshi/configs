@@ -1,0 +1,52 @@
+/**
+ * @file sugar命令入口
+ * @author fengshangshi
+ */
+var program = require('commander');
+var util = require('./util/util');
+var p = require('../package');
+
+global.sugar = sugar = util;
+
+program
+	.version(p.version)
+	.usage('command [options]');
+
+program
+	.command('init <name>')
+	.description('初始化服务器环境或应用程序环境')
+	.action(function(name) {
+		require('./command/init')(name);
+	});
+
+program
+	.command('server <cmd>')
+	.description('服务器控制管理, server start|stop|reload')
+	.action(function(cmd) {
+		require('./command/server')(cmd);
+	});
+
+program
+	.command('release')
+	.description('应用程序发布管理')
+	.option('-t, --target <config>', '发布目标环境, -t local|dev')
+	.option('-w, --watch', '监听源代码变化, 自动发布到目标环境')
+	.action(function(options) {
+		var target = options.target || 'local';
+		var watch = options.watch || 'false';
+		require('./command/release')(target, watch);
+	});
+
+program.on('--help', function() {
+	var cmd = program._name;
+	sugar.trace('  Examples:');
+	sugar.trace();
+	sugar.trace('    初始化服务器:  ' + cmd + ' init server');
+	sugar.trace('    启动服务器  :  ' + cmd + ' server start');
+	sugar.trace('    发布应用程序:  ' + cmd + ' release');
+	sugar.trace();
+});
+
+program.parse(process.argv);
+
+if (!program.args.length) program.help();

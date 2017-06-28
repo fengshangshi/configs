@@ -1,0 +1,2331 @@
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}
+var stream = require('stream');
+var util = require('util');
+
+function Love() {
+	stream.Readable.call(this);
+	this._max = 5;
+	this._index = 0;
+}
+util.inherits(Love, stream.Readable);
+
+Love.prototype._read = function() {
+	var i = this._index++;
+	if (i > this._max) {
+		this.push('beautiful');
+		this.push(null);
+	} else {
+		var str = '' + i;
+		var buf = new Buffer(str, 'utf8');
+		this.push(buf);
+	}
+}

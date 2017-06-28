@@ -1,0 +1,18 @@
+/**
+ * @file 用户验证
+ * @author ss.feng
+ */
+module.exports = function() {
+		return function(req, res) {
+				var cookieUid = req.cookies.uid,
+						sessionUid = req.session.uid;
+
+				if (!cookieUid || !sessionUid || cookieUid != sessionUid) {
+						return res.json({
+								'status': '4001',
+								'msg': '用户验证失败'
+						});
+						return true;
+				}
+		};
+};

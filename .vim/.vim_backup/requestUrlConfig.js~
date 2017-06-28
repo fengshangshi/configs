@@ -1,0 +1,29 @@
+/**
+ *@file 接口
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var config = {
+		/**
+		 * 按照视窗范围获取飞机列表
+		 */
+		get_flight_list_by_viewport: "/api/get_flight_active_list_by_coordinate",
+
+		/**
+		 * 搜索飞机列表
+		 */
+		get_flight_list_by_search: "/api/get_flight_info_list_by_search",
+
+		/**
+		 * 按照航班号获取飞机动态数据
+		 */
+		get_flight_active_info_by_no: "/api/get_flight_active_by_no",
+
+		/**
+		 * 按照航班号获取飞机静态数据
+		 */
+		get_flight_info_by_no: "/api/get_flight_info_by_no"
+	};
+
+	exports.config = config;
+});

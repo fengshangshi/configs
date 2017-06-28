@@ -1,0 +1,172 @@
+/* np = notice panel */
+.notice-panel {
+    width: 420px;
+    position: fixed;
+    bottom: 30px;
+    right: 0;
+    z-index: 999;
+    background-color: #fff;
+}
+/* tabs */
+.np-head {
+    background: #59b4f1;
+}
+.np-tabs {
+    border: 1px solid #2DA1EE;
+    border-bottom: none;
+}
+.np-tabs a {
+    float: left;
+    color: #fff;
+    background: #288bcd;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+.np-tabs .active {
+    position: relative;
+    background: #fff;
+    color: #2DA1EE;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+}
+.np-num {
+    margin-left: 5px;
+}
+.np-fold {
+    background: #59b4f1;
+    display: block;
+    text-align: right;
+    color: #fff;
+    padding: 6px 10px;
+}
+.np-fold a{
+    color: #fff;
+}
+/* content */
+.np-cont {
+    box-sizing: border-box;
+    border: 1px solid #2DA1EE;
+    padding: 0 10px;
+    clear: both;
+    height: 300px;
+    overflow: hidden;
+    background: #fff;
+}
+.np-msglist li {
+    border-bottom: 1px solid #D3E5ED;
+    position: relative;
+    padding: 11px 0;
+}
+.np-msglist li:last-child {
+    border-bottom: none;
+}
+.np-msglist li:after {
+    content: "";
+    display: block;
+    clear: both;
+    font-size: 0;
+    overflow: hidden;
+}
+.np-msg-head {
+    width: 290px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.np-weblogo {
+    margin-right: 10px;
+    vertical-align: text-bottom;
+}
+.np-msg-cont {
+    color: #888;
+}
+.np-msg-cont p {
+    margin-top: 2px;
+}
+.np-msg-breif {
+    display: inline-block;
+    max-width: 320px;
+    line-height: 25px;
+    padding-left: 8px;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: pointer;
+}
+.np-msg-breif:hover {
+    color: #2DA1EE;
+}
+.np-msg-breif:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 2px;
+    height: 2px;
+    background: #2DA1EE;
+}
+.np-msg-oprt {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    letter-spacing: -4px;
+}
+.np-msg-oprt .smui-btn {
+    letter-spacing: 0;
+    margin-left: 5px;
+}
+.np-price-tip {
+    color: #f00;
+    font-size: 12px;
+    position: absolute;
+    right: 0;
+    top: 32px;
+}
+.np-price-tip .fn-rmb {
+    font-size: 12px;
+}
+.np-msg-roomType {
+    display: inline-block;
+    max-width: 215px;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.np-msg-roomNum {
+    display: inline-block;
+    height: 15px;
+    line-height: 15px;
+    vertical-align: top;
+}
+.np-msg-contactor {
+    display: inline-block;
+    max-width: 100px;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.np-msg-contactorTelNo {
+    display: inline-block;
+    height: 15px;
+    line-height: 15px;
+    vertical-align: top;
+}
+.np-nullNotice{
+      font-size: 14px;
+      color: #888;
+      font-weight: bold;
+      width: 140px;
+      margin: auto;
+      margin-top: 150px;
+      background: url(http://source.qunar.com/srm/notice/res/logo-nullNotice.png) 0px 2px no-repeat;
+      text-indent: 20px;
+}

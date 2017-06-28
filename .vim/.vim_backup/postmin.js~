@@ -1,0 +1,143 @@
+/**
+ * 
+ * @author ss.feng@
+ */
+var fs = require("fs");
+var path = require("path");
+
+function scanFolder(path) {
+	var fileList = [],
+		folderList = [];
+
+	var getStats = function(path) {
+		try {
+			return fs.statSync(path);
+		} catch (e) {
+			return e;
+		}
+	};
+
+	var walk = function(path, fileList, folderList) {
+		var stats = getStats(path);
+		if (stats.isFile || stats.isDirectory) {
+			if (stats.isFile() || stats.isDirectory) {
+				var files = fs.readdirSync(path);
+				files.forEach(function(item) {
+					var tmp = path + "/" + item,
+						stats = getStats(tmp);
+
+					if (stats.isDirectory()) {
+						walk(tmp, fileList, folderList);
+						folderList.push(tmp);
+					} else {
+						fileList.push(tmp);
+					}
+					
+				});
+			}
+		} else {
+			console.log("未完成扫描，原因：" + stats);
+		}
+	};
+
+	walk(path, fileList, folderList);
+
+	return {
+		files: fileList,
+		folders: folderList
+	};
+}
+
+function extFilter(files, ext) {
+	var fileList = [];
+	files.forEach(function(item) {
+		if (path.extname(item) === ext) {
+			fileList.push(item);
+		}
+	});
+	return fileList;
+}
+
+function vmFilter(files) {
+	return extFilter(files, ".vm");
+}
+
+function jsonFilter(files) {
+	return extFilter(files, ".json");
+}
+
+function addSignFile(file) {
+	var content = fs.readFileSync(file, "utf-8");
+	var cssRe = /"\${qzz}\${cssPath}[^>]+"/g;
+	var jsRe = /"\${qzz}\${jsPath}[^>]+"/g;
+
+	var flag = 0;
+	if (cssRe.test(content)) {
+		var cssPath = content.match(cssRe)[0];
+		if (/\${cssPath}([^>]+)/.test(cssPath)) {
+			cssPath = cssPath.match(/\${cssPath}([^>]+)"/)[1];
+			cssPath = "/styles/www/page" + cssPath;
+			cssPath = "./refs/ver" + cssPath + ".ver";
+			console.log(cssPath);
+			if (fs.existsSync(cssPath)) {
+				var ver = fs.readFileSync(cssPath, "utf-8");
+				content = content.replace(/\.css"/, "@" + ver + '.css"');
+				flag++;
+			}
+		}
+	}
+	if (jsRe.test(content)) {
+		var jsPath = content.match(jsRe)[0];
+		if (/\${jsPath}([^>]+)/.test(jsPath)) {
+			jsPath = jsPath.match(/\${jsPath}([^>]+)"/)[1];
+			jsPath = "/scripts/www/page" + jsPath;
+			jsPath = "./refs/ver" + jsPath + ".ver";
+			if (fs.existsSync(jsPath)) {
+				var ver = fs.readFileSync(jsPath, "utf-8");
+				content = content.replace(/\.js"/, "@" + ver + '.js"');
+				flag++;
+			}
+		}
+	}
+
+	fs.writeFileSync(file, content, "utf-8");
+	return flag > 0 ? true : false;
+}
+
+function addSignFiles(files) {
+	var tmp = [];
+	files.forEach(function(item) {
+		if (addSignFile(item)) {
+			tmp.push(item);
+		}
+	});
+	return tmp;
+}
+
+function deleteJosnFiles(files) {
+	var jsonFiles = jsonFilter(files); 
+	jsonFiles.forEach(function(item) {
+		if (fs.existsSync(item)) {
+			fs.unlinkSync(item);
+		}
+	});
+}
+
+function main(argv) {
+	console.log("===========================");
+	console.log("===vm静态文件版本号工具===");
+	console.log("=========v 1.0.0===========");
+	console.log("===========================");
+	var files = scanFolder(argv).files;
+	var vmFiles = vmFilter(files);
+	var list = addSignFiles(vmFiles);
+	console.log("共处理文件" + list.length + "个");
+	list.forEach(function(item) {
+		console.log("[LOG] " + item);
+	});
+
+	// 删除vm目录下的json文件
+	deleteJosnFiles(files);
+}
+
+main("./refs/vm/page/www");

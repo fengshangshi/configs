@@ -1,0 +1,119 @@
+##顶托
+<div class="top-bar">
+	<div class="top-bar-content clearfix">
+		<div class="global-nav clearfix">
+			<h2>
+				<span>去哪儿网Qunar.com</span>
+			</h2>
+			<ol class="clearfix">
+				<li>
+					<a target="_blank" href="${homePage}">首页</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${flightPage}">机票</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${hotelPage}">酒店</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${tuanPage}">团购</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${dujiaPage}">度假</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${piaoPage}">门票</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${trainPage}">火车票</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${travelPage}">攻略</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${gongyuPage}">公寓</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${iPage}">当地人</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${carPage}">车车</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${guidePage}">骆驼书</a>
+				</li>
+				<li>
+					<a target="_blank"  href="${appPage}">客户端</a>
+				</li>
+			</ol>
+		</div>
+		<div class="global-account">
+			<ul>
+				<li>
+					#if ($loginName)
+					<a href="${userPage}">
+						$!{loginName}
+					</a>
+					<a href="${logoutPage}">退出</a>
+					#else
+					<a href="${loginPage}">登录</a>
+					<a href="${registerPage}">注册</a>
+					#end
+					<span class="sp-line">|</span>
+				</li>
+				<li class="order-list-li">
+					<dl class="order-list">
+						<dt>
+							<a target="_blank" class="order-list-title"  
+									href="${orderPage}">我的订单</a>
+						</dt>
+						<dd>
+							<a href="${flightOrderPage}" target="_blank">
+								<span>机票订单</span>
+							</a>
+							<a href="${hotelOrderPage}" target="_blank">
+								<span>酒店订单</span>
+							</a>
+							<a href="${apartmentOrderPage}" target="_blank">
+								<span>公寓订单</span>
+							</a>
+							<a href="${groupOrderPage}" target="_blank">
+								<span>团购订单</span>
+							</a>
+							<a href="${dujiaOrderPage}" target="_blank">
+								<span>度假订单</span>
+							</a>
+							<a href="${ticketOrderPage}" target="_blank">
+								<span>门票订单</span>
+							</a>
+							<a href="${trainOrderPage}" target="_blank">
+								<span>火车票订单</span>
+							</a>
+							<a href="${busOrderPage}" target="_blank">
+								<span>汽车票订单</span>
+							</a>
+							<a href="${carOrderPage}" target="_blank">
+								<span>车车订单</span>
+							</a>
+							<a href="${tinfoOrderPage}" target="_blank">
+								<span>机票预约单</span>
+							</a>
+							<a href="${iOrderPage}" target="_blank">
+								<span>当地人订单</span>
+							</a>
+						</dd>
+					</dl>
+					<span class="sp-line">|</span>
+				</li>
+				<li>
+					<a target="_blank"  href="${reviewPage}">积分商城</a>
+					<span class="sp-line">|</span>
+				</li>
+				<li>
+					<a target="_blank"  href="${connactPage}">联系客服</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+##/顶托

@@ -1,0 +1,10 @@
+var s = 2 * 1000;
+
+for (var i = 0; i < 2; i++) {
+		console.log('i=', i);
+		setTimeout(function() {
+				console.log('i=', i);
+		}, s);
+}
+
+console.log('the end');

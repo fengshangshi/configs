@@ -1,0 +1,32 @@
+/**
+ * @file 数据库连接中间件
+ * @author ss.feng
+ */
+var mongoose = require('mongoose');
+
+module.exports = function() {
+    var host = config.db['host'];
+    var port = config.db['port'];
+    var user = config.db['user'];
+    var pass = config.db['pass'];
+    var db = config.db['db'];
+
+    var url = 'mongodb://' + host + ':' + port + '/' + db;
+    var options = {
+        user: user,
+        pass: pass
+    };
+
+    // 创建数据链接实例
+    mongoose.connect(url, options);
+
+    // 监听错误信息
+    var conn = mongoose.connection;
+    conn.on('error', function(err) {
+        logger.error('mongodb数据错误, error: ' + err);
+    });
+
+	return function(req, res, next) {
+		next();
+	};
+};

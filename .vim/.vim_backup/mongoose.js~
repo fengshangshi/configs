@@ -1,0 +1,20 @@
+/**
+ * @file 数据库初始化链接
+ * @author ss.feng@qunar.com
+ */
+var mongoose = require('mongoose');
+
+var host = mongoConf.host,
+	db = mongoConf.db,
+	user = mongoConf.user,
+	password = mongoConf.password;
+
+var mongodb = 'mongodb://' + host + '/' + db;
+
+mongoose.connect(mongodb);
+mongoose.connection.on('error', function(error) {
+	console.log(111);
+	logger.error(error);
+});
+
+module.exports = mongoose;

@@ -1,0 +1,19 @@
+## @Describe: 新建审核列表 
+## @author ss.feng@qunar.com
+
+#parse("widget/include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/include/headMeta.vm")
+    <title>新建审核</title>
+    <link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/newSubmission/newSubmission.css" />
+    #parse("widget/include/headScript.vm")
+</head>
+<body>
+    <div ms-controller="layout" ms-include-src="content" data-include-replace="true" data-include-rendered="rendered"></div>
+    <div id="dataLoading" class="js-loading"></div>
+    <script src="${qzzUrl}/${jsPath}/common/base.js"></script>
+    <script src="${qzzUrl}/${jsPath}/pages/newSubmission/newSubmission//entry.js"></script>
+</body>
+</html>

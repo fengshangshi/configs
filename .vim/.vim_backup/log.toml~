@@ -1,0 +1,22 @@
+#是否启动，默认启动, 关闭需显示关闭
+enabled = true
+
+#日志级别，会记录大于设置level的日志，默认4
+#1=TRACE 2=DEBUG 3=INFO
+#4=WARN 5=ERROR 6=FATAL
+level = 4
+
+#日志滚动策略，默认是D
+#Y=年 M=月 D=日
+rolling = 'D'
+
+#日志名称，前缀名称，默认为app
+name = 'app'
+
+#存放目录，相对于根目录logs
+root = '/app'
+
+#自定义日志级别
+#levelName = levelCode
+#如设置：jdy = '1200'，在代码中的使用方法：logger.jdy('xxxx')
+[levels]

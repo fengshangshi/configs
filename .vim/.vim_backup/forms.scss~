@@ -1,0 +1,32 @@
+/**
+ * Forms样式
+ * 基于bootstrap扩展
+ * @auhtor yingran.wang@qunar.com
+ */
+
+// 灰色背景
+.input-gray {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+    &:focus {
+        background: #fff;
+        border-color: #58bc62;
+    }
+}
+
+// 日历选择框图标
+.input-icon-calendar {
+    background: #fff url('http://source.qunar.com/cesar/common/icon-calendar.png') 95% center no-repeat;
+}
+
+// 验证失败样式
+.input-validation-error {
+    border-color: #ff674e !important;
+}
+
+.textarea {
+    width: 600px;
+    display: inline-block;
+    margin: 5px 0;
+    line-height: 1.6;
+}

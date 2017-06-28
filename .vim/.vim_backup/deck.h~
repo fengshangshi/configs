@@ -1,0 +1,12 @@
+#ifndef DECK_H
+#define DECK_H
+
+#define DECKSIZE 52
+
+typedef struct deck_t
+{
+		int card[DECKSIE];
+		int dealt;
+} deck_t;
+
+#endif

@@ -1,0 +1,16 @@
+/**
+ *@file 地图配置
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var config = {
+		lng: 116.60340729216,
+		lat: 40.088211361469,
+		maxZoom: 18,
+		minZoom: 5,
+		defaultZoom: 8,
+		mapContainer: "map"
+	};
+
+	exports = config;
+});

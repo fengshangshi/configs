@@ -1,0 +1,43 @@
+/**
+ * 常用卡操作确认 
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+
+message.register("confirmOperateBankCard", function(e) {
+	var args = e.args,
+		dialogType = args.dialogType,
+		cardId = args.cardId;
+
+	var re = /dialog-([A-z]+)BankCard/,
+		type = re.exec(dialogType)[1];
+
+	var data = { 
+		type: type,
+		cardId: cardId 
+	};
+
+	dialogType = "#" + dialogType;
+
+	$.ajax({
+		url: "/member/asset/bankCard/manageBankCardApi.htm",
+		method: "post",
+		data: data,
+		success: function(data) {
+			alert(data.status === 0 ? "发送成功" : "发送失败");
+			if (data.status === 0) {
+				// 重新获取常用卡
+				message.fire("fetchBankCard", {
+					page: 2,
+					step: 10
+				});
+				// 关闭浮层
+				$(dialogType).dialog("close");
+			}
+		},
+		cache: false,
+		dataType: "json"
+	});
+});
+

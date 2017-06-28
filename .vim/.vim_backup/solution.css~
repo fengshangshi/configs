@@ -1,0 +1,61 @@
+/*[export]*/
+/**
+ * 去哪儿旅行卡章程
+ */
+require("../../base.css");
+require("../common.css");
+
+.top-bar-content {
+	width: 960px;
+}
+
+.top-bar .global-account {
+	margin-left: 0;
+}
+
+.logo-bar {
+	height: auto;
+	margin-bottom: 20px;
+}
+
+.logo-bar-content {
+	width: 960px;
+	border-bottom: 3px solid #00aec7;
+	padding-bottom: 10px;
+}
+
+.container {
+	width: 920px;
+	padding: 20px;
+	background: #f5fafd;
+}
+
+.inner-wrap {
+	background: #fff;
+	margin-bottom: 0;
+	font-size: 12px;
+	padding: 30px;
+}
+
+.inner-title h2 {
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+	padding-bottom: 20px;
+}
+
+.inner-title h3 {
+	padding: 0 50px 20px 0;
+	text-align: right;
+}
+
+.inner-content p,
+.inner-content h3 {
+	text-indent: 2em;
+	line-height: 18px;
+	padding: 5px 0;
+}
+
+.inner-content h3 {
+	font-weight: 700;
+}

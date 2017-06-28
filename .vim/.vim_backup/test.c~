@@ -1,0 +1,17 @@
+#include <stdio.h>
+#define MAX(a, b) (a > b) ? a : b
+
+int main()
+{
+	int x, y, a, b, max1, max2;
+	printf("input two numbers: ");
+	scanf("%d %d", &x, &y);
+	max1 = MAX(x, y);
+	printf("input two numbers: ");
+	scanf("%d %d", &a, &b);
+	max2 = MAX(a, b);
+	printf("max=%d\n", max1);
+	printf("max=%d\n", max2);
+
+	return 0;
+}

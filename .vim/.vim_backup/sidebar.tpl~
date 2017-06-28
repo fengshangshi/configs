@@ -1,0 +1,85 @@
+<div class="sidebar">
+	<div class="sidebar-title clearfix">
+		<h1>百度天眼</h1>
+		<a class="about" href="/about">关于</a>
+	</div>
+	<div class="sidebar-content">
+        {%widget name="sky:widget/search/search.tpl"%}
+	</div>
+</div>
+<div id="sky-detail-bar">
+    <span id="sky-back-to-index"><i>&lt;</i><strong>返回首页</strong><em>|</em></span>
+    <div id="sky-detail-bar-content">
+        <ul class="clearfix">
+            <li class="detail-item">
+                <span></span>
+                <strong>经纬度</strong>
+                <em id="sky-detail-point">40.323E, 116.345N</em>
+            </li>
+            <li class="detail-item">
+                <span></span>
+                <strong>方向</strong>
+                <em id="sky-detail-direction">268</em>
+            </li>
+            <li class="detail-item">
+                <span></span>
+                <strong>航速</strong>
+                <em id="sky-detail-speed">700km/h</em>
+            </li>
+            <li class="detail-item">
+                <span></span>
+                <strong>垂直航速</strong>
+                <em id="sky-detail-vertical-speed">1280fpm</em>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="flight-summary-data-wrap">
+	<div class="flight-start-city">北京首都</div>
+	<div class="flight-end-city">拉萨机场</div>
+	<div class="flight-start-time">
+		<span>实际起飞</span>
+		<em>07:30</em>
+	</div>
+	<div class="flight-end-time">
+		<span>预计到达</span>
+		<em>00:30</em>
+	</div>
+	<div class="flight-start-icon-wrap"></div>
+	<div class="flight-end-icon-wrap"></div>
+	<div class="flight-voyage-wrap">
+		<div class="flight-voyage-start-wrap"></div>
+		<div class="flight-voyage-end-wrap"></div>
+		<div class="flight-voyage-process-wrap">
+			<div class="flight-voyage-process-bar"
+				style="width: 180px;"></div>
+			<div class="flight-voyage-process-end-bar"
+				style="width: 0;"></div>
+			<div class="flight-voyage-processer"
+				style="left: 180px;"></div>
+			<div class="flight-altitude" 
+				style="left: 200px;">
+				<span>海拔</span>
+				<em>2342pf<span>(200m)</span></em>
+			</div>
+		</div>
+	</div>
+	<div class="flight-time-wrap">
+		<div class="flight-start-time-wrap"></div>
+		<div class="flight-time">
+			<span>预计耗时</span>
+			<em>2H30m</em>
+		</div>
+		<div class="flight-end-time-wrap"></div>
+	</div>
+	<div class="flight-distance-wrap">
+		<div class="flight-start-distance-wrap"></div>
+		<div class="flight-distance">
+			<span>预计耗时</span>
+			<em>2H30m</em>
+		</div>
+		<div class="flight-end-distance-wrap"></div>
+	</div>
+</div>
+{%require name="sky:widget/list/list.css"%}
+{%script%}require("./sidebar.js");{%/script%}

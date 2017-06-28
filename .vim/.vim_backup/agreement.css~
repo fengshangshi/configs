@@ -1,0 +1,61 @@
+/*分销协议*/
+.sepChannelSale{
+	margin: 15px 0 0;
+	width: 1135px;
+	color: #333;
+}
+.sepChannelSale .i-icon{
+	color: #fe2b2b;
+    font-size: 18px;
+    vertical-align: middle;
+}
+.sepChannelSale2{margin:55px 0 0 155px;}
+.sepChannelSale h3.qd-price{
+	padding: 20px 3px 10px;
+	font-size: 12px;
+}
+.sepChannelSale h3.qd-price .iconCaution{margin-top: -3px;}
+.sepChannelSale a{color: #2da1ee;}
+.sepChannelSale .content{
+	background: #fff;
+    padding: 10px 20px;
+    line-height: 25px;
+    border-bottom: 1px solid #e9e9e9;
+}
+.sepChannelSale .agreeDetail{
+	background: #fff;
+    padding: 10px 20px;
+    line-height: 25px;
+    border-bottom: 1px solid #e9e9e9;
+    margin-top: 15px;
+}
+.sepChannelSale .agreeDetail h3{
+	font-size: 14px;
+    color: #555;
+}
+.sepChannelSale .agreeContent{margin:0.5em 0 0 0;min-height:365px;overflow-y: auto;border:1px solid #b9b9b9;padding-bottom:20px;}
+.sepChannelSale .agreeContent h3{text-align: center;margin:30px 0;}
+.sepChannelSale .agreeContent .body{margin: 0 30px;}
+.sepChannelSale .agreeContent .body p{text-indent: 2em;line-height: 1.8;}
+.sepChannelSale .agreeContent .body p b {font-weight: 700;}
+.sepChannelSale .agreeContent .body h4 {line-height: 2.5;}
+.sepChannelSale .agreeContent .body li{line-height: 1.8;font-weight:100;}
+.sepChannelSale .agreeContent .body li b{font-weight:700;}
+.sepChannelSale .footer{margin-top: 20px;text-align: left;}
+.sepChannelSale .footer span{margin: 0 5px;}
+.sepChannelSale .footer button{
+	padding: 4px 14px;
+    width: auto;
+}
+.art-ui-dialog.alert p{text-indent: 2em;}
+.iconCaution {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 5px;
+	vertical-align: middle;
+	background: url(//static.kztpms.com/srmweb/channel/exd/icon-state.png) 0 0 no-repeat;
+}
+#showAgreement {
+	text-decoration:underline;
+}

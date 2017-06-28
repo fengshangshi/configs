@@ -1,0 +1,164 @@
+/**
+ * Created by he on 15/12/14.
+ */
+
+(function() {
+    var Native = function() {
+        var ua = navigator.userAgent,
+            isAndroid = /android/ig.test(ua),
+            isIos = /iphone|ipod|ios/ig.test(ua),
+
+            //保存每一次调用的参数和回调
+            hyCallbackObj = {},
+
+            callbackId = new Date().getTime(),
+
+            //保存h5注册的方法
+            nativeFunctions = {};
+
+        //ios保存消息的组数
+        window.hyMessageQueue = [];
+
+        //调用客户端提供的方法
+        this.invokeNative = function(action, option, succ, err) {
+
+            callbackId = (parseInt(callbackId, 10) + 1).toString();
+
+            //把参数和回调保存
+            hyCallbackObj[callbackId] = {
+                option: option,
+                succ: succ,
+                err: err || function() {}
+            }
+
+            execNative(action, option, callbackId);
+        };
+
+        function execNative(action, option, callbackId) {
+            if (isIos) {
+                execIos(action, callbackId)
+            } else if (isAndroid) {
+                execAndroid(action, JSON.stringify(option), callbackId)
+            } else {
+                throw new Error('暂不支持您的设备');
+            }
+        };
+
+        //h5调android
+        function execAndroid(action, option, callbackId) {
+            if (window['hy'] && window['hy'][action]) {
+                window['hy'][action](option, callbackId);
+            } else {
+                throw new Error('还不支持' + action + '方法');
+            }
+        };
+
+        //h5调ios
+        function execIos(action, callbackId) {
+            var iframeId = 'iframeBridge';
+
+            //创建iframe
+            function createIframe() {
+                var iframe = document.createElement('iframe');
+
+                iframe.setAttribute('height', '0');
+                iframe.setAttribute('width', '0');
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('style', 'display:none');
+                iframe.setAttribute('id', iframeId);
+
+                document.documentElement.appendChild(iframe);
+            };
+
+            var messageOption = hyGetOption(callbackId),
+                messageObj = {
+                    action: action,
+                    callbackId: callbackId,
+                    option: messageOption || ''
+                };
+
+            window.hyMessageQueue.push(messageObj);
+
+            if (!document.querySelector('#' + iframeId)) {
+                createIframe();
+            }
+
+            document.querySelector('#' + iframeId).src = 'hy://PleaseCheckNewMessage';
+        };
+
+
+        function hyGetOption(callbackId) {
+            return JSON.stringify(hyCallbackObj[callbackId].option);
+        };
+
+        //ios获取消息队列
+        window.hyGetMessageQueue = function() {
+            var messageQueueString = JSON.stringify(window.hyMessageQueue);
+
+            window.hyMessageQueue = [];
+
+            return messageQueueString;
+        };
+
+        //客户端成功函数
+        window.hyCallbackSucc = function(callbackId, data) {
+            if (hyCallbackObj[callbackId]
+                && hyCallbackObj[callbackId]['succ']) {
+
+                if (isIos) {
+                    hyCallbackObj[callbackId]['succ'](JSON.parse(data));
+                } else if (isAndroid) {
+                    hyCallbackObj[callbackId]['succ'](data);
+                }
+
+                delete hyCallbackObj[callbackId];
+            }
+        };
+
+        //客户端失败函数
+        window.hyCallbackErr = function(callbackId, data) {
+            if (hyCallbackObj[callbackId]
+                && hyCallbackObj[callbackId]['err']) {
+
+                if (isIos) {
+                    hyCallbackObj[callbackId]['err'](JSON.parse(data));
+                } else if (isAndroid) {
+                    hyCallbackObj[callbackId]['err'](data);
+                }
+
+                delete hyCallbackObj[callbackId];
+            }
+
+        };
+
+        //注册h5方法, 供客户端调用
+        this.registerNative = function(key, func) {
+            if (!nativeFunctions[key]) {
+                nativeFunctions[key] = func;
+            } else {
+                throw new Error('registerNative已经定义过' + key + ', 不要重新定义');
+            }
+        };
+
+        //客户端调用h5的方法,可以传入option作为参数
+        window.invokeHyFunc = function(key, option) {
+            if (nativeFunctions[key]) {
+                if (typeof option === 'undefined') {
+                    nativeFunctions[key]();
+                } else {
+                    if (isIos) {
+                        nativeFunctions[key](JSON.parse(option));
+                    } else if (isAndroid) {
+                        nativeFunctions[key](option);
+                    }
+                }
+            }
+        };
+    };
+
+    var native = new Native();
+
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = native;
+    }
+}())

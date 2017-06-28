@@ -1,0 +1,21 @@
+<div id="dialog-recharge" class="dialog" title="">
+	<form method="post" 
+			action="/member/asset/balance/refundApplySubmit.htm">
+		<p class="tips">
+			可申请金额
+			<strong>{{amount}}</strong>
+			将全部退还到您的
+			<strong>{{source}}</strong>
+			账户
+		</p>
+		<p>
+			<a href="###" 
+				class="dialog-button dialog-button-submit">确定</a>
+			<a href="###" 
+				class="dialog-button dialog-button-cancel">取消</a>
+			<input type="hidden" name="refundId" value="{{id}}" />
+		</p>
+	</form>
+</div>
+
+

@@ -1,0 +1,26 @@
+/**
+ *@file 搜索首页交互逻辑
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+	var animationConfig = require("libs/config/animationConfig").config;
+	var dataCenter = require("data/dataCenter");
+
+	var animationSpeed = animationConfig.timeout;
+	
+	message.register("show-search-index-panel", function(e) {
+		/**
+		 * 展现搜索面板
+		 */
+		$(".search-index-wrap").show();
+		$(".search-guide").animate({
+			right: 0
+		}, animationSpeed);
+
+		/**
+		 * 将状态插入页面队列
+		 */
+	});
+});

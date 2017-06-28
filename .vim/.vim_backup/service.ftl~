@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>网上开店 - 去呼呼管家</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="去呼呼管家是非标准住宿市场广为使用的客房管理系统，帮助管理者智能规划不同房型的占房计划，及价格计划，提供强有力的数据报表及收益分析，帮助管理者做出正确的决策。去呼呼管家不仅提供了房态，订单，账务，客史等基本功能，还提供渠道直连，店铺直销等协助管理者增加宣传和销售的整套解决方案。">
+        <meta name="keywords" content="非标住宿，智能门锁，密码开门，客栈管理系统，免费公寓管理系统，公寓管理，OTA数据同步，房态管理，免费PMS，房态管理系统">
+        <link rel="shortcut icon" href="${img}/base/bitbug_favicon.ico">
+		<link rel="stylesheet" href="http://q.qunarzz.com/srm/prd/styles/base@<#include '../ver/styles/base.css.ver'>.css">
+        <link rel="stylesheet" href="http://q.qunarzz.com/srm/prd/styles/dpService@<#include '../ver/styles/dpService.css.ver'>.css">
+		<#include '../common/config.ftl'>
+	</head>
+	<body class="page page-service">
+		<div ms-controller="layout" ms-include-src="layoutTpl" data-include-replace="true"></div>
+		<!-- main  -->
+		<div class="srm-main fn-clear js-service-set" id="js-service-set">
+			
+		</div>
+		<!-- /main  -->
+		
+		<script type="text/javascript" src="http://q.qunarzz.com/srm/prd/scripts/base@<#include '../ver/scripts/base.js.ver'>.js"></script>
+	    <script type="text/javascript" src="http://q.qunarzz.com/srm/prd/scripts/dpService@<#include '../ver/scripts/dpService.js.ver'>.js"></script>
+		
+		<!-- ga s -->
+		<#include '../common/ga.ftl'>
+		<!-- ga e -->
+		
+	</body>
+</html>

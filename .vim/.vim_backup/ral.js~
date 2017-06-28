@@ -1,0 +1,15 @@
+
+var config = {
+	"ralHost": "http://sys.beta.qunar.com",
+	"ralTimeout": 10
+}
+module.exports = {
+	// 用户登录
+	"userLogin": {
+		"type": "http",
+		"method": "post",
+		"host": config.ralHost,
+		"path": "/loginApi/login.do",
+		"timeout": config.ralTimeout
+	}
+}

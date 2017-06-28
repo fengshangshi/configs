@@ -1,0 +1,2395 @@
+/**
+ * @description: 预订模块
+ * @author     : yingran.wang@qunar.com
+ */
+
+require("moduleScript/avalon-renderTicker");
+require('moduleScript/priceVail');
+require('moduleScript/validationEngine');
+//自动分房提示
+require("autoRoomAssignments/index");
+
+// 引入时间实时房态模块
+var calendarStatus = require('calendarStatus');
+// 引入订单日志模块
+require("pages/ordersRoom/ordersDetail/orderLog/index");
+
+// 引入模板
+var bookingTpl = require('view');
+var _config = require('config');
+var ajaxRequest = null;
+var firstOpen = true;
+
+// 定义vm
+var vm = avalon.define({
+    $id: 'bookingDialog',
+    settings: {}, // 配置参数
+    bookingDialog: null, // 预订窗口
+    isShowLoading: true, // 加载中
+
+/* ###################### 主模块 ###################### */
+    
+    /**
+     * [初始化]
+     * @param  {[type]} options [配置参数]
+     * 
+     * -------------- 通用参数说明 --------------
+     * 
+     * bookingFrom [下单入口来源 roomStatus:房态 orderList:订单列表 noticeDialog:消息窗口]
+     * bookingType [预订类型 0:手工订单 1:渠道订单]
+     * 
+     * -------------- 手工下单参数 --------------
+     * 
+     * checkInDate [入住日期]
+     * checkOutDate [离店日期]
+     * roomNo [房间号]
+     * roomTypeNo [房型号]
+     *
+     * -------------- 渠道下单参数 --------------
+     * orderNo [渠道订单号]
+     */
+    init: function(options) {
+        vm.settings = options;
+
+        var bookingType = vm.settings.bookingType;
+
+        // 手工订单初始化逻辑
+        if (bookingType == 0 || bookingType == 3) {
+            vm.showDialog();
+        }
+        
+        // 渠道订单初始化逻辑
+        if (bookingType == 1) {
+            vm.fetchChannelOrderInfo();
+        }
+
+    },
+
+    /**
+     * [初始化窗口打开前数据加载]
+     */
+    initShowDialog: function() {
+
+        var bookingType = vm.settings.bookingType;
+
+        if (bookingType == 0) {
+            vm.initInsertStay();
+        }
+
+        if (bookingType == 1) {
+            vm.initChannelInsertStay();
+            vm.$fire("all!autoRoomAssigTips");
+        }
+
+
+        vm.initInsertFinance();
+        vm.fetchAccountCategory();
+        vm.fetchCertificateStatus();
+
+        // 第一次打开窗口时调用
+        if (firstOpen) {
+            vm.fetchCommonTypeList();
+            vm.bind();
+            firstOpen = false;
+        }
+
+        if(bookingType == 3) {
+            // 为了防止阻止此操作，阻止弹窗弹出
+            setTimeout(function(){
+                vm.initInsertMoreStay(vm.settings.orderNewList);
+            },300);
+            
+        }
+
+    },
+
+    /**
+     * [打开预订窗口]
+     */
+    showDialog: function() {
+        if (vm.bookingDialog) {
+            vm.isAjax = false;
+            vm.bookingDialog.showModal();
+            return;
+        }
+    	vm.bookingDialog = dialog({
+            title: ' ',
+            content: bookingTpl,
+            fixed: true,
+            width: 900,
+            height: 500,
+            padding: 0,
+            cancelDisplay: false,
+            onshow: function() {
+                avalon.scan(document.getElementById('bookingDialog'), avalon.vmodels['bookingDialog']);
+                vm.initShowDialog();
+            },
+            cancel: function() {
+                vm.onCloseDialog();
+                return false;
+            }
+        }).showModal();
+    },
+
+    /**
+     * [关闭窗口事件]
+     */
+    onCloseDialog: function() {
+        vm.bookingDialog.close();
+        vm.resetData();
+        // 消息窗口 - 刷新消息列表
+        if (vm.settings.bookingFrom == 'noticeDialog') {
+            // 刷新消息窗口通信接口
+            vm.$fire('all!noticetipsRefresh');
+        }
+        //挂单刷新列表
+        vm.$fire("all!hangOrdersPageRefresh",true);
+    },
+
+    /**
+     * [获取stay参数]
+     */
+    getStayListParam: function() {
+        var stayList = [];
+        $.each(vm.stayList, function(index, item) {
+            stayList.push({
+                checkInTime: vm.mergeDateTime(item.checkInDate, item.checkInTime),
+                checkOutTime: vm.mergeDateTime(item.checkOutDate, item.checkOutTime),
+                roomNo: item.roomNo,
+                roomTypeNo: item.roomTypeNo,
+                roomPrice: item.roomPrice,
+                customer: item.customer,
+                customerTel: item.customerTel,
+                certificateType: parseInt(item.certificateType) + 1,
+                certificateNo: item.certificateNo == '证件号码' ? '' : item.certificateNo
+            });
+        });
+        return stayList;
+    },
+
+    /**
+     * [获取FinanceList参数]
+     */
+    getFinanceListParam: function() {
+        var financeList = [];
+        $.each(vm.financeList, function(index, item) {
+            var roomNoStr = vm.getFinanceDes(index);
+            var accountComment = item.accountComment + roomNoStr;
+            if (accountComment.length > 200) {
+                accountComment = accountComment.substring(0, 197) + '...';
+            }
+            if (item.money) {
+                financeList.push({
+                    categoryCode: item.categoryId,
+                    paymentMethod: item.paymentMethod,
+                    money: item.money,
+                    accountComment: accountComment,
+                    itemType: item.itemType,
+                    payTypeCode: item.payTypeCode,
+                    categoryType: item.categoryType,
+                    costMoney: item.costMoney
+                });
+            }
+        });
+        return financeList;
+    },
+
+    /**
+     * [获取提交订单参数]
+     * @return {[type]} [数据对象]
+     */
+    getOrderParam: function() {
+        var stayList = vm.getStayListParam();
+        var financeList = vm.getFinanceListParam();
+        var data = {
+            hotelNo: window.GLOBAL.hotelNo,
+            des: vm.orderDes,
+            stayList: JSON.stringify(stayList),
+            financeList: JSON.stringify(financeList)
+        };
+        // 新增订单 || 新增多张订单
+        if (vm.settings.bookingType == 0 || vm.settings.bookingType == 3) {
+            data['payType'] = vm.defOrderTypeCode;
+            data['channelId'] = vm.defChannelFromCode;
+            data['channelName'] = vm.defChannelFromName;
+        }
+        if (vm.settings.bookingType == 1) {
+            data['channelOrderNo'] = vm.channelOrderInfo.channelOrderNo;
+            data['channelOrderCreateTime'] = vm.channelOrderInfo.channelOrderCreateTime;
+        }
+        return data;
+    },
+
+    /**
+     * [财务信息保存失败提示]
+     */
+    financeSaveFailDialog: function(orderNo) {
+        dialog({
+            content: '<div class="system-errortip"></div><div>财务信息保存失败，请重新添加。<div>',
+            padding: '20px 40px',
+            cancelValue: '知道了',
+            cancel: function() {
+                vm.showOrderDetail(orderNo, 'roomStatus');
+                vm.onCloseDialog();
+                // 刷新房态表格通信接口
+                vm.$fire('all!roomStatusRefresh');
+            }
+        }).showModal();   
+    },
+
+    /**
+     * [房间已被预订提醒]
+     * @param  {[type]} errorList [description]
+     * @return {[type]}           [description]
+     */
+    bookingErrorTips: function(errorList) {
+        $.each(errorList, function(index, item) {
+            vm.setStayField(item.idx, 'isBooking', true);
+        });
+    },
+
+    /**
+     * [显示订单详情]
+     * @param  {[type]} orderNo [订单号]
+     */
+    showOrderDetail: function(orderNo, fromType) {
+
+        var data = {}
+
+        if (fromType == 'roomStatus') {
+            var param = {};
+            if(vm.settings.bookingType == 3) {
+                var orderNew = vm.settings.orderNewList.$model[0];
+                param = {
+                    doorNo: orderNew.doorNo,
+                    roomTypeName: orderNew.roomTypeName,
+                    roomTypeNo: orderNew.roomTypeNo,
+                    hasLock: orderNew.isHasLock,
+                    startTime: orderNew.checkInDate,
+                    roomNo: orderNew.roomNo 
+                }
+            } else {
+                param = {
+                    doorNo: vm.settings.doorNo,
+                    roomTypeName: vm.settings.roomTypeName,
+                    roomTypeNo: vm.settings.roomTypeNo,
+                    hasLock: vm.settings.isHasLock,
+                    startTime: vm.settings.checkInDate,
+                    roomNo: vm.settings.roomNo 
+                }
+            }
+            data = {
+                orderNo: orderNo,
+                orderParam: param,
+                fromType: fromType
+            }
+        }
+
+        if (fromType == 'noticeDialog') {
+            data = {
+                orderNo: orderNo,
+                fromType: fromType
+            }
+        }
+
+        vm.$fire('all!showOrderDetailDialog', data);
+    },
+
+    /**
+     * [提交订单事件]
+     */
+    onSubmitOrder: function() {
+        var status = $("#bookingDialog").validationEngine('validate');
+        if (!status) {
+            return false;
+        }
+        if(vm.isAjax) {
+            return false;
+        }
+
+        var data = vm.getOrderParam();
+        vm.isAjax = true;
+        $.ajax({
+            type: 'POST',
+            url: '/order/j/addOrder',
+            data: data,
+            dataType: 'json',
+            success: function(res){
+                vm.isAjax = false;
+                // 满房校验提示
+                if (res.code == '3001' && res.data.errorList.length > 0) {
+                    vm.bookingErrorTips(res.data.errorList);
+                    return false;
+                }
+
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+
+                // 财务信息保存失败提示信息
+                if (res.data.financeCode == 1) {
+                    vm.financeSaveFailDialog(res.data.orderNo);
+                    return;
+                }
+
+                // 房态页来源 - 调用查看订单详情
+                if (vm.settings.bookingFrom == 'roomStatus') {
+                    // 显示订单详情
+                    vm.showOrderDetail(res.data.orderNo, 'roomStatus');
+                }
+
+                // 订单列表页来源 - 刷新订单列表
+                if (vm.settings.bookingFrom == 'orderList') {
+                    vm.$fire('all!orderListPageRefresh');
+                }
+
+                // 消息窗口 - 刷新消息列表
+                if (vm.settings.bookingFrom == 'noticeDialog') {
+                    // 显示订单详情
+                    vm.showOrderDetail(res.data.orderNo, 'noticeDialog');
+                    // 刷新消息窗口通信接口
+                    vm.$fire('all!noticetipsRead');
+                }
+
+                // 关闭下单窗口
+                vm.onCloseDialog();
+                
+            }
+        });
+
+    },
+
+/* ###################### 主模块 ###################### */
+
+
+
+/* ###################### 入住信息模块 ###################### */
+
+    /**
+     * 此模块包含[手工下单、渠道下单]
+     * 修改此模块需要兼容两个模式
+     */
+    
+    certificateTypeArr: _config.certificateTypeArr, // 证件号存储列表
+    stayList: [], // * 入住信息存储列表
+    maxStayCount: 25, // 最大stay数
+    totalRoomPrice: 0, // 总房费
+    channelOrderInfo: {}, // 渠道订单信息
+    certificateStatus: 0, // 证件号开启状态
+
+    /**
+     * [初始化插入一条入住信息]
+     */
+    initInsertStay: function() {
+        var defaultTime = vm.getTodayDefaultTime(vm.settings.checkInDate);
+        var stayData = {
+            checkInDate: vm.settings.checkInDate,
+            checkOutDate: vm.settings.checkOutDate,
+            checkInTime: defaultTime.checkInTime,
+            checkInTimeSelectedIndex: defaultTime.checkInTimeSelectedIndex,
+            roomNo: vm.settings.roomNo,
+            roomTypeNo: vm.settings.roomTypeNo,
+            roomTypeName: vm.settings.roomTypeName,
+            isHasLock: vm.settings.isHasLock,
+            doorNo: vm.settings.doorNo,
+            roomName: vm.mergeRoomName(vm.settings.doorNo, vm.settings.roomTypeName)
+        }
+        vm.insertStay(stayData);
+        vm.getNightsNum(0);
+        vm.getStayPrice(0);
+
+        // 调用时间实时房态
+        vm.setCalendarStatus(0);
+    },
+
+    /**
+     * [新增多条订单，插入多条入住信息]
+     */
+    initInsertMoreStay: function(data) {
+        var tempMoreStayList = [];
+        
+        $.each(data, function(index, item) {
+            var defaultTime = vm.getTodayDefaultTime(item.checkInDate);
+            var stayData = {
+                checkInDate: item.checkInDate,
+                checkOutDate: item.checkOutDate,
+                checkInTime: defaultTime.checkInTime,
+                checkInTimeSelectedIndex: defaultTime.checkInTimeSelectedIndex,
+                roomNo: item.roomNo,
+                roomTypeNo: item.roomTypeNo,
+                roomTypeName: item.roomTypeName,
+                isHasLock: item.isHasLock,
+                doorNo: item.doorNo,
+                roomName: vm.mergeRoomName(item.doorNo, item.roomTypeName)
+            }
+            var stayDataPer = vm.getStayData(stayData);
+            tempMoreStayList.push(stayDataPer);        
+            // vm.getNightsNum(index);
+            // vm.getStayPrice(index);
+
+            // // 调用时间实时房态
+            // vm.setCalendarStatus(index);
+            
+        });
+        // 以每次渲染5条，渲染间隔为200渲染数据
+        var ticker = avalon.renderTicker(vm.stayList, tempMoreStayList, {
+             count: 3,          //每次渲染条目数量
+             interval: 200      //渲染间隔
+        });
+    },
+
+    /**
+     * [初始化插入渠道入住信息]
+     */
+    initChannelInsertStay: function() {
+        var tempChannelStayList = [];
+        $.each(vm.channelOrderInfo.roomList, function(index, item) {
+            var checkInDate = qfn.dateTimeFormat(qfn.newDate(item.checkInTime), 'yyyy-MM-dd');
+            var checkOutDate = qfn.dateTimeFormat(qfn.newDate(item.checkOutTime), 'yyyy-MM-dd'); 
+            var checkInTime = qfn.dateTimeFormat(qfn.newDate(item.checkInTime), 'hh:mm');
+            var checkOutTime = qfn.dateTimeFormat(qfn.newDate(item.checkOutTime), 'hh:mm');
+            var tempChannelStay = vm.getStayData({
+                checkInDate: checkInDate,
+                checkInTime: checkInTime,
+                checkOutDate: checkOutDate,
+                checkOutTime: checkOutTime,
+                checkInTimeSelectedIndex: parseInt(checkInTime),
+                checkOutTimeSelectedIndex: parseInt(checkOutTime),
+                roomNo: item.roomNo,
+                roomTypeNo: item.roomTypeNo,
+                roomName: item.doorNo ? vm.mergeRoomName(item.doorNo, item.roomTypeName) : '',
+                roomPrice: item.rentMoney,
+                nightsNum: item.days,
+                isHasLock: item.hasLock,
+                customer: vm.channelOrderInfo.customerName,
+                customerTel: checkChannelMobile(vm.channelOrderInfo.contractTelno)
+            });
+            tempChannelStayList.push(tempChannelStay);
+        });
+
+        // 以每次渲染5条，渲染间隔为200渲染数据
+        var ticker = avalon.renderTicker(vm.stayList, tempChannelStayList, {
+             count: 5,          //每次渲染条目数量
+             interval: 200      //渲染间隔
+        });
+
+        // 更新总房费
+        vm.getTotalRoomPrice(tempChannelStayList);
+        
+        // 请求可订房间 - 废弃
+        /*if (vm.stayList.length > 0) {
+            vm.recursionFetchValidRoomList(0);  
+        }*/
+    },
+
+    /**
+     * [递归请求可订房间列表]  - 废弃
+     * @param  {[type]} index [索引]
+     */
+    /*recursionFetchValidRoomList: function(index) {
+        if (index > vm.stayList.length - 1) {
+            return;
+        }
+        // 请求可订房间
+        vm.fetchValidRoomList(index, function() {
+            vm.recursionFetchValidRoomList(index + 1);
+        });
+    },*/
+
+    /**
+     * [插入一条入住信息]
+     */
+    onInsertStay: function(el, index) {
+        // 获取上一条入住信息索引
+        var _index = index-1;
+        var stayData = {
+            checkInDate: vm.getStayField(_index, 'checkInDate'),
+            checkInTime: vm.getStayField(_index, 'checkInTime'),
+            checkInTimeSelectedIndex: vm.getStayField(_index, 'checkInTimeSelectedIndex'),
+            checkOutDate: vm.getStayField(_index, 'checkOutDate'),
+            checkOutTime: vm.getStayField(_index, 'checkOutTime'),
+            checkOutTimeSelectedIndex: vm.getStayField(_index, 'checkOutTimeSelectedIndex'),
+            roomName: '',
+            customer: vm.getStayField(_index, 'customer'), // 入住人姓名
+            customerTel: vm.getStayField(_index, 'customerTel'), // 入住人手机号
+            certificateType: vm.getStayField(_index, 'certificateType'), // 证件类型
+            certificateName: vm.getStayField(_index, 'certificateName'), // 证件名称
+            certificateNo: vm.getStayField(_index, 'certificateNo') // 证件号
+        }
+        vm.insertStay(stayData);
+        vm.getNightsNum(index);
+        vm.fetchValidRoomList(index, function() {
+            vm.getStayPrice(index);
+            // 调用时间实时房态
+            vm.setCalendarStatus(index);
+        });
+    },
+
+    /**
+     * [删除一条入住信息]
+     * @param  {[type]} el [description]
+     * @param  {[type]} id [stay id]
+     */
+    onRemoveStay: function(el, id) {
+        vm.stayList.splice(id, 1);
+
+        // 手工渲染入离日期组件
+        vm.autoScanStayList();
+        // 更新总房费
+        vm.getTotalRoomPrice();
+    },
+
+    /**
+     * [时间控件点击事件]
+     * @return {[type]} [description]
+     */
+    onTimer: function(e) {
+        $(this).toggleClass('open');
+        vm.$fire('closeToggle', $(this));
+        e.stopPropagation();
+    },
+
+    /**
+     * [入住时间选择事件]
+     * @param  {[type]} el         [description]
+     * @param  {[type]} outerIndex [stay index]
+     * @param  {[type]} index      [index]
+     * @param  {[type]} val        [时间值]
+     */
+    onCheckInTimeItem: function(el, outerIndex, index, val) {
+        if ($(this).hasClass('disabled')) {
+            return false;
+        }
+        vm.setStayField(outerIndex, 'checkInTime', val);
+        vm.stayList[outerIndex]['checkInTimeList'][index]['value'] = val;
+        vm.stayList[outerIndex]['checkInTimeSelectedIndex'] = index;
+        vm.timeLinkage(outerIndex, 'CI');
+        vm.getNightsNum(outerIndex);
+        vm.getStayPrice(outerIndex);
+        vm.fetchValidRoomList(outerIndex, function(validRoomList) {
+            // 检查当前stay房间可订状态
+            vm.checkValidRoomStatus(outerIndex, validRoomList);
+        });
+    },
+
+    /**
+     * [离店时间选择事件]
+     * @param  {[type]} el         [description]
+     * @param  {[type]} outerIndex [stay index]
+     * @param  {[type]} index      [index]
+     * @param  {[type]} val        [时间值]
+     */
+    onCheckOutTimeItem: function(el, outerIndex, index, val) {
+        if ($(this).hasClass('disabled')) {
+            return false;
+        }
+        vm.setStayField(outerIndex, 'checkOutTime', val);
+        vm.stayList[outerIndex]['checkOutTimeList'][index]['value'] = val;
+        vm.stayList[outerIndex]['checkOutTimeSelectedIndex'] = index;
+        vm.timeLinkage(outerIndex, 'CO');
+        vm.getNightsNum(outerIndex);
+        vm.getStayPrice(outerIndex);
+        vm.fetchValidRoomList(outerIndex, function(validRoomList) {
+            // 检查当前stay房间可订状态
+            vm.checkValidRoomStatus(outerIndex, validRoomList);
+        });
+    },
+
+    /**
+     * [房费Blur事件]
+     */
+    onBlurRoomPrice: function(el, index) {
+        if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test($(this).val())) {
+            vm.setStayField(index, 'roomPrice', '');
+        }
+        vm.getTotalRoomPrice();
+    },
+
+    /**
+     * [房费Keyup事件]
+     */
+    onKeyupRoomPrice: function() {
+        controlNumber($(this));
+    },
+
+    /**
+     * [证件号点击事件]
+     * @return {[type]} [description]
+     */
+    onClickCertificate: function(e) {
+        $(this).toggleClass('open');
+        e.stopPropagation();
+    },
+
+    /**
+     * [证件号选择事件]
+     */
+    onClickCertificateItem: function(el, index, id, name) {
+        vm.setStayField(index, 'certificateName', name);
+        vm.setStayField(index, 'certificateType', id);
+    },
+
+    /**
+     * [可订房间点击事件]
+     */
+    onClickValidRoom: function(e, index) {
+
+        // 重置可订房间数据
+        vm.resetRoomSuggest(index);
+
+        if (!$(this).hasClass('open')) {
+            vm.setStayField(index, 'validRoomList', []);
+            vm.fetchValidRoomList(index);
+        }
+        $(this).toggleClass('open');
+        vm.$fire('closeToggle', $(this));
+        e.stopPropagation();
+    },
+
+    /**
+     * [可订房间选择事件]
+     */
+    onClickValidRoomItem: function(index, item) {
+        var roomName = vm.mergeRoomName(item.doorNo, item.roomTypeName);
+        vm.setStayField(index, 'roomNo', item.roomNo);
+        vm.setStayField(index, 'roomTypeNo', item.roomTypeNo);
+        vm.setStayField(index, 'roomName', roomName);
+        vm.setStayField(index, 'isHasLock', item.hasLock);
+        vm.getStayPrice(index);
+
+        // 调用时间实时房态
+        vm.setCalendarStatus(index);
+
+        // 选择房间时将房间状态置为可预订  
+        // 提交订单时，后端会校验房间不可订时前端提示
+        vm.setStayField(index, 'isBooking', false);
+
+        // 强制验证
+        $("#bookingDialog .j_validRoom").eq(index).validationEngine('validate');
+    },
+
+    /**
+     * [建议提示框绑定事件]
+     */
+    onLodgerSuggestBind: function(el) {
+        vm.$fire('all!lodgerSuggestBind', $(this));
+    },
+
+    /**
+     * [入住人姓名电话获取焦点发送索引]
+     * @param  {[type]} el    [description]
+     * @param  {[type]} index [索引]
+     */
+    onLodgerSuggestFocus: function(el, index) {
+        vm.$fire('all!setLodgerSuggestIndex', {
+            index: index,
+            fromType: 'bookingDialog'
+        });
+    },
+
+    /**
+     * [日期控件点击事件]
+     */
+    onClickDatepicker: function() {
+        $('#bookingDialog .open').removeClass('open');
+        // 强制隐藏
+        setTimeout(function() {
+            $("#bookingDialog").validationEngine('hideAll');
+        }, 200);
+    },
+
+    /**
+     * [初始化入住日历控件]
+     * @param  {[type]} el    [description]
+     * @param  {[type]} index [索引]
+     */
+    onCheckInDatepicker: function(index) {
+        vm.setStayField(index, 'checkInDateObj', $(this));
+        vm.setCheckInDateDatepicker(index, $(this));
+    },
+
+    /**
+     * [初始化离店日历控件]
+     * @param  {[type]} index [索引]
+     */
+    onCheckOutDatepicker: function(index) {
+        vm.setStayField(index, 'checkOutDateObj', $(this));
+        vm.setCheckOutDateDatepicker(index, $(this));
+        vm.$fire('closeToggle', $(this));
+    },
+
+    /**
+     * [自动渲染入离日期组件]
+     * 添加删除stay时需要手工触发渲染入离日期组件
+     */
+    autoScanStayList: function() {
+        $.each(vm.stayList, function(index, item) {
+            var checkInDateObj = vm.getStayField(index, 'checkInDateObj');
+            var checkOutDateObj = vm.getStayField(index, 'checkOutDateObj');
+            vm.setCheckInDateDatepicker(index, checkInDateObj);
+            vm.setCheckOutDateDatepicker(index, checkOutDateObj);
+        });
+    },
+
+    /**
+     * [时间联动]
+     * @param  {[type]} index [索引]
+     */
+    timeLinkage: function(index, type) {
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        var checkInDateObj = vm.getStayField(index, 'checkInDateObj');
+        var checkOutDateObj = vm.getStayField(index, 'checkOutDateObj');
+        var checkInTimeSelectedIndex = vm.getStayField(index, 'checkInTimeSelectedIndex');
+        var checkOutTimeSelectedIndex = vm.getStayField(index, 'checkOutTimeSelectedIndex');
+
+        // 如果入离日期是同一天
+        if (checkInDate == checkOutDate) {
+
+            // 如果选择的是CI时间
+            if (type == 'CI') {
+                // 如果选择的是00:00
+                if (checkInTimeSelectedIndex == 0) {
+                    vm.setStayField(index, 'checkOutTime', '01:00');
+                    vm.setStayField(index, 'checkOutTimeSelectedIndex', 1);
+                    return;
+                }
+                // 如果选择的是23:00
+                if (checkInTimeSelectedIndex == 23) {
+                    vm.setStayField(index, 'checkOutDate', qfn.getNextDate(checkInDate));
+                    vm.setStayField(index, 'checkOutTime', '00:00');
+                    vm.setStayField(index, 'checkOutTimeSelectedIndex', 0);
+                    vm.setCheckOutDateDatepicker(index, checkOutDateObj);
+                    vm.setCheckInDateDatepicker(index, checkInDateObj);
+                    return;
+                }
+                // 如果CI大于等于CO
+                if (checkInTimeSelectedIndex >= checkOutTimeSelectedIndex) {
+                    var tempCo = checkInTimeSelectedIndex + 1;
+                    vm.setStayField(index, 'checkOutTime', qfn.toTime(tempCo));
+                    vm.setStayField(index, 'checkOutTimeSelectedIndex', tempCo);
+                }
+
+            }
+
+            // 如果选择的是CO时间
+            if (type == 'CO') {
+                // 如果选择的是01:00
+                if (checkOutTimeSelectedIndex == 1) {
+                    vm.setStayField(index, 'checkInTime', '00:00');
+                    vm.setStayField(index, 'checkInTimeSelectedIndex', 0);
+                    return;
+                }
+                // 如果选择的是00:00
+                if (checkOutTimeSelectedIndex == 0) {
+                    vm.setStayField(index, 'checkInDate', qfn.getPrevDate(checkOutDate));
+                    vm.setStayField(index, 'checkInTime', '23:00');
+                    vm.setStayField(index, 'checkInTimeSelectedIndex', 23);
+                    vm.setCheckInDateDatepicker(index, checkInDateObj);
+                    vm.setCheckOutDateDatepicker(index, checkOutDateObj);
+                    return;
+                }
+                // 如果CI大于等于CO
+                if (checkInTimeSelectedIndex >= checkOutTimeSelectedIndex) {
+                    var tempCi = checkOutTimeSelectedIndex - 1;
+                    vm.setStayField(index, 'checkInTime', qfn.toTime(tempCi));
+                    vm.setStayField(index, 'checkInTimeSelectedIndex', tempCi);
+                }
+            }
+            
+        }
+
+    },
+
+    /**
+     * [重新渲染离店时间列表]
+     */
+    scanCheckOutTimeList: function(index) {
+        vm.setStayField(index, 'checkOutTimeList', _config.timeList);
+    },
+
+    /**
+     * [日期联动]
+     * @param  {[type]} index [索引]
+     * @param  {[type]} type  [类型]
+     */
+    dateLinkage: function(index, type) {
+        // 获取入住日期
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        // 获取离店日期
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        // 获取入住日期jQuery对象
+        var checkInDateObj = vm.getStayField(index, 'checkInDateObj');
+        // 获取离店日期jQuery对象
+        var checkOutDateObj = vm.getStayField(index, 'checkOutDateObj');
+        // 比较入住离店日期，返回 1:大于 2:等于 3:小于
+        var diffDateStatus = qfn.dateCompare(checkInDate, checkOutDate);
+        // 获取默认时间
+        var defaultTime = vm.getTodayDefaultTime(checkInDate);
+
+        if (type == 'CI') {
+
+            // 如果入住日期大于离店日期
+            if (diffDateStatus == 1) {
+                // 获取下一个日期
+                var nextDate = qfn.getNextDate(checkInDate);
+                // 设置离店日期
+                vm.setStayField(index, 'checkOutDate', nextDate);
+                // 重新调用离店日期控件
+                vm.setCheckOutDateDatepicker(index, checkOutDateObj);
+            } else if (diffDateStatus == 2 || diffDateStatus == 3) {
+                // 重新调用离店日期控件
+                vm.setCheckOutDateDatepicker(index, checkOutDateObj);
+            }
+
+            // 重新设置默认时间
+            vm.setStayField(index, 'checkInTime', defaultTime.checkInTime);
+            vm.setStayField(index, 'checkInTimeSelectedIndex', defaultTime.checkInTimeSelectedIndex);
+
+        }
+
+        if (type == 'CO') {
+
+            // 如果入住日期等于离店日期
+            if (diffDateStatus == 2) {
+                // 重新调用入住日期控件
+                vm.setCheckInDateDatepicker(index, checkInDateObj);
+            } else if (diffDateStatus == 2 || diffDateStatus == 3) {
+                // 重新调用入住日期控件
+                vm.setCheckInDateDatepicker(index, checkInDateObj);
+            }
+
+        }
+
+        vm.scanCheckOutTimeList(index);
+
+        
+    },
+
+    /**
+     * [设置入住日期控件]
+     * @param {[type]} index [索引]
+     * @param {[type]} obj   [入住日期jQuery对象]
+     */
+    setCheckInDateDatepicker: function(index, obj) {
+        // 存储入住日期jQuery对象
+        vm.setStayField(index, 'checkInDateObj', obj);
+        // 获取入住日期
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        // 获取离店日期
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        // 生成默认日期对象
+        var defaultDate = qfn.newDate(checkInDate);
+        // 生成最大日期对象
+        var maxDate = qfn.newDate(checkOutDate);
+        // 生成最小日期对象
+        var minDate = qfn.getPostponeDate(checkOutDate, -365);
+        // 调用日期控件
+        obj.off().rDatepicker({
+            defaultDate: defaultDate,
+            minDate: minDate,
+            maxDate: maxDate,
+            top: 28,
+            callback: function(date) {
+                vm.setStayField(index, 'checkInDate', date);
+
+                // 调用日期联动
+                vm.dateLinkage(index, 'CI');
+                // 调用时间联动
+                vm.timeLinkage(index, 'CI');
+                // 调用时间实时房态
+                vm.setCalendarStatus(index);
+
+                vm.getNightsNum(index);
+                vm.getStayPrice(index);
+                vm.fetchValidRoomList(index, function(validRoomList) {
+                    // 检查当前stay房间可订状态
+                    vm.checkValidRoomStatus(index, validRoomList);
+                });
+                //vm.fetchValidCalendar(index);
+            }
+        });
+    },
+
+    /**
+     * [设置离店日期控件]
+     * @param {[type]} index [索引]
+     * @param {[type]} obj   [离店日期jQuery对象]
+     */
+    setCheckOutDateDatepicker: function(index, obj) {
+        // 存储离店日期jQuery对象
+        vm.setStayField(index, 'checkOutDateObj', obj);
+        // 获取入住日期
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        // 获取离店日期
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        // 生成默认日期对象
+        var defaultDate = qfn.newDate(checkOutDate);
+        // 生成最小日期对象
+        var minDate = qfn.newDate(checkInDate);
+        // 生成最大日期对象
+        var maxDate = qfn.getPostponeDate(checkInDate, 365);
+        // 调用日期控件
+        obj.off().rDatepicker({
+            defaultDate: defaultDate,
+            minDate: minDate,
+            maxDate: maxDate,
+            top: 28,
+            callback: function(date) {
+                vm.setStayField(index, 'checkOutDate', date);
+
+                // 调用日期联动
+                vm.dateLinkage(index, 'CO');
+                // 调用时间联动
+                vm.timeLinkage(index, 'CO');
+                // 调用时间实时房态
+                vm.setCalendarStatus(index);
+
+                vm.getNightsNum(index);
+                vm.getStayPrice(index);
+                vm.fetchValidRoomList(index, function(validRoomList) {
+                    // 检查当前stay房间可订状态
+                    vm.checkValidRoomStatus(index, validRoomList);
+                });
+                //vm.fetchValidCalendar(index);
+            }
+        });
+    },
+
+    /**
+     * [返回一条入住信息]
+     * @param  {[type]} options [入住信息]
+     */
+    getStayData: function(options) {
+        var stayData = {
+            checkInDate: options.checkInDate ? options.checkInDate : '', // 入住日期
+            checkInTime: options.checkInTime ? options.checkInTime : '14:00', // 入住时间
+            checkOutDate: options.checkOutDate ? options.checkOutDate : '', // 离店日期
+            checkOutTime: options.checkOutTime ? options.checkOutTime : '12:00', // 离店时间
+            roomNo: options.roomNo ? options.roomNo : '', // 房间NO
+            doorNo: options.doorNo ? options.roodoorNomNo : '', // 房间doorNo
+            roomName: options.roomName ? options.roomName : '', // 房间名称
+            roomTypeNo: options.roomTypeNo ? options.roomTypeNo : '', // 房型NO
+            roomTypeName: options.roomTypeName ? options.roomTypeName : '', // 房型名称
+            nightsNum: options.nightsNum ? options.nightsNum : 0, // 晚数
+            roomPrice: options.roomPrice ? options.roomPrice : '', // 房费
+            customer: options.customer ? options.customer : '', // 入住人姓名
+            customerTel: options.customerTel ? options.customerTel : '', // 入住人手机号
+            certificateType: options.certificateType ? options.certificateType : 0, // 证件类型
+            certificateName: options.certificateName ? options.certificateName : '身份证', // 证件名称
+            certificateNo: options.certificateNo ? options.certificateNo : '', // 证件号
+            validRoomList: [], // 可订房间列表
+            validRoomListCache: [], // 可订房间列表cache
+            validRoomSuggestKeyword: '', // 可订房间搜索关键字
+            checkInTimeList: $.extend([], _config.timeList), // 入住时间列表
+            checkOutTimeList: $.extend([], _config.timeList), // 离店时间列表
+            checkInTimeSelectedIndex: options.checkInTimeSelectedIndex ? options.checkInTimeSelectedIndex : 14, // 入住时间选中Index
+            checkOutTimeSelectedIndex: options.checkOutTimeSelectedIndex ? options.checkOutTimeSelectedIndex : 12, // 离店时间选择Index
+            isHasLock: options.isHasLock ? options.isHasLock : 0, // 是否有锁
+            isBooking: false, // 是否被预订
+            checkInDateObj: null, // 入住日期jQuery对象
+            checkOutDateObj: null // 离店日期jQuery对象
+        }
+        return stayData;
+    },
+
+    /**
+     * [插入一条入住信息]
+     * @param  {[type]} options [入住信息]
+     */
+    insertStay: function(options) {
+        var stayData = vm.getStayData(options);
+        vm.stayList.push(stayData);
+    },
+
+    /**
+     * [自动填充姓名电话]
+     * @param {[type]} index  [索引]
+     * @param {[type]} name   [入住人姓名]
+     * @param {[type]} mobile [入住人电话]
+     */
+    setLodgerSuggestInfo: function(index, name, mobile) {
+        vm.setStayField(index, 'customer', name);
+        vm.setStayField(index, 'customerTel', mobile);
+
+        // 强制验证
+        $("#bookingDialog .j_customer").eq(index).blur();
+        $("#bookingDialog .j_customerTel").eq(index).blur();
+    },
+
+    /**
+     * [写入一项入住信息字段]
+     * @param {[type]} index [索引]
+     * @param {[type]} name  [字段名称]
+     * @param {[type]} val   [字段值]
+     */
+    setStayField: function(index, name, val) {
+        vm.stayList[index][name] = val;
+    },
+
+    /**
+     * [获取同一天默认入住时间]
+     * @param  {[type]} checkInDate  [入住日期]
+     * @return {[type]}              [object]
+     */
+    getTodayDefaultTime: function(checkInDate) {
+        var defaultTime = {
+            checkInTime: '14:00',
+            checkInTimeSelectedIndex: 14
+        };
+        var currentHour = parseInt(CONFIG.TIME);
+        var isToday = qfn.checkIsToday(checkInDate);
+
+        if (isToday) {
+            if (currentHour == 23) {
+                defaultTime.checkInTime = qfn.toTime(23);
+                defaultTime.checkInTimeSelectedIndex = 23;
+            }
+
+            if (currentHour >= 14 && currentHour < 23) {
+                var defaultHour = currentHour + 1;
+                defaultTime.checkInTime = qfn.toTime(defaultHour);
+                defaultTime.checkInTimeSelectedIndex = defaultHour;
+            }
+        }
+
+        return defaultTime;
+
+    },
+
+    /**
+     * [获取一项入住信息字段]
+     * @param  {[type]} index [索引]
+     * @param  {[type]} name  [字段名称]
+     * @return {[type]}       [字段值]
+     */
+    getStayField: function(index, name) {
+        var val = vm.stayList[index][name];
+        return vm.stayList[index][name];
+    },
+
+    /**
+     * [获取房费]
+     * @param {[type]} index      [description]
+     */
+    getStayPrice: function(index) {
+
+        var nightsNum = vm.getStayField(index, 'nightsNum');
+        var roomTypeNo = vm.getStayField(index, 'roomTypeNo');
+
+        $.ajax({
+            type: 'GET',
+            url: '/roomType/j/info',
+            data: {
+                hotelNo: window.GLOBAL.hotelNo,
+                roomTypeNo: roomTypeNo
+            },
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                if (res.code != '0000') {
+                    return;
+                }
+
+                // 更新stay房费
+                var roomPrice = res.data.roomTypePrice * nightsNum;
+                vm.setStayField(index, 'roomPrice', roomPrice);
+
+                // 更新总房费
+                vm.getTotalRoomPrice();
+
+            }
+        });
+    },
+
+    /**
+     * [获取总房费]
+     */
+    getTotalRoomPrice: function(tempChannelStayList) {
+        var stayList = tempChannelStayList ? tempChannelStayList : vm.stayList;
+        var totalRoomPrice = 0;
+        $.each(stayList, function(index, item) {
+            if ($.isNumeric(item.roomPrice)) {
+                totalRoomPrice = totalRoomPrice + parseFloat(item.roomPrice, 10);
+            }
+        });
+        vm.totalRoomPrice = totalRoomPrice.toFixed(2);
+    },
+
+    /**
+     * [获取晚数]
+     * @param  {[type]} index [索引]
+     */
+    getNightsNum: function(index) {
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        var checkInTime = vm.getStayField(index, 'checkInTime');
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        var checkOutTime = vm.getStayField(index, 'checkOutTime');
+        var nightsNum = qfn.countDays(checkInDate, checkInTime, checkOutDate, checkOutTime);
+        vm.setStayField(index, 'nightsNum', nightsNum);
+    },
+
+    /**
+     * [获取已选择房间列表]
+     * @return {[array]} [房间列表]
+     */
+    getSelectedRoomList: function() {
+        var selectedRoomList = [];
+        _.each(vm.stayList, function(item) {
+            selectedRoomList.push({
+                checkInDate: vm.mergeDateTime(item.checkInDate, item.checkInTime),
+                checkOutDate: vm.mergeDateTime(item.checkOutDate, item.checkOutTime),
+                roomNo: item.roomNo
+            });
+        });
+        return selectedRoomList;
+    },
+
+    /**
+     * [可订房间互斥算法]
+     * @param  {[type]} options [description]
+     * @return {[type]}         [description]
+     */
+    roomListExclude: function(options) {
+        var newRooms = [];
+        _.each(options.roomList, function(item, index) {
+            newRooms.push(item);
+            newRooms[index]['_doorNo'] = item.doorNo;
+            newRooms[index]['_roomTypeName'] = item.roomTypeName;
+        });
+
+        var newCheckInDate = qfn.newDate(options.checkInDate).getTime();
+        var newCheckOutDate = qfn.newDate(options.checkOutDate).getTime();
+        
+        var nowRooms = vm.getSelectedRoomList();
+        var tempRooms = [];
+        
+        for (var i=0; i<newRooms.length; i++) {
+            for (var j=0; j<nowRooms.length; j++) {
+                var nowCheckInDate = qfn.newDate(nowRooms[j]['checkInDate']).getTime();
+                var nowCheckOutDate = qfn.newDate(nowRooms[j]['checkOutDate']).getTime();
+                if (_.isObject(newRooms[i])) {
+                    if (nowRooms[j]['roomNo'] == newRooms[i]['roomNo']) {
+                        if (newCheckInDate >= nowCheckInDate && newCheckInDate < nowCheckOutDate || newCheckOutDate < nowCheckOutDate && newCheckOutDate >= nowCheckInDate) {
+                            delete newRooms[i];
+                        }
+                    }
+                }
+            }
+        }
+        
+        for (var i=0; i<newRooms.length; i++) {
+            if (_.isObject(newRooms[i])) {
+                tempRooms.push(newRooms[i]);
+            }
+        }
+
+        return tempRooms;
+    },
+
+    /**
+     * [获取渠道订单]
+     */
+    fetchChannelOrderInfo: function() {
+        if (ajaxRequest) {
+            ajaxRequest.abort();
+        }
+        ajaxRequest = $.ajax({
+            type: 'GET',
+            url: '/channelOrder/j/info',
+            data: {
+                orderNo: vm.settings.orderNo
+            },
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+
+                // 缓存渠道订单数据
+                vm.channelOrderInfo = res.data;
+                // 打开窗口
+                vm.showDialog();
+            }
+        });
+    },
+
+    /**
+     * [获取可订房间列表]
+     * @param  {[type]} index [索引]
+     * @param  {[type]} [isSetDefRoomInfo] [是否设置默认房间信息]
+     */
+    fetchValidRoomList: function(index, callback) {
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        var checkInTime = vm.getStayField(index, 'checkInTime');
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        var checkOutTime = vm.getStayField(index, 'checkOutTime');
+        var hotelNo = window.GLOBAL.hotelNo;
+
+        // 如果下单类型渠道类型，则使用渠道订单hotelNo
+        if (vm.settings.bookingType == 1) {
+            hotelNo = vm.channelOrderInfo.hotelNo;
+        }
+
+        var data = {
+            checkInTime: vm.mergeDateTime(checkInDate, checkInTime),
+            checkOutTime: vm.mergeDateTime(checkOutDate, checkOutTime),
+            bizType: 'night',
+            hotelNo: hotelNo
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/room/j/valid',
+            data: data,
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+
+                // 获取可订房间列表
+                var validRoomList = vm.roomListExclude({
+                    roomList: res.data.roomList,
+                    checkInDate: vm.mergeDateTime(checkInDate, checkInTime),
+                    checkOutDate: vm.mergeDateTime(checkOutDate, checkOutTime)
+                });
+
+                // 写入可订房间列表
+                vm.setStayField(index, 'validRoomList', validRoomList);
+                vm.setStayField(index, 'validRoomListCache', validRoomList);
+
+                // 如果当前stay默认无可订房间，则设置默认房间信息
+                var isSetDefRoomInfo = vm.getStayField(index, 'roomNo');
+                if (!isSetDefRoomInfo) {
+                    vm.setDefRoomInfo(index, validRoomList);
+                }
+
+                // 回调函数
+                if ($.isFunction(callback)) {
+                    callback(res.data.roomList);
+                }
+            }
+        });
+    },
+
+    /**
+     * [设置默认房间信息]
+     * @param {[index]} index    [索引]
+     * @param {[type]}  validRoomList [可订房间列表]
+     */
+    setDefRoomInfo: function(index, validRoomList) {
+        if (validRoomList.length == 0) {
+            vm.setStayField(index, 'roomName', '暂无可订房间');
+            vm.setStayField(index, 'roomNo', '');
+            vm.setStayField(index, 'roomTypeNo', '');
+            vm.setStayField(index, 'roomTypeName', '');
+            vm.setStayField(index, 'doorNo', '');
+            vm.setStayField(index, 'isHasLock', 0);
+            return;
+        }
+
+        vm.getValidRoomInfo(index,validRoomList);
+
+        // 强制验证
+        $("#bookingDialog .j_validRoom").eq(index).validationEngine('validate');
+
+        
+    },
+
+    /**
+     * [从可订房间列表中查询同房型的房间]
+     * @param {[type]} validRoomList [可订房间列表]
+     */
+    getValidRoomInfo: function (index, validRoomList) {
+        var roomTypeNo = vm.getStayField(index-1, 'roomTypeNo');
+        for(var i=0,len=validRoomList.length;i<len;i++) {
+            var roomData = validRoomList[i];
+            if(validRoomList[i].roomTypeNo == roomTypeNo) {
+                var firstRoomData = validRoomList[0];
+                vm.setStayField(index, 'roomName', vm.mergeRoomName(roomData.doorNo, roomData.roomTypeName));
+                vm.setStayField(index, 'roomNo', roomData.roomNo);
+                vm.setStayField(index, 'roomTypeNo', roomData.roomTypeNo);
+                vm.setStayField(index, 'roomTypeName', roomData.roomTypeName);
+                vm.setStayField(index, 'doorNo', roomData.doorNo);
+                vm.setStayField(index, 'isHasLock', roomData.hasLock);
+                // 获取房费
+                vm.getStayPrice(index);
+                break;
+            }
+        }
+    },
+
+    /**
+     * [从可订房间列表中查询查询出当前房间名称]
+     * @param {[type]} validRoomList [可订房间列表]
+     */
+    getValidRoomListRoomInfo: function(index, validRoomList) {
+
+        // 默认房间号
+        var roomNo = vm.getStayField(index, 'roomNo');
+        // 默认房型号
+        var roomTypeNo = vm.getStayField(index, 'roomTypeNo');
+
+        // 如果手工下单默认房间存在于可订房间列表，则设置当前房间信息
+        $.each(validRoomList, function(_index, item) {
+            if (item.roomNo == roomNo && item.roomTypeNo == roomTypeNo) {
+                vm.setStayField(index, 'roomName', vm.mergeRoomName(item.doorNo, item.roomTypeName));
+                vm.setStayField(index, 'roomNo', item.roomNo);
+                vm.setStayField(index, 'roomTypeNo', item.roomTypeNo);
+                vm.setStayField(index, 'roomTypeName', item.roomTypeName);
+                vm.setStayField(index, 'doorNo', item.doorNo);
+                vm.setStayField(index, 'isHasLock', item.hasLock);
+            }
+        });
+
+        // 获取当前stay下的门牌号
+        var doorNo = vm.getStayField(index, 'doorNo');
+
+        // 如果在可订房间列表中没有找到手工下单房间
+        // 并且可订房间中有房间列表，默认指定第一个房间
+        if (!doorNo && validRoomList.length > 0) {
+            var firstRoomData = validRoomList[0];
+            vm.setStayField(index, 'roomName', vm.mergeRoomName(firstRoomData.doorNo, firstRoomData.roomTypeName));
+            vm.setStayField(index, 'roomNo', firstRoomData.roomNo);
+            vm.setStayField(index, 'roomTypeNo', firstRoomData.roomTypeNo);
+            vm.setStayField(index, 'roomTypeName', firstRoomData.roomTypeName);
+            vm.setStayField(index, 'doorNo', firstRoomData.doorNo);
+            vm.setStayField(index, 'isHasLock', firstRoomData.hasLock);
+        }
+
+        // 如果在可订房间列表中没有找到手工下单房间
+        // 并且可订房间列表为空，默认设置为暂无可订房间
+        if (!doorNo && validRoomList.length == 0) {
+            vm.setStayField(index, 'roomName', '暂无可订房间');
+            vm.setStayField(index, 'roomNo', '');
+            vm.setStayField(index, 'roomTypeNo', '');
+            vm.setStayField(index, 'roomTypeName', '');
+            vm.setStayField(index, 'doorNo', '');
+            vm.setStayField(index, 'isHasLock', 0);
+        }
+
+        // 获取房费
+        vm.getStayPrice(index);
+
+    },
+
+    /**
+     * [检查当前stay房间可订状态]
+     * @param  {[type]} index         [索引]
+     * @param  {[type]} validRoomList [可订房间列表]
+     */
+    checkValidRoomStatus: function(index, validRoomList) {
+        var isBooking = true;
+        var roomNo = vm.getStayField(index, 'roomNo');
+        $.each(validRoomList, function(index, item) {
+            if (item.roomNo == roomNo) {
+                isBooking = false;
+            }
+        });
+        if (!roomNo && validRoomList.length == 0) {
+            isBooking = false;
+        }
+        vm.setStayField(index, 'isBooking', isBooking);
+    },
+
+
+
+/* ###################### 入住信息模块 ###################### */
+
+
+/* ###################### 换房suggest模块 ###################### */
+
+    // 房间查询关键词
+    roomSuggestKeyword: '',
+    // 房型建议提示默认索引
+    roomSuggestIndex: -1,
+
+    onClickRoomSuggest: function(ev) {
+        ev.stopPropagation();
+    },
+
+    onKeyupRoomSuggest: function(ev, index) {
+        var obj = $(this).closest('.ui-select-search').next();
+        var validRoomList = vm.getStayField(index, 'validRoomList');
+
+        // 向上键
+        if (ev.keyCode == 38) {
+            vm.roomSuggestIndex--;
+            var iTop = Math.floor(vm.roomSuggestIndex/5) * 150;
+            obj.scrollTop(iTop);
+            if (vm.roomSuggestIndex < 0) {
+                vm.roomSuggestIndex = validRoomList.length - 1;
+                obj.scrollTop(vm.roomSuggestIndex * 30);
+            }
+            return;
+        }
+        // 向下键
+        if (ev.keyCode == 40) {
+            vm.roomSuggestIndex++;
+            var iTop = Math.floor(vm.roomSuggestIndex/5) * 150;
+            obj.scrollTop(iTop);
+            if (vm.roomSuggestIndex >= validRoomList.length) {
+                vm.roomSuggestIndex = 0;
+                obj.scrollTop(0);
+            }
+            return;
+        }
+        // 回车键
+        if (ev.keyCode == 13) {
+            if (validRoomList.length == 0 || !vm.roomSuggestKeyword) {
+                return;
+            }
+            vm.onClickValidRoomItem(index, validRoomList[vm.roomSuggestIndex]);
+            $(this).blur();
+            obj.closest('.j_booking_select').removeClass('open');
+            return;
+        }
+
+        vm.setStayField(index, 'validRoomList', vm.roomSuggestMatching(index, $.trim(vm.roomSuggestKeyword)));
+
+        if (!vm.roomSuggestKeyword) {
+            vm.roomSuggestIndex = -1;
+            return;
+        }
+
+        if (validRoomList.length > 0) {
+            vm.roomSuggestIndex = 0;
+        } else {
+            vm.roomSuggestIndex = -1;
+        }
+    },
+
+    /**
+     * [房型建议匹配方法]
+     * @param  {[type]} val [当前输入值]
+     * @return {[type]}     [房型列表]
+     */
+    roomSuggestMatching: function(index, val) {
+        var tempList = [];
+        var validRoomListCache = vm.getStayField(index, 'validRoomListCache');
+        $.each(validRoomListCache, function(index, item) {
+            if (item.doorNo.indexOf(val) > -1 || item.roomTypeName.indexOf(val) > -1) {
+                tempList.push(item);
+            }
+        });
+        $.each(tempList, function(index, item) {
+            item._doorNo = vm.roomSuggestFieldReplace(item.doorNo);
+            item._roomTypeName = vm.roomSuggestFieldReplace(item.roomTypeName);
+        });
+        return tempList;
+    },
+
+    // 字段替换方法
+    roomSuggestFieldReplace: function(str) {
+        return str.replace(vm.roomSuggestKeyword,'<span class="highlight">' + vm.roomSuggestKeyword + '</span>');
+    },
+
+    /**
+     * [重置可订房间数据]
+     * @param  {[type]} index [索引]
+     */
+    resetRoomSuggest: function(index) {
+        vm.setStayField(index, 'validRoomList', []);
+        vm.setStayField(index, 'validRoomListCache', []);
+        vm.roomSuggestKeyword = '';
+        vm.roomSuggestIndex = -1;
+    },
+
+/* ###################### 换房suggest模块 ###################### */
+
+
+
+/* ###################### 下单预订信息模块 ###################### */
+    
+    orderTypeList: [], // 订单类型存储列表
+    channelFromTypeList: [], // 渠道来源存储列表
+    defOrderTypeCode: '', // 默认订单类型编码
+    defChannelFromCode: 'SANKEQD', // 默认渠道来源编码
+    defOrderTypeName: '请选择订单类型', // 默认订单类型名称
+    defChannelFromName: '线下客人', // 默认渠道来源名称
+
+    /**
+     * [订单类型点击事件]
+     */
+    onClickOrderType: function(e) {
+        $(this).toggleClass('open');
+        vm.$fire('closeToggle', $(this));
+        e.stopPropagation();
+    },
+
+    /**
+     * [渠道来源点击事件]
+     */
+    onClickChannelFromType: function(e) {
+        $(this).toggleClass('open');
+        vm.$fire('closeToggle', $(this));
+        e.stopPropagation();
+    },
+
+    /**
+     * [订单类型选择事件]
+     */
+    onClickOrderTypeItem: function(el, code, name) {
+        vm.defOrderTypeCode = code;
+        vm.defOrderTypeName = name;
+    },
+
+    /**
+     * [渠道来源选择事件]
+     */
+    onClickChannelFromTypeItem: function(el, code, name) {
+        vm.defChannelFromCode = code;
+        vm.defChannelFromName = name;
+    },
+
+
+/* ###################### 下单预订信息模块 ###################### */
+
+
+/* ###################### 财务信息模块 ###################### */
+    
+    financeList: [], // * 财务信息存储列表
+    financeItemList: [], // 项目存储列表
+    payTypeList: [], // 支付方式存储列表
+    maxFinanceCount: 100, // 最大财务信息数
+    paidCash: 0, // 已付押金
+    paidRoomPrice: 0, // 已付房费
+    otherCost: 0, // 其它消费
+    oweRoomPrice: 0, // 补交房费
+    totalOrderPrice: 0, // 订单总金额
+    allConsumePrice: 0, //消费金额
+    allGatheringPrice: 0, //收款金额
+    addCategoryName: '', //增加消费选项
+    addPayTypeName: '', //增加收款选项
+    // 支付项目预置code码，id为数据库中的值
+    financeItemCode: {
+        payRoomPrice: {
+            id: 'PAID_ROOMRATE',
+            name: '支付房费'
+        },
+        payCashPledge: {
+            id: 'PREPAID_DEPOSIT',
+            name: '支付押金'
+        },
+        addBad: {
+            id: 'EXTRA_BED',
+            name: '加床'
+        },
+        repaymentCashPledge: {
+            id: 'RETURNED_DEPOSIT',
+            name: '退还押金'
+        },
+        repaymentMoney: {
+            id: 'REFUND',
+            name: '退款'
+        }
+    },
+
+    //增加消费/收款取消默认事件
+    onClickFinanceAdd: function(ev) {
+        ev.stopPropagation();
+    },
+
+    /**
+     * [插入两条默认财务数据]
+     */
+    initInsertFinance: function() {
+        // 支付押金
+        /*vm.insertFinance({
+            categoryType: 1,
+            financeItemCode: 'payCashPledge'
+        });*/
+
+        // 支付房费
+        // 如果下单类型是渠道并且订单类型是预付
+        // 则将预付金额默认填充至：押金房费金额，支付方式为：渠道代收
+        if (vm.settings.bookingType == 1 && vm.channelOrderInfo.payType == 0 && vm.channelOrderInfo.paymentMethodCode == "") {
+            vm.insertFinance({
+                itemType: 1,
+                categoryType: 1,
+                financeItemCode: 'payRoomPrice',
+                paymentMethod: 'channel',
+                paymentMethodName: '渠道代收',
+                money: vm.channelOrderInfo.prePayMoney
+            });
+        // 挂单 填入支付方式
+        }else if(vm.settings.bookingType == 1 && vm.channelOrderInfo.paymentMethodCode != ''){
+            vm.insertFinance({
+                itemType: 1,
+                categoryType: 1,
+                financeItemCode: 'payRoomPrice',
+                paymentMethod: vm.channelOrderInfo.paymentMethodCode,
+                paymentMethodName: vm.channelOrderInfo.paymentMethodName,
+                money: vm.channelOrderInfo.prePayMoney
+            });
+
+        // 其它场景默认插入一条空支付房费
+        } else {
+            vm.insertFinance({
+                itemType: 1,
+                categoryType: 1,
+                financeItemCode: 'payRoomPrice'
+            });
+        }
+
+        // 更新财务信息
+        vm.countFinance();   
+        
+    },
+
+    /**
+     * [新增消费事件]
+     */
+    onInsertIncome: function() {
+        vm.insertFinance({
+            itemType: 1,
+            categoryType: 1,
+            financeItemCode: 'payRoomPrice'
+        });
+    },
+
+    /**
+     * [新增收款事件]
+     */
+    onInsertOutlay: function() {
+        vm.insertFinance({
+            itemType: 0,
+            categoryType: 0,
+            financeItemCode: 'repaymentCashPledge'
+        });
+    },
+
+    /**
+     * [删除一条财务信息事件]
+     * @param  {[type]} el [description]
+     * @param  {[type]} id [财务信息ID]
+     */
+    onRemoveFinance: function(el, id) {
+        vm.financeList.splice(id, 1);
+        // 更新财务信息
+        vm.countFinance();   
+    },
+
+    /**
+     * [项目点击事件]
+     */
+    onClickFinance: function(e) {
+        $(this).toggleClass('open');
+        vm.$fire('closeToggle', $(this));
+        e.stopPropagation();
+    },
+
+    /**
+     * [项目选择事件]
+     */
+    onClickFinanceItem: function(el, index, name, val) {
+        vm.setFinanceField(index, 'categoryId', val);
+        vm.setFinanceField(index, 'categoryName', name);
+        // 更新财务信息
+        vm.countFinance();
+    },
+
+    /**
+     * [支付方式点击事件]
+     */
+    onClickPaymentMethod: function(e) {
+        $(this).toggleClass('open');
+        vm.$fire('closeToggle', $(this));
+        e.stopPropagation();
+    },
+
+    /**
+     * [支付方式项目选择事件]
+     */
+    onClickPaymentMethodItem: function(el, index, name, val) {
+        vm.setFinanceField(index, 'payTypeCode', val);
+        //vm.setFinanceField(index, 'paymentMethodName', name);
+    },
+
+    /**
+     * [价格Blur事件]
+     * @param  {[type]} el    [el]
+     * @param  {[type]} index [索引]
+     */
+    onBlurFinanceCostPrice: function(el, index) {
+        if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test($(this).val())) {
+            vm.setFinanceField(index, 'costMoney', '');
+        }
+    },
+
+    onBlurFinancePrice: function(el, index) {
+        if(!/^(-)?(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test($(this).val())) {
+            vm.setFinanceField(index, 'money', '');
+        }
+    },
+
+    /**
+     * [计算财务信息]
+     */
+    countFinance: function() {
+        vm.getPaidCash();
+        vm.getPaidRoomPrice();
+        vm.getOtherCost();
+        vm.getOweRoomPrice();
+        vm.getTotalOrderPrice();
+    },
+
+    /**
+     * [获取已付押金]
+     */
+    getPaidCash: function() {
+        // 已付押金总金额
+        var paidCashPrice = 0;
+        // 支付押金总金额
+        var payCashPledgePrice = 0;
+        // 退还押金总金额
+        var repaymentCashPledgePrice = 0;
+        // 计算逻辑
+        $.each(vm.financeList, function(index, item) {
+            // 获取当前财务金额
+            var money = 0;
+            if (item.money && !isNaN(item.money)) {
+                money = parseFloat(item.money);
+            }
+            // 计算支付押金总额
+            if (item.categoryId == vm.financeItemCode['payCashPledge']['id']) {
+                payCashPledgePrice += money;
+            }
+            // 计算退还押金总额
+            if (item.categoryId == vm.financeItemCode['repaymentCashPledge']['id']) {
+                repaymentCashPledgePrice += money;
+            }
+        });
+        // 已付押金 = 支付押金 - 退还押金
+        paidCashPrice = payCashPledgePrice - repaymentCashPledgePrice;
+        // 设置已付押金总额
+        vm.paidCash = parseFloat(paidCashPrice).toFixed(2);
+    },
+
+    /**
+     * [获取已付房费]
+     */
+    getPaidRoomPrice: function() {
+        // 已付房费总额
+        var paidRoomPrice = 0;
+        // 计算逻辑
+        $.each(vm.financeList, function(index, item) {
+            // 获取当前财务金额
+            var money = 0;
+            if (item.money && !isNaN(item.money)) {
+                money = parseFloat(item.money);
+            }
+            // 计算已付房费总额
+            if (item.categoryId == vm.financeItemCode['payRoomPrice']['id']) {
+                paidRoomPrice += money;
+            }
+        });
+        // 设置已付房费总额
+        vm.paidRoomPrice = parseFloat(paidRoomPrice).toFixed(2);
+    },
+
+    /**
+     * [获取其它消费]
+     */
+    getOtherCost: function() {
+        // 其它收入总额
+        var otherCostPrice = 0;
+        // 其它支出总额
+        var otherPayPrice = 0;
+        // 计算逻辑
+        $.each(vm.financeList, function(index, item) {
+            // 获取当前财务金额
+            var money = 0;
+            if (item.money && !isNaN(item.money)) {
+                money = parseFloat(item.money);
+            }
+            // 计算其它收入总额 （不包含：支付房费、支付押金）
+            if (item.categoryType == 1) {
+                if (item.categoryId != vm.financeItemCode['payRoomPrice']['id'] && item.categoryId != vm.financeItemCode['payCashPledge']['id']) {
+                    otherCostPrice += money;
+                }
+            }
+            // 计算其它支出总额 （不包含：退还押金）
+            if (item.categoryType == 0) {
+                if (item.categoryId != vm.financeItemCode['repaymentCashPledge']['id']) {
+                    otherPayPrice += money;
+                }
+            }
+        });
+        // 其它消费 = 其它收入 - 其它支付
+        otherCostPrice = otherCostPrice - otherPayPrice;
+        // 设置其它消费总额
+        vm.otherCost = parseFloat(otherCostPrice).toFixed(2);
+    },
+
+    /**
+     * [获取补交房费]
+     */
+    getOweRoomPrice: function() {
+        // 补交房费总额
+        var oweRoomPrice = 0;
+        // 补交房费 = 总房费 - 已付房费
+        oweRoomPrice = vm.totalRoomPrice - vm.paidRoomPrice;
+        // 设置补交房费总额
+        vm.oweRoomPrice = parseFloat(oweRoomPrice).toFixed(2);
+    },
+
+    /**
+     * [获取订单总金额]
+     */
+    getTotalOrderPrice: function() {
+        // 订单总金额
+        var totalOrderPrice = 0;
+        // 所有收入金额
+        var allIncomePrice = 0;
+        // 所有支出金额
+        var allPayPrice = 0;
+        // 计算逻辑
+        $.each(vm.financeList, function(index, item) {
+            // 获取当前财务金额
+            var money = 0,
+                costMoney = 0;
+
+            if (item.money !== '' && !isNaN(item.money)) {
+                money = parseFloat(item.money);
+            }
+
+            if (item.costMoney !== '' && !isNaN(item.costMoney)) {
+                costMoney = parseFloat(item.costMoney);
+            }
+            // 计算所有消费金额
+            if (item.itemType == 1) {
+                allIncomePrice += costMoney;
+            }
+            // 计算所有收款金额
+            if (item.itemType == 0) {
+                allPayPrice += money;
+            }
+        });
+        // 订单总金额 = 所有收入金额 - 所有支出金额
+        totalOrderPrice = allIncomePrice - allPayPrice;
+
+        // 设置订单总金额
+        vm.totalOrderPrice = parseFloat(totalOrderPrice).toFixed(2);
+
+        //设置消费金额
+        vm.allConsumePrice = parseFloat(allIncomePrice).toFixed(2);
+
+        //设置收款金额
+        vm.allGatheringPrice = parseFloat(allPayPrice).toFixed(2);
+    },
+
+    /**
+     * [获取财务信息备注、房间号拼接字符串]
+     */
+    getFinanceDes: function() {
+        var des = '#费用来自: ';
+        var roomNoList = [];
+        $.each(vm.stayList, function(index, item) {
+            var roomName = vm.getStayField(index, 'roomName');
+            roomNoList.push(roomName);
+        });
+        des += ' ' + roomNoList.join('、');
+        return des;
+    },
+
+    /**
+     * [插入一条财务信息]
+     */
+    insertFinance: function(options) {
+        var financeData = {
+            categoryType: options.categoryType, // 财务类型ID
+            categoryTypeName: options.categoryType == 1 ? '收入' : '支出', // 财务类型名称
+            categoryId: options.financeItemCode ? vm.financeItemCode[options.financeItemCode]['id'] : '', // 项目ID
+            categoryName: options.financeItemCode ? vm.financeItemCode[options.financeItemCode]['name'] : '未选择', // 项目名称
+            paymentMethod: options.paymentMethod ? options.paymentMethod : 'cash', // 支付方式ID
+            paymentMethodName: options.paymentMethodName ? options.paymentMethodName : '现金', // 支付方式名称
+            money: options.money ? options.money : '', // 金额
+            accountComment: '', // 备注
+            itemType: options.itemType,
+            payTypeCode: options.payTypeCode,
+            categoryType: options.categoryType,
+            costMoney: options.costMoney
+        }
+        vm.financeList.unshift(financeData);
+    },
+
+    /**
+     * [写入一项财务信息字段]
+     * @param {[type]} index [索引]
+     * @param {[type]} name  [字段名称]
+     * @param {[type]} val   [字段值]
+     */
+    setFinanceField: function(index, name, val) {
+        vm.financeList[index][name] = val;
+    },
+
+    /**
+     * [获取消费项目列表]
+     */
+    fetchAccountCategory: function() {
+        $.ajax({
+            type: 'GET',
+            url: '/finance/j/queryAccountCategory',
+            data: {
+                hotelNo: window.GLOBAL.hotelNo
+            },
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                vm.financeItemList = res.data.accountCategoryList; // 项目存储列表
+            }
+        });
+    },
+
+    /**
+     * [新增消费项目]
+     */
+    onClickAddCategoryList: function(){
+        $.ajax({
+            type: 'GET',
+            url: CONFIG.ROOT + '/bill/j/addCategory',
+            data: {
+                "hotelNo": window.GLOBAL.hotelNo,
+                "accountType": 1,
+                "categoryName": vm.addCategoryName
+            },
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                //重新查询消费项目
+                vm.fetchAccountCategory();
+                vm.addCategoryName = '';
+            }
+        });
+    },
+
+    /**
+     * [新增收款项目]
+     */
+    onClickAddPayTypeList: function(){
+        $.ajax({
+            type: 'GET',
+            url: CONFIG.ROOT + '/finance/j/addPayType.do',
+            data: {
+                "hotelNo": window.GLOBAL.hotelNo,
+                "payTypeName": vm.addPayTypeName
+            },
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                //重新查询收款项目
+                vm.fetchCommonTypeList();
+                vm.addPayTypeName = '';
+            }
+        });
+    },
+
+/* ###################### 财务信息模块 ###################### */
+
+/* ###################### 备注模块 ###################### */
+    
+    orderDes: '', // 备注存储
+
+    /**
+     * [备注keyup事件]
+     */
+    onKeyupOrderDes: function() {
+        if (this.value.length > 400) {
+            vm.orderDes = this.value.substring(0, 400);
+        }
+    },
+
+
+/* ###################### 备注模块 ###################### */
+
+
+/* ###################### 订单日志模块 ###################### */
+
+    detailActiveTab : true, // 订单详情tab选中
+    logActiveTab : false, // 订单日志tab选中
+    isAjax: false, // 表示是否提交
+
+    // 点击订单详情tab
+    selectDetail : function() {
+        vm.detailActiveTab = true;
+        vm.logActiveTab = false;
+    },
+
+    // 点击订单日志tab
+    selectLog : function() {
+        var orderNo = vm.settings.orderNo;
+        vm.detailActiveTab = false;
+        vm.logActiveTab = true;
+        vm.$fire("all!queryOrderLog",orderNo);
+    },
+
+/* ###################### 订单日志模块 ###################### */
+
+
+/* ###################### 通用方法模块 ###################### */
+
+    /**
+     * [设置时间控制列表状态]
+     * @param {[type]} index [索引]
+     */
+    setCalendarStatus: function(index) {
+        var roomNo = vm.getStayField(index, 'roomNo');
+        var checkInDate = vm.getStayField(index, 'checkInDate');
+        var checkOutDate = vm.getStayField(index, 'checkOutDate');
+        calendarStatus.init({
+            roomNo: roomNo,
+            checkInDate: checkInDate,
+            checkOutDate: checkOutDate,
+            callback: function(res) {
+                if (res.defaultCI != -1) {
+                    vm.setStayField(index, 'checkInTime', qfn.toTime(res.defaultCI));
+                    vm.setStayField(index, 'checkInTimeSelectedIndex', res.defaultCI);
+                }
+                vm.stayList[index]['checkInTimeList'] = vm.resetTimeList(res.checkInCalendarList);
+                vm.stayList[index]['checkOutTimeList'] = vm.resetTimeList(res.checkOutCalendarList);
+            }
+        });
+    },
+
+    /**
+     * [重置时间控件列表]
+     * @param  {[type]} calendarList [实时状态列表]
+     * @return {[type]}              [时间列表]
+     */
+    resetTimeList: function(calendarList) {
+        var timeList = $.extend(true, [], _config.timeList);
+        $.each(calendarList, function(index, item) {
+            timeList[index]['isDisabled'] = item;
+        });
+        return timeList;
+    },
+
+    /**
+     * [获取证件号设置状态]
+     */
+    fetchCertificateStatus: function() {
+        $.ajax({
+            url: '/setting/j/searchCertificateNoStatus',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                hotelNo : window.GLOBAL.hotelNo
+            },
+            success : function(res) {
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                vm.certificateStatus = res.data.status;
+            }
+        });
+    },
+
+    /**
+     * [获取通用类型列表]
+     */
+    fetchCommonTypeList: function() {
+        $.ajax({
+            type: 'GET',
+            url: '/dict/j/commonList',
+            data: {hotelNo: window.GLOBAL.hotelNo},
+            dataType: 'json',
+            success: function(res){
+                // 处理返回状态
+                var checkCodeFlag = checkCode(res);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                vm.orderTypeList = res.data.orderTypeList; // 订单类型存储列表
+                vm.channelFromTypeList = res.data.channelList; // 渠道来源存储列表
+                vm.payTypeList = res.data.payWayList; // 支付方式存储列表
+            }
+        });
+    },
+
+    /**
+     * [合并日期时间]
+     * @param  {[type]} date   [日期]
+     * @param  {[type]} time   [时间]
+     * @return {[string]}      [2015-05-01 12:00]
+     */
+    mergeDateTime: function(date, time) {
+        return date + ' ' + time;
+    },
+
+    /**
+     * [合并房间名称]
+     * @param  {[type]} doorNo       [门牌号]
+     * @param  {[type]} roomTypeName [房型名称]
+     * @return {[type]}              [房间名称]
+     */
+    mergeRoomName: function(doorNo, roomTypeName) {
+        return doorNo + ' ' + '(' + roomTypeName + ')';
+    },
+
+    /**
+     * [重置数据]
+     */
+    resetData: function() {
+        vm.settings = {}; // 配置参数
+        vm.isShowLoading = true; // 恢复Loading状态
+
+        vm.stayList = []; // * 入住信息存储列表
+        vm.totalRoomPrice = 0; // 总房费
+        vm.channelOrderInfo = {}; // 渠道订单信息
+
+        vm.defOrderTypeCode = ''; // 默认订单类型编码
+        vm.defChannelFromCode = 'SANKEQD'; // 默认渠道来源编码
+        vm.defOrderTypeName = '请选择订单类型'; // 默认订单类型名称
+        vm.defChannelFromName = '线下客人'; // 默认渠道来源名称
+
+        vm.financeList = []; // * 财务信息存储列表
+
+        vm.orderDes = vm.settings.bookingType == 1 ? vm.channelOrderInfo.des : ''; // 备注
+
+        // 初始化选中tab的值
+        vm.detailActiveTab = true;
+        vm.logActiveTab = false;
+
+    },
+
+/* ###################### 通用方法模块 ###################### */
+
+/* ###################### 事件绑定模块 ###################### */
+    bind: function() {
+        // select 显示隐藏
+        $(document).on('click.bookingHideSelect', function() {
+            $('#bookingDialog .j_booking_select').removeClass('open');
+            $('#bookingDialog .j_booking_timer').removeClass('open');
+        });
+
+        // 调用价格验证组件
+        $('#bookingDialog').on('keypress', '.j_booking_price', function() {
+            return $(this).priceVail();
+        });
+
+        $('#bookingDialog').on('keypress', '.j_booking_minus', function() {
+            return $(this).priceVailMinus();
+        });
+
+        // 窗口滚动条滚动时关闭建议提示框
+        $('#bookingDialog .pop-cont-wrap').on('scroll', function() {
+            vm.$fire('all!closeLodgerSuggest');
+        });
+
+        // 绑定验证组件
+        $("#bookingDialog").validationEngine({
+            maxErrorsPerField: 1,
+            showOneMessage: true,
+            scroll: false,
+            promptPosition: 'topLeft'
+        });
+        
+    },
+/* ###################### 事件绑定模块 ###################### */
+
+});
+
+/* ###################### 监听属性 ###################### */
+    
+    /**
+     * [监听总房费变化，更新财务信息]
+     */
+    vm.$watch('totalRoomPrice', function() {
+        vm.countFinance();
+    });
+
+    /**
+     * [关闭所有的下拉框]
+     */
+    vm.$watch('closeToggle', function(obj) {
+        // 关闭其它下拉框
+        $('.open', '#bookingDialog').not(obj).removeClass('open');
+        // 强制关闭日期控件
+        $('.rDatepicker', '#bookingDialog').parent().hide();
+    });
+
+    /**
+     * [住客姓名电话自动填充通信接口]
+     * @param  {[type]} index   [索引]
+     * @param  {[type]} name    [姓名]
+     * @param  {[type]} mobile  [电话]
+     */
+    vm.$watch('setLodgerSuggestInfo_bookingDialog', function(index, name, mobile) {
+        vm.setLodgerSuggestInfo(index, name, mobile);
+    });
+
+    /**
+     * [监控stayList长度变化]
+     */
+    vm.stayList.$watch('length', function(len) {
+        // 如果是手工下单跳出循环
+        if (vm.settings.bookingType == 0) {
+            return;
+        }
+        // 如果是渠道订单时，监控length长度等于渠道stayList长度时，关闭Loading
+        if (vm.channelOrderInfo.roomList && len == vm.channelOrderInfo.roomList.length) {
+            vm.isShowLoading = false;
+        }
+        // 如果是新增多张订单，监控length长度等于stayList长度时，关闭Loading
+        if (vm.settings.orderNewList && len == vm.settings.orderNewList.length) {
+            $.each(vm.stayList, function(index, item) {        
+                vm.getNightsNum(index);
+                vm.getStayPrice(index);
+
+                // 调用时间实时房态
+                vm.setCalendarStatus(index);                
+            });
+            vm.isShowLoading = false;
+        }
+    });
+
+/* ###################### 监听属性 ###################### */
+
+
+/* ###################### 证件号方法 ###################### */
+
+    /**
+     * [检查证件号是否合法]
+     * @param  {[type]} card [证件号]
+     * @return {[type]}      [boole]
+     */
+    function checkCardNo(field, rules, i, options) {
+        var index = field.attr('index');
+        var certificateType = vm.getStayField(index, 'certificateType');
+        var identityCardFlag = checkIdentityCard(field.val());
+        var otherCardFlag = checkOtherCard(field.val());
+        var tips = '请输入正确的证件号';
+        if (certificateType == 0 && !identityCardFlag) {
+            return tips;
+        }
+        if ( (certificateType == 1 || certificateType == 2 || certificateType == 3) && !otherCardFlag) {
+            return tips;
+        }
+    }
+
+    /**
+     * [检查其它证件号是否合法]
+     * @param  {[type]} card [证件号]
+     * @return {[type]}      [boole]
+     */
+    function checkOtherCard(card) {
+        var reg = /^[a-zA-Z0-9]{0,50}$/;
+        if (reg.test(card)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * [检查身份证号是否合法]
+     * @param  {[type]} card [身份证号]
+     * @return {[type]}      [boole]
+     */
+    function checkIdentityCard(card) {
+        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+        if (reg.test(card)) {
+            return true;
+        }
+        return false;
+    }
+
+/* ###################### 证件号方法 ###################### */
+
+/* ###################### 通用方法 ###################### */
+
+    /**
+     * [控制只能输入数字 obj表示输入框  relateObj表示关联对象]
+     * @param  {[type]} obj [description]
+     */
+    function controlNumber (obj) {
+        var reg = /^[0-9]{1,6}$/;
+        var diyVal = $(obj).val();
+
+        if (!reg.test(diyVal)) {
+            var value = diyVal.replace(/\D/g,'');      
+
+            if(value !== "" && value !== 0) {
+                value = parseInt(value);
+            } else {
+                value = "";
+            }
+
+            $(obj).val(value);
+            return false;
+        }
+        
+    }
+
+    function controlNumberMinus(obj) {
+        var reg1 = /^(-)?(([1-9]\d*)|\d)(\.\d{1,2})?$/,
+            reg2 = /^(-)?[0-9](\d{0,8})$/,
+            val = obj.val();
+
+        var reg = /^(-)?(([1-9]\d*)|\d)(\.\d{1,2})?$/;
+
+        console.log(val, reg.test(val));
+
+        if (reg.test(val)) {
+            console.log(1111111);
+            return true;
+        }
+
+        return false;
+//
+//        if (val.indexOf('.') !== -1) {
+//
+//            //有小数点，应用规则reg1
+//            if (reg1.test(val)) {
+//                return true;
+//            }
+//        } else {
+//            if (reg2.test(val)) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+    }
+
+    /**
+     * [验证渠道stay中的手机号]
+     * @param  {[type]} tel [手机号]
+     */
+    function checkChannelMobile (tel) {
+        var reg = /^(13|15|18|14|17)\d{9}$/;
+        if (reg.test(tel)) {
+            return tel;
+        } else {
+            return '';
+        }
+    }
+
+/* ###################### 通用方法 ###################### */
+
+
+// 将个性化验证方法挂载到全局对象
+window.bookinglValidation = {
+    checkCardNo: checkCardNo
+}
+
+module.exports = vm;

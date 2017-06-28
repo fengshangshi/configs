@@ -1,0 +1,16 @@
+var target = document.getElementById("p");
+target.onmouseenter = function(e) {
+	console.log(1);
+};
+
+target.onmouseleave = function(e) {
+	console.log(2);
+};
+
+target.onmouseover = function(e) {
+	console.log(2221);
+};
+
+target.onmouseout = function(e) {
+	console.log(4);
+};

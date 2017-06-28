@@ -1,0 +1,26 @@
+/*[export]*/
+/**
+ * 红包详情页样式
+ */
+require("../../base.css");
+require("../common.css");
+require("../../../common/loading.css");
+require("../../../common/menu.css");
+
+.summary-info {
+    border-bottom: none;
+    border-top: 2px solid #d2ebfa;
+    background: #f6fbfe;
+}
+
+.data-list {
+    margin-top: 0;
+}
+
+.module-ft .page {
+    padding: 20px 0;
+}
+
+.loading {
+	margin: 20px auto;
+}

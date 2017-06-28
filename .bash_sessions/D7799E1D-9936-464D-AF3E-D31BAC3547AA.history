@@ -1,0 +1,515 @@
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+clear
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+ll
+npm i streamroller moment
+ll
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+node test.js 
+ls
+rm -rf log*
+ll
+rm -rf node_modules/
+ls
+ll
+rm -rf .DS_Store 
+ls
+npm addUser
+npm addUser
+npm publish
+ss
+cd sugar2.0/
+ls
+cd sugar-log
+ls
+ll
+git init
+ll
+git status
+ll
+touch .gitignore
+vi .gitignore 
+git add .
+git commit -m 'sugar-log dev'
+git remote add origin git@github.com:fengshangshi/sugar-log.git
+git pull origin master
+git push -u origin master
+vi .gitignore 
+git add .
+git commit -m 'add gitignore file'
+git push origin master
+ll
+rm -rf log.2017-04-2*
+git status
+git add .
+git commit -m 'delete log* files'
+git push 
+ll
+node test.js 
+ll
+git status
+cd ..
+ls
+mkdir sugar-type
+cd sugar-type/
+ls
+ll
+cd ..
+ls
+rm -rf sugar-type/
+ls
+git clone git@github.com:fengshangshi/sugar-type.git
+ll
+rm -rf sugar-log.bak*
+ll
+cd sugar-type/
+ls
+ll
+touch index.js .gitignore
+ll
+npm init
+ll
+ll
+cd ..
+cd sugar-log/
+ls
+vi .gitignore 
+ll
+cd ..
+ll
+ls
+cd sugar-log/
+ls
+atom .gitignore 
+vi package.json 
+atom libs/type.js 
+ls
+rm -rf libs/type.js 
+ls
+git status
+git diff
+git add .
+git status
+git commit -m '修改了type的引用，变为sugar-type'
+git push 
+npm addUser
+npm publish
+cd ..
+ls
+cd sugar-type/
+ls
+vi package.json 
+git status
+git add .
+git commit -m 'init'
+git push
+ll
+touch README.md
+vi index.js 
+ll
+git status
+git diff
+git add .
+git status
+git commit -m 'add README'
+git push
+npm addUser
+npm publish
+cd ../sugar-log/
+ls
+npm i sugar-type --save
+node test.js 
+vi test.js 
+ll
+tail -f log.2017-04-24 
+git diff
+vi package.json 
+git add .
+git commit -m 'dependencies version'
+git push
+npm publish
+vi package.json 
+git staus
+git status
+git add .
+git commit -m ''
+git commit -m 'add package version'
+git push
+npm publish
+vi package.json 
+npm publish
+git add .
+git commit -m 'version'
+git push
+ls
+cd ..
+ls
+cd sugar-toml/
+ls
+tree
+ll
+vi index.js 
+vi test.js 
+vi index.js 
+git status
+git init
+git add .
+git commit -m 'init sugar-toml'
+git remote add origin git@github.com:fengshangshi/sugar-toml.git
+git push -u origin master
+cp ../sugar-log/.gitignore .
+ls
+vi .gitignore 
+rm -rf node_modules/
+ls
+git status
+git add .
+git commit -m 'add .gitignore'
+git push
+ls
+git status
+vi package.json 
+touch README.md
+ll
+npm i
+git status
+git add .
+git commit -m 'add readme'
+git push
+npm addUser
+npm publish
+vi package.json 
+npm addUser
+npm publish
+git status
+vi package.json 
+git status
+vi package.json 
+git diff
+npm publish
+git add .
+git commit -m 'version'
+git push
+cd ../sugar-watcher/
+ls
+git init
+vi package.json 
+git status
+cp ../sugar-log/.gitignore 
+cp ../sugar-log/.gitignore  .
+ll
+git status
+vi index.js 
+cd node_modules/sugar-util/
+vi index.js 
+cd ..
+cd ..
+vi index.js 
+vi index.js 
+ll
+vi index.js 
+touch README.md
+git diff
+git status
+git init
+ll
+git status
+git add .
+git commit -m 'init'
+git remote add origin git@github.com:fengshangshi/sugar-watcher.git
+git push -u origin master
+git status
+npm addUser
+npm publish
+cd ..
+ls
+cd sugar-util/
+ls
+npm unpublish
+npm unpublish sugar-util
+npm unpublish sugar-util@0.0.1
+npm addUser
+npm unpublish sugar-util@0.0.1
+npm unpublish help
+npm unpublish fengshangshi/sugar-util@0.0.1
+clear
+npm unpubllish sugar-util@v0.0.1
+npm unpublish sugar-util@v0.0.1
+npm unpublish  tx-xxxx@ v1.0.1
+npm unpublish  tx-xxxx@v1.0.1
+npm unpublish sugar-monitor@v0.0.1
+cd ..
+ls
+cd sugar-log/
+ls
+npm i colors-cli
+node
+ls
+npm i json2toml
+node 
+ls
+cd ..
+ls
+cd sugar-toml/
+ls
+npm i json2toml --save
+ll
+vi package.json 
+vi README.md 
+git status
+git diff
+ls
+npm i lodash
+cd node_modules/
+ls
+cd lodash.isempty/
+ls
+vi index.js 
+cd ..
+cd ..
+ls
+cd ..
+cd sugar-type/
+ls
+git diff
+vi index.js 
+git add .
+git status
+git commit -m 'add method isEmpty'
+git push
+npm addUser
+npm publish
+cd ../sugar-toml/
+ls
+npm i sugar-type --save
+vi package.json 
+vi package.json 
+npm uni json2toml --save
+vi package.json 
+npm i strftime --save
+cd ..
+cd sugar-log/node_modules/lodash.isplainobject/
+ls
+vi index.js 
+cd ..
+cd ..
+cd ..
+cd sugar-toml/
+ls
+node
+ls
+vi test.toml 
+node
+ls
+wget http://57970c94c2d4ad1917a9fbed.ams.corp.qunar.com/zhixiao/api/touch/member/pointDetail.do?__v__=0.0.1
+ls
+mv pointDetail.do\?__v__\=0.0.1 p.json
+vi p.json 
+brew info git
+brew info node
+node -v
+brew info nvm
+nvm -v
+nvm -V
+nvm help
+nvm --version
+brew update
+brew update
+ss
+cd sugar2.0/
+ls
+rm -rf sugar-monitor/
+ps -ef | grep node
+kill -s 9 40681
+ps -ef | grep node
+ls
+cd .sgu
+cd .sugar/
+ls
+cd no
+cd node_modules/
+ls
+cd ssugar/
+ls
+vi package.json 
+vi package.json 
+node
+ls
+cd bin/
+ls
+vi sugar.js 
+sugar
+abc
+echo $PATH
+whereis sugar
+where sugar
+cd /Users/fengshangshi/Documents/git/nvm/versions/node/v7.2.0/bin
+ll
+cd ../lib/node_modules/ssugar/bin/
+ll
+pwd
+/Users/fengshangshi/Documents/git/nvm/versions/node/v7.2.0/lib/node_modules/ssugar/bin/sugar.js 
+cd ~/.sugar/
+ls
+cd node_modules/
+ls
+cd ssugar/
+ls
+cd ..
+cd ..
+ls
+vi index.js 
+cd bin/
+ls
+vi www 
+cd ..
+grep -r 'ssugar' .
+vi ./libs/router.js
+ss
+cd sugar2.0/
+ls
+cd sugar-toml/
+ls
+wget http://57970c94c2d4ad1917a9fbed.ams.corp.qunar.com/zhixiao/api/touch/member/queryMemberDetail.do?__v__=0.0.1 -O a.json
+ls
+cat a.json 
+ll
+rm -rf a.*
+ll
+rm -rf b.toml 
+rm -rf c.toml 
+ll
+rm -rf p.json test.toml 
+ll
+git status
+git diff
+git status
+git diff
+cd ..
+cd ..
+ls
+cd test/
+ls
+vi index.js 
+ab -n 10 -c http://localhost:8678/
+a
+ab
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 100 -c 10 http://localhost:8678/
+ab -n 10 -c 10 http://localhost:8678/
+ab -n 12 -c 10 http://localhost:8678/
+ab -n 12 -c 10 http://localhost:8678/
+ab -n 23 -c 10 http://localhost:8678/

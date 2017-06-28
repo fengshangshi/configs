@@ -1,0 +1,88 @@
+/**
+ * 获取常用卡列表
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+require("handlebars/handlebars.js");
+var bankListTitleTpl = require("../template/cardListTitle.handlebars");
+var bankListTpl = require("../template/cardList.handlebars");
+var pageHtml = require("module/page/page.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchBankCard", function(e) {
+	var args = e.args,
+		page = args.page || 1,
+		step = args.step || 7;
+
+	var data = {
+		pageStart: page,
+		pageLength: step
+	};
+
+	service.ajax({
+		url: "/member/asset/bankCard/fetchBankCardsApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			// 卡片数量
+			Handlebars.registerHelper("cardCountHelper", function(count) {
+				return count === undefined ? 0 : count;
+			});
+
+			// 卡片类型
+			Handlebars.registerHelper("cardTypeHelper", function(cardType) {
+				return cardType == "debit" ? "借记卡" : "信用卡";
+			});
+
+			// 卡片状态
+			Handlebars.registerHelper("cardStatusHelper", function(cardStatus) {
+				return cardStatus == 0 ? "未开通" : "已开通";
+			});
+
+			// 操作状态
+			Handlebars.registerHelper("cardOperateHelper", function(cardStatus) {
+				return cardStatus === 0 ? "开通" : "关闭";
+			});
+
+			// 分页
+			Handlebars.registerHelper("pageHelper", function(pageTotal, pageCurrent, options) {
+				if (pageTotal > 1) {
+					var pageArray = [];
+					for (var i = 1; i <= pageTotal; i++) {
+						pageArray.push({
+							index: i,
+							className: pageCurrent === i ? "current" : ""
+						});
+					}
+
+					if (pageCurrent < 1) {
+						pageArray[0]["className"] = "current";
+					}
+
+					if (pageCurrent > pageTotal) {
+						pageArray[pageTotal - 1]["className"] = "current";
+					}
+
+					return options.fn(pageArray);
+				}
+			});
+
+			// 比较页码大小
+			Handlebars.registerHelper("compareHelper", function(v1, v2, flag, options) {
+				if (flag && v1 > v2) {
+					return options.fn({index: v1 - 1});
+				}
+
+				if (!flag && v1 < v2) {
+					return options.fn({index: v1 + 1});
+				}
+			});
+
+			$(".main .main-content .module-hd").html(bankListTitleTpl(data));
+			$(".main .main-content .module-bd").html(bankListTpl(data));
+			$(".main .main-content .module-ft").empty().append(pageHtml(data.data.page));
+		}
+	});
+});
+
+message.fire("fetchBankCard");

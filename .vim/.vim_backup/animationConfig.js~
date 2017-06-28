@@ -1,0 +1,15 @@
+/**
+ *@file 动画相关配置
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var config = {
+		/**
+		 * 动画速度
+		 */
+		timeout: 100
+	};
+
+	exports.config = config;
+});
+

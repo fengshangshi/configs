@@ -1,0 +1,3 @@
+#parse("widget/header/topBarForSolution.vm")
+#parse("widget/header/logoForSolution.vm")
+

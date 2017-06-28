@@ -1,0 +1,205 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/context/mytags.jsp"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>【去哪儿网】保险商城-投保人填写</title>
+		<link rel="stylesheet" type="text/css" href="//qunarzz.com/insurance_mall/prd/styles/insurOrderCenter@<%@include file='/include/ver/styles/insurOrderCenter.css.ver'%>.css">
+		<script>
+		window["common"] = {
+			"sysCode": "${order.sysCode}",
+			"busiType": "${order.busiType}",
+			"insurBeginDate": ${insurBeginDate},
+			"insurEndDate": ${insurEndDate}
+		};
+		</script>
+	</head>
+	<body>
+		<c:set value="${order.orderInfo}" var="orderInfo" />
+		<div id="orderCenter-header" class="head q_header">
+			<%@include file='/include/prd/deposite/header_mini_styles.html'%>
+			<%@include file='/include/prd/deposite/header_main_mini.html'%>
+			<div class="clearfix" style="width: 976px;margin: 0 auto;">
+				<a class="qn_page_logo" href="/"></a>
+				<div class="qn_tit">保险</div>
+			</div>
+		</div>
+        <div class="body">
+            <div class="inner">
+                <div class="main">
+                    <div class="module insur-info clearfix">
+                        <div class="module-hd">
+                            <h3>保险信息</h3>
+                            <div class="more">
+                                <img src="//source.qunarzz.com/site/images/pay/insurance_mall/page/insurOrderCenter/bao.png" alt="" />
+                                <span>全程预定保障 去哪儿都放心</span>
+                            </div>
+                        </div>
+                        <div class="module-bd">
+                            <ol class="insur-info-items">
+                                <li>
+                                    <label>保险名称</label>
+                                    <div class="field">
+										<h4>${prdDetail.prdNm}</h4>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>保险时间</label>
+                                    <div class="field">
+										<span class="start-date">
+											<input id="start-date" readonly="readonly" type="text" value="" />
+										</span>
+										<span>至</span>
+										<span class="end-date">
+											<em id="end-date">0000-00-00</em>
+										</span>
+										<span class="week"><em id="week"></em></span>
+										<span class="month">共<em id="month">0</em>个月</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>保险价格</label>
+                                    <div class="field">
+										<strong id="insur-price">￥${prdDetail.price}</strong>/份
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>适用区域</label>
+                                    <div class="field">
+                                        ${prdDetail.destination}
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>适用年龄</label>
+                                    <div class="field">
+                                        ${prdDetail.ageLimitDesc}
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>保障内容</label>
+                                    <div class="field">
+                                        ${prdDetail.ensureContentDesc}
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="module insur-user-info clearfix">
+						<form id="insur-form" action="/insure/fillOrder" method="post">
+							<div class="module-hd">
+								<h3>被保险人信息</h3>
+							</div>
+							<div class="module-bd">
+								<ol id="insur-user-info-items" class="insur-user-info-items">
+
+								</ol>
+							</div>
+							<div class="module-ft">
+								<div class="insur-patch">
+									<div class="insur-submit">
+										<a data-click-id="inspay" href="javascript:void(0);" class="button button-disable" id="insur-submit-button">同意协议并投保</a>
+										<span>总计<em style="font-family: arial;">¥</em><strong id="total-amount">0.00</strong></span>
+										<input type="hidden" name="orderNo" value="${orderInfo.orderNo}" />
+										<input type="hidden" name="sysCode" value="${order.sysCode}" />
+										<input type="hidden" name="busiType" value="${order.busiType}" />
+										<input type="hidden" name="prdNo" value="${prdDetail.prdNo}" />
+										<input type="hidden" name="totalAmount" value="" />
+										<input type="hidden" name="insurBeginDate" value="" />
+										<input type="hidden" name="insurEndDate" value="" />
+									</div>
+									<div class="insur-protocal">
+										<c:forEach items="${prdDetail.insItems}" var="item">
+										<p>
+											<a data-click-id="insfile" href="${item.url}" target="_blank">${item.title}</a>
+										</p>
+										</c:forEach>
+									</div>
+									<div class="insur-notice">
+										<h4>保险须知</h4>
+										<div class="insur-notice-content">
+											<p>
+												<label>投保说明</label>
+												<span>${prdDetail.insuredDesc}</span>
+											</p>
+											<p>
+												<label>理赔说明</label>
+												<span>${prdDetail.claimDesc}</span>
+											</p>
+											<p>
+												<label>退保说明</label>
+												<span>${prdDetail.surrenderDesc}</span>
+											</p>
+											<c:if test="${order.busiType == 'TRAIN'}">
+											<p>
+												<label>特殊说明</label>
+												<span>未满18周岁投保最高赔付金额不超过10万元人民币</span>
+											</p>
+											</c:if>
+										</div>  
+									</div>
+								</div>
+							</div>
+						</form>
+                    </div>
+                </div>
+                <div class="aside">
+                    <div class="module air-info">
+						<div class="module-hd order-type order-type-${order.busiType}">
+                            <h4>
+								${orderInfo.productName}
+                                <em>${orderInfo.busNo}</em>
+                            </h4>
+                        </div>
+                        <div class="module-bd">
+                            <div class="air-start">
+                                <h5>${orderInfo.departureCity}</h5>
+								<c:choose>
+									<c:when test="${orderInfo.departureArea != null}">
+                                <p><span>${orderInfo.departureArea}</span></p>
+									</c:when>
+								</c:choose>
+								<p><strong>
+									<fmt:formatDate value="${orderInfo.departureDate}" pattern="yyyy/MM/dd"/>
+								</strong></p>
+								<p><span>
+									<fmt:formatDate value="${orderInfo.departureDate}" pattern="HH:mm:ss"/>
+								</span></p>
+                            </div>
+                            <div class="air-end">
+                                <h5>${orderInfo.arrivalCity}</h5>
+								<c:choose>
+									<c:when test="${orderInfo.arrivalArea != null}">
+                                <p><span>${orderInfo.arrivalArea}</span></p>
+									</c:when>
+								</c:choose>
+								<p><strong>
+									<fmt:formatDate value="${orderInfo.arrivalDate}" pattern="yyyy/MM/dd"/>
+								</strong></p>
+								<p><span>
+									<fmt:formatDate value="${orderInfo.arrivalDate}" pattern="HH:mm:ss"/>
+								</span></p>
+                            </div>
+                        </div>
+                        <div class="module-ft">
+                            <p>
+                                <label>订单号</label>
+                                <span>${orderInfo.orderNo}</span>
+                            </p>
+                             <p>
+                                <label>乘机人</label>
+                                <span>${orderInfo.passengers}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="qn_footer">
+		   <div class="inner">
+			   <%@include file='/include/footer/footer_public_hotel.html'%>
+		   </div>
+		</div>
+		<script src="//qunarzz.com/insurance_mall/prd/scripts/insurOrderCenter@<%@include file='/include/ver/scripts/insurOrderCenter.js.ver'%>.js"></script>
+	</body>
+</html>

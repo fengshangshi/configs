@@ -1,0 +1,46 @@
+/*[export]*/
+@import url(styles/common/base.css);
+@import url(styles/common/pagination.scss);
+
+.q-contenter .q-sidebar {
+		padding-top: 80px;
+		width: 320px;
+}
+
+.q-contenter .q-main {
+		margin-left: 330px;
+}
+
+.q-sidebar h2 {
+		font-size: 18px;
+		padding-bottom: 20px;
+		padding-left: 20px;
+}
+
+.q-sidebar .form-control {
+		display: inline-block;
+		vertical-align: middle;
+}
+
+.otherinfo li {
+		padding: 8px;
+}
+
+.q-panel h3 {
+		font-size: 14px;
+		padding: 10px;
+}
+
+.q-button-panel {
+		padding: 20px;
+		text-align: center;
+}
+
+.q-anonymous-account {
+		padding: 0 10px;
+}
+
+.radio-inline input[type="radio"], .checkbox-inline input[type="checkbox"] {
+		margin-left: -18px;
+		top: -6px;
+}

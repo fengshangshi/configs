@@ -1,0 +1,21 @@
+<li class="orderListTab-4 j-sebOrders active" data-row="4"><%=msg.data.ebOrderTotalNum %></li>
+<li class="orderListTab-1" data-row="1">待分房
+	<% if(msg.data.waitForDealOrderNum != 0) {%>
+		(<span><%=msg.data.waitForDealOrderNum%></span>)
+	<% } %>
+</li>
+<li class="orderListTab-2" data-row="2">今日预到
+	<% if(msg.data.arriveTodayOrderNum != 0) {%>
+		(<span><%=msg.data.arriveTodayOrderNum%></span>)
+	<% } %>
+</li>
+<li class="orderListTab-3" data-row="3">今日预离
+	<% if(msg.data.leaveTodayOrderNum != 0) {%>
+		(<span><%=msg.data.leaveTodayOrderNum%></span>)
+	<% } %>
+</li>
+<li class="orderListTab-0" data-row="0">全部订单
+	<% if(msg.data.totalOrderNum != 0) {%>
+		(<span><%=msg.data.totalOrderNum%></span>)
+	<% } %>
+</li>

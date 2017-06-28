@@ -1,0 +1,90 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'login' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink /usr/local/bin/node
+5 verbose adduser before first PUT { name: 'fengshangshi',
+5 verbose adduser   password: 'XXXXX',
+5 verbose adduser   email: 'fss123@gmail.com',
+5 verbose adduser   _id: 'org.couchdb.user:fengshangshi',
+5 verbose adduser   type: 'user',
+5 verbose adduser   roles: [],
+5 verbose adduser   date: '2015-04-20T07:38:39.597Z' }
+6 verbose request where is /-/user/org.couchdb.user:fengshangshi
+7 verbose request registry http://registry.cnpmjs.org/
+8 verbose request id eb80af7d361caa86
+9 verbose url raw /-/user/org.couchdb.user:fengshangshi
+10 verbose url resolving [ 'http://registry.cnpmjs.org/',
+10 verbose url resolving   './-/user/org.couchdb.user:fengshangshi' ]
+11 verbose url resolved http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi
+12 verbose request where is http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi
+13 info trying registry request attempt 1 at 15:38:39
+14 http PUT http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi
+15 http 409 http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi
+16 verbose headers { server: 'nginx/1.4.6 (Ubuntu)',
+16 verbose headers   date: 'Mon, 20 Apr 2015 07:38:41 GMT',
+16 verbose headers   'content-type': 'application/json; charset=utf-8',
+16 verbose headers   'content-length': '65',
+16 verbose headers   connection: 'keep-alive',
+16 verbose headers   'x-readtime': '5' }
+17 verbose adduser update existing user
+18 verbose request where is /-/user/org.couchdb.user:fengshangshi?write=true
+19 verbose request registry http://registry.cnpmjs.org/
+20 verbose url raw /-/user/org.couchdb.user:fengshangshi?write=true
+21 verbose url resolving [ 'http://registry.cnpmjs.org/',
+21 verbose url resolving   './-/user/org.couchdb.user:fengshangshi?write=true' ]
+22 verbose url resolved http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi?write=true
+23 verbose request where is http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi?write=true
+24 info trying registry request attempt 1 at 15:38:40
+25 http GET http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi?write=true
+26 http 200 http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi?write=true
+27 verbose adduser userobj { name: 'fengshangshi',
+27 verbose adduser   password: 'XXXXX',
+27 verbose adduser   email: 'fss123@gmail.com',
+27 verbose adduser   _id: 'org.couchdb.user:fengshangshi',
+27 verbose adduser   type: 'user',
+27 verbose adduser   roles: [],
+27 verbose adduser   date: '2015-04-20T07:38:39.597Z' }
+28 verbose request where is /-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+29 verbose request registry http://registry.cnpmjs.org/
+30 verbose url raw /-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+31 verbose url resolving [ 'http://registry.cnpmjs.org/',
+31 verbose url resolving   './-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353' ]
+32 verbose url resolved http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+33 verbose request where is http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+34 info trying registry request attempt 1 at 15:38:40
+35 http PUT http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+36 http 401 http://registry.cnpmjs.org/-/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+37 verbose headers { server: 'nginx/1.4.6 (Ubuntu)',
+37 verbose headers   date: 'Mon, 20 Apr 2015 07:38:42 GMT',
+37 verbose headers   'content-type': 'application/json; charset=utf-8',
+37 verbose headers   'content-length': '47',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-readtime': '3' }
+38 verbose adduser back [ [Error: unauthorized Login first: -/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353],
+38 verbose adduser   { error: 'unauthorized', reason: 'Login first' },
+38 verbose adduser   '{"error":"unauthorized","reason":"Login first"}' ]
+39 warn adduser Incorrect username or password
+39 warn adduser You can reset your account by visiting:
+39 warn adduser
+39 warn adduser     https://npmjs.org/forgot
+40 error Error: unauthorized Login first: -/user/org.couchdb.user:fengshangshi/-rev/2-ce0c1e529eaefd23ab4279652460b353
+40 error     at RegClient.<anonymous> (/Users/fengshangshi/.nvm/v0.10.33/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:308:14)
+40 error     at Request._callback (/Users/fengshangshi/.nvm/v0.10.33/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:246:65)
+40 error     at Request.self.callback (/Users/fengshangshi/.nvm/v0.10.33/lib/node_modules/npm/node_modules/request/request.js:236:22)
+40 error     at Request.emit (events.js:98:17)
+40 error     at Request.<anonymous> (/Users/fengshangshi/.nvm/v0.10.33/lib/node_modules/npm/node_modules/request/request.js:1142:14)
+40 error     at Request.emit (events.js:117:20)
+40 error     at IncomingMessage.<anonymous> (/Users/fengshangshi/.nvm/v0.10.33/lib/node_modules/npm/node_modules/request/request.js:1096:12)
+40 error     at IncomingMessage.emit (events.js:117:20)
+40 error     at _stream_readable.js:943:16
+40 error     at process._tickCallback (node.js:419:13)
+41 error If you need help, you may report this *entire* log,
+41 error including the npm and node versions, at:
+41 error     <http://github.com/npm/npm/issues>
+42 error System Darwin 14.3.0
+43 error command "/usr/local/bin/node" "/usr/local/bin/npm" "login"
+44 error cwd /Users/fengshangshi/Documents/qunar/node/sugarjs
+45 error node -v v0.10.33
+46 error npm -v 1.4.28
+47 verbose exit [ 1, true ]

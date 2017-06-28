@@ -1,0 +1,13 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello World</title>
+	</head>
+	<body>
+		Hello World!<br/>
+		<%
+			out.println("Your IP address is " + request.getRemoteAddr());
+		%>
+		<h1>dffsdf</h1>
+	</body>
+</html>

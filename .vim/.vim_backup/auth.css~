@@ -1,0 +1,429 @@
+/*[export]*/
+/**
+ * 实名认证样式
+ */
+require("../base.css");
+require("../../common/step.css");
+require("../../common/box.css");
+require("../../common/poptip.css");
+require("../../common/form.css");
+require("../../common/select.css");
+require("../../common/jquery-ui.css");
+require("../../common/yselector.css");
+
+body{
+	font: 12px/1.5 tahoma,arial,Hiragino Sans GB,"Microsoft Yahei",\5b8b\4f53;
+}
+
+.auth-main{
+	position: relative;
+}
+
+.auth .poptip{
+	width: 980px;
+	margin: 20px auto;
+}
+
+.auth-form{
+	width: 86%;
+	margin: 20px auto;
+}
+
+.button{
+	background-color: #ff8201;
+	text-align: center;
+	font-size: 12px;
+	padding: 0.4em 2.2em;
+	color: #fff;
+}
+
+.auth .p-input{
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	padding: 2px 10px;
+}
+
+.auth-bankCard, 
+.auth-identity{
+	border: 16px solid #f3f3f3;
+}
+
+.auth-identity-tishi{
+	width: 92%;
+	margin: 30px auto;
+	border-top: 1px solid #e3e3e3;
+	color: #555;
+}
+
+.auth-identity-tishi p{
+	font-size: 12px;
+	padding: 0px 20px;
+	line-height: 28px;
+}
+
+.auth-identity-tishi h3{
+	padding: 15px 20px 5px 20px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/*  身份信息占用弹层----start   */
+
+.id-info-prompt{
+	margin: 30px auto;
+}
+
+.id-info-prompt .show-info-con{
+	margin: 5px auto 30px auto;
+	padding: 0px 10px 0px 77px;
+	font-size: 16px;
+}
+
+.show-info-con p{
+	float: left;
+	margin-right: 30px;
+	font-size: 14px;
+	color: #333;
+}
+
+.show-info-con span{
+	color: #999;
+	padding-right: 10px;
+	font-size: 12px;
+}
+
+.id-info-prompt .id-info-prompt-title{
+	width: 50%;
+	margin: 0 auto;
+}
+
+.id-info-prompt-title h3{
+	font-size: 14px;
+	line-height: 32px;
+	height: 33px;
+	padding-left: 15px;
+	color: #555;
+	font-weight: bold;
+}
+.id-info-prompt-title h3 i{
+	float: left;
+	margin-right: 15px;
+	width: 48px;
+	height: 48px;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/deng.png);
+	_background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/deng.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.id-info-prompt .info-prompt-oper{
+	position: relative;
+	zoom: 1;
+	margin: 30px 0px;
+}
+
+.info-prompt-btn{
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.info-select-con{
+	width: 530px;
+	float: left;
+	border: 1px solid #e5e5e5;
+	margin-left: 30px;
+}
+
+.info-select-con .select-con-item{
+	display: block;
+	padding: 10px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.info-select-con .select-con-item:hover{
+	border: 1px solid #0e64f1;
+}
+
+.select-con-item input{
+	float: left;
+	margin-right: 8px;
+	margin-top: 4px;
+}
+
+.select-con-item .text{
+	font-size: 14px;
+	font-weight: bold;
+	color: #666;
+}
+
+.select-con-item .text span{
+	color: #999;
+	font-weight: 200;
+	font-size: 12px;
+	padding-left: 21px;
+}
+
+
+.info-prompt-btn .button{
+	margin-right: 15px;
+}
+
+.info-prompt-oper .info-prompt-poptip{
+	float: left;
+	width: 268px;
+	margin: 0px;
+}
+
+/* 银行卡绑定模块--------------------start */
+
+.auth-bankCard .select{
+	width:120px;
+	float: left;
+}
+
+.m-l-20{
+	margin-left: 20px;
+}
+
+.auth-bankCard .f-color-gray{
+	color: #999;
+	float: left;
+	margin-left: 5px;
+	margin-top: 3px;
+}
+
+.bank-module-form{
+	min-height: 500px;
+	height: auto!important;
+  	height: 500px;
+}
+
+.show-card-info-wrap{
+	position: relative;
+	z-index: 1;
+	clear: both;
+}
+
+.show-card-info-wrap .show-card-pic{
+	position: absolute;
+	top: -300px;
+	left: 800px;
+}
+
+.show-card-info-wrap .show-card-pic .img{
+	width: 161px;
+	height: 142px;
+	background: url(
+		'https://pay.qunar.com/images/site/images/pay/quick_pay/cardback_two.gif') no-repeat scroll 0px 0px transparent;
+	overflow: hidden;
+}
+
+.show-card-info-wrap .show-card-pic .img.back{
+	background-position: 0px -142px;
+}
+
+.bankCard-wrap {
+    padding: 20px 0 0 120px;
+}
+
+.bankCard-wrap .item {
+    margin-bottom: 22px;
+    height: 30px;
+}
+
+.bankCard-wrap .item label,
+.bankCard-wrap .item .field {
+    display: inline-block;    
+    vertical-align: top;
+    *display: inline;
+    *zoom: 1;
+}
+
+.bankCard-wrap .item label {
+	float: left;
+    width: 90px;
+    height: 36px;
+    line-height: 36px;
+    color: #999;
+    text-align: right;
+    margin-right: 20px;
+}
+
+.bankCard-wrap .item .field {
+	float: left;
+	width: 500px;
+}
+
+.bankCard-wrap .item .field input {
+	height: 32px;
+	line-height: 32px;
+	float: left;
+	color: #555;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.bankCard-wrap .item input,
+.select-bank-button {
+    width: 248px;
+    height: 34px;
+    border: 1px solid #e5e5e5;   
+    outline: none;
+    padding: 0 10px;
+}
+
+.select-bank-button {
+	float: left;
+	background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/arrows.png) no-repeat 240px 15px;
+	_background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-005/arrows.png) no-repeat 240px 15px;
+}
+
+.bankCard-wrap .item input:hover,
+.select-bank-button:hover {
+    border: 1px solid #59bec6;
+}
+
+.bankCard-wrap .item input.middle-input,
+.bankCard-wrap .item input.short-input {
+    /*height: 28px;*/
+}
+
+.bankCard-wrap .item input.middle-input {
+    width: 220px;
+}
+
+.bankCard-wrap .item input.short-input {
+    width: 130px;
+}
+.bankCard-wrap .item label.middle-label {
+    height: 32px;
+    line-height: 32px;
+}
+
+.select-bank-content {
+    padding: 2px 15px;
+    cursor: pointer;
+}
+
+.select-bank-content em {
+    display: block;
+    text-align: center;
+    line-height: 30px;
+}
+
+.select-bank-content * {
+    vertical-align: top;
+    display: inline-block;
+}
+
+.select-bank-content span {
+    padding: 5px 10px 0 2px;
+    color: #e3e3e3;
+}
+
+.select-bank-content strong {
+    padding-top: 6px;
+    color: #333;
+}
+
+.bankCard-info-submit .button-submit {
+    margin-left: 111px;
+    margin-right: 10px;
+    display: inline-block;
+    padding: .5em 2em;
+    background: #fe8100;
+    color: #fff;
+}
+
+.bankCard-info-submit .button-submit:hover {
+    background: #ff7400;
+    text-decoration: none;
+}
+
+.button-vcode {
+    display: inline-block;
+    margin: 6px 10px;
+    background: #0e68f2;
+    padding: .2em 2.0em;
+    color: #fff;
+}
+
+.button-vcode:hover {
+    background: #0a53ed;
+    text-decoration: none;
+}
+
+.bankCard-wrap .item select {
+	width: 80px;
+	margin-right: 5px;
+	visibility: hidden;
+}
+
+.bankCard-wrap .item .yselector {
+	display: inline-block;
+	width: 80px;
+	vertical-align: top;
+	margin-right: 15px;
+	float: left;
+}
+
+.bankCard-wrap .item .yselector_box {
+	border: 1px solid #e5e5e5;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.bankCard-wrap .item .yselector_input {
+	text-align: center;
+}
+
+.bankCard-wrap .item .yselector_suggest {
+	width: 78px;
+}
+
+.bankCard-wrap .item .select-bank-hidden {
+	float: left;
+	padding: 0;
+	height: 0;
+	width: 0;
+	visibility: hidden;
+	position: absolute;
+}
+
+.vCode-validator-hidden .form-other {
+	display: none;
+}
+
+.button-gray,
+.button-gray:hover {
+	background: #c1c1c1;
+}
+
+.readonly{
+	border: none !important;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#updateMobile{
+	font-size: 12px;
+	color: #0069ca;
+	cursor: pointer;
+	float: left;
+	margin-top: 6px;
+	margin-left: 8px;
+}
+
+.update-mobile{
+	font-size: 14px;
+	font-weight: bold;
+	padding-right: 10px;
+	float: left;
+	margin-top: 6px;
+}
+
+/* 银行卡绑定模块--------------------end */

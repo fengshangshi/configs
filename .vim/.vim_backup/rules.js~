@@ -1,0 +1,25 @@
+var params = require('common/params.js');
+function _get(type,innId){
+	try{
+		return params.getInn(innId)["rules"][type];
+	}catch(e){
+		return 0;
+	}
+}
+
+function getItems(orgin){
+	var arr = [];
+	for(var i=0,len=orgin.length;i<len;i++){
+		var obj = orgin[i];
+		if(obj && _get(obj.key)){
+			COMMON_URLS[obj.key] && (obj.__href = COMMON_URLS[obj.key]);
+			arr.push(obj);
+		}
+	}
+	return arr;
+}
+
+module.exports = {
+	get : _get,
+	getItems : getItems
+}

@@ -1,0 +1,268 @@
+#parse("page/www/_include/global.vm")
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf8">
+		<title>无忧改签险【去哪儿网】</title>
+		<link rel="stylesheet"
+			href="${qzz}${cssPath}/claim/apply/entry.css">
+	</head>
+	<body>
+		#set($orderInfo = ${tplData.orderInfo})
+		#set($claimInfo = ${tplData.claimInfo})
+		#set($beneficiaryInfo = ${tplData.beneficiaryInfo})
+		#parse("widget/www/header/header.vm")
+		<div class="container outter-wrap">
+			<div class="inner-wrap clearfix">
+				<div class="common-info-wrap">
+					<div class="common-info">
+						<div class="insurance-info-wrap">
+							<div class="md">
+								<div class="md-hd">
+									<h3>保单信息</h3>
+								</div>
+								<div class="md-bd">
+									<div class="left-bar">
+										<ul>
+											<li>
+												<label>产品名称:</label>
+												<div class="field">
+													<span>无忧改签险</span>
+												</div>
+											</li>
+											<li>
+												<label>始发地:</label>
+												<div class="field">
+													<span>${orderInfo.departureCity}</span>
+												</div>
+											</li>
+											<li>
+												<label>原航班号:</label>
+												<div class="field">
+													<span>${orderInfo.busNo}</span>
+												</div>
+											</li>
+											<li>
+												<label>乘机人/被保险人:</label>
+												<div class="field">
+													<span>${beneficiaryInfo.name}</span>
+												</div>
+											</li>
+										</ul>
+									</div>
+									<div class="right-bar">
+										<ul>
+											<li>
+												<label>保单号:</label>
+												<div class="field">
+													<span>${claimInfo.policyNo}</span>
+												</div>
+											</li>
+											<li>
+												<label>目的地:</label>
+												<div class="field">
+													<span>${orderInfo.arrivalCity}</span>
+												</div>
+											</li>
+											<li>
+												<label>原航班日期:</label>
+												<div class="field">
+													<span>$!dateTool.format("yyyy/MM/dd", ${orderInfo.departureDate})</span>
+												</div>
+											</li>
+											<li>
+												<label>证件号:</label>
+												<div class="field">
+													<span>${beneficiaryInfo.idNum}</span>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<form id="claimApplyForm" action="/claim/submitApply" method="post">
+							<div class="flight-info-wrap">
+								<div class="md">
+									<div class="md-hd">
+										<h3>改签后航班信息</h3>
+									</div>
+									<div class="md-bd">
+										<div class="left-bar">
+											<ul>
+												<li>
+													<label for="eTicketNo">
+													<em>*</em>
+													改签后电子客票/行程单号:</label>
+													<div class="field">
+														<input id="eTicketNo" name="eTicketNo" 
+															data-jvalidator-pattern="required&numeric&cleanLengthMore[11]"
+															type="text" />
+													</div>
+													<div class="ticket-tips">
+														<i></i>
+														<div class="ticket-tips-content">
+															<img src="//source.qunarzz.com/site/images/pay/insurance/www/page/claim/apply/flight-ticket.jpg" />
+															<span class="arrow-outter">
+																<span></span>
+															</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<label for="alterFlightNo">改签后航班号:</label>
+													<div class="field">
+														<input id="alterFlightNo" name="alterFlightNo" type="text" />
+													</div>
+												</li>
+											</ul>
+										</div>
+										<div class="right-bar">
+											<ul>
+												<li>
+													<label for="alterReason">改签原因:</label>
+													<div class="field">
+														<select id="alterReason" name="alterReason">
+															<option value="出差行程变化">出差行程变化</option>
+															<option value="旅行计划改变">旅行计划改变</option>
+															<option value="错过登机时间">错过登机时间</option>
+															<option value="航班取消">航班取消</option>
+															<option value="其他原因">其他原因</option>
+														</select>
+													</div>
+												</li>
+												<li>
+													<label for="alterFlightDate">改签后航班日期:</label>
+													<div class="field">
+														<input id="alterFlightDate" name="alterFlightDate" type="text" />
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="beneficiary-info-wrap">
+								<div class="md">
+									<div class="md-hd">
+										<h3>受益人信息</h3>
+										<div class="tips claim-rules">
+											赔付金额将以您的机票<em>改签费用标准</em>全额赔付（上限1000元），未通过去哪儿网改签按最低金额赔付
+											<div class="claim-rules-info">
+												<table>
+													<thead>
+														<tr>
+															<th>改签时间点</th>
+															<th>改期加手续费</th>
+															<th>签转</th>
+														</tr>
+													</thead>
+													<tbody>
+														#foreach( $item in $claimInfo.rules )
+														<tr>
+															<td>${item.timeText}</td>
+															<td><em>￥${item.changeFee}</em>/人</td>
+															<td>${item.signText}</td>
+														</tr>
+														#end
+													</tbody>
+												</table>
+												<span class="arrow-outter">
+													<span></span>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="md-bd">
+										<ul>
+											<li class="tips">理赔收款账户名必须为乘机人本人，否则无法赔付哦！</li>
+											<li>
+												<label for="bankCode">
+													<em>*</em>
+													开户行:
+												</label>
+												<div class="field">
+													<select id="bankCode" name="bank">
+														<option value="102100099996|工商银行">工商银行</option>
+														<option value="103100000026|农业银行">农业银行</option>
+														<option value="104100000004|中国银行">中国银行</option>
+														<option value="105100000017|建设银行">建设银行</option>
+														<option value="301290000007|交通银行">交通银行</option>
+														<option value="302100011000|中信银行">中信银行</option>
+														<option value="303100000006|光大银行">光大银行</option>
+														<option value="304100040000|华夏银行">华夏银行</option>
+														<option value="305100000013|民生银行">民生银行</option>
+														<option value="306581000003|广发银行">广发银行</option>
+														<option value="307584007998|平安银行">平安银行</option>
+														<option value="308584000013|招商银行">招商银行</option>
+														<option value="309391000011|兴业银行">兴业银行</option>
+														<option value="310290000013|上海浦东发展银行">上海浦东发展银行</option>
+													</select>
+												</div>
+											</li>
+											<li>
+												<label for="cardNo">
+													<em>*</em>
+													银行卡号:
+												</label>
+												<div class="field">
+													<input id="cardNo" name="cardNo" 
+															data-jvalidator-pattern="required&numeric&cleanLengthMore[12]"
+														type="text" />
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="ext-info-wrap">
+								<div class="md">
+									<div class="md-hd">
+										<h3>其他信息</h3>
+									</div>
+									<div class="md-bd">
+										<ul>
+											<li>
+												<label for="phone">
+													<em>*</em>
+													联系电话:
+												</label>
+												<div class="field">
+													<input id="phone" name="phone" 
+															data-jvalidator-pattern="required&numeric&phone"
+														type="text" />
+												</div>
+											</li>
+											<li class="textarea">
+												<label for="extraInfo">附加信息:</label>
+												<div class="field">
+													<textarea id="extraInfo" name="extraInfo">(限200字)</textarea>
+												</div>
+											</li>
+											<li>
+												<label></label>
+												<div class="field">
+													<a id="submit" href="\#\#\#" class="submit-button">提交申请</a>
+													<input type="hidden" name="insurOrderNo" value="${claimInfo.insurOrderNo}" />
+													<input type="hidden" name="insurNo" value="${orderInfo.orderNo}" />
+													<input type="hidden" name="name" value="${beneficiaryInfo.name}" />
+													<input type="hidden" name="idNum" value="${beneficiaryInfo.idNum}" />
+													<input type="hidden" name="requestAmount" value="${claim.amount}" />
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="common-tips-wrap">
+					#parse("page/www/claim/common_question.vm")
+				</div>
+			</div>
+		</div>
+		<script src="${qzz}${jsPath}/claim/apply/entry.js"></script>
+		#parse("widget/www/footer/footer.vm")
+	</body>
+</html>

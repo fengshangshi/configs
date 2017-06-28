@@ -1,0 +1,54 @@
+module.exports = {
+    /otas/list/ : "./mock/otalist.json" ,
+    /otas/login/ : "./mock/otalogin.mockjson",
+    /otas/roomTypes/:"./mock/otaRoomsTypes.json",
+    /otas/rooms/:"./mock/otaRooms.json",
+    /otas/binding/:"./mock/submit.mockjson",
+    /customer/order/ignoreOrder.json : "./mock/ignoreOrder.mockjson",
+    /test1/ : "./mock.json" ,
+    /test2/ : "./mock.mockjson",
+    /mockData/innpowerlist/ : "./mock/innpowerlist.json",
+    /mockData/poweradd/ : "./mock/poweradd.json",
+    /mockData/addsubAccount/ : "./mock/addsubAccount.json",
+    /mockData/powerModifySunmit/:"./mock/powerModifySunmit.json",
+    /mockData/modifySubInfo/:"./mock/modifySubInfo.json",
+    /mockData/deleteUser/:"./mock/deleteUser.json",
+    /mockData/defaultPay/:"./mock/defaultPay.json",
+    /mockData/defaultChannel/:"./mock/defaultChannel.json",
+    /customer/order/ : "./mock/roomstatus.json",
+    /mockData/sendValicode/:"./mock/sendValicode.json",
+
+    /admin/getInnList.json/ : function(req, r, context) {
+        var query = req.query, res = [],
+        page = query.page || 1,
+        innName = query.innName || "这个客栈没有名字",
+        telephone = query.telephone || "13456789000",
+        pageSize = query.pageSize || 20
+        if(page * pageSize <= 500) {
+            var ct = pageSize
+            while(ct--) {
+                res.push({
+                    "innId": pageSize * page - ct,
+                    innName: innName,
+                    bossName: "小二比",
+                    cityName: "这个城市很偏僻",
+                    mobile: telephone,
+                    "operatorTime": "2014/01/22 22:22",
+                    "operator": "xiaorui.guo"
+                })
+            }
+        }
+        r.end(JSON.stringify({
+            status: 0,
+            data: {
+                count: 500,
+                list: res
+            }
+        }))
+    },
+    /admin/getLoginUser.json/ : "./mock/getLoginUser.mockjson",
+    /admin/getAncientTowns.json/ : "./mock/getAncientTowns.mockjson",
+    /admin/addInn.json/ : "./mock/addInn.mockjson",
+    /mockData/otaLogin/:"./mock/otaLogin.json"
+
+}

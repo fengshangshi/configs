@@ -1,0 +1,44 @@
+/**
+ * nav.css
+ */
+.navigation {
+	width: 100%;
+	height: 38px;
+	background: #2cabc4;
+}
+
+.navigation ol {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.navigation li {
+	float: left;
+}
+
+.navigation li a {
+	float: left;
+	height: 38px;
+	line-height: 38px;
+	font-size: 14px;
+	color: #fff;
+	padding: 0 30px;
+}
+
+.navigation li a:hover {
+	background: #0086a0;
+	text-decoration: none;
+}
+
+.navigation li a.current {
+	background: #0086a0;
+}
+
+.index .page-index,
+.asset .page-asset,
+.trade-body .page-trade,
+.security .page-security,
+.password-body .page-security,
+.help .page-help {
+	background: #555;
+}

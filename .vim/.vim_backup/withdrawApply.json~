@@ -1,0 +1,62 @@
+{
+    "tplData": {
+        "withdrawBalance": "1400.00",
+        "withdrawcashRule": {
+            "nums": 3,
+            "maxamount": "22222",
+            "minamount": "0.1"
+        },
+        "cardList": [
+            {
+                "bankCode": "1",
+                "bankName": "工商银行",
+                "picUrl": "",
+                "pmCode": "CAUTH",
+				"cardType": "1",
+                "cardNo": "**2342"
+
+            },
+            {
+                "bankCode": "2",
+                "bankName": "xx银行",
+                "picUrl": "",
+                "pmCode": "DAUTH",
+				"cardType": "1",
+                "cardNo": "**1242"
+
+            },
+            {
+                "bankCode": "3",
+                "bankName": "工商银行",
+                "picUrl": "",
+                "pmCode": "CAUTH",
+				"cardType": "1",
+                "cardNo": "**2342"
+
+            },
+            {
+                "bankCode": "4",
+                "bankName": "xx银行",
+                "picUrl": "",
+                "pmCode": "DAUTH",
+				"cardType": "1",
+                "cardNo": "**1242"
+
+            }
+        ],
+        "bankList": [
+            {
+                "bankcode": "1",
+                "bankname": "xx银行"
+            },
+            {
+                "bankcode": "2",
+                "bankname": "中国建设银行"
+            },
+            {
+                "bankcode": "3",
+                "bankname": "妈妈咪呀银行"
+            }
+        ]
+    }
+}

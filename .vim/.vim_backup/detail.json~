@@ -1,0 +1,28 @@
+{
+    "code": "0",
+    "msg": "处理成功",
+    "data": {
+        "orderTypeName": "智能售",
+        "hotelName": "7天",
+        "hotelNo": "021323",
+        "channelOrderNo": "0234234",
+        "channelName": "",
+        "customerName": "张三",
+        "orderTime": "2016-07-12",
+        "checkInTime": "2016-07-13",
+        "checkOutTime": "2016-07-15",
+        "cityName": "北京",
+        "orderStatus": "离店",
+        "tradingStatus": "支付成功",
+        "orderAmount": 500,
+        "refundAmount": 0,
+        "hotelRevenue": 300,
+        "income": '',
+        "companyInsteadRevenue": 450,
+        "companyRevenue": 150,
+        "channelRevenue": 450,
+        "bdName": "李四",
+        "createTime": "2016-07-12",
+		"refundTime": ""
+    }
+}

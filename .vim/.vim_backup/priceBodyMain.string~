@@ -1,0 +1,57 @@
+<div class="qd-price js-qd-qu-price" id="qd_price_main" style="padding-top:10px;">
+	<div class="qd-fixed-parent" style="height: 152px;">
+		<div class="qd-fixed-title" id="qd_fixed_title">
+			<div class="dp-price-tips" style="height:60px;">
+				<span></span>
+				注意：去呼呼分销平台会将您的酒店投放到国内外知名OTA，帮您获取海量订单，实现利益最大化，价格将以您在本页面设置为准。
+				<p style="text-indent: 20px;">若您的酒店符合客栈、公寓、青旅等非标住宿的特点，去呼呼分销平台还会将您的酒店投放到去哪儿网公寓频道等非标平台进行售卖。
+				</p>
+				<p style="text-indent: 20px;">去呼呼分销平台在售卖时，门店及房型信息将以您在
+					<a href="/dp/t/room" class="qd-update-price" style="float: none;margin: 0;">直销-门店房型信息</a>
+					设置的为准，请确保信息准确。
+				</p>
+			</div>
+			<div class="fn-clear">
+				<span class="qd-update-price" id="qd_update_price">批量修改价格</span>
+				<div class="qd-roomType">
+				    <dl>
+				    	<dt>房型</dt>
+				    	<dd>
+				    		<div class="fn-clear qd-ui-select">
+				                <div class="ui-select-box js-select-box w130">
+				                	<div class="dropdown-toggle dp_price_select">
+										<span class="dropdown-value" code="" title="全部" id="ui_qu_select_content">全部</span>
+										<span class="icon-arrowSelect icon-position-adjust"></span>
+									</div>
+									<div class="ui-select-items" id="qd_select_items">
+
+									</div>
+								</div>
+				            </div>
+				    	</dd>
+				    </dl>
+			    </div>
+			    <div class="qd-roomType qd-time-do">
+					<a class="btn btn-prev" id="btn_prev">前7天</a>
+					<div class="qd-time-select">
+						<dl>
+							<dt>起始日期</dt>
+							<dd>
+								<input type="text" class="qd-time" id="qd_startTime">
+							</dd>
+						</dl>
+
+					</div>
+					<a class="btn btn-next" id="btn_next">后7天</a>
+				</div>
+				<input type="hidden" id="qd_roomtypeno_hidden"/>
+				<input type="hidden" id="qd_roomtypename_hidden"/>
+				<input type="hidden" id="qd_type_hidden"/>
+				<input type="hidden" id="qd_priceplancode_hidden"/>
+				<input type="hidden" id="qd_pricePlanName_hidden"/>
+			</div>
+			<div id="qd_price_title" class="qd_price_title"></div>
+		</div>
+	</div>
+	<div id="qd_price_content" class="qd-price-content"></div>
+</div>

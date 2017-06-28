@@ -1,0 +1,65 @@
+var $ = require('realestate:widget/common/jquery/jquery-1.11.1.js');
+var message = require('realestate:widget/common/message/message.js');
+var config = require('realestate:widget/map/config.js');
+
+var mapConfig = config['map'],
+	zoomLevelConfig = config['zoomLevel'];
+
+var host = mapConfig['host'],
+	ak = mapConfig['ak'],
+	geocoderApiConfig = mapConfig['geocoderApi'],
+	path = geocoderApiConfig['path'],
+	output = geocoderApiConfig['output'],
+	pois = geocoderApiConfig['pois'],
+	callback = geocoderApiConfig['callback'];
+
+var url = host
+		+ path
+		+ '?ak=' + ak
+		+ '&callback=' + callback
+		+ '&output=' + output
+		+ '&pois=' + pois;
+
+function mapEventListener(e) {
+	var args = e.args,
+		level = args.level,
+		lng = args.lng,
+		lat = args.lat,
+		location = lat + ',' + lng;
+	
+	console.log(zoomLevelConfig[level]);
+	var url = host
+			+ path
+			+ '?ak=' + ak
+			+ '&location=' + location
+			+ '&callback=' + callback
+			+ '&output=' + output
+			+ '&pois=' + pois;
+			
+	$.ajax({
+		'url': url,
+		'dataType': 'jsonp',
+		'timeout': 5000,
+		'jsonp': false
+	});
+}
+
+//定义回调函数
+window[callback] = function(data) {
+	var status = data.status,
+		result = data.result;
+
+	if (status === 0) {
+		var address = result.addressComponent,
+			province = address.province,
+			city = address.city,
+			district = address.district,
+			street = address.street;
+
+		console.log(address);
+		console.log(province, city, district, street);
+	}
+};
+
+message.register('map-is-dragend', mapEventListener);
+message.register('map-is-zoomend', mapEventListener);

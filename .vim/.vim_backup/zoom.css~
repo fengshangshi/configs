@@ -1,0 +1,25 @@
+.zoom {
+	width: 44px;
+	height: 88px;
+}
+
+.zoom-in,
+.zoom-out {
+	display: block;
+	width: 44px;
+	height: 44px;
+	background: rgba(0, 0, 0, 0.6);
+	text-indent: -999em;
+	background-position: center center;
+	background-size: 22px 22px;
+	background-repeat: no-repeat;
+}
+
+.zoom-in {
+	border-radius: 5px 5px 0 0;
+	background-image: url(./zoom-in.png);
+}
+
+.zoom-out {
+	border-radius: 0 0 5px 5px;
+}

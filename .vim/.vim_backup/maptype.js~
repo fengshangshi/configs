@@ -1,0 +1,13 @@
+var $ = require("sky-mobile:widget/libs/zepto/zepto.js");
+var message = require("sky-mobile:widget/libs/message/message.js");
+
+$(".map-type").on("click", function(e) {
+	e.preventDefault();
+	$(this).toggleClass("type-toggle");
+
+	var type = BMAP_NORMAL_MAP;
+
+	if ($(this).hasClass("type-toggle")) {
+		type = BMAP_HYBRID_MAP;
+	}
+});

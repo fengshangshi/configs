@@ -1,0 +1,10 @@
+<?php
+
+class A
+{
+	public $fuck = "fuck you";
+
+	public functon get() {
+		return $fuck;
+	}
+}

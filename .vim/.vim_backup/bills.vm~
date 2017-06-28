@@ -1,0 +1,21 @@
+## @desc 账单查询页面
+## @author ss.feng@qunar.com
+
+#parse("__include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>账单查询 - ${websiteName}</title>
+<link rel="stylesheet" href="${qzzUrl}/${cssPath}/common/base.css">
+<link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/account/bills/entry.css">
+#parse("__include/headScript.vm")
+</head>
+<body>
+<div id="container"></div>
+
+<script src="${qzzUrl}/${jsPath}/common/base.js"></script>
+<script src="${qzzUrl}/${jsPath}/pages/account/bills/entry.js"></script>
+</body>
+</html>
+

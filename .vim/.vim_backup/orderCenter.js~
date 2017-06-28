@@ -1,0 +1,97 @@
+/*[export]*/
+/*
+ * 订单中心保险业务
+ * @author ss.feng@qunar.com
+ */
+require("jquery");
+require("Handlebars");
+require("./common/jquery.qdatepicker.js");
+var template = require("../templates/orderCenter.handlebars");
+
+
+/**
+ * 1、日期选择触发事件
+ * 2、获取选择的日期
+ * 3、改变目标地址
+ * 4、获取数据
+ * 5、刷新投保人列表
+ *
+ */
+
+// 日期操作
+// 获取选择的日期
+function fetchDate() {
+	var date = $("#date-start").val(),
+		dates = date.split("-"),
+		y = parseInt(dates[0]),
+		m = parseInt(dates[1]),
+		d = parseInt(dates[2]),
+		now = new Date();
+
+	now.setFullYear(y, m, d);
+	now.setDate(now.getDate() - 1);
+
+	editEndDate(now);
+	fetchInsurData(date, now);
+}
+
+// 修改截止时间
+function editEndDate(date) {
+	var week = ["日", "一", "二", "三", "四", "五", "六"],
+		weekDay, dateStr;
+
+	weekDay = "周" + week[date.getDay()];
+	dateStr = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+	$("#date-end").text(dateStr);
+	$("#date-week").text(weekDay);
+
+	// 时间跨度这里写死了，一个月
+	$("#date-total").text(1);
+}
+
+// 获取投保人列表数据
+function fetchInsurData(dateStart, dateEnd) {
+	dateEnd = dateEnd.getFullYear() + "-" + (dateEnd.getMonth() + 1) + "-" + dateEnd.getDate();
+
+	var common = window["common"],
+		orderNo = common.orderNo,
+		prdNo = common.prdNo,
+		// 请求参数
+		data = {
+			orderNo: orderNo,
+			prdNo: prdNo,
+			insurBeginDate: dateStart,
+			insurEndDate: dateEnd
+		};
+
+	$.ajax({
+		url: "/orderCenter/checkGuests",
+		data: data,
+		type: "POST",
+		dataType: "json",
+		cache: false,
+		success: function(data, status, xhr) {
+			console.log(template(data));
+		}
+	});
+}
+
+
+// 渲染投保人列表数据
+var now = new Date();
+var tomorrow = new Date().setDate(new Date().getDate() + 1);
+
+$("#date-start").qdatepicker({
+	"ui": "qunar",
+	"minDate": now,
+	"defaultDay": tomorrow,
+	"multi": 1,
+	"on": {
+		"q-datepicker-select": function() {
+			fetchDate();
+		}
+	}
+});
+
+fetchDate();

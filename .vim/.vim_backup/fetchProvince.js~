@@ -1,0 +1,85 @@
+/**
+ * 获取省份
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+require("jquery/jquery.selector.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchProvince", function(e) {
+	var args = e.args,
+		form = args.form,
+		bankCode = args.bankCode;
+
+	message.fire("resetProvince", {
+		form: form
+	});
+
+	message.fire("resetCity", {
+		form: form
+	});
+
+	message.fire("resetBranch", {
+		form: form
+	});
+
+	var data = {
+		bankCode: bankCode
+	};
+
+	service.ajax({
+		url: "/member/asset/balance/fetchProvinceApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			var dataList = [];
+			dataList.push("<option value='0'>请选择省</option>");
+
+			if (data.errorCode == 0) {
+				var list = data.data.list;
+				for (var i = 0, l = list.length; i < l; i++) {
+					var html = [
+						"<option value='" + list[i].provincecode,
+						"|" + list[i].provincename +"'>",
+						list[i].provincename + "</option>"
+					];
+					dataList.push(html.join(""));
+				}
+			}
+
+			form = form + " select[name=provinceName]";
+			
+			$(form).html(dataList);
+
+			var options = {
+				selectors: {}
+			};
+			options.selectors[form] = "";
+			message.fire("initSelector", options);
+		}
+	});
+});
+
+// 重置省
+message.register("resetProvince", function(e) {
+	var args = e.args,
+		form = args.form;
+
+	var dataList = [];
+	dataList.push("<option value='0'>请选择省</option>");
+
+	form = form + " select[name=provinceName]";
+	$(form).html(dataList.join(""));
+
+	var options = {
+		selectors: {}
+	};
+	options.selectors[form] = "";
+	message.fire("initSelector", options);
+});
+
+// 有常用卡才会发起获取省份
+parseInt(window["common"]["cardSize"]) > 0 && message.fire("fetchProvince",  {
+	bankCode: $("input[name=bankCode]", "#cardList-form").val(),
+	form: "#cardList-form"
+});

@@ -1,0 +1,17 @@
+/*[export]*/
+
+/*组件库*/
+require('styles/libs/reset');
+require('styles/libs/bootstrap/bootstrap');
+require('styles/libs/bootstrap/bootstrap-datepicker3');
+require('styles/libs/jquery/autocomplete');
+require('styles/libs/ui-dialog');
+
+/*公共样式*/
+require('styles/common/common');
+require('styles/common/buttons');
+require('styles/common/forms');
+require('styles/common/icon');
+
+/*布局*/
+require('styles/common/layout');

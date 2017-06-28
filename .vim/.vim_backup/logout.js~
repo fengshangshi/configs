@@ -1,0 +1,10 @@
+/**
+ * @file用户退出
+ */
+exports.GET_index = function(req, res) {
+		req.session = undefined;
+		res.clearCookie('uid', {
+				path: '/'
+		});
+		res.redirect('/account/login');
+};

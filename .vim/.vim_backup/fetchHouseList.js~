@@ -1,0 +1,55 @@
+/**
+ * 获取房源列表
+ * @author ss.feng@qunar.com
+ */
+require("handlebars/handlebars.js");
+var $ = require("zepto/zepto");
+var message = require("message/message");
+var ajax = require("service/ajax");
+var template = require("../template/houseList");
+
+//获取公寓列表类型
+function getListType() {
+	return $('#listTitle').data('type');
+}
+
+// 注册获取房源列表消息
+message.register("fetchHouseList", function(e) {
+	var data = {},
+		args = e.args,
+		isEmpty = args.isEmpty;
+
+	data.isSearch = args.isSearch;
+	data.type = getListType();
+	data.searchName = args.searchName || '';
+
+	ajax({
+		url: "/resource/api/fetchHouseList",
+		data: data,
+		success: function(data) {
+			// 对数据的基本判断
+			if (data.ret !== "0") {
+				return false;
+			}
+
+			Handlebars.registerHelper("if", function(list, options) {
+				return list.length > 0 ?
+					options.fn(this) : options.inverse(this);
+			});
+
+			Handlebars.registerHelper("ifSurplus", function(surplus, options) {
+				surplus = parseInt(surplus);
+				return surplus <= 3 ?
+					options.fn(this) : options.inverse(this);
+			});
+
+			if (isEmpty) {
+				$(".js-list-wrap").empty();
+			}
+
+			$(".js-list-wrap").append(template(data));
+		}
+	});
+});
+
+message.fire("fetchHouseList", {isSearch: false});

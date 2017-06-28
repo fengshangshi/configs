@@ -1,0 +1,34 @@
+/**
+ * @file 需自动加载
+ * @author fengshangshi
+ */
+var fs = require('fs');
+var path = require('path');
+
+function isDir(dir) {
+    return fs.existsSync(dir) ? fs.statSync(dir).isDirectory() : false;
+}
+
+var boots = {};
+
+function scanBootstrap(boots, dir) {
+    if (!fs.existsSync(dir)) {
+        return false;
+    }
+    fs.readdirSync(dir).forEach(function(i) {
+        var filePath = path.join(dir, i);
+        if (isDir(filePath)) {
+            boots[i] = {};
+            scanBootstrap(boots[i], filePath);
+        } else if (/\.js$/.test(i)) {
+            boots[i.slice(0, -3)] = require(filePath);
+            logger.info('loading bootstrap ' + filePath + ' success');
+        }
+    });
+}
+
+module.exports = function() {
+    scanBootstrap(boots, BOOTSTRAPROOT);
+    s.boot = boots;
+    console.log(sugar);
+};

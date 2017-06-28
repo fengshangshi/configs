@@ -1,0 +1,50 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付激活</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/openResult.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content ious-open-result">
+			#if($!{tplData.ret} == "success")
+				<div class="result-panel">
+					<div class="result-content success-bg">
+						<h3 class="summary">恭喜您，已获得<span class="numbric">$!{tplData.preCreditResp.quotaAmount}</span><span class="digit">.00</span>元信任付额度</h3>
+						<p class="detail">延后期付款<span class="day">$!{tplData.preCreditResp.intFreeDays}</span>天，年利率<span class="rate">$!{tplData.preCreditResp.annualRate}</span>%，有效期<span class="date">$!{tplData.preCreditResp.startLoanDate}</span>至<span class="date">$!{tplData.preCreditResp.endLoanDate}</span></p>
+						<p class="protocol">您可以<a href="/member/asset/ious/contract.htm">点击此处</a>查看合同信息，<span class="countdown">3</span>秒后自动跳转</p>
+					</div>
+				</div>
+			#else
+				<div class="result-panel">
+					<div class="result-content error-bg">
+						<h3 class="summary">激活信任付失败</h3>
+						#set($errMsg = "系统异常")
+						#if($!{tplData.preCreditResp.returnCode} == "IOUS6000011" || $!{tplData.preCreditResp.returnCode} == "IOUS6000013" || $!{tplData.preCreditResp.returnCode} == "IOUS6000014")
+							#set($errMsg = $!{tplData.preCreditResp.returnMsg})
+						#end
+						<p class="detail">$!{errMsg}</p>
+						<p>&nbsp;</p>
+					</div>
+				</div>
+			#end
+			</div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script src="${qzzUrl}${jsPath}/asset/ious/openResult/entry.js"></script>
+	<!-- ${tplData} -->
+</body>
+</html>

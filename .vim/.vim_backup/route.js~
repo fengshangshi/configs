@@ -1,0 +1,38 @@
+//ACCOUNT_INFO
+var ROUTES = {
+	"ROOM_STATUS" : /customer\/room/,  //房态
+	"ACCOUNT_OVERVIEW" : /statistics\/reportOverview/,  //概览统计
+	"OPERATE_REPORT" : /statistics\/operationReportInfo/,  //运营报告
+	"ACCOUNT_REPORT" : /statistics\/accountReport/,  //流水报告
+	"OTHER_ACCOUNT_REPORT": /statistics\/otherAccountReport/,
+	"LOG_VIEW" : /customer\/log/,  //日志
+	"ROOM_MANAGE" : /settings\/roomtype/, //客栈及房型管理
+	"ACCOUNT_INFO" : /account\/account/,  //帐号信息
+	"CHANNER_MANAGE" : /settings\/channel/,  //渠道设置
+	"ADVANCED_SETTING" : /settings\/pay/, //高级设置
+	// "SETTING" : /customer\/setting/, //设置
+	"OTAS_MANANGE" : /customer\/ota/,  //分销
+	"GUEST_INFO": /customer\/guest\/customerInfo\/default/, //客人资料
+	"AUTO_MESSAGE" : /customer\/sms\/autoMessageTemplate/, //自助短信
+	"MESSAGE_TEMPLATE": /customer\/guest\/smsTemplate/, //短信模板
+	"MESSAGE_SEND_RECORD" : /customer\/sms\/sendSmsLogList/, //短信发送记录
+	"FUNCTION_UPDATE":/versions\/list/,   //新功能提醒
+	"GROUP_MESSAGE" : /customer\/guest\/massSms/, //群发短信
+	"INTEGRAL_HELP" : /customer\/coin/,
+	"HELPCENTER" : /customer\/versions/,
+	"CHARACTER_SETTING" : /settings\/characteristic\/default/,
+	"REBATE_RULES" : /customer\/commission/,
+	"CONTACT" : /customer\/help\/contact/
+	// "ECOIN_MANAGE" : /customer\/coin\/eCoin/,
+	// "GOLD_COIN_MANAGE" : /customer\/coin\/goldCoin/
+};
+
+var _url = location.href;
+var _active;
+for(var key in ROUTES){
+	if(ROUTES[key].test(_url)){
+		_active = key;
+		break;
+	}
+}
+window.activePage = _active || "ROOM_STATUS";

@@ -1,0 +1,21 @@
+{
+    "code": "0000",
+    "msg": "处理成功",
+    "data": {
+        "pageSize": 20,
+        "pageNum": 1,
+        "total": 200,
+        "dataList": [
+            {
+                "id": 0,
+                "billNo": "dfsfsdfsdfsd",
+                "accountId": 0,
+                "accountName": "dfsdfsdfsdf",
+                "accountNo": "fsdfsdfsf",
+                "accountType": 0,
+                "billDate": "2016-08-11 16:88:9",
+                "income": 78.99 
+            }
+        ]
+    }
+}

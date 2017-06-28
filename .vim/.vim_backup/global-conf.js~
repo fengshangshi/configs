@@ -1,0 +1,12 @@
+/**
+ *@file 全局配置
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var config = {
+		animation: {
+			timeout: 500
+		}
+	};
+	exports.config = config;
+});

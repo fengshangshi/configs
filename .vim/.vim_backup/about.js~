@@ -1,0 +1,77 @@
+/**
+ *@file 关于页面的操作逻辑
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+	var globalConfig = require("libs/config/global-conf").config;
+
+	var feedbackApi = "/feedback/insert";
+
+	$(".about-wrap").delegate("#feedback-submit", "click", function(e) {
+		e.preventDefault();
+
+		$(".feedback-message").html("");
+
+		var content = $.trim($("#feedback-content").val()),
+			contact = $.trim($("#contact-content").val());
+
+		if (content.length <= 0) {
+			$(".feedback-message").html("请填写反馈内容!");
+			return false;
+		}
+
+		if (content.length > 500) {
+			$(".feedback-message").html("反馈内容少于500字!");
+			return false;
+		}
+
+		if (contact.length > 32) {
+			$(".feedback-message").html("联系方式内容必须少于32字!");
+			return false;
+		}
+
+		content = encodeURIComponent(content);
+		contact = encodeURIComponent(contact);
+
+		url = feedbackApi
+			+ "?content=" + content
+			+ "&contact=" + contact
+			+ "&_=" + new Date().getTime();
+
+		$.ajax({
+			url: url,
+			dataType: "json",
+			timeout: 5000,
+			success: function(data) {
+				if (data.error == 0) {
+					$(".feedback-message").html("提交成功！衷心感谢您的建议!");
+					$("#feedback-content").val("");
+					$("#contact-content").val("");
+				} else {
+					$(".feedback-message").html("提交失败，请重试!");
+				}
+			},
+			error: function(xhr, errorType, error) {
+				$(".feedback-message").html("提交失败，请重试!");
+			}
+		});
+	});
+
+	$(".about-wrap").delegate(".go-prev-button", "click", function(e) {
+		e.preventDefault();
+		var timeout = globalConfig.animation.timeout;
+		$(".about-wrap").animate({
+			right: "-100%"
+		}, timeout);
+	});
+
+	message.register("about-button-is-clicked", function(e) {
+		$(".feedback-message").html("");
+		var timeout = globalConfig.animation.timeout;
+		$(".about-wrap").animate({
+			right: 0
+		}, timeout);
+	});
+});

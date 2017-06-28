@@ -1,0 +1,15 @@
+/**
+ * 验证表单信息
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var form = require("module/formValidator/formValidator.js").formValidater;
+
+
+form.initForm(".bankCard-wrap form", ".bankCard-wrap .button-submit",
+		{
+			"events": ["blur"],
+			successCallback: function() {
+				console.log(1);
+			}
+});

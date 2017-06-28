@@ -1,0 +1,5 @@
+require('./common/jquery-1.5.2.min.js');
+
+require('./classes/dialog.js');
+require('./page/tester.js');
+alert(111);

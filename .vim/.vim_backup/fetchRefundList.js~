@@ -1,0 +1,56 @@
+/**
+ * 获取充值退还列表
+ * @author ss.feng@qunar.com
+ */
+require("handlebars/handlebars.js");
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var template = require("../template/refundList.handlebars");
+var pageHtml = require("module/page/page.js");
+var service = require("module/service/ajax.js");
+
+// 获取红包
+message.register("fetchRefundList", function(e) {
+	var args = e.args,
+		page = args.page || 1,
+		step = args.step || 10;
+
+	var data = {
+		pageNum: page,
+		pageSize: step
+	};
+
+	service.ajax({
+		url: "/member/asset/balance/fetchRefundApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			// 对数据列表的判断
+			Handlebars.registerHelper("if", function(list, options) {
+				return list.length > 0 ? 
+					options.fn(this) : options.inverse(this);
+			});
+			
+			// 资金来源
+			Handlebars.registerHelper("from", function(status) {
+				var text = "";
+				switch (status) {
+					case 0:
+						text = "可使用";
+						break;
+					case 1:
+						text = "已用完";
+						break;
+					case 2:
+						text = "已过期";
+						break;
+				}
+				return text;
+			});
+
+			$(".data-list tbody").html(template(data));
+			$(".page-wrap").html(pageHtml(data.data.page));
+		}
+	});
+});
+
+message.fire("fetchRefundList");

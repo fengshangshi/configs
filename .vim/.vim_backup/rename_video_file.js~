@@ -1,0 +1,58 @@
+var fs = require('fs');
+var path = require('path');
+var reader = require('rfline').reader;
+
+var video_name_map = {};
+var lineCount = 0;
+
+reader('./videoNameList.txt')
+	.line(function(line) {
+		var lines = line.split(/\t/);
+		video_name_map[lines[0]] = lines[1];
+		lineCount++;
+	})
+	.finish(function() {
+		renameFilesInDir('..');
+	});
+
+
+function renameFilesInDir(dir) {
+	fs.readdir(dir, function(err, files) {
+		var l = files.length;
+		var file = null;
+		for (var i = 0; i < l; i++) {
+			file = files[i];
+			console.log(file);
+			changeFileName(dir + '/' + file);
+		}	
+	});
+}
+
+function changeFileName(filepath) {
+	fs.stat(filepath, function(err, stats) {
+		if (err) throw err;
+		if (stats.isFile()) {
+			var filename = path.basename(filepath);
+			var parentDir = path.dirname(filepath);
+
+			var newName = video_name_map[filename];
+			newName = newName ? newName.replace(/[\r\n]/, '') + '.mp4' : newName;
+			if (newName) {
+				var newPath = parentDir + '/' + newName;
+				console.log('Going to rename from ' + filepath + ' to ' + newPath);
+				fs.rename(filepath, newPath);
+			}
+			
+		}
+	});
+}
+
+/*
+lineReader.eachLine('./videoNameList.txt', function(line, last) {
+	var lines = line.split(/\t/i);
+	video_name_map[lines[0]] = lines[1];
+}).then(function(err) {
+	if (err) throw err;
+	console.log(video_name_map);
+});
+*/

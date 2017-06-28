@@ -1,0 +1,29 @@
+/**
+ * 获取用户中心消息
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var service = require("module/service/ajax.js");
+
+var data = {
+	source: "pay"
+};
+
+service.ajax({
+	url: "https://user.qunar.com/webapi/message/unreadCount",
+	data: data,
+	type: "GET",
+	dataType: "jsonp",
+	jsonp: "callback",
+	onsuccess: function(data) {
+		if (data.ret) {
+			data = data.data;
+			if (data && data.total > 0) {
+				var text = data.total > 99 ? "99+" : data.total;
+				var html = "<span class='messageCount'><i></i>"+ text +"</span>";
+				$("#userMessage").find(".messageCount").remove();
+				$("#userMessage").append(html);
+			}
+		}
+	}
+});

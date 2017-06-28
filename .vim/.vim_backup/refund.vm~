@@ -1,0 +1,39 @@
+#parse("widget/include/global.vm")
+#set( $headerTitle = '资金退回' )
+#set( $navTitleTwo = { "key1": "申请退回", "key2": "退回记录"} )
+#set( $headTitle = '资金退回【我的账户】' )
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		#parse("widget/layout/head.vm")
+	    <link rel="stylesheet" 
+	        href="${qzzUrl}${cssPath}/asset/balance/refund.css" />
+	    #parse("widget/include/scriptHeader.vm")
+	</head>
+	<body>
+		<div class="qn_main">
+			<div class="qn_pages">
+				#if(${tplData} && ${tplData.userAgent} && ${tplData.userAgent.isApp}!="1")
+					#parse("widget/header/header.vm")
+				#end
+				<div class="qn_nav">
+					#parse("widget/nav/nav-two.vm")
+				</div>
+				<div class="qn_list_main">
+					<div class="list_item_con list_item_con1" data-id="1">
+					</div>
+					<div class="list_item_con list_item_con2 hide" data-id="2">
+					</div>
+				</div>
+				#if($!tplData && $!{tplData.refundAmount} && $!{tplData.refundAmount}!="0.00" )
+				<div class="refund_apply_all" data-amount="$!{tplData.refundAmount}">
+					申请全部退回 (共$!{tplData.refundAmount}元)
+				</div>
+				#end
+			</div>
+		</div>
+		<script 
+	        src="${qzzUrl}${jsPath}/asset/balance/refund/entry.js">
+	    </script>
+	</body>
+</html>

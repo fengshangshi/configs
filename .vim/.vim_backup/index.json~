@@ -1,0 +1,171 @@
+{
+	"tplData": {
+		"iousUserInfo": {
+			"loanCount": 3,
+			"remainderAmount": "8000.00",
+			"creditAmount": "12000.00",
+			"paidAmount": "4000.00",
+			"effectDate": "2014/12/15",
+			"expiryDate": "2015/12/11",
+			"contractStatus": "0",
+			"annualRate": "8.2",
+			"freezeAmount": "200",
+			"repayType": "3",
+			"loanRate": "0.5",
+			"loanProvide": "去哪儿"
+		},
+		
+		"loanInfos": {
+			"totalPage": 4,
+			"pageSize": 10,
+			"recentPage": 2,
+			"nonRepaidCount": 30,
+			"totalRemainAmount": "8000.00",
+			"sevenDayRepayAmount": "7000.00",
+			"autoRepayment": true,
+			"autoRepaymentDate": "2015-04-22",
+			"loanInfoList": [
+				{
+					"orderNo": "k2sp234234223432k2sp234234223432k2sp234234223432",
+					"updateTime": "2015/01/11",
+					"iousPayAmount": "5000.00",
+					"loanTerm": 2,
+					"createTime": "2015/01/12",
+					"payTime": "2015/02/12",
+					"loanProvideNo": "234234",
+					"nonRepayAmount": "2130.03",
+					"busiTypeName": "火车票",
+					"iconName": "default",
+					"ifRepaid": false,
+					"tppCode" : "CMBCLOAN"
+				},
+				{
+					"orderNo": "k2sp234234223432",
+					"updateTime": "2015/01/11",
+					"iousPayAmount": "8000.00",
+					"loanTerm": 12,
+					"createTime": "2015/01/12",
+					"payTime": "2015/02/12",
+					"loanProvideNo": "rreerre",
+					"nonRepayAmount": "5130.03",
+					"busiTypeName": "汽车票",
+					"iconName": "deposit",
+					"ifRepaid": false
+				}
+			],
+
+			"scheduleDetailMap": {
+				"ddd": [
+					{
+						"status": 0,
+						"prcpStatus": "OL",
+						"intStatus": "OL",
+						"overDueDays": "28",
+						"expiryDays": 2,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": true
+					},
+					{
+						"status": 0,
+						"prcpStatus": "NM",
+						"overDueDays": "28",
+						"expiryDays": 10,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": false
+					},
+					{
+						"status": 0,
+						"prcpStatus": "NM",
+						"overDueDays": "28",
+						"expiryDays": 2,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": false
+					},
+					{
+						"status": 0,
+						"prcpStatus": "NM",
+						"overDueDays": "28",
+						"expiryDays": 10,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": false
+					}
+				],
+				"234234": [
+					{
+						"status": 0,
+						"prcpStatus": "OL",
+						"intStatus": "OL",
+						"overDueDays": "28",
+						"expiryDays": 2,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": true
+					},
+					{
+						"status": 0,
+						"prcpStatus": "NM",
+						"overDueDays": "28",
+						"expiryDays": 10,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": false
+					},
+					{
+						"status": 0,
+						"prcpStatus": "NM",
+						"overDueDays": "28",
+						"expiryDays": 2,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": false
+					},
+					{
+						"status": 0,
+						"prcpStatus": "NM",
+						"overDueDays": "28",
+						"expiryDays": 10,
+						"totalAmount": "230.00",
+						"prcpAmount": "232",
+						"intAmount": "1",
+						"loanProvideNo": "234234",
+						"repayIndex": 1,
+						"dueDate": "2014/12/11",
+						"ifRecent": false
+					}
+				]
+			}
+		}
+	}
+}

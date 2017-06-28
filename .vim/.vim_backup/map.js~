@@ -1,0 +1,69 @@
+/**
+ *@file 地图操作入口
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+
+/**
+ *引入模块
+ */
+var $ = require("libs/zepto/zepto");
+var message = require("libs/message/message").MessageCenter;
+var mapConfig = require("libs/config/map-conf").config;
+var mapInitConfig = require("libs/config/map-init-conf").config;
+var mapThemeConfig = require("libs/config/theme-conf").config;
+var request = require("libs/request/request").request;
+
+require("data/datacenter");
+require("./events");
+
+var host = mapConfig.host,
+	path = mapConfig.path,
+	version = mapConfig.querys.version,
+	callback = mapConfig.querys.callback,
+	accessKey = mapConfig.accessKey;
+
+var url = host + path
+		+ "?v=" + version
+		+ "&ak=" + accessKey
+		+ "&callback=" + callback
+		+ "&_=" + new Date().getTime();
+
+setTimeout(function() {
+	request({
+		url: url,
+		dataType: "jsonp"
+	});
+}, 500);
+
+var lng = mapInitConfig.lng,
+	lat = mapInitConfig.lat,
+	minZoom = mapInitConfig.minZoom,
+	maxZoom = mapInitConfig.maxZoom,
+	defaultZoom = mapInitConfig.defaultZoom,
+	mapContainerId = mapInitConfig.mapContainer;
+
+window[callback] = function() {
+	var point = new BMap.Point(lng, lat);
+	var map = new BMap.Map(mapContainerId, {
+		enableMapClick: false,
+		mapType: BMAP_HYBRID_MAP
+	});
+
+	map.getContainer().style.background = "#3c5773";
+
+	map.enableScrollWheelZoom();
+	map.enablePinchToZoom();
+	map.setMinZoom(minZoom);
+	map.setMaxZoom(maxZoom);
+	/*
+	 *此处加settimeout是为了地图加载主题皮肤之前会展现默认的
+	 *这么做是为了地图可以先行加载
+	 */
+		map.centerAndZoom(point, defaultZoom);
+		window["common"]["map"] = map;
+		message.fire("map-instance-is-created");
+	}, 60);
+};
+
+});

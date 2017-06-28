@@ -1,0 +1,159 @@
+#parse("page/www/_include/global.vm")
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf8">
+		<title>理赔结果【去哪儿网】</title>
+		<link rel="stylesheet"
+			href="${qzz}${cssPath}/claim/result/entry.css">
+	</head>
+	<body>
+		#set($claimInfo = ${tplData.claimInfo})
+		#set($alterTicketInfo = ${tplData.alterTicketInfo})
+		#set($beneficiaryInfo = ${claimInfo.beneficiaryInfo})
+		#parse("widget/www/header/header.vm")
+		<div class="container outter-wrap">
+			<div class="inner-wrap clearfix">
+				<div class="common-info-wrap">
+					<div class="result-wrap">
+						<div class="result-info warning">
+							<div class="result-info-title">
+								#if ($claimInfo.status == 0)
+								您的理赔申请已核实通过，理赔款<strong>${claimInfo.amount}</strong>元于<em>$!dateTool.format("yyyy/MM/dd", ${claimInfo.claimDate})</em>完成赔付，到账时间以银行为准
+								#elseif ($claimInfo.status == 1)
+								您提交的理赔申请已经受理，乘机人乘坐改签航班后7个工作日内完成审核
+								#elseif ($claimInfo.status == 2)
+								<strong>理赔未通过审核，由于您未乘坐改签后的航班，依据保险条款无法赔付</strong>
+								#end
+							</div>
+							<div class="result-info-content claim-rules">
+								#if ($claimInfo.status == 2)
+								如有问题您可以联系010-57646166,
+								返回 <a href="\#\#\#">保单详情</a>
+								#else
+								您的赔付金额是以机票<em>改签费用标准</em>全额赔付，如有问题您可以联系010-57646166，
+								返回 <a href="\#\#\#">保单详情</a>
+								<div class="claim-rules-info">
+									<table>
+										<thead>
+											<tr>
+												<th>改签时间点</th>
+												<th>改期加手续费</th>
+												<th>签转</th>
+											</tr>
+										</thead>
+										<tbody>
+											#foreach( $item in $claimInfo.rules )
+											<tr>
+												<td>${item.timeText}</td>
+												<td><em>￥${item.changeFee}</em>/人</td>
+												<td>${item.signText}</td>
+											</tr>
+											#end
+										</tbody>
+									</table>
+									<span class="arrow-outter">
+										<span></span>
+									</span>
+								</div>
+								#end
+							</div>
+						</div>
+					</div>
+					<div class="common-info">
+						<div class="claim-info-wrap">
+							<h3>理赔信息</h3>
+							<table class="data-table">
+								<thead>
+									<tr>
+										<th width="20%">申请时间</th>
+										<th width="20%">赔付时间</th>
+										<th width="20%">理赔金额</th>
+										<th width="20%">联系电话</th>
+										<th width="20%">理赔状态</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>$!dateTool.format("yyyy/MM/dd", ${claimInfo.applyDate})</td>
+										<td>
+										#if (${claimInfo.claimDate})
+										$!dateTool.format("yyyy/MM/dd", ${claimInfo.claimDate})
+										#else
+										--
+										#end
+										</td>
+										<td><strong>￥${claimInfo.amount}</strong></td>
+										<td>${beneficiaryInfo.phone}</td>
+										<td>
+										#if ($claimInfo.status == 0)
+											理赔完成
+										#elseif ($claimInfo.status == 1)
+											受理中
+										#elseif ($claimInfo.status == 2) 
+											理赔失败
+										#else 
+											--
+										#end
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="alter-info-wrap">
+							<h3>改签信息</h3>
+							<table class="data-table">
+								<thead>
+									<tr>
+										<th width="25%">改签后电子客票/行程单号</th>
+										<th width="25%">改签后航班</th>
+										<th width="25%">改签后航班日期</th>
+										<th width="25%">改签原因</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>${alterTicketInfo.eTicketNo}</td>
+										<td>${alterTicketInfo.alterFlightNo}</td>
+										<td>$!dateTool.format("yyyy/MM/dd", ${alterTicketInfo.alterFlightDate})</td>
+										<td>${alterTicketInfo.alterReason}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="beneficiary-info-wrap">
+							<h3>受益人信息</h3>
+							<table class="data-table">
+								<thead>
+									<tr>
+										<th width="25%">姓名</th>
+										<th width="25%">证件号码</th>
+										<th width="25%">银行卡号</th>
+										<th width="25%">开户行</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>${beneficiaryInfo.name}</td>
+										<td>${beneficiaryInfo.idNum}</td>
+										<td>${beneficiaryInfo.cardNo}</td>
+										<td>${beneficiaryInfo.bank}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="ext-info">
+								<span>附加信息：</span>
+								<span>${beneficiaryInfo.extraInfo}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="common-tips-wrap">
+					#parse("page/www/claim/common_question.vm")
+				</div>
+			</div>
+		</div>
+		<script src="${qzz}${jsPath}/claim/result/entry.js"></script>
+		#parse("widget/www/footer/footer.vm")
+	</body>
+</html>

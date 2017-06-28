@@ -1,0 +1,33 @@
+## @Describe: 无权限页面
+## @author ss.feng@qunar.com
+## @date  2016.05.05
+
+#parse("widget/_include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+	<title>权限导航</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/privilege.css" />
+	#parse("widget/_include/headScript.vm")
+</head>
+<body>
+#parse("widget/_include/header_for_privilege.vm")
+
+<div class="container">
+		<div class="content">
+				<ul class="privilegeList">
+						#if ($_SYS_LIST.size() > 0)
+								#foreach($i in $_SYS_LIST)
+								<li><a href="${i.url}">${i.groupDesc}</a></li>
+								#end
+						#else
+								<li>账号相关疑问，请发相关问题至商务运营邮件组: <a href="mailto:@asp_public@qunar.com">asp_public@qunar.com</a></li>
+						#end
+				</ul>
+		</div>
+</div>
+<script src="${qzzUrl}/${jsPath}/pages/privilege/list/entry.js"></script>
+</body>
+</html>

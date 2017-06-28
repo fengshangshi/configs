@@ -1,0 +1,111 @@
+{
+	"tplData": {
+		"orderInfo": {
+			"logoUrl": "xxx",
+			"productName": "东方航空",
+			"orderNo": "2015052120234234",
+			"price": "2400.00",
+			"passengers": "冯尚实, Tomas",
+			"busNo": "MU2033",
+			"departureArea": "虹桥机场",
+			"arrivalArea": "首都机场",
+			"departureCity": "上海",
+			"arrivalCity": "北京",
+			"departureDate": "2015-08-10",
+			"arrivalDate": "2015-08-11"
+		},
+
+		"claimInfo": {
+			"amount": "201.00",
+			"rules": [
+				{
+					"title": "",
+					"time": "2",
+					"timeText": "起飞前2小时之前",
+					"changeFee": "201",
+					"signText": "不可签转"
+				},
+				{
+					"title": "",
+					"time": "2",
+					"timeText": "起飞前2小时之后",
+					"changeFee": "335",
+					"signText": "不可签转"
+				}
+			]
+		},
+
+		"insurInfo": {
+			"prdNo": "23423424234",
+			"price": "24.00",
+			"claimPrice": "210.00",
+			"zipPrice": "10.00",
+			"minCount": "1",
+			"maxCount": "10",
+			"tags": [
+				"线上灵活理赔",
+				"改签无忧",
+				"小保单大保障"
+			],
+			"purchase": 2000,
+			"explain": [
+				{
+					"title": "投保说明",
+					"content": "由于航空公司、机票代理商或其他第三方原因造成的变更或签转不负责赔偿"
+				},
+				{
+					"title": "理赔说明",
+					"content": "生成保险订单后可进入我的金融订单页申请理赔"
+				},
+				{
+					"title": "退保说明",
+					"content": "此产品购买后不可退保"
+				}
+			]
+		},
+
+		"guestInfo": [
+			{
+				"token": "234234234",
+				"insurNm": "冯尚实",
+				"insurIdNo": "331003***************1967",
+				"status": 0
+			},
+			{
+				"token": "234234234",
+				"insurNm": "冯尚实",
+				"insurIdNo": "331003***************1967",
+				"status": 0
+			},
+			{
+				"token": "234234234",
+				"insurNm": "冯尚实",
+				"insurIdNo": "331003***************1967",
+				"status": 0
+			},
+			{
+				"token": "234234234",
+				"insurNm": "冯尚实",
+				"insurIdNo": "331003***************1967",
+				"status": 0
+			},
+			{
+				"token": "234234234",
+				"insurNm": "冯尚实",
+				"insurIdNo": "331003***************1967",
+				"status": 1
+			},
+			{
+				"token": "234234234",
+				"insurNm": "冯尚实",
+				"insurIdNo": "331003***************1967",
+				"status": 2
+			}
+		],
+
+		"meta": {
+			"sysCode": "",
+			"busiType": "FLIGHT"
+		}
+	}
+}

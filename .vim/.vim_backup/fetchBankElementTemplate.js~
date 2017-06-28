@@ -1,0 +1,41 @@
+/**
+ * 获取银行要素模板
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+require("handlebars/handlebars.js");
+var template = require("../template/bankInfo.handlebars");
+
+message.register("bankElementTemplate", function(e) {
+	var args = e.args,
+		html = args.html,
+		data = args.data;
+
+	if ($(".bankCard-wrap form input[name=bankType]").length > 0) {
+		$(".bankCard-wrap form input[name=bankType]").val(data.type);
+	} else {
+		$("<input type='hidden' name='bankType' value='"+ data.type +"'>")
+			.appendTo(".bankCard-wrap form");
+	}
+
+	// 好trick
+	$(".select-bank-hidden").val(data.bankCode);
+	$(".select-bank-hidden")
+		.parent().find(".form-other").remove();
+	$(".select-bank-hidden")
+		.parent()
+		.append("<span class='form-other'><i class='ok'></i></span>");
+
+	$(".bankCard-wrap .select-bank-content").html(template(data));
+	$(".bankCard-wrap .bankCard-info-async").html(html);
+
+	message.fire("initSelector", {
+		selectors: {
+			"#identityType": function(data) {
+			},
+			"#validMonth": "",
+			"#validYear": ""
+		}
+	});
+});

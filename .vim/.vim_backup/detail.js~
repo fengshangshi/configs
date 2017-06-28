@@ -1,0 +1,75 @@
+/**
+ *@file 飞机详情
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+	var env = require('common/environment');
+	var globalConfig = require("libs/config/global-conf").config;
+	var mapInitConfig = require("libs/config/map-init-conf").config;
+	var util = require("libs/util/util");
+
+	require("./events");
+
+	$(".detail-header .go-prev-button").on("click", function(e) {
+		e.preventDefault();
+		var flight_no = $(".detail-header").find(".go-prev-button")
+				.attr("data-flight-no");
+		var company = $(".detail-header").find(".go-prev-button")
+				.attr("data-flight-company");
+		var is_page_location = $(this).attr("data-is-page-location");
+		if (is_page_location === "flight-search") {
+			message.fire("flight-detail-layer-hide");
+			message.fire("search-layer-show");
+			message.fire("controller-layer-restore-detail");
+			message.fire("flight-layer-init");
+		} else if (is_page_location === "flight-detail") {
+			if (!window.common.is_from_index) {
+				$(this).attr("data-is-page-location", "flight-search");
+			} else {
+				$(this).attr("data-is-page-location", "false");
+			}
+			message.fire("flight-detail-layer-show", {
+				flight_no: flight_no,
+				company: company
+			});
+			message.fire("controller-layer-move-detail");
+			message.fire("flight-data-detail-layer-hide");
+		} else {
+			message.fire("flight-layer-init");
+		}
+	});
+
+	message.register("flight-layer-init", function(e) {
+			var singleFlightOverlay = env.get('singleFlightOverlay');
+			if (singleFlightOverlay) {
+				singleFlightOverlay.hide();
+			}
+			var airlineOverlay = env.get('airlineOverlay');
+			if (airlineOverlay) {
+				airlineOverlay.hide();
+			}
+			for (var i = 0, l = window.common.timer.length; i < l; i++) {
+				clearTimeout(window.common.timer[i]);
+			}
+			clearTimeout(window.common.flights_timer);
+			window.common.is_single = false;
+			window.common.isAirlineShow = false;
+			 window.common.init_map_zoom = false;
+			message.fire("flight-data-detail-layer-hide");
+			message.fire("flight-detail-layer-hide");
+			message.fire("controller-layer-restore-detail");
+			var map = window.common.map;
+			map.setZoom(mapInitConfig.defaultZoom);
+			message.fire("get-map-viewport");
+	});
+
+	$(document).delegate(".flight-real-data-button", "click", function(e) {
+		e.preventDefault();
+		var flight_no = $(this).attr("data-flight-no");
+		message.fire("flight-real-data-show", {
+			flight_no: flight_no
+		});
+	});
+});

@@ -1,0 +1,7 @@
+[
+	{
+		"name": "crm_touch",
+		"context": "",
+		"root": "/crm_touch/vm/page/resource"
+	}
+]

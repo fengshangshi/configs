@@ -1,0 +1,45 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】我的账户-账户资产-提现-提现申请失败</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+        href="${qzzUrl}${cssPath}/asset/balance/withdrawApply.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-bank-card">
+    #parse("widget/header/header.vm")
+    #parse("widget/nav/nav.vm")
+    <div class="container clearfix">
+        <div class="side-bar">
+            #parse("widget/menu/menuForAsset.vm")
+        </div>
+        <div class="main">
+            <div class="main-content">
+                <div class="result-tips">
+                    <div class="result-tips-content tips-fail">
+                        <h2>抱歉，提现申请提交失败！</h2>
+                        <p> ${tplData.errorMsg}</p>
+                        <p>
+                            #if( ${tplData.errorCode} == "M999012")
+                            您可以重新
+                            <a href="/member/asset/balance/withdrawApply.htm">提现</a>
+                            或返回
+                            <a href="/member/">我的账户</a>
+							#else
+                            您可以返回
+                            <a href="/member/">我的账户</a>
+                            #end
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("widget/footer/footer.vm")
+</body>
+</html>
+

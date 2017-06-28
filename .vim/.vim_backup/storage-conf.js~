@@ -1,0 +1,11 @@
+/**
+ *@file 本地存储配置
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var config = {
+		key: "SKYHistory"
+	};
+
+	exports.config = config;
+});

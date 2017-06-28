@@ -1,0 +1,19 @@
+<script>
+var common = {
+
+	/**
+	 * 页面队列
+	 */
+	pageQueue: [],
+
+	/**
+	 * 超时句柄队列
+	 */
+	timeQueue: [],
+
+	/**
+	 * 地图状态
+	 */
+	map: {}
+};
+</script>

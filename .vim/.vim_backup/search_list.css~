@@ -1,0 +1,21 @@
+.search-list-panel {
+	background: #fff;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.table > thead > tr {
+	background: #ddeee0;
+}
+
+.table > thead > tr > th {
+	text-align: center;
+	border-bottom-width: 1px;
+	font-weight: 700;
+}
+
+.table > tbody > tr > td {
+	text-align: center;
+	border-top: none;
+	border-bottom: 1px solid #ddd;
+}

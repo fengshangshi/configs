@@ -1,0 +1,32 @@
+/**
+ * @file 请求http
+ * @author fengshangshi
+ */
+var request = require('superagent');
+
+module.exports = function(config, callback) {
+	var url = config.url || config.upstream;
+	var method = config.method.toLocaleLowerCase();
+	var timeout = parseInt(config.timeout) || 10;
+
+	var req = request[method](url);
+	req.on('error', function(err) {
+		console.log(err);
+	});
+	req.end(function(err, res) {
+		console.log('dd',res.text)
+	});
+
+	// request[method](url)
+	// 	.timeout(timeout * 1000)
+	// 	.end(function(res) {
+	// 		callback && callback(null, res);
+	// 	})
+	// on('error', handle);
+};
+
+module.exports({
+	url: 'http://www.baiddddu.com',
+	method: 'get',
+	timeout: '5'
+});

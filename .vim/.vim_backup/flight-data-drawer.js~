@@ -1,0 +1,110 @@
+var $ = require("sky-mobile:widget/libs/zepto/zepto.js");
+var common = require("sky-mobile:widget/libs/common.js");
+
+var getType = common.getType;
+
+function FlightDataDrawer(container, monitor) {
+	if (getType(container) === "undefined") {
+		container = document.body;
+	}
+	monitor = monitor || true;
+
+	var containerWidth = $(container).width(),
+		containerHeight = $(container).height();
+
+	var canvas = document.createElement("canvas");
+	$(container)
+	.css({
+		position: "relative",
+	})
+	.append(canvas);
+	$(canvas)
+	.attr({
+		width: containerWidth,
+		height: containerHeight
+	})
+	.css({
+		position: "absolute",
+		top: 0,
+		left: 0
+	});
+
+	this.canvas = canvas;
+	this.container = container;
+}
+
+FlightDataDrawer.prototype.drawBackground = function() {
+	var canvas = this.canvas,
+		width = canvas.width,
+		height = canvas.height;
+
+	var context = canvas.getContext("2d");
+
+	var startX = 28,
+		startY = 58,
+		endX = width  - startX,
+		endY = startY;
+
+	var radius = 6;
+
+	var startStrokeStyle = "#0b84d0";
+		endStrokeStyle = "#7c45ba";
+		lineWidth = 2;
+
+	context.strokeStyle = startStrokeStyle;
+	context.fillStyle = startStrokeStyle;
+	context.lineWidth = lineWidth;
+
+	// 绘制来源机场的信息
+	context.beginPath();
+	context.arc(startX, startY, radius, 0, 2 * Math.PI, true);
+	context.stroke();
+	context.moveTo(startX, startY - radius);
+	context.rect(startX, startY -radius, 1, -100);
+	context.fill();
+
+	context.moveTo(startX + radius, startY);
+	context.bezierCurveTo(54, 58, 40, 42, 66, 42);
+	context.stroke();
+	context.beginPath();
+	context.rect(66, 42, width / 2, 2);
+	context.fill();
+
+	// 绘制目标机场的信息
+	context.beginPath();
+	context.strokeStyle = endStrokeStyle;
+
+	context.arc(endX, endY, radius, 0, 2 * Math.PI, true);
+	context.moveTo(endX, endY - radius);
+	context.lineTo(endX, 17);
+	context.stroke();
+	context.stroke();
+
+	context.moveTo(endX - radius, endY);
+	context.bezierCurveTo(width - 54, 58, width - 40, 42, width - 66, 42);
+	context.stroke();
+	for (var i = width / 2; i < width - 66; i++) {
+		context.moveTo(i += lineWidth, 42);
+		context.lineTo(i += lineWidth, 42);
+		context.stroke();
+	}
+};
+
+FlightDataDrawer.prototype.drawText = function (text, x, y) {
+
+};
+
+FlightDataDrawer.prototype.reset = function() {
+	var container = this.container,
+		width = $(container).width(),
+		height = $(container).height();
+
+	$(this.canvas).attr({
+		width: width,
+		height: height
+	});
+
+	this.drawBackground();
+};
+
+module.exports = FlightDataDrawer;

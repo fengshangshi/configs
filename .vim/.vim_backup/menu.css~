@@ -1,0 +1,19 @@
+.menu {
+	height: 60px;
+}
+
+.menu li {
+	float: left;
+	height: 60px;
+}
+
+.menu a {
+	display: block;
+	height: 33px;
+	padding: 27px 15px 0;
+}
+
+.menu a:hover,
+.menu a.current {
+	background: #fba500;
+}

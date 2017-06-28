@@ -1,0 +1,16 @@
+/**
+ *@file 工具函数集
+ *@author ss.feng@
+ */
+module.exports = function(obj) {
+	var str = Object.prototype.toString.call(obj),
+		regex = /^\[object (\w+)\]$/i;
+
+	str = str.toLocaleLowerCase();
+
+	if (regex.test(str)) {
+		return str.match(regex)[1];
+	}
+
+	return false;
+};

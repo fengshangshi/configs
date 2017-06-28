@@ -1,0 +1,35 @@
+/**
+ * @file 登录验证：与数据库比较用户信息
+ * @author ss.feng
+ */
+module.exports = function(name, pass, cb) {
+	var User = sugar.model['user'];
+
+	// 查询条件
+	var where = {
+		username: name
+	};
+
+	// 状态
+	var status = false;
+
+	// 查询回调函数
+	function handler(err, data) {
+			var username = '';
+			var usertype = '';
+
+		// 比较用户密码是否相等
+		if (!err && data && data['password'] == password) {
+			status = true;
+		}
+
+		cb && cb(status, {
+			uid: name,
+			username: data['nickname'],
+			usertype: data['usertype']
+		});
+	}
+
+	// 从数据库中读取用户信息
+	User.findOne(where, handler);
+};

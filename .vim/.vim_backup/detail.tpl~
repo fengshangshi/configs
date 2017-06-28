@@ -1,0 +1,69 @@
+<header class="detail-header clearfix">
+	<nav>
+		<a href="###" class="go-prev-button">返回</a>
+		<h1><span class="text">百度天眼</span></h1>
+	</nav>
+</header>
+<div class="flight-detail"></div>
+<script type="text/template" id="template-flight-detail">
+<div class="flight-detail-info clearfix">
+	<div class="flight-detail-info-start">
+		<div class="flight-city">
+			<%:=tplData.take_off_and_land[0]
+				.departure.city_name%>
+		</div>
+		<div class="flight-airport">
+			<%:=tplData.take_off_and_land[0].departure.byname%>&nbsp;
+			<%:=tplData.take_off_and_land[0].departure.code%>&nbsp;
+			<%:=tplData.take_off_and_land[0].departure.terminal%>
+		</div>
+		<div class="flight-time">
+			<div class="flight-time-plan">计划
+				<em>
+				<%:=tplData.take_off_and_land[0]
+					.plan.launch%>
+				</em></div>
+			<div class="flight-time-real">实际
+				<em>
+				<%:=tplData.take_off_and_land[0]
+					.actual.launch%>
+				</em></div>
+		</div>
+	</div>
+	<div class="flight-detail-info-end">
+		<div class="flight-city">
+			<%:=tplData.take_off_and_land[0]
+				.destination.city_name%></div>
+		<div class="flight-airport">
+			<%:=tplData.take_off_and_land[0].destination.byname%>&nbsp;
+			<%:=tplData.take_off_and_land[0].destination.code%>&nbsp;
+			<%:=tplData.take_off_and_land[0].destination.terminal%>&nbsp;
+		</div>
+		<div class="flight-time">
+			<div class="flight-time-plan">计划
+				<em>
+				<%:=tplData.take_off_and_land[0]
+					.plan.landing%>
+				</em></div>
+			<div class="flight-time-real">实际
+				<em>
+				<%:=tplData.take_off_and_land[0]
+					.actual.landing%>
+				</em></div>
+		</div>
+	</div>
+	<div class="flight-detail-info-status ">
+		<em><%:=tplData.base_info.model%></em>
+		<strong class="flight-status-<%:=tplData.status%>">
+			<%:=tplData.status_text%></strong>
+	</div>
+</div>
+<div class="flight-detail-data-tips">
+	<a href="###" class="flight-real-data-button"
+			data-flight-no="<%:=tplData.flight_no%>">
+		飞机数据<span></span>
+	</a>
+</div>
+</script>
+{%widget name="sky-mobile:widget/detail/data-detail.tpl"%}
+{%script%}require("./detail.js");{%/script%}

@@ -1,0 +1,3 @@
+<div id="SKYSearchIndexr" class="search-list-wrap">
+	{%widget name="sky-mobile:widget/search/searchList/header.tpl"%}
+</div>

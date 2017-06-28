@@ -1,0 +1,70 @@
+register的用法
+register("type", fn);
+register("type", [fn1, fn2]);
+register({
+	"type": fn,
+	"type1": [fn1, fn2]
+});
+
+不在支持的形式
+register([{}, {}, {}]);
+
+
+fire的用法
+fire("type"); // 广播消息
+fire("type", args); //发射时传递参数
+
+
+remove的用法
+remove("type"); // 删除type类的所有消息订阅
+remove("type", fn); // 删除type类的fn这个消息订阅
+remove("type", [fn1, fn2]); // 删除type类的列表中的消息订阅
+remove({ //删除多个类的消息订阅
+	"type": fn,
+	"type1": [fn1, fn2]
+});
+remove([type1, type2, type2...]);// 删除列表中的消息类
+
+
+
+
+消息订阅类的使用说明
+
+一、订阅消息 register
+	本消息订阅类支持以下3种订阅方式
+	1、register(type, fn);
+		type为消息类型，字符串类型；
+		fn为消息触发时的回调函数，function类型
+	2、register(type, [fn1, fn2, ...]);
+		type说明如上；
+		[fn1, fn2, ...]，第2个参数为回调函数列表，一次对同个消息类型注册多个
+		回调函数；
+	3、register({
+		type: [fn1, fn2, ...],
+		type: fn
+	});
+		参数为object类型，内部支持消息类型跟回调函数，以及消息类型和
+		回调函数列表
+
+二、消息触发 fire
+	1、fire(type)
+		单独触发一个type的消息，字符串类型
+	2、fire(type, args);
+		单独触发一个type的消息，并且传递一个object类型的args参数
+	3、fire([type1, type2, ...], args);
+		触发一系列的消息, 并且可以给所有的回调函数传递一个相同的参数
+
+三、取消订阅 remove
+	1、remove(type)
+		删除type类的所有消息订阅
+		type为字符串
+	2、remove(type, fn)
+		删除type类的fn这个消息订阅
+		type同上
+		fn为string类型，是对function的变量引用
+	3、remove(type, [fn1, fn2, ...]
+		删除type类中的订阅列表
+		type跟fn的类型同上
+	4、remove([type1, type2, ...]);
+		删除列表中的所有消息注册
+		type类型如上说明

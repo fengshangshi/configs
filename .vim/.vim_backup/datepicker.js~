@@ -1,0 +1,55 @@
+/**
+ * @desc 日历组件, 基于bootstrap datepicker
+ * @author ming.zhou
+ */
+var initDate = {
+    // 获取今天日期
+    getInitDate: function(date) {
+        var today = new Date();
+        if(date == 'lastweek') {
+            var d = today.getTime();
+            today.setTime(d - 7 * 24 * 60 * 60 * 1000);
+        }
+        if(date == 'lastmonth') {
+            var m = today.getMonth();
+			today.setMonth(m - 1);
+        }
+        var y = today.getFullYear(),
+            m = today.getMonth() + 1,
+            d = today.getDate();
+
+
+        // 两位数
+        if(m >= 10) {
+            m = m
+        } else {
+            m = '0' + m;
+        }
+        if(d >= 10) {
+            d = d
+        } else {
+            d = '0' + d;
+        }
+        return y + '-' + m + '-' + d;
+    },
+
+    initCalendar: function(data) {
+        $(data).datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            clearBtn: true // 清除按钮
+            // startDate: '+1' // 去掉今天之前的限制
+        });
+    },
+
+    initCalendarRange: function(data) {
+
+        $(data).datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            clearBtn: true, //清除按钮
+            //endDate: '+1'
+        });
+    }
+}
+module.exports = initDate;

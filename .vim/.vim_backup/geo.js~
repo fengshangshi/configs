@@ -1,0 +1,20 @@
+/**
+ *@file 头部操作
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+
+	require("./events");
+
+	$(".geo").on("click", function(e) {
+		e.preventDefault();
+
+		message.fire("geo-button-is-clicked", {
+			target: $(this)[0]
+		});
+	});
+});
+
+

@@ -1,0 +1,14 @@
+/**
+ *@file 服务端请求接口配置
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var config = {
+		get_flight_list_by_location: "/api/get_flight_list_by_location_radius",
+		get_flight_list_by_coordinate: "/api/get_flight_list_by_coordinate",
+		get_flight_list_by_search: "/api/get_flight_list_by_search",
+		get_flight_by_flight_no: "/api/get_flight_by_flight_no"
+	};
+
+	exports.request_config = config;
+});

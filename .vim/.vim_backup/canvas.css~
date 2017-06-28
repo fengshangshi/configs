@@ -1,0 +1,11 @@
+#flight {
+	position: absolute;
+	top: 50px;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+}
+
+body {
+	/*background: #000;*/
+}

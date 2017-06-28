@@ -1,0 +1,64 @@
+/**
+ * 气泡提示组件样式
+ * author water.li
+ * Date 2014-12-10
+ */
+.poptip {
+	color: #656565;
+	font-size: 12px;
+	line-height: 1.5;
+	zoom: 1;
+}
+
+.poptip-shadow {
+	width: 100%;
+	background-color: rgba(229,169,107,.15);
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#26e5a96b, endColorstr=#26e5a96b);
+	border-radius: 2px;
+	padding: 2px;
+	zoom: 1;
+	_display: inline;
+}
+
+.poptip-container {
+	width: 100%;
+	background-color: #FFFCEF;
+	border: 1px solid #ffbb76;
+	border-radius: 2px;
+	padding: 5px 15px;
+	zoom: 1;
+	_display: inline;
+}
+
+.poptip-arrow,
+.poptip-arrow em,
+.poptip-arrow span,
+.poptip-arrowup em,
+.poptip-arrowup span
+{
+	float: left;
+	font-size: 14px;
+	font-family: SimSun;
+	font-style: normal;
+	line-height: 1;
+}
+
+.poptip-arrow{
+	background: url(http://simg1.qunarzz.com/usercenter/login/quick_login2.png) 0 0 no-repeat;
+	width: 16px;
+	height: 18px;
+	background-position: 0 -197px;
+}
+
+.poptip-arrowup {
+	left: 120px;
+	top: -5px;
+}
+
+.poptip-arrowup span{
+	color: #b2e2ea;
+}
+
+.poptip-content{
+	padding-left:22px;
+}

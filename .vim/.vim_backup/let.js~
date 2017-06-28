@@ -1,0 +1,31 @@
+"use strict";
+
+/*
+var a = [];
+for (let i = 0; i < 10; i++) {
+		a[i] = function() {
+				console.log(i);
+		};
+}
+
+console.log(a);
+a[6]();
+*/
+
+/*
+console.log(foo);
+console.log(bar);
+
+var foo = 2;
+let bar = 2;
+*/
+
+var tmp = 123;
+
+if (true) {
+		let tmp;
+		tmp = 'abc';
+		console.log(tmp);
+}
+
+console.log(tmp);

@@ -1,0 +1,12 @@
+{
+    "code": "0000",
+    "msg": "处理成功",
+    "data": {
+        "userInfo": {
+            "userId": "111",
+            "userName": "111",
+            "loginNo": "111",
+            "token": "111"
+        }
+    }
+}

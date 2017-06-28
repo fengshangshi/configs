@@ -1,0 +1,13 @@
+var request = require('superagent');
+var fs = require('fs');
+
+
+//request.post('http://localhost:8080/upload')
+//request.post('http://10.86.46.120:8089/api/in/app/imageUpload.do')
+request.post('http://cutimage.beta.qunar.com/image/api/addImage.do')
+.set('Content-Type', 'multipart/form-data')
+.attach('image', '1.jpg')
+.field('caller', 'hotelinfo')
+.end(function(err, res){
+	console.log(err, res);
+});

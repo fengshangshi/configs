@@ -1,0 +1,97 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/context/mytags.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>【去哪儿网】保险商城-旅行保险产品搜索-去哪儿网Qunar.com</title>
+    <base href="<%=basePath%>"> 
+    <link href="http://qunarzz.com/insurance_mall/prd/styles/safe-search@<%@include file='/include/ver/styles/safe-search.css.ver'%>.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="q_header">
+  <%@include file='/include/prd/home/header_styles.html'%>
+  <%@include file='/include/prd/home/header_main.html'%>
+</div>
+<div class="safe-box">
+	<div class="safe-warp">
+	    <!--隐藏数据-->
+	    <input type="hidden" value="${param.insurLabelIdList}" id="insurLabelIdList"/>
+	    <!-- 面包屑 -->
+	    <div class="safe-crumbs">
+	        <a href="index.do" title="">保险商城</a>&gt;<span>旅行产品搜索</span>
+	    </div>
+	    <!-- 筛选 -->
+	    <div class="safe-scre">
+	           <!-- 筛选头部 -->
+	           <div class="safe-scre-top" id="inputInfo">
+	               <span class="safe-scre-toptitle">旅行计划</span>
+	           </div>
+	           <!-- 筛选内容 -->
+	           <ul class="safe-scre-main">
+	                <c:forEach var="info" items="${labels}"  varStatus="s">
+	                    <li class="clearfix label-list">
+	                            <span class="safe-scre-text">${info.name}</span>
+	                            <div class="safe-scre-list">
+	                                <c:forEach var="leafInfo" items="${info.leaf}"  varStatus="s">
+	                                    <c:if test = "${leafInfo.isChoose == true}">
+	                                        <a href="javascript:;" title="" class="cur" data-id="${leafInfo.id}" data-item="tag"><b>${leafInfo.name}</b><i></i></a>
+	                                    </c:if>
+	                                    <c:if test = "${leafInfo.isChoose != true}">
+	                                        <a href="javascript:;" title=""  data-id="${leafInfo.id}" data-item="tag"><b>${leafInfo.name}</b><i></i></a>
+	                                    </c:if>
+	                                </c:forEach>        
+	                            </div>
+	                    </li>
+	                </c:forEach>
+	           </ul>
+	    </div>
+	    <!-- 内容 -->
+	    <div class="clearfix">
+	            <!-- 左侧内容 -->
+	            <div class="safe_recom f_l">
+	                <div class="safe-recom-text" id="prodNumTips">共有<span id="total">0</span>个商品</div>
+	                <div class="safe-recom-text safe-recom-no-data" id="noResultTips">暂没有符合条件的产品</div>
+	                <ul class="safe-recom-main" id="productList" data-type="searchList">
+	                </ul>
+	                <div class="pay_page">
+	                </div>
+	            </div>
+	            <!-- 右侧内容 -->
+	            <div class="safe_hot f_r">
+	                <h4 class="font-18-bold">热销产品</h4>
+	                <ul class="safe_hot-mian">
+	                <c:forEach var="info" items="${hot}"  varStatus="s">
+	                    <li>
+	                         <a href="./products/${info.productNo}?fromFlag=search_hot${info.name}" title="" class="safe-img-201">
+	                          <c:if test="${fn:startsWith(info.img, 'http')==false}">
+						       <img src="resources/imgs/${info.entiCode}/hot/${info.img}" alt="${info.name}">
+						       </c:if>
+						       <c:if test="${fn:startsWith(info.img, 'http')==true}">
+						       <img src="${info.img}" alt="${info.name}">
+						       </c:if>
+	                         </a>
+	                         <a href="./products/${info.productNo}?fromFlag=search_hot${info.name}" title="" class="safe-hot-text">${info.name}</a>
+	                         <p class="safe-hot-money">&yen;${info.price}</p>
+	                    </li>
+	                </c:forEach>
+	                </ul>
+	            </div>  
+	    </div>
+	</div>
+</div>
+<div class="qn_footer">
+    <div class="inner">
+        <jsp:include page="/include/footer/footer_public_hotel.html" flush="true"/>
+    </div>
+</div>
+<input type="hidden" id="fromFlag" value="${param.fromFlag}">
+<a href="#" title="返回顶部" class="safe-gptop" id="goTop"></a>
+<script> var beaconed = '1604'; </script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/gaInit@<%@include file='/include/ver/scripts/gaInit.js.ver'%>.js"></script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/search@<%@include file='/include/ver/scripts/search.js.ver'%>.js"></script> 
+</body>
+</html>
+
+
+

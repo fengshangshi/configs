@@ -1,0 +1,7 @@
+module.exports = {
+	postgresql : "postgres",
+	pg         : "postgres",
+	mysql			 : "mysql",
+
+	mongo      : "mongodb"
+};

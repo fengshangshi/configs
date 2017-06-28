@@ -1,0 +1,467 @@
+/**
+ * Created by he on 15/9/23.
+ */
+
+//静态方法
+$.extend($, {
+
+    /**
+     * 加0
+     */
+    addZero: function(n) {
+        return n < 10 ? '0' + n : n;
+    },
+
+    /**
+     * 传入日期时间格式, 获得毫秒数
+     * yy-mm-dd必传, HH:ii:ss可选
+     */
+    getMilliseconds: function(t) {
+        var dArr = t.split(' '),
+            dateArr = dArr[0].split('-'),
+            timeArr = [];
+
+        if (dArr.length === 1) {
+            return new Date(dateArr[0], dateArr[1] - 1, dateArr[2]).getTime();
+        } else if (dArr.length === 2) {
+            timeArr = dArr[1].split(':');
+
+            switch (timeArr.length) {
+                case 1:
+                    return new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0]).getTime();
+                    break;
+                case 2:
+                    return new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0], timeArr[1]).getTime();
+                    break;
+                case 3:
+                    return new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0], timeArr[1], timeArr[
+                        2]).getTime();
+                    break;
+            }
+
+        }
+    },
+
+    /**
+     * 传入毫秒数
+     * hasTime为true得到yy-mm-dd HH:ii
+     * hasTime为false得到yy-mm-dd
+     * 不传默认为true
+     */
+    getTimeString: function(t, hasTime) {
+        var d = new Date(t),
+            dateArr = [],
+            timeArr = [];
+
+        dateArr[0] = d.getFullYear();
+        dateArr[1] = $.addZero(d.getMonth() + 1);
+        dateArr[2] = $.addZero(d.getDate());
+        timeArr[0] = $.addZero(d.getHours());
+        timeArr[1] = $.addZero(d.getMinutes());
+
+        if (arguments.length < 2 || hasTime) {
+            return dateArr.join('-') + ' ' + timeArr.join(':');
+        } else {
+            return dateArr.join('-')
+        }
+    },
+
+    /**
+     * 获取日期时间格式信息
+     * 参数格式yy-mm-dd HH:ii:ss
+     * yy-mm-dd必传, HH:ii:ss可选
+     */
+    date: function(t) {
+        var dArr = t.split(' '),
+            dateArr = dArr[0].split('-'),
+            timeArr = dArr[1] ? dArr[1].split(':') : [];
+
+        return {
+
+            //获取年 yy
+            getYear: function() {
+                return dateArr[0];
+            },
+
+            //获取月 mm
+            getMonth: function() {
+                return dateArr[1];
+            },
+
+            //获取天 dd
+            getDate: function() {
+                return dateArr[2];
+            },
+
+            //获取小时 HH
+            getHour: function() {
+                return timeArr.length > 0 ? timeArr[0] : '';
+            },
+
+            //获取分钟 ii
+            getMinute: function() {
+                return timeArr.length > 1 ? timeArr[1] : '';
+            },
+
+            //获取当天为星期几
+            getDay: function() {
+                var milliseconds = $.getMilliseconds(t);
+
+                return new Date(milliseconds).getDay();
+            },
+
+            //获取yyyy-MM-dd
+            getFormatDate: function() {
+                return dArr[0];
+            }
+        }
+    },
+
+    /**
+     * 或者中文星期
+     * isFullWeek 是否是星期全名 比如周六 全名星期六, 简名六
+     */
+    getCNWeek: function(n, isFullWeek) {
+        var weekObj = {
+            '0': '星期日',
+            '1': '星期一',
+            '2': '星期二',
+            '3': '星期三',
+            '4': '星期四',
+            '5': '星期五',
+            '6': '星期六'
+        }
+
+        return isFullWeek ? weekObj[n] : weekObj[n].slice(2);
+    },
+
+    /**
+     * 把日期字符串转成日期对象
+     * @example dateUtil.getDate('2011-09-09 12:12:12')
+     * @param {String} dateStr 时期字符串，只支持国内日期格式
+     * @example 如2011-6-12 12:15:20【必选】
+     * @return {Date} 转化后时间对象
+     */
+    getDate: function(input) {
+        var str,
+            date,
+            time;
+        str = $.trim(input).split(' ');
+        date = str[0].split(/[\-\/]/);
+        time = str[1] ? str[1].split(':') : [0, 0, 0];
+        return new Date(date[0], date[1] - 1, date[2], time[
+            0], time[1], time[2] ? time[2] : 0);
+    },
+
+    /**
+     * [内部方法] 返回日期对象
+     * @return {[type]} [日期对象]
+     */
+    _getDate: function(date) {
+        if ($.type(date) == 'string') {
+            return this.getDate(date);
+        }
+        return date;
+    },
+
+    /**
+     * 日期比较
+     * @param  {[type]} date1 [日期1]
+     * @param  {[type]} date2 [日期2]
+     * @return {[type]}       [string]
+     */
+    compareDate: function(date1, date2) {
+        date1 = this._getDate(date1);
+        date2 = this._getDate(date2);
+        var time1 = date1.getTime(),
+            time2 = date2.getTime();
+        if (time1 > time2) {
+            return '1';
+        } else if (time1 < time2) {
+            return '-1';
+        } else {
+            return '0';
+        }
+    },
+
+    /**
+     * 计算日期差
+     * @param  {[type]} checkInDate  [开始日期]
+     * @param  {[type]} checkOutDate [结束日期]
+     * @return {[type]}              [相差天数]
+     */
+    daysDiff: function(startDate, endDate) {
+        var aDate, oDate1, oDate2, iDays;
+        aDate = startDate.split(' ')[0].split("-");
+        oDate1 = new Date(aDate[0], aDate[1] - 1, aDate[2]);
+        aDate = endDate.split(' ')[0].split("-");
+        oDate2 = new Date(aDate[0], aDate[1] - 1, aDate[2]);
+        iDays = parseInt(Math.abs(oDate2 - oDate1) / 1000 /
+            60 / 60 / 24);
+
+        return iDays;
+    },
+
+    /**
+     * 计算日期差
+     * @param  {[type]} checkInDate  [开始日期]
+     * @param  {[type]} checkOutDate [结束日期]
+     * @return {[type]}              [相差时分]
+     */
+    hoursDiff: function(startDate, endDate) {
+        var sDate, eDate, oDate1, oDate2, hour;
+        sDate = this._getDate(startDate);
+        eDate = this._getDate(endDate);
+        hour = parseFloat(Math.abs(sDate - eDate) / 1000 /
+            60 / 60);
+        return hour;
+    },
+
+    /**
+     * 计算日期差(用于天数计算)
+     * @param  {[type]} checkInDate  [开始日期]
+     * @param  {[type]} checkOutDate [结束日期]
+     * @return {[type]}              [相差晚数]
+     */
+    nightsDiff: function(startDate, endDate) {
+        var aDate, oDate1, oDate2, iDays;
+        aDate = startDate.split(' ')[0].split("-");
+        oDate1 = new Date(aDate[0], aDate[1] - 1, aDate[2]);
+        aDate = endDate.split(' ')[0].split("-");
+        oDate2 = new Date(aDate[0], aDate[1] - 1, aDate[2]);
+        iDays = parseInt(Math.abs(oDate2 - oDate1) / 1000 /
+            60 / 60 / 24);
+
+        if (iDays === 0) {
+            iDays = 1;
+        }
+
+        return iDays;
+    },
+
+    /**
+     * 跳跃天数
+     * 传入yy-mm-dd HH:ii或者yy-mm-dd，和天数
+     * 默认跳跃一天
+     */
+    jumpDate: function(t, days) {
+        var ms = $.getMilliseconds(t),
+            days = arguments.length === 1 ? 1 : days,
+            hasTime = t.indexOf(':') !== -1;
+
+        return $.getTimeString(ms + 3600 * 24 * 1000 * days, hasTime);
+    },
+
+    /**
+     * 跳跃小时数
+     * 默认跳跃一小时
+     */
+    jumpHour: function(t, hours) {
+        var ms = $.getMilliseconds(t),
+            hours = arguments.length === 1 ? 1 : hours;
+
+        return $.getTimeString(ms + 3600 * 1000 * hours);
+    },
+
+    /**
+     * 跳跃分钟数
+     * 默认跳跃一分钟
+     */
+    jumpMin: function(t, min) {
+        var ms = $.getMilliseconds(t),
+            hours = arguments.length === 1 ? 1 : min,
+            hasTime = t.indexOf(':') !== -1;
+
+        return $.getTimeString(ms + 60 * 1000 * min, hasTime);
+    },
+
+    /**
+     *  跳跃月数, 默认跳跃一个月
+     */
+    jumpMonth: function(t, month, hasTime) {
+        var d = new Date(t),
+            month = arguments.length === 1 ? 1 : month,
+            newD = $.getTimeString(d.setMonth(d.getMonth() + month));
+
+        if (hasTime) {
+            return newD;
+        } else {
+            return newD.slice(0, 10);
+        }
+    },
+
+    //处理url相关方法
+    href: function() {
+        var value = window.location.href,
+            re = new RegExp(),
+            result;
+
+        value = value.replace(/#.*/, '');
+
+        return {
+
+            search: function(q) {
+                return (document.location.search.match(new RegExp(
+                    "(?:^\\?|&)" + q + "=(.*?)(?=&|$)")) || [
+                    '', null
+                ])[1];
+            },
+
+            getValue: function() {
+                return value;
+            },
+
+            replace: function() {
+                value = value.replace(arguments[0], arguments[1])
+                return this;
+            },
+
+            append: function(paramString) {
+                value = value + "&" + paramString;
+                return this;
+            },
+
+            path: function(path) {
+                value = value.indexOf('?') != -1 ? value.replace(/\/[^\/]*\?/, '/' + path + '?') :
+                    value.replace(/\/[^/]*$/, '/' + path + '?');
+                return this;
+            },
+
+            param: function() {
+                var argu = arguments,
+                    len = argu.length;
+
+                if (len === 0) {
+
+                    //消除所有参数
+                    value = value.replace(/\?(.)*/, '?');
+                    return this;
+                }
+
+                if (len === 1 && typeof argu[0] === 'string') {
+                    re.compile('[&?]' + argu[0] + '=([^=&?#]*)');
+                    return value.match(re) ? value.match(re)[1] : '';
+
+                }
+
+                if (len === 2) {
+                    re.compile('[&?]' + argu[0] + '=([^=&?#]*)');
+                    result = value.match(re);
+                    value = result ? value.replace(argu[0] + '=' + result[1], argu[0] + '=' + argu[1]) :
+                        (value + (value.indexOf('?') == -1 ? '?' : (value.indexOf('?') == value.length -
+                            1 ? '' : '&')) + argu[0] + '=' + argu[1]);
+                    return this;
+                }
+
+                if (typeof argu[0] === 'object') {
+                    var i, obj = argu[0];
+                    for (i in obj) {
+                        argu.callee(i, obj[i]);
+                    }
+                }
+                return this;
+            },
+
+            exec: function() {
+                window.location.href = value;
+            }
+        }
+    },
+
+    //解析location.search为对象
+    getSearchObj: function() {
+        var urlSearch = location.search,
+            sArr = [],
+            obj = {};
+
+        if (urlSearch.indexOf('?') === -1) return ''
+
+        sArr = urlSearch.split('?')[1].split('&');
+
+        $.each(sArr, function(i) {
+            var sa = sArr[i].split('=');
+
+            obj[sa[0]] = sa[1];
+        });
+
+        return obj;
+    },
+
+    /**
+     * 过滤表情等特殊字符
+     * 匹配空格，可以组成单词的字符，下划线及常用中英文标点
+     */
+    expressionFilter: function(str) {
+        return str.replace(/[^\s\w\u4E00-\u9FA5\.\。\!\！\,\，\、\(\)\+\-\*\?\？\[\]\$\@\#\~]/g, '')
+    },
+
+    /**
+     * 加星号
+     * start 从头开始几位不加星
+     * end 从尾部开始几位不加星
+     */
+    protectMsg: function(str, start, end) {
+        var strLen = str.length,
+            len = strLen - start - end,
+            star = '';
+
+        for (var i = 0; i < len; i++) {
+            star += '*';
+        }
+
+        return str.slice(0, start) + star + str.slice(strLen - end, strLen);
+    },
+
+    validateMoney: function(price) {
+        var price = price.trim(),
+            re = /^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$/;
+
+        return re.test(price);
+    },
+
+    /**
+     *检验电话号码是否合格
+     */
+    validateTel: function(val) {
+        var telValue = val,
+            re = /^1[34578][0-9]{9}$/;
+        return re.test(telValue);
+    }
+});
+
+//实例方法
+$.extend($.fn, {
+
+    validateTextArea: function(maxLength) {
+        this.on('input', function() {
+            var inputLength = $(this).val().length;
+
+            if (inputLength >= maxLength) {
+                $(this).val($(this).val().substring(0, maxLength - 1));
+                G.toast('最多输入' + maxLength + '字');
+            }
+        });
+
+        return this;
+    },
+
+    validateTel: function() {
+        var telValue = this.val(),
+            re = /^1[34578][0-9]{9}$/;
+        return re.test(telValue);
+    },
+
+    validateName: function() {
+        var nameValue = this.val().trim(),
+            re = /^[\sa-zA-Z\u4E00-\u9FA5]+$/;
+
+        return (nameValue.length > 1) && re.test(nameValue);
+    },
+
+    validateMoney: function(price) {
+        var price = this.val().trim(),
+            re = /^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$/;
+
+        return re.test(price);
+    }
+});

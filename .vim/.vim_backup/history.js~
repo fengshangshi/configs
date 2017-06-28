@@ -1,0 +1,63 @@
+/**
+ * @file 资源包发布历史
+ * @author ss.feng
+ */
+var eventproxy = require('eventproxy');
+
+var GET_index = exports.GET_index = function(req, res) {
+	var size = this.GET['count'];
+	var index = this.GET['page'];
+
+	var page = sugar.config['page'];
+
+	var where = {};
+	var fields = null;
+	var extra = {
+		sort: {
+			date: -1
+		}
+	};
+
+	var pageSize = size || page.size;
+	var pageIndex = index || page.index;
+	pageSize = parseInt(pageSize);
+	pageIndex = parseInt(pageIndex);
+
+	var skip = pageIndex > 0 ? (pageIndex - 1) * pageSize : pageIndex++;
+
+	var ep = new eventproxy();
+	ep.all('fetch_count_event', "fetch_data_event", function(count, data) {
+		res.render('config/history', {
+			versions: data,
+			types: {
+				2: '强制升级',
+				3: '提示升级'
+			},
+			pageIndex: pageIndex,
+			pageTotal: Math.ceil(count / pageSize)
+		});
+	});
+
+	var Ver = sugar.model['ver'];
+
+	// 获取总数
+	Ver.count(where, function(err, count) {
+		if (err) {
+			count = 0;
+		}
+		ep.emit('fetch_count_event', count);
+	});
+
+	// 获取分页数据
+	Ver.find(where, fields, extra)
+		.skip(skip)
+		.limit(pageSize)
+		.populate('user')
+		.exec(function(err, data) {
+			if (err) data = {};
+			ep.emit('fetch_data_event', data);
+		});
+
+};
+
+GET_index.filters = 'auth';

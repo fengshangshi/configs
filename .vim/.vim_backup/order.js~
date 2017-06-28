@@ -1,0 +1,15 @@
+/**
+ * 订单列表
+ * @author ss.feng@qunar.com
+ */
+
+function olBtnEnterHandle(e) {
+	$(this).addClass("current");
+}
+
+function olBtnLeaveHandle(e) {
+	$(this).removeClass("current");
+}
+
+$(document).delegate(".order-list-li", "mouseenter", olBtnEnterHandle);
+$(document).delegate(".order-list-li", "mouseleave", olBtnLeaveHandle);

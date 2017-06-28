@@ -1,0 +1,96 @@
+/*[export]*/
+var $ = require("jquery/jquery");
+require("upload/upload.js");
+
+  var AJAXURL = {
+    "push": "member/security/upload.htm",
+    "get": "member/security/requestCertCardImage.htm"
+  };
+
+  var ajax = function(url, opts, successCallback){
+     $.ajax({
+        type: "POST",
+        url: url,
+        data: opts,
+        dataType: "json",
+        success: function(data){
+            if( successCallback && 
+                (typeof successCallback ==="function")  ){
+               successCallback(data);
+            }
+        }
+    });
+  };
+
+  var uploadConfig = function(op ){
+      var opts = {
+        runtimes : 'flash',
+        browse_button : op.b, // you can pass in id...
+        container: op.con, // ... or DOM Element itself
+        url : op.url,
+        flash_swf_url : 'http://qunarzz.com/useraccount/src/scripts/libs/plupload/Moxie.swf',
+        silverlight_xap_url : 'plupload/Moxie.xap',
+        multipart: true,
+        multi_selection: false,
+        filters : {
+            max_file_size : '2mb',
+            mime_types: [
+                {title : "Image files", extensions : "jpg,gif,png"},
+                {title : "Zip files", extensions : "zip"}
+            ]
+        },
+        multipart_params: op.params,
+        file_data_name: "filedata",
+        init: {
+
+            FilesAdded: function(up, files) {
+              debugger;
+               //op.fn();
+            },
+            UploadComplete: function(up, files){
+              //上传完成后预览
+              //ajax(AJAXURL.get, );
+            }
+        }
+      }
+      return opts;
+  };
+  var cardConfig1 = uploadConfig({
+        b:'pickfiles-z',
+        con:'idContainer-z',
+        params: {
+          uploadType: "certifyFront"
+        },
+        url: AJAXURL.push,
+        fn:function(){
+            uploader1.start();
+        }
+  }),
+  cardConfig2 = uploadConfig({
+        b:'pickfiles-f',
+        con:'idContainer-f',
+        url: AJAXURL.push,
+        params: {
+          uploadType: "certifyBack"
+        },
+        fn:function(){
+            uploader12.start();
+        }
+  }),
+  cardConfig3 = uploadConfig({
+        b:'h-pickfiles-z',
+        con:'h-idContainer-z',
+        url: AJAXURL.push,
+        params: {
+          uploadType: "otherCertify"
+        },
+        fn:function(){
+            uploader3.start();
+        }
+  });
+  var uploader1 = new plupload.Uploader(cardConfig1),
+      uploader2 = new plupload.Uploader(cardConfig2),
+      uploader3 = new plupload.Uploader(cardConfig3);
+  uploader1.init();
+  uploader2.init();
+  uploader3.init();

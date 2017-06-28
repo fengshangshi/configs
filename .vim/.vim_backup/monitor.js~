@@ -1,0 +1,131 @@
+var os = require('os');
+var graphite = require('graphite');
+
+// monitor服务器端配置
+var mPrefix = config.monitor.prefix;
+var mHost = config.monitor.host;
+var mPort = config.monitor.port;
+var mInterval = config.monitor.interval;
+
+// 标记集合
+var signs = {
+    count: 'COUNT',
+    time: 'TIME',
+    _: '_'
+};
+
+// 获取hostname
+var fetchHostName = function() {
+    var hostname = os.hostname();
+
+    hostname = hostname.replace('qunar.com', '');
+    hostname = hostname.replace(/\./g, '_');
+
+    return hostname;
+};
+
+// 创建后缀 _类型_机器名，形如：_COUNT_l-fenode1_sp_cn8
+var createSuffix = function(key) {
+    return signs['_'] + signs[key] + signs['_'] + fetchHostName();
+};
+
+function Monitor(options) {
+    var host = options.host;
+    var port = options.port;
+    var prefix = options.prefix;
+    var interval = options.interval;
+
+    this.times = {};
+    this.metrics = {};
+    this.timer = null;
+
+    this.prefix = prefix + '.';
+    this.interval = (interval || 1) * 60 * 1000;
+    this.serverUrl = 'plaintext://' + host + ':' + port;
+
+    // 调度发送监控
+    this.send();
+}
+
+// 计数
+Monitor.prototype.count = function(key) {
+    key = this.prefix + key + createSuffix('count');
+
+    if (this.metrics[key]) {
+        ++this.metrics[key];
+    } else {
+        this.metrics[key] = 1;
+    }
+};
+
+// 平均时长，单位为毫秒
+Monitor.prototype.time = function(key, time) {
+    // key是发送到watcher平台的节点信息，会在watcher平台生成树状节点
+    // 例如：s.sp.fore.market.hotelList_request_COUNT_l-fenode1_sp_cn
+    key = this.prefix + key + createSuffix('time');
+
+    if (this.times[key]) {
+        this.times[key]['time'] += time;
+        this.times[key]['count'] += 1;
+    } else {
+        this.times[key] = {};
+        this.times[key]['time'] = time;
+        this.times[key]['count'] = 1;
+    }
+
+    var t = this.times[key].time;
+    var c = this.times[key].count;
+
+    this.metrics[key] = t/c;
+};
+
+// 创建client
+Monitor.prototype.createClient = function() {
+    return graphite.createClient(this.serverUrl);
+};
+
+// 发送数据
+Monitor.prototype.sentToWatcher = function() {
+    var _this = this;
+    var client = this.createClient();
+
+    client.write(this.metrics, function(err) {
+
+        client.end();
+
+        if (err) {
+			logger.error(err);
+			return 'watcher返回错误';
+		}
+
+        Object.keys(_this.metrics).forEach(function(i) {
+            _this.metrics[i] = 0;
+        });
+
+        Object.keys(_this.times).forEach(function(i) {
+            _this.times[i] = null;
+        });
+    });
+
+    this.send();
+};
+
+Monitor.prototype.send = function() {
+    var _this = this;
+
+    if (_this.timer) {clearTimeout(_this.timer)};
+
+    _this.timer = setTimeout(function() {
+        _this.sentToWatcher();
+    }, _this.interval);
+};
+
+
+var monitor = new Monitor({
+    prefix: mPrefix,
+    host: mHost,
+    port: mPort,
+	interval: mInterval
+});
+
+module.exports = monitor;

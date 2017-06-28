@@ -1,0 +1,75 @@
+/**
+ * 常用的单选和浮选按钮组件样式
+ * author water.li
+ * Date 2014-12-16
+ */
+
+.checkbox,
+.radio {
+	position: relative;
+	margin-bottom: 12px;
+	padding-left: 32px;
+	position: relative;
+	-webkit-transition: 0.25s;
+	-moz-transition: 0.25s;
+	-o-transition: 0.25s;
+	transition: 0.25s;
+	-webkit-backface-visibility: hidden;
+}
+
+.checkbox .icon, 
+.checkbox .icon-to-fade, 
+.radio .icon, 
+.radio .icon-to-fade {
+	background: url("http://source.qunarzz.com/site/images/pay/useraccount/common/20150108/checkbox.png") -90px 0 no-repeat;
+	display: block;
+	height: 20px;
+	left: 0;
+	opacity: 1;
+	position: absolute;
+	top: -1px;
+	width: 20px;
+	-webkit-transition: opacity 0.1s linear;
+	-moz-transition: opacity 0.1s linear;
+	-o-transition: opacity 0.1s linear;
+	transition: opacity 0.1s linear;
+	-webkit-backface-visibility: hidden;
+}
+
+.radio .icon, 
+.radio .icon-to-fade {
+	background-image: url("http://source.qunarzz.com/site/images/pay/useraccount/common/20150108/radio.png");
+}
+
+.checkbox .icon, 
+.radio .icon {
+	opacity: 0;
+	top: 0;
+	z-index: 1;
+	display: none\9;
+}
+
+.checkbox.checked .icon, 
+.radio.checked .icon {
+	background-position: -60px -30px;
+	opacity: 1;
+	display: block\9;
+}
+
+.checkbox.checked .icon-to-fade, 
+.radio.checked .icon-to-fade {
+	opacity: 0;
+	display: none\9;
+}
+
+.checkbox input, 
+.radio input {
+	position: absolute;
+	left: 1px;
+	top:2px;
+	display: block;
+	outline: none !important;
+	filter: alpha(opacity=0) !important;
+	opacity: 0;
+	zoom: 1;
+}

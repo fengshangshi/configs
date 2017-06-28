@@ -1,0 +1,52 @@
+/*
+ *获取数据类型
+ *@author fengshangshi@baidu.com
+ */
+function getType(obj) {
+	var str = Object.prototype.toString.call(obj),
+		regex = /^\[object (\w+)\]$/i;
+
+	str = str.toLocaleLowerCase();
+
+	if (regex.test(str)) {
+		return str.match(regex)[1];
+	}
+
+	return false;
+}
+
+var formatTimestamp = function(timestamp, format) {
+	var date = new Date(timestamp);
+	var hour = date.getHours(),
+		minute = date.getMinutes(),
+		second = date.getSeconds(),
+		year = date.getFullYear(),
+		month = date.getMonth(),
+		day = date.getDate(),
+		week = date.getDay();
+
+	format = format || true;
+
+	if (format) {
+		hour = hour < 10 ? ("0" + hour) : hour;
+		minute = minute < 10 ? ("0" + minute) : minute;
+		second = second < 10 ? ("0" + second) : second;
+		month = month < 10 ? ("0" + month) : month;
+		day = day < 10 ? ("0" + day) : month;
+	}
+
+	return {
+		year: year,
+		month: month,
+		day: day,
+		hour: hour,
+		minute: minute,
+		second: second,
+		week: week
+	};
+};
+
+exports = {
+	getType: getType,
+	formatTimestamp: formatTimestamp
+};

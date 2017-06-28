@@ -1,0 +1,37 @@
+{
+	"errorMsg": "",
+	"errorCode": "M999998",
+	"data": {
+		"page": {
+            "pageCount": 8, 
+            "pageSize": 10, 
+            "pageNum": 2		
+		},
+		"list": [
+			{
+				"rechargeId": "23423423424",
+				"rechargeTime": "2014-12-25 12:22:22",
+				"rechargeType": "xxxxx",
+				"from": "支付宝",
+				"rechargeAmout": 15000.00,
+				"refundAmount": 5000.00
+			},
+			{
+				"rechargeId": "23423423424",
+				"rechargeTime": "2014-12-25 12:22:22",
+				"rechargeType": "xxxxx",
+				"from": "招商银行",
+				"rechargeAmout": 15000.00,
+				"refundAmount": 5000.00
+			},
+			{
+				"rechargeId": "23423423424",
+				"rechargeTime": "2014-12-25 12:22:22",
+				"rechargeType": "xxxxx",
+				"from": "建设银行",
+				"rechargeAmout": 15000.00,
+				"refundAmount": 5000.00
+			}
+		]
+	}
+}

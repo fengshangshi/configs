@@ -1,0 +1,29 @@
+<ol class="asset-menu-wrap menu-wrap">
+	<li>
+		<a class="page-balance" href="/member/asset/balance/">
+			<span>账户余额</span>
+		</a>
+	</li>
+	<li>
+		<a class="page-bank-card" href="/member/asset/bankCard/">
+			<span>常用卡</span>
+		</a>
+	</li>
+	<li>
+		<a class="page-camel-card" href="/member/asset/card/">
+			<span>骆驼卡/旅行卡</span>
+		</a>
+	</li>
+	<li>
+		<a class="page-coupon" href="/member/asset/coupon/">
+			<span>红包</span>
+		</a>
+	</li>
+	#if ($iousWhite == true)
+	<li>
+		<a class="page-ious" href="/member/asset/ious/">
+			<span>信任付</span>
+		</a>
+	</li>
+	#end
+</ol>

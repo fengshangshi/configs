@@ -1,0 +1,13 @@
+var PMS = {};
+
+PMS = {
+	alert: function(title, content, callback) {
+		QApp.showWidget('alert', {
+			'title': title,
+			'content': content,
+			'onComplete': callback || ''
+		});
+	}
+}
+
+module.exports = PMS;

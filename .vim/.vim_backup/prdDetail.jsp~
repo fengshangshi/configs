@@ -1,0 +1,181 @@
+﻿<%@page import="java.util.Date"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/context/mytags.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>【去哪儿网】保险商城-保险产品详情介绍-去哪儿网Qunar.com</title>
+    <base href="<%=basePath%>">
+    <link href="http://qunarzz.com/insurance_mall/prd/styles/detail@<%@include file='/include/ver/styles/detail.css.ver'%>.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="q_header">
+  <%@include file='/include/prd/home/header_styles.html'%>
+  <%@include file='/include/prd/home/header_main.html'%>  
+</div>
+<div class="safe-box">
+	<div class="safe-warp">
+    	<!-- 面包屑 -->
+		<div class="safe-crumbs"><a href="index.do" title="">保险商城</a>&gt;<span>旅行保险</span></div>
+		<!-- 产品基本信息 -->
+		<div class="safe-infor clearfix">		 
+	       <div class="safe-infor-img">
+	       <c:if test="${fn:startsWith(prdDetail.largePic, 'http')==false}">
+	       <img src="resources/imgs/big/${prdDetail.largePic}" alt="">
+	       </c:if>
+	       <c:if test="${fn:startsWith(prdDetail.largePic, 'http')==true}">
+	       <img src="${prdDetail.largePic}" alt="">
+	       </c:if>
+	       </div>
+		   <!-- 基本信息 -->
+		   <div class="safe-infor-main">
+			 <form action="./insure/toInsure.do" method="post" id="detailForm">
+			   <input type="hidden" name="prdId" value="${prdDetail.id}"/>
+			   <input type="hidden" name="insurPremium" value="${prdDetail.price}">
+			   <dl>
+				 <dt class="font-18-bold">${prdDetail.prdNm}</dt> 
+				 <dd class="clearfix">
+					<span class="safe-info-text">总价</span>
+					<p class="f_l"><b class="font-24-org" id="total">&yen;${prdDetail.price}</b>
+						<em>（以实际支付价格为准）</em>
+					</p>
+				 </dd>
+				 <dd class="clearfix">
+					<span class="safe-info-text">产品标签</span>
+					<p class="f_l">
+					<c:forEach var="labelRelInfo" items="${prdDetail.labels}"  varStatus="s">
+					     ${labelRelInfo.name}<c:if test="${not s.last}">/</c:if>
+					</c:forEach>
+				    </p>
+				 </dd>
+				 <dd class="clearfix">
+					<span class="safe-info-text">适用区域</span>
+					<p class="f_l">${prdDetail.destination}</p>
+				 </dd>
+				 <dd class="clearfix">
+					<span class="safe-info-text">适用年龄</span>
+					<p class="f_l">
+					    <c:if test="${prdDetail.minAge == -1 and prdDetail.maxAge == -1}">
+					        不限
+					    </c:if>
+					    <c:if test="${prdDetail.minAge == -1 and prdDetail.maxAge != -1}">
+                        		0-${prdDetail.maxAge}周岁
+                        </c:if>
+                         <c:if test="${prdDetail.minAge != -1 and prdDetail.maxAge == -1}">
+                                ${prdDetail.minAge}周岁以上
+                        </c:if>
+                         <c:if test="${prdDetail.minAge != -1 and prdDetail.maxAge != -1}">
+                                    ${prdDetail.minAge}-${prdDetail.maxAge}周岁
+                         </c:if>
+					</p>
+				 </dd>
+				 <c:if test = "${not empty prdDetail.plans}">
+				 <dd class="clearfix">
+					<span class="safe-info-text">保障计划</span>
+					<div class="f_l safe-info-btn">	
+					<c:forEach var="insurPlanInfo" items="${prdDetail.plans}"  varStatus="s">
+						<c:if test = "${s.index == 0}">
+							<a href="javascript:;" title="" 
+							class="cur" data-item='tag' data-value="${insurPlanInfo.id}" data-text="${insurPlanInfo.name}" }>${insurPlanInfo.name}<i></i></a>
+				            <input type="hidden" name="planId" value="${insurPlanInfo.id}"/>
+						</c:if>
+						<c:if test = "${s.index != 0}">
+							<a href="javascript:;" title="" data-item='tag' data-value="${insurPlanInfo.id}" data-text="${insurPlanInfo.name}" }>${insurPlanInfo.name}<i></i></a>
+						</c:if>
+					</c:forEach>
+					</div>
+				 </dd>
+				 </c:if>
+				 <c:choose>
+					<c:when test = "${prdDetail.dangerActivity eq 1}">
+						<dd class="clearfix">
+							<span class="safe-info-text">含高危运动</span>
+							<div class="f_l safe-info-btn">
+								 <c:if test="${prdDetail.dangerActivity == 1}">
+                                    <a href="javascript:;" title="" data-item='tag' data-value="1" data-text="是" class="cur">是<i></i></a>
+                                    <a href="javascript:;" title="" data-item='tag' data-value="0" data-text="否" >否</a>
+								 </c:if>
+								  <c:if test="${prdDetail.dangerActivity != 1}">
+								     <a href="javascript:;" title="" data-item='tag' data-value="1" data-text="是">是<i></i></a>
+                                    <a href="javascript:;" title="" data-item='tag' data-value="0" data-text="否" class="cur">否</a>
+                                 </c:if>
+                                 <input type="hidden" name="dangerActivity" value="${prdDetail.dangerActivity}"/>
+							</div>
+						</dd>
+					</c:when>
+					<c:otherwise>
+						<input type="hidden" name="dangerActivity" value="${prdDetail.dangerActivity}"/>
+					</c:otherwise>
+				 </c:choose>
+				 <c:if test="${not empty prdDetail.periods}">
+                 <dd class="clearfix">
+                     <span class="safe-info-text">保障期间</span>
+                     <div class="f_l safe-info-btn">
+                        <c:forEach var="insurPeriodInfo" items="${prdDetail.periods}"  varStatus="s">
+                            <c:if test = "${s.index == 0}">
+                                <a href="javascript:;" title=""
+                                    class="cur" data-item='period' data-value="${insurPeriodInfo.val}" data-text="${insurPeriodInfo.title}" >${insurPeriodInfo.title}<i></i></a>
+                                    <input type="hidden" name="period" value="${insurPeriodInfo.val}"/>
+                            </c:if>
+                            <c:if test = "${s.index != 0}">
+                                <a href="javascript:;" title="" data-item='period' data-value="${insurPeriodInfo.val}" data-text="${insurPeriodInfo.title}" >${insurPeriodInfo.title}<i></i></a>
+                            </c:if>
+                        </c:forEach>
+                     </div>
+                  </dd>
+                  </c:if>
+				 <dd class="clearfix">
+					<span class="safe-info-text">保障时间</span>
+					<div class="safe-order-input f_l">
+						<p class="safe-date"><input type="" name="insurBeginDate" id="start"><i></i></p>
+						<span class="f_l safe-date-text">至</span>
+						<p class="safe-date"><input type="" name="insurEndDate" id="end" value="<c:if test='${not empty insurEndDate}'><fmt:formatDate value='${insurEndDate}' pattern='yyyy-MM-dd' /></c:if>"><i></i></p>
+						<span class="safe-prom-c"><i></i>请输入有效的邮件地址</span>
+					</div>
+				 </dd>
+				 <c:if test="${not empty prdDetail.periods}">
+				  <dd class="clearfix">
+                      <span class="safe-info-text">&nbsp;</span>
+                      <div class='f_1' style='color:#3fa9e0;'>
+                        <p>注:保障起始时间为次日30天内</p>
+                      </div>
+                 </dd>
+                 </c:if>
+			  </dl>
+		      <div class="safe-banner-money">
+		     	<c:choose>
+					<c:when test = "${prdDetail.outOfStock eq 1}">
+						<a href="###" title="" data-title="detail_${prdDetail.prdNm}" class="safe-btn-tb" id="submitBtn">立即投保</a>
+					</c:when>
+					<c:otherwise>
+						<a href="javascript:;" title="" class="safe-btn-gray">已售完</a>
+					</c:otherwise>
+				</c:choose>
+		     </div>
+		     </form>
+		 </div>
+	</div>
+	<jsp:include page="./pages/${prdDetail.id}.html" flush="true" />
+</div>
+</div>
+<div class="qn_footer">
+    <div class="inner">
+        <jsp:include page="/include/footer/footer_public_hotel.html" flush="true"/>
+        <!--#jsp:include page="./pages/${prdDetail.id}.html" flush="true" /-->
+        <!--#include virtual="footer/footer_public_hotel.html" -->
+    </div>
+</div>
+<input type="hidden" id="fromFlag" value="${param.fromFlag}">
+<a href="#" title="返回顶部" class="safe-gptop" id="goTop"></a>
+<script type="text/javascript">
+var insurPrd_chargeMode = ${prdDetail.chargeMode};
+var SERVER_TIME = new Date(${insurTimestamp});
+</script>
+<script> var beaconed = '1605'; </script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/gaInit@<%@include file='/include/ver/scripts/gaInit.js.ver'%>.js"></script>
+<script type="text/javascript" src="http://qunarzz.com/insurance_mall/prd/scripts/detail@<%@include file='/include/ver/scripts/detail.js.ver'%>.js"></script>
+</body>
+</html>
+
+

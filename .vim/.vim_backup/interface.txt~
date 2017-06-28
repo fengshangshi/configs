@@ -1,0 +1,171 @@
+接口约定
+
+【smarty渲染】
+1、/realestate/new
+说明：前端根据该数据判断当前停留在什么页面，新房还是二手房
+输入：无
+输出：
+	$tplData = array(
+		"menu"=> "new",
+	);
+
+2、/realestate/
+说明：同上
+输入：无
+输出：
+	$tplData = array(
+		"menu"=> "used",
+	);
+
+【ajax接口】
+一、新房
+1、/realestate/api/new/get_all_city
+方式：get
+说明：全国视图获取所有数据
+输入：无
+输出：
+	array(
+		"error"=> 0, //数据状态，0-正常
+		//top数据
+		"top"=> array(
+			array(
+				"name"=> "北京",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"average"=> "2342432", //均价
+					"trend"=> "1", //趋势 0-平 1-涨 2-跌
+				),
+			),
+			...
+		),
+		//均价数据
+		"average"=> array(
+			array(
+				"name"=> "北京",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432", //均价
+					"ratio"=> "-2.33", //环比
+					"trend"=> "1", //趋势 0-平 1-涨 2-跌
+				),
+			),
+			...
+		),
+		//涨跌指数
+		"rise"=> array(
+			array(
+				"name"=> "大唐芙蓉园VIVA",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432", //均价
+					"trend"=> "1", //趋势 0-平 1-涨 2-跌
+				),
+			),
+			...
+		),
+		//关注度
+		"attention"=> array(
+			array(
+				"name"=> "大唐芙蓉园VIVA",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432", //均价
+				),
+			),
+			...
+		),
+		//推荐指数
+		"recommendation"=> array(
+			array(
+				"name"=> "大唐芙蓉园VIVA",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432", //均价
+				),
+			),
+			...
+		),
+	);
+
+2、/realestate/api/new/get_city_info
+说明：全国视图下根据条件筛选数据
+方式：get
+输入: 
+	date=201407 //月份，查找当前月的数据
+	tab=1/2/4 //边栏的标签属性，查找当前标签下的数据
+	结合月份，结合标签查找对应数据
+输出：
+	//输出均价
+	array(
+		"error"=> 0, //数据状态，0-正常
+		"average"=> array(
+			array(
+				"name"=> "北京",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432",
+					"ratio"=> "-2.33",
+					"trend"=> "1",
+				),
+			),
+			...
+		),
+	);
+	
+	//输出涨跌指数
+	array(
+		"error"=> 0, //数据状态，0-正常
+		"rise"=> array(
+			array(
+				"name"=> "北京",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432", 
+					"trend"=> "1",
+				),
+			),
+			...
+		),
+	);
+
+	//输出关注度
+	array(
+		"error"=> 0, //数据状态，0-正常
+		"attention"=> array(
+			array(
+				"name"=> "北京",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432",
+				),
+			),
+			...
+		),
+	);
+
+	//输出推荐指数
+	array(
+		"error"=> 0, //数据状态，0-正常
+		"recommendation"=> array(
+			array(
+				"name"=> "北京",
+				"longitude"=> "116",
+				"latitude"=> "39",
+				"attribute"=> array(
+					"value"=> "2342432",
+				),
+			),
+			...
+		),
+	);
+
+3、/realestate/api/new/get_all_county
+说明：城市视图

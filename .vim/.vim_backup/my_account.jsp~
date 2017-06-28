@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<title>【去哪儿网】我的账户</title>
+	<meta content="" name="keywords" />
+	<meta content="" name="description" />	
+	<link href="/static/payment/prd/styles/user_record@<jsp:include page="/include/ver/styles/user_record.css.ver" flush="true"/>.css" rel="stylesheet" type="text/css"/>
+	<link href="https://user.qunar.com/webApi/popup.jsp?css=ssl" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="/static/payment/prd/scripts/payment-records@<jsp:include page="/include/ver/scripts/payment-records.js.ver" flush="true"/>.js"></script>
+</head>
+<body>
+	<%@include file='/include/prd/paycenter/header_styles.html'%>
+	<div class="q_header q_header_paycenter">
+		<%@include file='/include/prd/paycenter/header_main.html'%>
+	</div>
+	
+	<div class="q_pagecontainer">
+		<div class="q_pagewrap">
+			<div class="q_page">
+				<div class="l_s175m770 clr_after"> 
+					<!--left-->
+					<div class="l_s175 q_ucsidebar_account_item1_1"> 
+						<!--ucsidebar-->
+                    	<jsp:include page="/menu/aside.htm"/>
+                    	<!--\ucsidebar-->
+					</div>
+					<!--/left--> 
+					<!--right-->
+					<div class="l_m770"> 
+						<!--breadcrumb-->
+						<div class="b_ucbreadcrumb"> <a href="http://user.qunar.com/userinfo/index.jsp#basic" target="_top">个人中心</a><em>&gt;</em><span>我的账户</span></div>
+						<!--\breadcrumb--> 
+						
+						<div class="b_acctips"><em class="ico_warnS"></em>账户充值资金目前可购买去哪儿网部分国内机票及酒店产品，也可原路退回至银行卡。</div>
+						<!--contents-->
+						<div class="acout_balan">
+							<h5>账户余额</h5>
+							<div class="bt_pr">
+								<b>${balance }</b>元
+								<div class="bt_list">
+									<a href="../refund/list.htm" class="bt_rechth"><em>充值退还</em></a>
+									<a href="../account/userStatusInfo.htm?jumpUrl=withdrawal" class="bt_withdrawal"><em>提现</em></a>
+									<a href="../recharge/page.htm" class="bt_rechar"><em class="hide">充值</em></a>
+								</div>
+							</div>
+							<c:if test="${ iousWhite eq true }">
+								<c:choose>
+									<c:when test="${ iousSigned eq true }">
+										<div class="look_up">
+											<h5>信任付<i class=""></i></h5>
+											<div class="amount"><p>信用额度（元）</p><em><fmt:formatNumber type="number" minFractionDigits="2" groupingUsed="false" value="${ creditAmount }" /></em></div>
+											<div class="used"><p>已使用（元）</p><em><fmt:formatNumber type="number" minFractionDigits="2" groupingUsed="false" value="${ paidAmount }" /></em></div>
+											<a href="/userAccount/ious/myhome.htm">查看</a>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div class="open_up">
+											<h5>信任付<i class=""></i></h5>
+											<p>想先下单，后还钱？<a href="/userAccount/ious/myhome.htm">立即开通</a>信任付吧</p>
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</c:if>
+							<div style="position:absolute;top: 10px;right: 20px;width: 220px;height: 64px;border-left: 1px solid #d6dbdb;padding: 0 20px;">
+							  	<h5>待退款</h5>
+							  	<div style="overflow: hidden;padding-top: 10px;">
+							  		<c:choose>
+							  			<c:when test="${ refundAccount eq null }">
+							  				<span style="float: left;padding-top:7px;padding-left: 5px;">获取超时</span>
+							    		</c:when>
+							    		<c:otherwise>
+									    	<strong style="color: #f60;font-family: arial;font-size: 20px;font-weight: 700;float: left;vertical-align: top;">${ refundAccount }</strong>
+									    	<span style="float: left;padding-top:7px;padding-left: 5px;">元</span>
+							    		</c:otherwise>
+							    	</c:choose>
+							    	<a href="http://order.qunar.com/refund.html" style="float: right;padding-top: 7px;">查看详情</a>
+							  	</div>
+							</div>
+						</div>
+				
+						<div class="record_ct">
+							<ul class="otab">
+								<li class="active">收支明细</li>
+								<li><a href="../record/recharge.htm">充值记录</a></li>
+								<li><a href="../record/refund.htm">充值退还记录</a></li>
+								<li><a href="../record/withdraw.htm">提现记录</a></li>
+							</ul>
+							
+							<div class="return_cord">
+								<script type="text/javascript">if(typeof QNR=="undefined"){window.QNR={};} QNR._maxd="${currentTime}";</script>
+								<form method="post" action="../record/account.htm" id="account-form">
+									<table cellspacing="0" cellpadding="0" class="setbl">
+										<tbody>
+											<tr>
+												<td class="c1">开始时间：</td>
+												<td class="c2"><input type="text" class="textbox" name="startDate" value="${startTime }" maxlength="10" id="startdate" /></td>
+												<td class="c3">结束时间：</td>
+												<td class="c4"><input type="text" class="textbox" name="endDate" value="${endTime }" maxlength="10" id="enddate" /></td>
+												<td class="c5">
+												  <div class="csparest wt120">
+													<select id="account-type" name="accountType">
+														<option selected="selected" value="">交易类型</option>
+														<option value="RECHARGEIN">充值</option>
+														<option value="REFUNDIN">退款</option>
+														<option value="PAYOUT">支付</option>
+														<option value="REFUNDFROZENOUT">退还</option>
+														<option value="RETURNCASHQUNARIN">返现</option>
+                                                        <option value="PWITHDRAWIN">提现</option>
+                                                        <option value="REFUNDRECHARGE">退至余额</option>
+													</select>
+												  </div>
+												</td>
+												<td class="c6"><button type="submit" class="btnQuery"></button></td>
+											</tr>                  
+										</tbody>
+									</table>
+								</form>
+								
+								<div class="detail_paybg">
+									<table width="100%" border="0" cellpadding="0" class="det_table">
+										<thead>
+											<tr>
+												<th class="ref1">序号</th>
+												<th class="ref2">交易流水号</th>
+												<th class="ref3"><a id="sort-key-order" class="dbsort" value="${order }" href="javascript:void(0);"><span>创建时间</span></a></th>
+												<th class="ref4">交易类型</th>
+												<th class="ref5">收入（元）</th>
+												<th class="ref6">支出（元）</th>
+												<th class="ref7">账户余额（元）</th>
+											</tr>
+										</thead>
+										<c:choose>
+											<c:when test="${not empty list}">
+												<tbody>
+													<c:forEach items="${list}" var="o" varStatus="vs">
+														<tr>
+															<td class="ref1">${vs.count + (currentPage - 1) * pageCount}</td>
+															<td class="ref2">${o.tradeNo }</td>
+															<td class="ref3">
+																<fmt:formatDate value="${o.createTime }" type="date" pattern="yyyy.MM.dd"/><br>
+																<fmt:formatDate value="${o.createTime }" type="date" pattern="HH:mm"/>
+															</td>
+															<td class="ref4">${o.remark }</td>
+
+                                                            <c:if test="${o.accountType eq 'RECHARGEIN' ||  o.accountType eq 'REFUNDIN' || o.accountType eq 'RETURNCASHQUNARIN'|| o.accountType eq 'REFUNDRECHARGE' || o.accountType eq 'REFUNDRECHARGEIN'  || o.accountType eq 'C2CPAYQUNARIN' ||o.accountType eq 'TRADE_IN' || o.accountType eq 'WITHDRAWBALANCEIN'}">
+																<td class="ref5">+${o.amount }</td>
+																<td class="ref6"></td>
+															</c:if>
+															<c:if test="${o.accountType eq 'PAYOUT' ||  o.accountType eq 'REFUNDFROZENOUT'|| o.accountType eq 'REFUNDOUT' ||o.accountType eq 'WITHDRAWBALANCEOUT'}">
+																<td class="ref5"></td>
+																<td class="ref6">${o.amount }</td>
+															</c:if>
+															<td class="ref7">${o.balance }</td>
+														</tr>
+													</c:forEach>
+												</tbody>
+												</table>
+											</c:when>
+											<c:otherwise>
+												</table><div class="norecode_tip"><p class="iner_re">没有符合条件的查询结果！</p></div>
+											</c:otherwise>  
+										</c:choose>
+							
+									<c:choose>
+										<c:when test="${not empty list}">
+											<div class="rech_page" js-place-holder="pagination">
+												<script type="text/javascript">
+													if(typeof QNR=="undefined"){
+														window.QNR={};
+													}
+												
+													QNR.pagiData={
+														count: ${total},
+														current: ${currentPage},
+														contain: ${pageCount},
+														url: false,
+														method: "post",
+														form: "account-form"
+													};
+												</script>
+											</div>
+										</c:when>
+									</c:choose>
+								</div>
+							</div>
+						</div>
+						<!--contents end-->
+					</div>
+					<!--right-->
+					<div class="clr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript"  src="https://user.qunar.com/webApi/popup.jsp?js=ssl" ></script>
+<script type="text/javascript">
+(function(){
+	window._ba_utm_init = function(GA){ 
+		window['_ba_utm_l'] = 'pay';
+		window['_ba_utm_s'] = '472';
+		window['_ba_utm_ex'] = {};
+	};
+	//-- load ga script
+	var s = document.createElement('script');
+	s.src = '/static/payment/prd/scripts/ga@<jsp:include page="/include/ver/scripts/ga.js.ver" flush="true"/>.js';
+	var head = document.getElementsByTagName('head');
+	if(head&&head[0]) { head[0].appendChild(s); }
+})();
+</script>
+	<div class="qn_footer">
+		<div class="inner">
+		<%@include file='/include/footer/ssl_footer_public.html'%>
+		</div>
+	</div>
+</body>
+</html>

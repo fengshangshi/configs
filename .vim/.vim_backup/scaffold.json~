@@ -1,0 +1,15 @@
+{
+		"server": {
+				"config": {
+						"type": "gitlab",
+						"repos": "aspfe/sugar-template-server"
+				}
+		},
+
+		"app": {
+				"config": {
+						"type": "github",
+						"repos": "aspfe/sugar-template-app"
+				}
+		}
+}

@@ -1,0 +1,15 @@
+/**
+ * @file 默认过滤器
+ * @author fengshangshi
+ */
+var fs = require('fs-extra');
+
+exports.filter_legal_dir = function(req, res, next) {
+		console.log(111);
+		next();
+};
+
+exports.filter_legal = function(req, res, next) {
+		console.log(22);
+		next();
+};

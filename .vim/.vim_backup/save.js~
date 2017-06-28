@@ -1,0 +1,61 @@
+/**
+ * 新增门店 提交
+ * @author water.li
+ */
+
+var createAPI = require('hotelroomwidget/api/hotelCreateAPI');
+
+var popupUtil = require('common/utils/popupUtil');
+
+var vm = avalon.define({
+    $id: 'storeAddSave'
+});
+
+var save = function(opts) {
+    var params = opts && opts.params,
+        dialogObj = opts && opts.dialogObj;
+
+	params['source'] = 'KEZHANTONG';
+
+    //$('.add-store-dialog .art-ui-dialog-autofocus').attr('disabled', true);
+    //Q.hub.submiting = true;
+    createAPI({
+        data: params,
+        callback: function(data) {
+            //Q.hub.submiting = false;
+            //新增成功
+            popupUtil.succeed('新增门店成功');
+
+            // Q.sug.hotelNo = data.hotelNo;
+            // vm.$fire('all!layout.set.setHotel', {
+            //     hotelNo: data.hotelNo,
+            //     hotelName: data.hotelName
+            // });
+            $.cookie('HotelValue', data.hotelNo, {
+                expires: 365,
+                path: '/'
+            });
+            $.cookie('HotelName', data.hotelName, {
+                expires: 365,
+                path: '/'
+            });
+
+            //进入该新增门店的”房间设置“页
+            location.reload();
+
+            if (dialogObj && dialogObj.close) {
+                dialogObj.close().remove();
+            }
+        },
+        failcallback: function() {
+            //Q.hub.submiting = false;
+        }
+    });
+};
+
+/**
+ * 提交 接口
+ */
+vm.$watch('config.save.storeAdd', function(opts) {
+    save(opts);
+});

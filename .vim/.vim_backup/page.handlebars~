@@ -1,0 +1,13 @@
+<div class="page">
+{{#compareHelper pageNum 1 true}}
+    <a href="###" data-page="{{index}}">上一页</a>
+{{/compareHelper}}
+{{#pageHelper data.page.pageCount data.page.pageNum}}
+    {{#each this}}
+    <a href="###" class="{{className}}" data-page="{{index}}">{{index}}</a>
+    {{/each}}
+{{/pageHelper}}
+{{#compareHelper data.page.pageNum data.page.pageCount false}}
+    <a href="###" data-page="{{index}}">下一页</a>
+{{/compareHelper}}
+</div>

@@ -1,0 +1,42 @@
+/**
+ * @file logger-lib
+ * @author ss.feng
+ */
+const path = require('path');
+const Logger = require('sugar-log');
+
+// 读取logger的配置
+const configure = config.logger;
+
+// 年月日映射
+const __ROLLINGTYPES = {
+	Y: 'yyyy', M: 'yyyyMM', D: 'yyyyMMdd',
+};
+
+// 读取有用的配置
+const __pattern = __ROLLINGTYPES[configure.rolling || 'D'] || __ROLLINGTYPES['D'];
+const __customLevels = configure.levels || {};
+const __filename = configure.name || 'app';
+const __root = configure.root || 'app';
+const __level = configure.level || 4;
+
+// 组装日志文件名
+__filename = path.join(ROOT, __root, __filename);
+
+// 实例化日志对象
+const logger = new Logger({
+	level: __level,
+	pattern: __pattern,
+	filename: __filename,
+	customLevels: __customLevels,
+});
+
+const __disabled = configure.enabled === false ? true : false;
+const __levels = logger.levels;
+
+// 如果日志不启用，enabled===true
+if (__disabled) {
+	return Object.keys(__levels).forEach((level) => {
+		exports[level.toLowerCase()] = function() {};
+	});
+}

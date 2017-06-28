@@ -1,0 +1,111 @@
+(function() {
+var message = require("realestate:widget/common/message/message.js");
+
+
+//测试用例1
+message.register("test1", function(e) {
+	//console.log("测试用例1");
+	// 打印消息类返回的参数
+	//console.log(e);
+});
+//测试成功与否
+//message.fire("test1");
+//or
+/*
+message.fire("test1", {
+	"arg1": "hello world",
+	"arg2": 123424
+});
+*/
+
+//测试用例2
+message.register("test2", [
+	function(e) {
+		console.log("测试用例2", "我是test2的第一个回调函数");
+	},
+
+	function(e) {
+		console.log("测试用例2", "我是test2的第二个回调函数");
+	}
+]);
+//测试成功与否
+//message.fire("test2");
+
+//测试用例3
+message.register({
+	"test3": function(e) {
+		console.log("测试用例3", "我是test3的第一个回调函数");
+	},
+
+	"test4": [
+		function(e) {
+			console.log("测试用例3", "我是test3的第二个回调函数");
+		},
+
+		function(e) {
+			console.log("测试用例3", "我是test3的第三个回调函数");
+		}
+	]
+});
+//测试成功与否
+/*
+message.fire("test3");
+message.fire("test4", {
+	"arg1": "hello world",
+	"arg2": 123424
+});
+*/
+
+// 触发消息
+//message.fire(["test1", "test2", "test3", "test4"]);
+// or
+/*
+message.fire(["test1", "test2", "test3", "test4"], {
+	"arg1": "hello world",
+	"arg2": 123424
+});
+*/
+
+// 取消订阅
+var fn1 = function(e) {
+	console.log("我是有名字的函数，我叫fn1");
+};
+var fn2 = function(e) {
+	console.log("我是有名字的函数，我叫fn2");
+};
+var fn3 = function(e) {
+	console.log("我是有名字的函数，我叫fn3");
+};
+var fn4 = function(e) {
+	console.log("我是有名字的函数，我叫fn4");
+};
+message.register("test5", [fn1, fn2, fn3, fn4]);
+//1、取消订阅测试用例1
+message.fire("test1");
+message.remove("test1");
+message.fire("test1");
+
+/*
+//2、取消订阅测试用例2
+message.fire("test5");
+message.remove("test5", fn1);
+message.fire("test5");
+
+
+//3、取消订阅测试用例3
+message.fire("test5");
+message.remove("test5", [fn1,fn3, fn4]);
+message.fire("test5");
+
+/*
+//4、取消订阅测试用例4
+message.fire(["test1", "test2", "test5"]);
+message.remove(["test1", "test2", "test5"]);
+message.fire(["test1", "test2", "test5"]);
+
+*/
+
+
+
+
+})();

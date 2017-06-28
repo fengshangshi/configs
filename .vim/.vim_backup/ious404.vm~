@@ -1,0 +1,43 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付申请成功</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/signIous.css" />
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content">
+                <div class="result-tips">
+                    <div class="result-tips-content tips-ok">
+                        <h2>对不起，请求数据异常</h2>
+                        <p>
+                            您可以
+                            <a href="/member/asset/ious/">查看合同</a>
+                            或返回
+                            <a href="/member/">我的账户</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script 
+		src="${qzzUrl}${jsPath}/asset/signIous/index/entry.js">
+	</script>
+</body>
+</html>
+
+
+

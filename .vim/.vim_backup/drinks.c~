@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main()
+{
+	int drinks[] = {4, 2, 3};
+	printf("第一单：%i 杯\n", drinks[0]);
+	printf("第一单：%i 杯\n", *drinks);
+
+	printf("第三单：%i 杯\n", drinks[2]);
+	printf("第三单：%i 杯\n", *drinks);
+
+	return 0;
+}

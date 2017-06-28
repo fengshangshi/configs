@@ -1,0 +1,52 @@
+/*[export]*/
+/**
+ * 充值页面样式
+ */
+require("../../base.css");
+require("../common.css");
+require("../../../common/menu.css");
+require("../../../common/jquery-ui.css");
+
+.balance-wrap .item .button-submit {
+	margin: 0 0 0 62px;
+}
+
+/*
+ * ui-dialog css patch
+ */
+.dialog p {
+	text-align: center;
+}
+
+.dialog .tips {
+	padding: 20px 0;
+}
+
+.dialog .dialog-button {
+	display: inline-block;
+	padding: .4em 2.2em;
+	text-decoration: none;
+	margin: 0 5px;
+}
+
+.dialog .dialog-button-submit {
+	background: #ff8001;
+	color: #fff;
+}
+
+.dialog .dialog-button-submit:hover {
+	background: #ff7900;
+}
+
+.dialog .dialog-button-cancel {
+	background: #c1c1c1;
+	color: #333;
+}
+
+.dialog .dialog-button-cancel:hover {
+	background: #c2c2c2;
+}
+
+.dialog .ui-dialog-titlebar-close {
+	display: none;
+}

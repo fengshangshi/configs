@@ -1,0 +1,139 @@
+var layoutTpl = require('tplScript/common/sidebarPart.string');
+
+// 二级菜单配置
+var config = {
+
+	// 渠道菜单配置
+	'channel' : [{
+			'code' : 'seb',
+			'name' : '去呼呼售卖',
+			'url' : '/seb/t/page'
+		}, {
+			'code' : 'channelState',
+			'name' : '开房关房',
+			'url' : '/channelState/t/page'
+		}, {
+			'code' : 'channelInfo',
+			'name' : '渠道直连',
+			'url' : '/channelState/t/channelInfo'
+		}, {
+			'code' : 'ota',
+			'name' : '分销渠道大全',
+			'url' : '/ota/t/page'
+		}, {
+			'code' : 'personalStores',
+			'name' : '我的店铺',
+			'url' : 'dp/t/page'
+		}
+	],
+
+	// 门店菜单配置
+	'store' : [{
+			'code' : 'store',
+			'name' : '门店与房型',
+			'url' : '/store/t/page'
+		}
+	],
+
+	// 设置菜单配置
+	'settings' : [{
+			'code' : 'functionManage',
+			'name' : '功能管理',
+			'url' : '/setting/t/pageFun'
+		}, {
+			'code' : 'smartMessage',
+			'name' : '智能短信',
+			'url' : '/setting/t/message'
+		}
+	],
+
+	// 报表菜单配置
+	'report' : [{
+			'code' : 'income',
+			'name' : '收入统计',
+			'url' : ''
+		}, {
+			'code' : 'rental',
+			'name' : '出租率统计',
+			'url' : ''
+		}, {
+			'code' : 'reverse',
+			'name' : '预订统计',
+			'url' : ''
+		}, {
+			'code' : 'store',
+			'name' : '全部门店统计',
+			'url' : ''
+		}
+	],
+	//网上开店
+	'dp_net' : [{
+			'code' : '',
+			'name' : '收款信息设置',
+			'url' : '/dp/t/cache'
+		},{
+			'code':'',
+			'name':'公寓房型详情',
+			'url':'/dp/t/room'
+		},{
+			'code':'',
+			'name':'价格设置',
+			'url':'/dp/t/price'
+		},{
+			'code':'',
+			'name':'分享店铺',
+			'url':'/dp/t/share'
+		},{
+			'code':'',
+			'name':'客户服务',
+			'url':'/dp/t/certification'
+		}
+	]
+
+};
+
+var sidebarPart = {
+
+	init : function (options) {
+		this.settings = options;
+		this.headerTop = $('#SRM-header').height();
+		this.create();
+		this.bind();
+	},
+
+	create : function () {
+
+		var _this = this;
+
+		var render = template.compile(layoutTpl);
+		var html = render({
+				list : config[_this.settings.type],
+				active : _this.settings.active
+			});
+
+		$('body').append(html);
+
+	},
+
+	bind : function () {
+
+		var _this = this;
+
+		$(window).on('scroll.sidebarPart', function () {
+			var scrollTop = $(this).scrollTop();
+			if (scrollTop >= _this.headerTop) {
+				$('#sidebarPart').css('marginTop', 0);
+			} else {
+				$('#sidebarPart').css('marginTop', _this.headerTop - scrollTop);
+			}
+		});
+
+	}
+
+}
+
+var sidebarPartInit = function (options) {
+	sidebarPart.init(options);
+}
+
+module.exports = sidebarPart;

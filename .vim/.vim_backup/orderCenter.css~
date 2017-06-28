@@ -1,0 +1,388 @@
+/*[export]*/
+/*
+ * 订单中心保险业务样式
+ * @author ss.feng@qunar.com
+ */
+require("reset.css");
+require("q_datepicker.css");
+
+/*居然在reset里加入!inportant*/
+html,
+body {
+	background: #fff !important;
+}
+
+.header {
+	height: 122px;
+	background: #fff;
+	border-bottom: 2px solid #00aec7;
+}
+
+.footer {
+	height: 178px;
+	background: #fff;
+}
+
+.container {
+	padding: 15px 0;
+	background: #ececec;
+}
+
+.inner-container {
+	width: 976px;
+	margin: 0 auto;
+}
+
+.main {
+	float: left;
+	width: 658px;
+	background: #fff;
+	border-top: 2px solid #00aec7;
+	padding: 0 20px;
+	position: relative;
+}
+
+.aside {
+	float: right;
+	width: 272px;
+}
+
+.module {
+	margin-bottom: 20px;
+}
+
+.module-hd {
+	padding: 15px 0 5px;
+	border-bottom: 2px solid #ddd;
+}
+
+.module-hd h3 {
+	float:left;
+	font-size: 18px;
+}
+
+.module-hd .more {
+	float: right;
+	line-height: 24px;
+}
+
+.insurance-info {
+	padding-top: 20px;
+}
+
+.insurance-info li {
+	width: 100%;
+	height: 30px;
+}
+
+.insurance-info label,
+.insurance-info .field {
+	float: left;
+	vertical-align: top;
+}
+
+.insurance-info label {
+	width: 100px;
+	padding-right: 25px;
+	font-size: 14px;
+	text-align: right;
+}
+
+.insurance-info .field {
+	width: 480px;
+}
+
+.insurance-info h4 {
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.insurance-info .field span,
+.insurance-info .field strong {
+	line-height: 22px;
+}
+
+.insurance-info .field strong {
+	color: #f55;
+	font-weight: 400;
+}
+
+.insurance-info .field span {
+	color: #666;
+}
+
+.insurance-info .field .scope,
+.insurance-info .field .scope-text,
+.insurance-info .field .scope-amount {
+	display: inline-block;
+	line-height: 15px;
+	height: 13px;
+}	
+
+.insurance-info .field .scope {
+	border: 1px solid #f55;
+	margin: 2px 5px 5px 0;
+}
+
+.insurance-info .field .scope-text {
+	background: #f55;
+	padding: 0 1px;
+	color: #fff;
+}
+
+.insurance-info .field .scope-amount {
+	color: #f55;
+}
+
+.insurance-user-list {
+	margin-top: 20px;
+	border: 0;
+}
+
+.insurance-user-list tr {
+	margin-bottom: 10px;
+}
+
+.insurance-user-list td {
+	text-align: center;
+	padding: 15px 0;
+}
+
+.insurance-user-list li {
+	overflow: hidden;
+	padding-bottom: 10px;
+}
+
+.insurance-user-list .user-info {
+	overflow: hidden;
+	height: 48px;
+	display: block;
+	border: 1px solid #fff;
+}
+
+.insurance-user-list a.user-info * {
+	cursor: pointer;
+}
+
+.insurance-user-list a.user-info:hover {
+	border: 1px solid #d3d3d3;
+}
+
+.insurance-user-list a.user-info:hover .total-amount {
+	background-image: url(//source.qunarzz.com/site/images/pay/insurance_mall/page/orderCenter/icons.png);
+	background-repeat: no-repeat;
+}
+
+.insurance-user-list .inner-user-info {
+	float: left;
+	padding: 14px 0 15px 17px;
+	width: 480px;
+}
+
+.insurance-user-list .total-amount {
+	float: right;
+	width: 144px;
+	padding-left: 6px;
+}
+
+.insurance-user-list .selected,
+.insurance-user-list a.selected:hover {
+	border: 1px solid #03a4d3;
+}
+
+.insurance-user-list .selected .total-amount,
+.insurance-user-list a.selected:hover .total-amount {
+	background-image: url(//source.qunarzz.com/site/images/pay/insurance_mall/page/orderCenter/icons.png);
+	background-position: 0 -51px;
+	background-repeat: no-repeat;
+}
+
+.insurance-user-list .inner-amount {
+	text-align: center;
+	padding: 17px 0;
+}
+
+.insurance-user-list .selected .inner-amount {
+	background: #e3f8fe;
+}
+
+.insurance-user-list .inner-user-info input {
+	margin-right: 10px;
+}
+
+.insurance-user-list .inner-user-info strong {
+	font-size: 14px;
+}
+
+.insurance-user-list .inner-user-info span {
+	margin-left: 30px;
+	color: #999;
+}
+
+.insurance-user-list .inner-user-info em {
+	line-height: 18px;
+	margin-left:10px;
+}
+
+.insurance-user-list .disable {
+	color: #999;
+}
+
+.insurance-detail {
+	padding: 25px;
+}
+
+.insurance-detail h4 {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.insurance-detail p {
+	line-height: 22px;
+	overflow: hidden;
+	padding-bottom: 4px;
+}
+
+.insurance-detail p label,
+.insurance-detail p span {
+	float: left;
+	vertical-align: top;
+}
+
+.insurance-detail p label {
+	width: 68px;
+	font-weight: 700;
+}
+
+.insurance-detail p span {
+	width: 422px;
+}
+
+.insurance-submit-wrap {
+	width: 714px;
+	height: 116px;
+	margin-left: -36px;
+	position: absolute;
+	top: 500px;
+}
+
+.submit-bg {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 714px;
+	height: 100px;
+	background: rgba(200, 228, 244, 0.9);
+}
+
+.arrow-right-top,
+.arrow-right-bottom,
+.arrow-left-top {
+	position: absolute;
+	font-size: 0;
+	width: 0;
+	height; 0;
+}
+
+.arrow-left-top {
+	border-width: 8px;
+	border-style: solid;
+	border-color: transparent #4b6066 #4b6066 transparent;
+	top: 0;
+	left: 0;
+}
+
+.arrow-right-bottom {
+	border-width: 25px 4px;
+	border-style: solid;
+	border-color: transparent transparent rgba(200, 228, 244, 0.9)  
+		rgba(200, 228, 244, 0.9);
+	right: -8px;
+	bottom: 0;
+}
+
+.arrow-right-top {
+	border-width: 25px 4px;
+	border-style: solid;
+	border-color: rgba(200, 228, 244, 0.9) transparent 
+		transparent rgba(200, 228, 244, 0.9);
+	right: -8px;
+	top: 16px;
+}
+
+.insurance-submit {
+	position: absolute;
+	width: 100%;
+	padding-top: 45px;
+	text-align: right;
+	color: #666;
+}
+
+.insurance-submit a {
+	cursor: pointer;
+}
+
+.insurance-protocol a:hover {
+	text-decoration: underline;
+}
+
+.insurance-protocol,
+.insurance-price-wrap {
+	padding-right: 30px;
+}
+
+.insurance-price-wrap {
+	padding-bottom: 8px;
+}
+
+.insurance-price-wrap span {
+	vertical-align: -2px;
+}
+
+.insurance-price-wrap span strong {
+	font-size: 18px;
+	color: #f60;
+	line-height: 16px;
+	vertical-align: -2px;
+}
+ 
+.insurance-price-wrap .button-submit {
+	display: inline-block;
+	padding: 0.5em 2.2em;
+	background: #f60;
+	border-radius: 2px;
+	color: #fff;
+	margin-left: 10px;
+}
+
+#date-start {
+	width: 150px;
+}
+
+.date-start-wrap {
+	width: 168px;
+	height: 20px;
+	float: left;
+}
+
+/*重写日历样式*/
+.qunar-dp {
+	width: 158px;
+}
+
+.qunar-dp .dp-info .dp-text {
+	line-height: 14px;
+}
+
+.qunar-dp .q-datepicker {
+	left: -2px;
+	margin-top:1px;
+}
+
+.qunar-dp .q-datepicker { 
+	width: 220px;
+}
+
+.qunar-dp .q-datepicker .g { 
+	width: 220px;
+}

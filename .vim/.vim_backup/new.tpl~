@@ -1,0 +1,9 @@
+{%*继承layout.tpl*%}
+{%extends file="realestate/page/layout.tpl"%}
+
+{%*新房页面*%}
+
+{%block name="page-title"%}
+	新房-百度房地产预测
+		fdsfsdfsfs
+{%/block%}

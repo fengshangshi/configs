@@ -1,0 +1,24 @@
+/**
+ * @function 日期差计算
+ * @params minuend：被减数
+ * @params subtrahend：减数
+ * @params condition：差值条件 YY-年 MM-月 DD-日 hh-小时 mm-分钟 ss-秒 默认hh
+ */
+function dateDiff(minuend, subtrahend, condition) {
+	var conditions = {
+		"DD": 1000*60*60*24,
+		"hh": 1000*60*60,
+		"mm": 1000*60,
+		"ss": 1000
+	};
+
+	var cond = condition || "hh";
+
+	var diff = minuend - subtrahend;
+
+	return parseInt(diff/conditions[cond]); 
+}
+
+module.exports = {
+	dateDiff: dateDiff
+}

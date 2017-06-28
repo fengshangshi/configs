@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <string.h>
+
+char *names_for_dog[] = {"Bowser", "Bonza", "Snodgrass"};
+
+void print_names()
+{
+	printf("%lu\n", strlen(names_for_dog));
+	for (int i = 0; i < sizeof(names_for_dog); i++) {
+		printf("dog: %s\n", names_for_dog[i]);
+	}
+}
+
+void print_reverse(char *s)
+{
+	size_t len = strlen(s);
+	char *t = s + len - 1;
+	while (t >= s) {
+		printf("%c", *t);
+		t = t - 1;
+	}
+	puts("");
+}
+
+int main()
+{
+	char reverse_str[20];
+	printf("Need reverse string is: ");
+	fgets(reverse_str, sizeof(reverse_str), stdin);
+	reverse_str[strlen(reverse_str) - 1] = '\0';
+
+	printf("String is: %s\n", reverse_str);
+	//printf("String length is: %i\n", strlen(reverse_str));
+	//printf("String length is: %i\n", sizeof(reverse_str));
+	print_reverse(reverse_str);
+	print_names();
+
+	return 0;
+}

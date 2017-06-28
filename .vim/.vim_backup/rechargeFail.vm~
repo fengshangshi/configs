@@ -1,0 +1,38 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】我的账户-账户资产-充值失败</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+        href="${qzzUrl}${cssPath}/asset/balance/recharge.css" />
+</head>
+<body class="asset asset-balance">
+    #parse("widget/header/header.vm")
+    #parse("widget/nav/nav.vm")
+    <div class="container clearfix">
+        <div class="side-bar">
+            #parse("widget/menu/menuForAsset.vm")
+        </div>
+        <div class="main">
+            <div class="main-content">
+                <div class="result-tips">
+                    <div class="result-tips-content tips-fail">
+                        <h2>抱歉，您此次充值失败！</h2>
+                        <p>
+                            您可以返回到
+                            <a href="/member/">我的账户</a>
+                            查看余额或继续
+                            <a href="/member/asset/balance/recharge.htm">充值</a>
+                            。如有疑问，请咨询去哪儿网客服 10101234。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("widget/footer/footer.vm")
+</body>
+</html>

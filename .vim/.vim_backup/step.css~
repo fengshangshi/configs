@@ -1,0 +1,164 @@
+/**
+ * 步骤条组件样式
+ * author water.li
+ * Date 2014-12-09
+ */
+.step{
+	position: relative;
+	width: 900px;
+	margin: 0 auto;
+	padding: 38px 0px;
+}
+
+.step-main{
+	position: relative;
+	height: 56px;
+}
+
+.step-main li{
+	position: relative;
+	float:left;
+	height: 56px;
+}
+
+.step-3 li{
+	width: 400px;
+}
+
+.step-main .step-line{
+	width: 378px;
+	float: left;
+	font-size: 0px;
+	height: 3px;
+	line-height: 1;
+	background-color: #fff;
+	border-top: 1px solid #dde1e2;
+	margin-top: 14px;
+}
+
+.step-text{
+	position: relative;
+	bottom: -10px;
+	left: -29px;
+	color: #999;
+}
+
+.step-end .step-text{
+	bottom: -26px;
+	left: -29px;
+}
+
+.step-main .step-icon{
+	width: 14px;
+	position: relative;
+	float: left;
+	text-align: center;
+}
+
+.step-icon .step-circlebg{
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	font-size: 16px;
+	color: #fff;
+	text-align: center;
+	border-radius: 50%;
+	line-height: 20px;
+	margin-top: 7px;
+    background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/step-white-s.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/step-white-s.png);
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.step-active .step-icon{
+	width: 22px;
+}
+
+.step-icon i
+{
+	font-style: normal;
+	font-size: 14px;
+}
+
+.step-active .step-line{
+	width: 378px;
+}
+
+.step-active .step-circlebg{
+	width: 22px;
+	height: 22px;
+	margin-top: 3px;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/step-green-l.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/step-green-l.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	border-top: none;
+}
+
+.step-done .step-circlebg{
+	width: 14px;
+	height: 14px;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/step-green-s.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/step-green-s.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.step-done .step-icon{
+	width: 14px;
+}
+.step-done .step-line{
+	width: 386px;
+	background-color: #4bae51;
+    border-top: none;
+}
+
+.step-active .step-text,
+.step-done .step-text
+{
+	color:#676767;
+}
+
+.step-end .step-circlebg {
+    background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/step-white-s.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/step-white-s.png);
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+.step .step-end,
+.step .last-bg{
+	width: 100px;
+}
+
+.step-first .step-text {
+	left: -42px;
+}
+
+.step-middle .step-text {
+	left: -34px;
+}
+
+.step-last .step-text {
+	left: -40px;
+}
+
+.step-middle-not-active .step-line{
+	width: 386px;
+}
+
+.step-end-active .step-icon{
+	width: 14px;
+}
+
+.step-end-active .step-circlebg {
+	width: 14px;
+	height: 14px;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/step-green-s.png);
+	_background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/step-green-s.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}

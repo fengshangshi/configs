@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>MouseEnter</title>
+	</head>
+	<body>
+		<p id="p">sdff<span>sdfsf范德</span>萨发生</p>
+		<script src="./mouseenter.js"></script>
+	</body>
+</html>

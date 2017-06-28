@@ -1,0 +1,32 @@
+require("jquery");
+require("jvalidator");
+require("Handlebars");
+require("../templates/invoiceList.handlebars");
+require("../templates/scrollImgs.handlebars");
+var list = require("pages/searchList.js");
+var GoTop = require("pages/goTop.js");
+var DOM = {
+	CANCLEBTN : "#cancleBtn",
+	CLOSEBTN : "[data-item='closeBtn']",
+	MASK : "#mask",
+	POPBOX: "#popBox",
+	TUIBAO: "#tuibao",
+	TUIBAOBOX: "#tuibaoPanel"
+};
+(function(){
+	$(function(){
+		$(DOM.CANCLEBTN).bind("click", function(){
+			$(DOM.MASK).show();
+			$(DOM.POPBOX).show();
+		});
+		$(DOM.CLOSEBTN).bind("click", function(){
+			$(DOM.MASK).hide();
+			$(DOM.POPBOX).hide();
+			$(DOM.TUIBAOBOX).hide();
+		});
+		$(DOM.TUIBAO).bind("click", function(){
+			$(DOM.MASK).show();
+			$(DOM.TUIBAOBOX).show();
+		});
+	})
+})();

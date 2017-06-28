@@ -1,0 +1,146 @@
+.config-roomfloor {
+    ul {
+        height: 110px;
+        background: #e9f8ea;
+        overflow:auto;
+        padding: 10px 0;
+        li {
+            display: inline-block;
+            width: 130px;
+            height: 24px;
+            padding: 1px 3px;
+            margin: 0 0 10px 10px;
+            background: #ffffff;
+            border: 1px solid #dddddd;
+            box-shadow: 0px 0 5px #e2e2e2;
+            border-radius: 2px;
+            position: relative;
+            .floor-no {
+                width: 60px;
+                height: 20px;
+                line-height: 20px;
+                padding: 0 3px 0 12px;
+                border: none;
+                background: transparent;
+                outline: 0 none;
+                display: inline-block;
+            }
+            .delete-ico {
+                display: block;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+                font-size: 16px;
+                background: transparent;
+                color: #666;
+                position: absolute;
+                top: 1px;
+                right: 3px;
+                cursor: pointer;
+            }
+            input {
+                width: 60px;
+                height: 20px;
+                line-height: 20px;
+                padding: 0 2px 0 10px;
+                border: none;
+                background: transparent;
+                outline: 0 none;
+            }
+            .confirm-btn,
+            .cancel-btn {
+                display: none;
+            }
+
+            &.is-edit {
+                input {
+                    background: #fff;
+                }
+                .confirm-btn,
+                .cancel-btn {
+                    display: block;
+                    width: 30px;
+                    height: 20px;
+                    line-height: 19px;
+                    position: absolute;
+                    top: 1px;
+                    text-align: center;
+                }
+                .confirm-btn {
+                    right: 30px;
+                    color: #fff;
+                    border-radius: 2px 0 0 2px;
+                    background: #58bc62;
+                    &.disabled {
+                        background: #eee;
+                        color: #9a9a9a;
+                        border:1px solid #ddd;
+                    }
+                }
+                .cancel-btn {
+                    right: 1px;
+                    color: #333;
+                    border:1px solid #ddd;
+                    border-radius: 0 2px 2px 0;
+                }
+                .delete-ico {
+                    display: none;
+                }
+            }
+        }
+        .add-btn {
+            width: auto;
+            height: 22px;
+            line-height: 21px;
+            color: #fff;
+            padding: 0 8px;
+            background: #58bc62;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: none;
+            border: 0;
+            margin-bottom: 0;
+            &.disabled {
+                background: #eee;
+                color: #9a9a9a;
+                border:1px solid #ddd;
+            }
+            i,span {
+                display: inline-block;
+                vertical-align: middle;
+            }
+            i {
+                font-size: 14px;
+            }
+        }
+    }
+    .table-body table tr td {
+        padding: 5px;
+    }
+    .room-item {
+        background-color: #f8f8f8;
+        height: 26px;
+        line-height: 26px;
+        border-radius: 3px;
+    }
+
+    .formError .formErrorArrow {
+        top: 47px;
+    }
+
+    .tip-bottom {
+        .formError .formErrorArrow {
+            top: -7px;
+            border-top: 0;
+            border-bottom-color: #d8d6d7;
+            border-width: 0 7px 7px;
+            i {
+                top: 1px;
+                left: -7px;
+                border-top: 0;
+                border-bottom-color: #fff;
+            }
+        }
+    }
+
+}

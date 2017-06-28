@@ -1,0 +1,161 @@
+#!/bin/sh
+##############################################################################
+# File:			build.sh
+# Descption:		a template of qunar build script
+# Version:		1.0
+# Modified times:	0
+# Date:			2011/7/22
+# Author:		zuohua.liang
+##############################################################################
+#使用方法:		./build.sh -P=beta|prd|dev -AB=a|b -D=t1,t2
+#参数说明:		-T:编译方法
+#			-P:编译策略
+#			-AB:服务器环境
+#           -D:编译类型
+#参数默认值：
+#			-T:mvn
+#			-P:beta
+#			-AB:a
+#例:			使用maven编译beta版发布到A类服务器
+#			./build.sh -T=mvn -P=beta -AB=a
+##############################################################################
+
+
+##############################################################################
+#常量定义
+##############################################################################
+
+
+##############################################################################
+#变量及默认值定义
+##############################################################################
+mvnbin=`which mvn`
+#tagname=r-140828-192107-young.zhou
+#type="mvn"		#编译方法,从-T参数获取
+#profile="beta"		#编译策略,从-P参数获取
+#ab="a"			#服务器环境,从-AB参数获取
+customTarget=""
+
+
+##############################################################################
+#函数定义
+##############################################################################
+usage()
+{
+        echo "
+		使用方法:		./build.sh -P=beta|prd -D=
+		参数说明:
+					-T:编译方法
+					-P:编译策略
+					-AB:服务器环境
+					-D:编译类型，如果不包含此参数则从buildTarget.txt取值
+		参数默认值：
+					-P:beta
+					-AB:a
+		例:			使用maven编译beta版发布到A类服务器
+					./build.sh -P=beta -AB=a
+        "
+}
+
+
+##############################################################################
+#参数获取及判断
+##############################################################################
+
+
+for ((i=1;i<=$#;i++))
+do
+        eval str=\${$i}
+
+        case $str in
+                -T*)
+                        type=`echo $str |cut -d'='  -f 2`
+                        ;;
+                -P*)
+                        profile=`echo $str |cut -d'='  -f 2`
+                        ;;
+                -V*)
+                        ver=`echo $str |cut -d'='  -f 2`
+                        ;;
+                -D*)
+                        targets=`echo $str |cut -d'='  -f 2`
+                        customTarget="1"
+                        ;;
+                *)
+                        usage
+                        exit 1
+                        ;;
+        esac
+done
+
+curlbin=`which curl`;
+nodebin=`which node`;
+
+#判断是否存在curl
+if [ -z "$curlbin" ]; then
+   echo 'Error: curl does not exist'
+   exit 1
+
+fi
+
+#判断是否存在node
+if [ -z "$nodebin" ]; then
+    echo 'Error: Node does not exist'
+    exit 1
+fi
+
+
+##############################################################################
+#以下为实际执行的程序，请作相应替换
+#用法 sh build.sh -P=beta
+##############################################################################
+
+#定义变量
+yumUrl='http://cmyum.corp.qunar.com' #yum源url
+projectPath='/mobile_app/fe/asphy/' #项目路径
+projectName='srm_hy' #项目名
+compressionType='.zip' #打包类型
+
+#获取版本号
+version=`cat app.version`;
+
+#获取当前时间时间戳
+timeStamp=`date +%Y%m%d%H%M%S`;
+
+if [ $ver ]; then
+	zipname=${projectName}'-v'${ver}${compressionType};
+else
+	zipname=${projectName}'-v'${version}${compressionType};
+fi
+
+#执行fekit min
+fekit min
+
+#创建临时文件夹
+mkdir -p srm_hy/src
+
+#把./src/html ./prd ./src/images复制进文件夹
+cp -a ./src/html ./srm_hy
+cp -a ./prd ./srm_hy
+cp -a ./src/images ./srm_hy/src
+cp -a ./preLoad.config ./srm_hy
+
+#工程名替换
+sed -i   "s/srmweb_hy/srm_hy/g" `grep srmweb_hy -rl ./srm_hy`
+
+#打包
+zip -r $zipname ./srm_hy
+
+#删除临时文件夹
+rm -rf ./srm_hy
+
+#检测文件在Yum上是否存在
+already_exists=$(curl -Is $yumUrl$projectPath$projectName/$profile/$zipname | head -1 |grep "200 OK");
+if [[ -n $already_exists ]]; then
+    echo "warn: $zipname is already exists"
+fi
+
+#发送到yum服务器
+/usr/bin/expect -f  /home/q/tools/devbin/bds_scp_client.exp l-newyum1.cm.cn1.qunar.com $zipname /home/q/MFS_YUM/mobile_app/fe/asphy/$projectName/$profile/ 2>&1
+
+echo 'Done!';

@@ -1,0 +1,163 @@
+<p>#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付自动还款</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/autoRepaymentForm.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content ious-autorepay-form">
+				<h3 class="title">
+					<span class="parent">信任付</span>
+					&nbsp;&gt;&nbsp;
+					<span class="current">自动还款</span>
+				</h3>
+
+				<div class="head">
+					<ul class="desc">
+						<li class="advance"><p>账单日前1日自动还款</p></li>
+						<li class="sms"><p>扣款结果免费短信告知<br />发至$!{tplData.userBindCardInfo.maskUserMobile}</p></li>
+						<li class="fee"><p>自动扣款零手续费</p></li>
+					</ul>
+					<p class="id">
+						需选择或填写<span 
+							class="person">姓名<span 
+							class="fm">$!{tplData.userBindCardInfo.maskUserName}</span>身份证号<span 
+							class="cardno">$!{tplData.userBindCardInfo.maskUserIdcode}</span></span>信息一致的银行卡
+					</p>
+				</div>
+				#set($hasbinds = ${tplData.userBindCards.size()} > 0)
+				#if(! $!{hasbinds})
+					#set($othertab = "tab-current")
+					#set($othertabpanel = "tab-panel-cur")
+				#end
+				<ul class="tabs">
+				#if($!{hasbinds})
+					<li class="tab tab-current" name="often">常用卡</li>
+				#end
+					<li class="tab $!{othertab}" name="other">其他储蓄卡</li>
+				</ul>
+
+				<div class="tab-panels">
+					#if($!{hasbinds})
+					<div class="tab-panel tab-panel-cur" name="often">
+						<ul class="bank-card-list">
+						#foreach($card in ${tplData.userBindCards})
+							#if(${velocityCount} > 2)
+								#set($moreThan2 = "more-than-2")
+							#else
+								#set($moreThan2 = "")
+							#end
+							<li class="$!{moreThan2}" 
+								data-cardBankId="$!{card.cardBankId}" 
+								data-cardBankCode="$!{card.cardBankCode}" 
+								data-cardPmCode="$!{card.cardPmCode}" 
+								data-cardTppcode="$!{card.cardTppcode}" 
+								data-cardAuthAmonut="$!{card.cardAuthAmonut}" 
+							>
+								<label class="bank-card" for="bank-no">
+									<input type="radio" name="bank-no" class="no"  />
+									<span class="logo">
+										<img src="$!{card.cardBankLogo}" 
+											alt="$!{card.cardBankName}" />
+									</span>
+									<span class="type">储蓄卡</span>
+									<span class="mask">**</span>
+									<span class="last4">$!{card.cardNoTail4}</span>
+								</label>
+							</li>
+						#end
+						</ul>
+						#if(${tplData.userBindCards.size()} > 2)
+						<div class="show-all">
+							<div class="text-wrapper"><label>全部展开</label></div>
+						</div>
+						#end
+						<dl class="sms-form">
+							<dt>银行预留手机号</dt>
+							<dd><input type="text" class="mobile" /></dd>
+							<dt>短信验证码</dt>
+							<dd><input type="text" class="vcode" /><span class="send">免费获取</span></dd>
+							<dt>&nbsp;</dt>
+							<dd><span class="submit">同意协议并关联</span><a class="protocol" href="\#\#\#">《信任付自动还款协议》</a></dd>
+						</dl>
+					</div>
+					#end
+					<div class="tab-panel $!{othertabpanel}" name="other">
+					<ul class="steps">
+						<li class="step step-one step-cur">
+							<h3 class="choice">可选银行卡</h3>
+							<ul class="bank-list">
+								#foreach($bank in $!{tplData.bankList})
+								<li data-bankCode="$!{bank.bankCode}"
+									data-bankLogo="$!{bank.bankLogo}"
+									data-bankName="$!{bank.bankName}">
+									<label for="bank" class="bank" >
+										<input type="radio" class="type" name="bank" />
+										<span class="logo">
+											<img src="$!{bank.bankLogo}" alt="$!{bank.bankName}" />
+										</span>
+									</label>
+								</li>
+								#end
+							</ul>
+							<div>
+								<span class="fillcardinfo">下一步</span>
+							</div>
+						</li>
+						<li class="step step-two">
+							<dl class="sms-form">
+								<dt>已选银行</dt>
+								<dd>
+									<span class="logo"><img src="\#\#\#" alt="中国工行银行" /></span>
+									<span class="type">储蓄卡</span>
+									<span class="backtopick">重新选择</span>
+								</dd>
+								<dt class="cardno-label">银行卡号</dt>
+								<dd><input type="text" class="banckno"  /></dd>
+								<dt>证件</dt>
+								<dd><span 
+									class="idtype">身份证</span><span 
+									class="idno">$!{tplData.userBindCardInfo.maskUserIdcode}</span></dd>
+								<dt>姓名</dt>
+								<dd><span class="fm">$!{tplData.userBindCardInfo.maskUserName}</span></dd>
+								<dt>银行预留手机号</dt>
+								<dd><input type="text" class="mobile" /></dd>
+								<dt>短信验证码</dt>
+								<dd>
+									<input type="text" class="vcode" />
+									<span class="send">免费获取</span>
+								</dd>
+								<dt>&nbsp;</dt>
+								<dd>
+									<span class="submit">同意协议并关联</span>
+									<a class="protocol" href="\#\#\#">《信任付自动还款协议》</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script 
+		src="${qzzUrl}${jsPath}/asset/ious/autoRepaymentForm/entry.js">
+	</script>
+	<!-- ${tplData} -->
+</body>
+</html>
+</p>

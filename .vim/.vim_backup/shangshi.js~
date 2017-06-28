@@ -1,0 +1,14 @@
+exports.GET_index = function(req, res, next, welcome, xx) {
+		console.log(welcome, xx);
+		res.render('index', {title: req.params.id, version: req.params.version});
+};
+
+//exports.GET_index.params = 'id';
+exports.GET_index.params = ['id', 'version'];
+
+exports.POST_index = function(req, res) {
+		console.log(this.REQUEST);
+		res.end('shangshi, i love you, too' + req.params.version);
+};
+
+exports.POST_index.params = ['id', 'version'];

@@ -1,0 +1,78 @@
+/**
+ * 增加stay时间绑定 模块
+ * @author dujuan.cao
+ */
+
+var vm = avalon.define({
+    $id: 'arStayEvent'
+});
+
+// 绑定事件
+function bindEvent() {
+    // 绑定房价事件
+    $('.js-assignRoomList').on('focus', '.js-priceList', function(e) {
+        //如果价格日历存在,则先关闭
+        vm.$fire('all!order.assignRoomPrice.hideRoomPriceList');
+        var self = $(this),
+            index = self.parents('.js-roomListCon').index(),
+            //top = (self.outerHeight() + 10) * (index + 1),
+            top = 0,
+            data = self.data();
+        // estimateCiDate = getStayField(index, 'estimateCiDate'),
+        // estimateCoDate = getStayField(index, 'estimateCoDate'),
+        // roomTypeNo = getStayField(index, 'roomTypeNo');
+
+        Q.hub.roomPrice.curIndex = index;
+
+        if (!!data.roomtypeno) {
+            vm.$fire('all!order.assignRoomPrice.showRoomPriceList', {
+                beginDate: data.ci,
+                endDate: data.co,
+                roomTypeNo: data.roomtypeno,
+                top: top
+            });
+        }
+    }).on('click', '.js-priceList', function(e) {
+        e.stopPropagation();
+    });
+
+    // 房型有变
+    $('.js-assignRoomList').on('mouseenter', '.js-change-roomtype', function(e) {
+            var self = $(this),
+                $container = self.parents('.js-roomListCon'),
+                $tips = $container.find('.js-roomtype-tips'),
+                top = -self.outerHeight() - 10;
+            $tips.css({
+                top: top,
+                left: 0
+            });
+            $tips.show();
+        })
+        .on('mouseenter', '.js-change-price', function(e) {
+            var self = $(this),
+                $container = self.parents('.js-roomListCon'),
+                $tips = $container.find('.js-price-tips'),
+                top = -$container.outerHeight() - 5;
+            $tips.css({
+                top: top,
+                right: -20
+            });
+            $tips.show();
+        })
+        .on('mouseleave', '.js-change-roomtype', function(e) {
+            var self = this;
+            $(self).parents('.select2-container').find('.js-roomtype-tips').hide();
+        }).on('mouseleave', '.js-change-price', function(e) {
+            var self = this;
+            $(self).parents('.js-roomListCon').find('.js-price-tips').hide();
+        });
+
+    $(document.body).on('click', function() {
+        vm.$fire('all!order.assignRoomPrice.hideRoomPriceList');
+    })
+}
+
+// 事件绑定
+vm.$watch('channelOrder.bind.stayEvent', function() {
+    bindEvent();
+});

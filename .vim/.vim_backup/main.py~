@@ -1,0 +1,10 @@
+def f(n):
+    res = [0] * (n+1)
+    if n == 0: return 1;
+    if n == 1: return 1;
+    for k in range(2, n+1):
+        res[k] = res[k-1] + res[k-2] + res[k-3]
+
+    return res[n]
+
+print(f(15))

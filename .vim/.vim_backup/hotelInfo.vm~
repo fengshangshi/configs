@@ -1,0 +1,20 @@
+## @Describe: 新建审核详情
+## @author ss.feng@qunar.com
+
+#parse("widget/include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/include/headMeta.vm")
+    <title>保存——修改审核</title>
+    <link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/resubmission/hotelInfo.css" />
+    #parse("widget/include/headScript.vm")
+</head>
+<body>
+    <div ms-controller="layout" ms-include-src="content" data-include-replace="true" data-include-rendered="rendered"></div>
+    <div id="dataLoading" class="js-loading"></div>
+    <script src="${qzzUrl}/${jsPath}/common/base.js"></script>
+    <script src="${qzzUrl}/${jsPath}/pages/resubmission/hotelInfo/entry.js"></script>
+</body>
+</html>
+

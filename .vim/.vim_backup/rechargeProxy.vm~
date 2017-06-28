@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】充值代理</title>
+</head>
+<body>
+	<form id="rechargeForm" method="post" action="${tplData.url}">
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+		<input type="hidden" name="${tplData.}" value="${tplData.}" />
+	</form>
+</body>
+</html>

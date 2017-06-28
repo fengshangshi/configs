@@ -1,0 +1,28 @@
+/**
+ * 检查用户是否绑定手机
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+var dialog = require("./dialog.js");
+
+message.register("checkUserBindingMobile", function(e) {
+	var args = e.args,
+		accountName = args.accountName;
+
+	service.ajax({
+		url: "/member/asset/card/checkUserMobileApi.htm",
+		onsuccess: function(data) {
+			if (data.errorCode == 0) {
+				if (data.data.isBinding) {
+					dialog.showRecharge({
+						accountName: accountName
+					});
+				} else {
+					window.open("/member/security/");
+				}
+			}
+		}
+	});
+});

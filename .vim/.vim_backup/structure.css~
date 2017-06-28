@@ -1,0 +1,134 @@
+.outter-wrap {
+	width: 100%;
+	background: #ececec;
+	padding: 16px 0;
+}
+
+.inner-wrap {
+	width: 978px;
+	margin: 0 auto;
+}
+
+.header-logo-wrap {
+	padding:16px 0;
+	border-top: 1px solid #ddd;
+}
+
+.header-logo-wrap .inner-wrap {
+	overflow: hidden;
+}
+
+.logo-wrap {
+	float: left;
+}
+
+.logo-wrap h1 strong{
+	font-size: 20px;
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 25px;
+	padding-left: 20px;
+	color: #808080;
+}
+
+.process-wrap {
+	float: right;
+}
+
+.q_header .q_header_top .q_header_main {
+	width: 978px;
+}
+
+.form-other {
+	margin-left: 8px;
+	position: relative;
+	display: inline-block;
+	zoom: 1;
+	font-size: 12px;
+	color: red;
+	margin-top: 7px;
+	vertical-align: top;
+}
+
+.form-other i {
+	width: 16px;
+	height: 17px;
+	float: left;
+	margin-top: 0;
+	margin-right: 5px;
+}
+
+.form-other i.err {
+	background: url(//source.qunarzz.com/site/images/pay/insurance/www/common/quick_login2.png)
+		no-repeat 0 0;
+	background-position: 0 -142px;
+}
+
+.form-other i.ok {
+	background: url(//source.qunarzz.com/site/images/pay/insurance/www/common/success.png)
+		no-repeat 0 0;
+}
+
+/** 
+ * 费用规则
+ */
+.claim-rules {
+	position: relative;
+	z-index: 2;
+}
+
+.show-rules .claim-rules-info {
+	display: block;
+}
+
+.claim-rules-info {
+	position: absolute;
+	width: 280px;
+	border: 1px solid #e3e3e3;
+	padding: 10px;
+	background: #fff;
+	box-shadow: 0 0 5px 1px #e3e3e3;
+	top: 25px;
+	left: -10px;
+	color: #616161;
+	display: none;
+}
+
+.claim-rules-info table {
+	width: 100%;
+}
+
+.claim-rules-info table td {
+	padding: 8px 3px 0 5px;
+}
+
+.claim-rules-info table th {
+	padding: 3px 3px 3px 5px;
+	background: #f5f5f5;
+}
+
+.claim-rules-info table td em {
+	color: #f50;
+}
+
+.arrow-outter,
+.arrow-outter span {
+	display: block;
+	position: absolute;
+	font-size: 0;
+	border-style: solid;
+}
+
+.arrow-outter {
+	border-width: 6px;
+	border-color: transparent transparent #e3e3e3;
+	top: -12px;
+	left: 145px;
+}
+
+.arrow-outter span {
+	border-width: 4px;
+	border-color: transparent transparent #fff;
+	top: -2px;
+	left: -4px;
+}

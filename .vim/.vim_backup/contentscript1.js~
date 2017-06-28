@@ -1,0 +1,6 @@
+alert(document.cookie);
+$("body").append("<div id='idWER' style='color:red'>dfsdf</div>");
+
+chrome.extension.sendRequest({greeting: "hello"}, function(res) {
+	console.log(res);
+});

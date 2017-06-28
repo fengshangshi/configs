@@ -1,0 +1,15 @@
+{{#if data.list}}
+    {{#each this.data.list}}
+        <tr>
+            <td>{{orderNo}}</td>
+            <td>{{payTime}}</td>
+            <td>{{type payMethod}}</td>
+            <td>{{orderAmount}}</td>
+            <td>{{minus payMethod}}{{payAmount}}</td>
+        </tr>
+    {{/each}}
+{{else}}
+	<tr>
+		<td colspan="5">该红包暂无试用记录</td>
+	</tr>
+{{/if}}

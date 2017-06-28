@@ -1,0 +1,41 @@
+{
+		"routeUseModule": false,
+
+		"autoTemplateRoute": true,
+
+		"timeout": 10,
+
+		"console": false,
+
+		"logLevel": "error",
+
+		"viewEngine": "hbs",
+
+		"server": {
+				"port": 8080,
+				"name": "SWS",
+				"support": "SUGAR"
+		},
+
+		"monitor": {
+			"prefix": "t.shadow.test.sp.fore.test",
+			"host": "qmon-beta.corp.qunar.com",
+			"port": "2013",
+			"interval": "5"
+		},
+
+		"preMiddleware": [
+				"sugar_middleware_access",
+				"sugar_middleware_settimeout",
+				"sugar_middleware_checktimeout",
+				"sugar_middleware_static",
+				"sugar_middleware_view",
+				"sugar_middleware_header",
+				"sugar_middleware_urlparser",
+				"sugar_middleware_bodyparser",
+				"sugar_middleware_methodoverride",
+				"sugar_middleware_cookieparser",
+				"sugar_middleware_session",
+				"sugar_middleware_favicon"
+		]
+}

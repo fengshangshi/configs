@@ -1,0 +1,37 @@
+/**
+ * 智能短信 配置
+ */
+
+module.exports = {
+    // 智能短信类型配置
+    messageType: {
+        // 入住
+        "1": {
+            key: "checkin",
+            name: "入住提醒"
+        },
+        // 预订
+        "3": {
+            key: "reserve",
+            name: "预订提醒"
+        },
+        // 离店
+        "4": {
+            key: "checkout",
+            name: "离店提醒"
+        }
+    },
+
+    // 统一配置
+    messageHandle: function(caller, type) {
+        var resType = type;
+        // 1:预定提醒 2:入住提醒 3:离店前提醒 (nirvana)
+        if (caller == "nirvana") {
+            var sysConfig = [3, 1, 4];
+            resType = sysConfig[type - 1];
+        }
+
+        return resType;
+    }
+
+}

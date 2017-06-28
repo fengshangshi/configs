@@ -1,0 +1,80 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】我的账户-账户资产-账户余额-充值</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+        href="${qzzUrl}${cssPath}/asset/balance/recharge.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-balance">
+    #parse("widget/header/header.vm")
+    #parse("widget/nav/nav.vm")
+    <div class="container clearfix">
+        <div class="side-bar">
+            #parse("widget/menu/menuForAsset.vm")
+        </div>
+        <div class="main">
+            <div class="main-content">
+                <div class="module">
+                    <div class="module-hd clearfix">
+                        <h3>充值</h3>
+						<p>
+						充值资金可用于购买去哪儿网产品，也可原路退还至银行卡，不支持提现。
+						</p>
+                    </div>
+                    <div class="module-bd">
+                            <div class="balance-wrap">
+                                <div class="balance-title">
+                                    <span>
+                                        账户金额
+                                        <strong>${tplData.amount}</strong>
+                                        元
+                                    </span>
+                                </div>
+                                <div class="balance-content">
+									<form method="post" target="_blank" 
+											action="/member/asset/balance/rechargeSubmit.htm">
+										<div class="item clearfix">
+											<label for="amount">充值金额</label>
+											<div class="field">
+												<input  class="short-input"
+                                                    maxlength="9"
+													id="amount"
+													data-jvalidator-pattern="required&cash"
+													type="text" name="amount" value="" />
+												<b class="unit">元</b>
+									
+												##防止单个文本框时，回车自动提交的trick的方式
+												<input style="display:none;" type="text" name="hidden" value="" />
+											</div>
+										</div>
+										<div class="item">
+											<a href="\#\#\#" 
+												class="button button-o button-submit" data-type="bind">确定充值</a>
+											<input type="hidden" 
+													name="rechargeNo" 
+													id="rechargeNo"
+													value="${tplData.rechargeNo}" />
+
+											##防止csrf攻击
+											<input type="hidden" name="csrfToken" value="$!{csrfToken}" />
+										</div>
+									</form>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("widget/footer/footer.vm")
+    <script 
+        src="${qzzUrl}${jsPath}/asset/balance/recharge/entry.js">
+    </script>
+</body>
+</html>
+

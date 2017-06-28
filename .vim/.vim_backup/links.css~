@@ -1,0 +1,11 @@
+/**
+ * 链接样式
+ */
+a {
+	color: #0087c6;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}

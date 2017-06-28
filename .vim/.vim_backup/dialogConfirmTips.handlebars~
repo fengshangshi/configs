@@ -1,0 +1,8 @@
+<div id="dialog-tips" class="dialog"
+		title="{{dialogTitle}}结果">
+	<p class="tips-content">
+		【<strong>{{cardName}}</strong>
+		尾号<strong>{{tailHelper cardNo}}</strong>】
+		{{dialogTitle}}{{statusHelper status}}
+	</p>
+</div>

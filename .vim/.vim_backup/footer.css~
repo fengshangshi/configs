@@ -1,0 +1,13 @@
+/**
+ * footer.css
+ */
+.footer {
+	width: 1200px;
+	text-align: center;
+}
+
+.footer_icon {
+	display: block;
+	background-image: url(http://source.qunarzz/site/images/pay/useraccount/common/footer_v10.png);
+	height: 30px;
+}

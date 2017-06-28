@@ -1,0 +1,17 @@
+/**
+ * @file config.js
+ * @author ss.feng
+ */
+var pageData = window.Q.pageData;
+
+module.exports = {
+	// iframe相关配置
+	iframe: {
+		#url: '/insurance/property/home',
+		url: 'http://www.baidu.com',
+		width: '100%',
+		height: '1000'
+	},
+
+	guide_url: pageData.accountUrl + 'account/index.html?bizType=nsrm'
+};

@@ -1,0 +1,22 @@
+var Person = {
+	name: 'Mike',
+	country: 'China',
+	"Symbol('info')": {
+		foo: 'foo',
+		bar: 'bar'
+	}
+	/*
+	[Symbol('info')]: {
+		foo: 'foo',
+		bar: 'bar'
+	}
+	*/
+};
+
+console.log(Object.getOwnPropertySymbols(Person));
+
+console.log(Object.getOwnPropertyNames(Person));
+
+for (var i in Person) {
+	console.log(i);
+}

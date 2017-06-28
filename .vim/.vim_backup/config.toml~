@@ -1,0 +1,47 @@
+#配置文件示例
+
+#捕获错误开关是否打开
+interceptError = true
+
+#错误页面, interceptError开关打开才有效
+[errorPage]
+#404，基于view节点的root配置
+404 = "404.html"
+
+#500，基于view节点的root配置
+500 = "500.html"
+
+#服务器
+[server]
+#服务器名称
+name = 'Sugar'
+
+#服务器版本
+version = '2.0'
+
+#监听端口
+port = 8080 
+
+#视图层
+[view]
+#根路径, 默认/views
+root = 'views'
+
+#文件编码，默认utf-8
+encoding = 'utf-8'
+
+#解析引擎, 默认ejs，支持ejs、hbs
+engine = 'ejs'
+
+#是否缓存模板，默认true
+cache = true
+
+#静态资源
+[static]
+#根路径
+root = 'static'
+
+#文件编码，默认utf-8
+encoding = 'utf-8'
+
+#静态资源缓存相关配置

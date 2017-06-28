@@ -1,0 +1,133 @@
+/**
+ * 处理选择框
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+require("jquery/jquery.selector.js");
+var message = require("message/message.js");
+
+message.register("initSelector", function(e) {
+	var args = e.args,
+		selectors = args.selectors || {};
+	
+	for (var i in selectors) {
+		console.log(i);
+		console.log($(i));
+		$(i).yselector({
+			index: 0,
+			onchange: (function() {
+				var selector = selectors[i];
+				return function(data) {
+					if (typeof selector === "function") {
+						selector.call(null, data);
+					}
+				};
+			})()
+		});
+	}
+});
+
+message.fire("initSelector", {
+	selectors: {
+		"#cardList-form select[name=provinceName]": function(data) {
+			var form = "#cardList-form";
+			var bankCode = $("input[name=bankCode]", form).val(),
+				provinceId = $("select[name=provinceName]", form).val();
+
+			if (provinceId == 0) {
+				return false;
+			}
+			message.fire("fetchCity", {
+				provinceId: provinceId,
+				bankCode: bankCode,
+				form: form
+			});
+		},
+
+		"#cardList-form select[name=cityName]": function(data) {
+			var form = "#cardList-form";
+			var bankCode = $("input[name=bankCode]", form).val(),
+				provinceId = $("select[name=provinceName]", form).val(),
+				cityId = $("select[name=cityName]", form).val();
+
+
+			if (provinceId == 0 || cityId == 0) {
+				return false;
+			}
+
+			$("select[name=cityName]", form).closest(".field")
+				.find(".form-other").remove();
+
+			message.fire("fetchBranch", {
+				provinceId: provinceId,
+				cityId: cityId,
+				bankCode: bankCode,
+				form: form
+			});
+		},
+		"#cardList-form select[name=branchBankCode]": function(data) {
+			var form = "#cardList-form";
+
+			$("select[name=branchBankCode]", form).closest(".field")
+				.find(".form-other").remove();
+		},
+		"#no-cardList-form select[name=bankCode]": function(data) {
+			var form = "#no-cardList-form";
+			var bankCode = $("select[name=bankCode]", form).val();
+			var bankName = $("select[name=bankCode] option:selected", form).text();
+
+			if (bankCode == 0) {
+				return false;
+			}
+			
+			$("input[name=bankName]", form).val(bankName);
+
+			message.fire("fetchProvince", {
+				bankCode: bankCode,
+				form: form
+			});
+		},
+
+		"#no-cardList-form select[name=provinceName]": function(data) {
+			var form = "#no-cardList-form";
+			var bankCode = $("select[name=bankCode]", form).val(),
+				provinceId = $("select[name=provinceName]", form).val();
+
+			if (bankCode == 0 || provinceId == 0) {
+				return false;
+			}
+
+			message.fire("fetchCity", {
+				provinceId: provinceId,
+				bankCode: bankCode,
+				form: form
+			});
+		},
+		"#no-cardList-form select[name=cityName]": function(data) {
+			var form = "#no-cardList-form";
+			var bankCode = $("select[name=bankCode]", form).val(),
+				provinceId = $("select[name=provinceName]", form).val(),
+				cityId = $("select[name=cityName]", form).val();
+
+			if (bankCode == 0 || provinceId == 0 || cityId == 0) {
+				return false;
+			}
+
+			$("select[name=cityName]", form).closest(".field")
+				.find(".form-other").remove();
+
+			message.fire("fetchBranch", {
+				provinceId: provinceId,
+				cityId: cityId,
+				bankCode: bankCode,
+				form: form
+			});
+		},
+		"#no-cardList-form select[name=branchBankCode]": function(data) {
+			var form = "#no-cardList-form";
+
+			$("select[name=branchBankCode]", form).closest(".field")
+				.find(".form-other").remove();
+		}
+   }
+});

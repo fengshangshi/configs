@@ -1,0 +1,516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>【去哪儿网】机票查询预订，酒店预订，旅游团购，度假搜索，门票预订-去哪儿网Qunar.com</title>
+<link rel="stylesheet" href="http://qunarzz.com/home/prd/styles/home@<!--#include file='ver/styles/home.css.ver' -->.css" />
+<!--[if IE 9 ]>
+    <meta name="application-name" content="去哪儿网" />
+    <meta name="msapplication-tooltip" content="去哪儿网" />
+    <meta name="msapplication-task" content="name=机票预订;action-uri=http://flight.qunar.com/;icon-uri=http://simg4.qunarzz.com/site/images/ico/flight.ico" />
+    <meta name="msapplication-task" content="name=酒店预订;action-uri=http://hotel.qunar.com/;icon-uri=http://simg4.qunarzz.com/site/images/ico/hotel.ico" />
+    <meta name="msapplication-task" content="name=团购;action-uri=http://tuan.qunar.com/;icon-uri=http://simg4.qunarzz.com/site/images/ico/tuan.ico" />
+    <meta name="msapplication-task" content="name=度假线路;action-uri=http://package.qunar.com/;icon-uri=http://simg4.qunarzz.com/site/images/ico/package.ico" />
+    <meta name="msapplication-task" content="name=火车票查询;action-uri=http://train.qunar.com/;icon-uri=http://simg4.qunarzz.com/site/images/ico/train.ico" />
+
+    <link rel="shortcut icon" href="http://simg4.qunarzz.com/site/images/ico/favicon2.ico" />
+
+    <script type='text/javascript'>
+    try {
+    window.external.msSiteModeCreateJumplist('特惠旅游团购');
+    window.external.msSiteModeAddJumpListItem
+        ('今日旅游团购新品' ,
+        'http://tuan.qunar.com/index.php?rank=fresh&sortby=city_kw&key=5YWo6YOo_5YWo6YOo',
+        'http://simg4.qunarzz.com/site/images/ico/tuan.ico');
+    window.external.msSiteModeAddJumpListItem
+        ('旅游团购2.3折起' ,
+        'http://tuan.qunar.com/qtab_travel.php',
+        'http://simg4.qunarzz.com/site/images/ico/tuan.ico');
+    window.external.msSiteModeAddJumpListItem
+        ('周边生活2.5折起' ,
+        'http://tuan.qunar.com/qtab_life.php',
+        'http://simg4.qunarzz.com/site/images/ico/tuan.ico');
+    window.external.msSiteModeAddJumpListItem
+        ('酒店团购2折起' ,
+        'http://tuan.qunar.com/qtab_hotel.php',
+        'http://simg4.qunarzz.com/site/images/ico/tuan.ico');
+    } catch (ex) {
+    }
+    </script>
+<![endif]-->
+<meta name="Robots" content="index,follow,NOODP">
+<meta name="keywords" content="机票,飞机票,机票查询,飞机票查询,机票预订,特价机票,机票预定,打折机票" />
+<meta name="description" content="去哪儿Qunar.com提供机票,飞机票,特价机票,打折机票的查询预订；99元春秋航空特惠折扣机票，百元南航、海航惊喜特价机票任您挑选,国航、深航1折特价机票和折扣机票一网打尽，更多打折机票尽在Qunar.com。实时提供上百家旅游预订网站机票报价和航空公司直销机票价格，为您找到最实惠的飞机票信息,是你查询特价机票和机票预订的最佳途径。" />
+<meta http-equiv="cache-control" content="no-cache" />
+<script type="text/javascript">
+    (function(){
+        try{
+            if(top === self || ~location.href.indexOf("index.htm") || ~top.location.host.indexOf('qunar.com')) {
+                return;
+            }
+        } catch (e){
+            var r = document.referrer;
+            if(~r.indexOf('qunar.com') || ~r.indexOf('http://tongji.baidu.com/web/')){
+                return;
+            }
+        }
+        try{
+            top.location.replace("http://www.qunar.com/index.htm");
+        }catch(e){}
+    })();
+</script>
+<script type="text/plain" id="releasemap">
+    <!--#include file="/ver/versions.mapping" -->
+</script>
+</head>
+<body>
+<abbr id="homeadSy" style="display:none;" data-type="qde" data-query="chan=homepage&pg=home&pos=right_top&site=qunar&size=230x200&type=Tear_angle"></abbr>
+<!--#include virtual="/include_html/prd/home/header_styles.html" -->
+<div class="q_header q_header_home">
+    <!--#include virtual="/include_html/prd/home/header_main.html" -->
+</div>
+<div class="q_pagewrap">
+	<div class="q_pagecontair">
+    <abbr style="display:none;" data-type="qde" id="home_active_dynamic" data-query="chan=homepage&pg=home&site=qunar&type=dynamic_skinned" data-style="width:100%;"></abbr>
+    <div class="q_page">
+        <div class="dlAd" id="ad_active_container">
+            <div class="dll"><abbr style="display:none;" id="home_active_couplet_left" data-style="width:120px;"></abbr></div>
+            <div class="dlr">
+                <abbr style="display:none;" id="home_active_couplet_right" data-style="width:120px;"></abbr>
+                <abbr style="display:none;" data-type="qde" data-query="chan=homepage&pg=home&pos=right&site=qunar&size=120x300&type=couplet" data-style="width:120px;" id="dlad_right"></abbr>
+            </div>
+        </div>
+        <!--左栏-->
+        <div class="l_lside">
+            <!--搜索模块-->
+            <div class="b_cgy_sch clrfix" id="js_searchbox">
+                <div class="e_csh_cgy">
+                    <ul class="nav_cgy" id="js_nva_cgy">
+                        <li class="c_flight js-searchnav cur" data-for="flight"><a href="http://flight.qunar.com/" target="_blank"><i class="ico"></i>机票</a></li>
+                        <li class="c_hotel js-searchnav" data-for="hotel"><a href="http://hotel.qunar.com/" target="_blank"><i class="ico"></i>酒店</a></li>
+                        <li class="c_package js-searchnav" data-for="package"><a href="http://package.qunar.com/" target="_blank"><i class="ico"></i>度假</a></li>
+                        <li class="c_piao js-searchnav" data-for="piao"><a href="http://piao.qunar.com/" target="_blank"><i class="ico"></i>门票</a></li>
+                        <li class="c_tuan js-searchnav" data-for="tuan"><a href="http://tuan.qunar.com/" target="_blank"><i class="ico"></i>团购</a></li>
+                        <li class="c_car js-searchnav" data-for="car"><a href="http://car.qunar.com/" target="_blank"><i class="ico"></i>车车</a></li>
+                        <li class="c_phone js-searchnav last" data-for="mobile"><a href="http://phone.qunar.com/" target="_blank"><i class="ico"></i>手机版</a></li>
+                    </ul>
+                </div>
+                <div class="e_csh_sch">
+                    <div id="js_searchbox_flight" class="js-searchbox-panel e_csh_sch_fl">
+                        <div style="display: block;" class="e_csh_sch_flpn">
+                            <div class="ch_search_tab">
+                                <div class="rt_link"><a href="http://user.qunar.com/flight_toolbox.jsp?catalog=ownorders&from=qunarindexP1" target="_blank">出票状态查询</a> | <a href="http://user.qunar.com/flight_toolbox.jsp?catalog=ownorders&from=tuigai" target="_blank">退票改签</a></div>
+                                <ul class="ul_search_tab">
+                                    <li class="cur" id="js_domestic_tab"><a href="#" onclick="return false;">国内机票</a></li>
+                                    <li class="" id="js_inter_tab"><a href="#" onclick="return false;">国际·港澳台机票</a></li>
+                                    <li id="js_tj_tab"><i class="ico_hurryup"></i><a href="#" onclick="return false;"><i class="ico_hot"></i>特价机票</a></li>
+                                </ul>
+                            </div>
+                            <div style="display: block;" class="ch_sch_form ch_sch_flt_bf clrfix" id="js_flighttype_tab_domestic">
+                                <form action="/twell/flight/Search.jsp" method="get" id="js_flight_domestic_searchbox">
+                                    <input value="qunarindex" name="from" type="hidden">
+                                    <div class="crl_group">
+                                        <div class="crl_lab">&nbsp;</div>
+                                        <div class="controls">
+                                            <label class="lal_rdo" for="js_searchtype_oneway">
+                                                <input name="searchType" class="inp_rad js-searchtype-oneway" value="OnewayFlight" checked="checked" id="js_searchtype_oneway" type="radio">
+                                                单程</label>
+                                            <label class="lal_rdo" for="js_searchtype_roundtrip">
+                                                <input name="searchType" class="inp_rad js-searchtype-roundtrip" value="RoundTripFlight" id="js_searchtype_roundtrip" type="radio">
+                                                往返</label>
+                                            <!-- <label class="lal_rdo" for="js_searchtype_deals">
+                                                <input name="searchType" class="inp_rad js-searchtype-deals" value="DealsFlight" id="js_searchtype_deals" type="radio">
+                                                特价</label> -->
+                                        </div>
+                                    </div>
+                                    <div class="crl_group">
+                                        <div class="crl_sp2_1">
+                                            <a class="lnk_change js-exchagne-city" href="#" title="调换出发地和目的地">换</a>
+                                            <div class="crl_lab">城市</div>
+                                            <div class="controls">
+                                                <div class="qcbox qcity" style="z-index: 40;">
+                                                    <div class="qunar-qcbox"><div style="width: 175px; left: 16px; padding-left: 4px; height: 18px; line-height: 18px; " class="qcbox-placeholder">出发地</div><div class="qcbox-prefix">从</div><div class="qcbox-info"><b></b></div><input value="" data-detect-oninput="1" style="margin-left: 16px;" value="" name="fromCity" class="cinput textbox" data-qcbox-placeholder="出发地" data-qcbox-prefix="从" data-qcbox-suggest="flight-fromcity" data-qcbox-hotcity="flight" autocomplete="off" x-webkit-speech="x-webkit-speech" type="text"><div class="qcbox-fixed"></div></div>
+                                                    <div class="qsuggest-contaier js-suggestcontainer"><div style="display: none; z-index: 500;" class="q-suggest"></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="crl_lab">&nbsp;</div>
+                                            <div class="controls">
+                                                <div class="qcbox qcity" style="z-index: 30;">
+                                                    <div class="qunar-qcbox"><div style="width: 175px; left: 16px; padding-left: 4px; height: 18px; line-height: 18px; " class="qcbox-placeholder">目的地</div><div class="qcbox-prefix">到</div><div class="qcbox-info"><b></b></div><input value="" data-detect-oninput="2" style="margin-left: 16px;" value="" name="toCity" class="cinput textbox" data-qcbox-placeholder="目的地" data-qcbox-prefix="到" data-qcbox-suggest="flight-tocity" data-qcbox-hotcity="flight" autocomplete="off" x-webkit-speech="x-webkit-speech" type="text"><div class="qcbox-fixed"></div></div>
+                                                    <div class="qsuggest-contaier js-suggestcontainer"><div style="display: none; z-index: 500;" class="q-suggest"></div></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="crl_sp2_2">
+                                            <div class="crl_lab">日期</div>
+                                            <div class="controls">
+                                                <div class="qcbox qdate fromD" style="z-index: 20;">
+                                                    <div class="qunar-dp"><div class="dp-prefix">往</div><div class="dp-info"><b></b><span class="dp-text">周二</span></div><input style="margin-left: 16px;" id="js_domestic_fromdate" value="" name="fromDate" class="cinput textbox" autocomplete="off" maxlength="10" data-prefix="往" type="text"><div style="display: none;" class="q-datepicker"></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="crl_lab">&nbsp;</div>
+                                            <div class="controls js-backdate" style="visibility: hidden; display: none;">
+                                                <div class="qcbox qdate toD" style="z-index: 10;">
+                                                    <div class="qunar-dp"><div class="dp-prefix">返</div><div class="dp-info"><b></b><span class="dp-text">周五</span></div><input style="margin-left: 16px;" id="js_domestic_todate" value="" name="toDate" class="cinput textbox" autocomplete="off" maxlength="10" data-prefix="返" type="text"><div style="display: none;" class="q-datepicker"></div></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="crl_group crl_group_submit">
+                                        <div class="crl_lab">&nbsp;</div>
+                                        <div class="controls"> <span class="p_btn">&nbsp;<button type="submit" class="btn_search"></button></span>
+                                            <p class="p_text">
+                                                <span style="display: none;" id="js_alsosearch_domestic"></span>
+                                                可实时搜索&nbsp;<span class="highlight">18.1万</span>&nbsp;条国内国际航线
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="ch_agt_inf"></div>
+                        </div>
+                    </div>
+                    <div id="js_searchbox_hotel" class="js-searchbox-panel e_csh_sch_h" style="display:none;"><img class="e_csh_sch_loadding" src="http://simg4.qunarzz.com/tts/images/demo/spinner_tra.gif" /></div>
+                    <div id="js_searchbox_tuan" class="js-searchbox-panel" style="display:none;"><img class="e_csh_sch_loadding" src="http://simg4.qunarzz.com/tts/images/demo/spinner_tra.gif" /></div>
+                    <div id="js_searchbox_package" class="js-searchbox-panel" style="display:none;"><img class="e_csh_sch_loadding" src="http://simg4.qunarzz.com/tts/images/demo/spinner_tra.gif" /></div>
+                    <div id="js_searchbox_piao" class="js-searchbox-panel" style="display:none;"><img class="e_csh_sch_loadding" src="http://simg4.qunarzz.com/tts/images/demo/spinner_tra.gif" /></div>
+                    <div id="js_searchbox_car" class="js-searchbox-panel e_csh_sch_cheche" style="display:none;"><img class="e_csh_sch_loadding" src="http://simg4.qunarzz.com/tts/images/demo/spinner_tra.gif" /></div>
+                    <div id="js_searchbox_mobile" class="js-searchbox-panel e_csh_sch_mb" style="display:none;"><img class="e_csh_sch_loadding" src="http://simg4.qunarzz.com/tts/images/demo/spinner_tra.gif" /></div>
+                </div>
+            </div>
+            <!--\搜索模块-->
+            <!--banner模块-->
+            <div class="b_banner"><abbr id="banner_home_pageMiddle" style="display:none;" data-type="qde" data-style="width:728px;margin-top:6px;" data-query="chan=homepage&pg=home&pos=top&site=qunar&size=728x90"></abbr></div>
+            <!--\banner模块-->
+
+            <!--当季度假热门-->
+            <div class="b_hot_wrap" id="js_b_seasonhot">
+                <div class="e_hot_tit">
+                    <div class="rt_lnk">
+                        <div class="m_tab_sel">
+                            <ul>
+                                <li class="cur" data-tab="month" data-tab-id="month-11月" data-tab-active="cur" data-postfix="秋末余味" data-moreurl="http://package.qunar.com?month=11&amp;from=qunarindexPa11">
+                                    <a href="javascript:void 0;">11月秋末余味</a>
+                                </li>
+                                <li class="" data-tab="month" data-tab-id="month-12月" data-tab-active="cur" data-postfix="欢乐圣诞" data-moreurl="http://package.qunar.com?month=12&amp;from=qunarindexPa12">
+                                    <a href="javascript:void 0;">12月</a>
+                                </li>
+                                <li class="" data-tab="month" data-tab-id="month-1月" data-tab-active="cur" data-postfix="末日已去" data-moreurl="http://package.qunar.com?month=1&amp;from=qunarindexPa1">
+                                    <a href="javascript:void 0;">1月</a>
+                                </li>
+                                <li class="" data-tab="month" data-tab-id="month-2月" data-tab-active="cur" data-postfix="新春畅游" data-moreurl="http://package.qunar.com?month=2&amp;from=qunarindexPa2">
+                                    <a href="javascript:void 0;">2月</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="lnk_more" href="http://package.qunar.com?month=11&amp;from=qunarindexPa11" target="_blank">更多</a>
+                        </div>
+
+                    <h3>当季度假热门</h3>
+                </div>
+
+                <div class="e_hot_cont" data-month="11月" data-panel="month" data-panel-id="month-11月">
+                    <ul class="ul_hot_pkg ul_hot_pkg_h clrfix">
+                        <li>
+                            <div style="overflow: hidden;" class="h_img">
+                                <div class="p_img"> <a href="http://package.qunar.com/beijing_泰国/?from=qunarindexPa11" target="_blank"><img alt="" src="http://img1.qunarzz.com/tuan/team/2012/1102/13518659581355.jpeg" height="110" width="162"></a> </div>
+                                <div style="display: block;" class="p_flt_bg"></div>
+                                <div style="display: block;" class="p_tit">泰国</div>
+                                <div style="top: 110px; display: block;" class="p_hover">
+                                    <h3><a href="http://package.qunar.com/beijing_泰国/?from=qunarindexPa11" target="_blank">恋恋水灯节</a></h3>
+                                    <p><a href="http://package.qunar.com/beijing_泰国/?from=qunarindexPa11" target="_blank">推荐理由：旖旎在泰美丽的烛光之夜，放走烦恼留下美好。</a></p>
+                                    <p class="zt"><a class="v_route" href="http://package.qunar.com/beijing_泰国/?from=qunarindexPa11" target="_blank">查看线路</a><a href="http://package.qunar.com/beijing_泰国/?from=qunarindexPa11" target="_blank">泰国旅游</a></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="h_img">
+                                <div class="p_img"> <a href="http://package.qunar.com/beijing_丽江/?from=qunarindexPa11" target="_blank"><img alt="" src="http://img1.qunarzz.com/tuan/team/2012/1102/13518658426495.jpeg" height="110" width="162"></a> </div>
+                                <div class="p_flt_bg"></div>
+                                <div class="p_tit">丽江</div>
+                                <div class="p_hover">
+                                    <h3><a href="http://package.qunar.com/beijing_丽江/?from=qunarindexPa11" target="_blank">淡季游丽江</a></h3>
+                                    <p><a href="http://package.qunar.com/beijing_丽江/?from=qunarindexPa11" target="_blank">推荐理由：神圣的玉龙雪山下，细品古城热闹背后的味道。</a></p>
+                                    <p class="zt"><a class="v_route" href="http://package.qunar.com/beijing_丽江/?from=qunarindexPa11" target="_blank">查看线路</a><a href="http://package.qunar.com/beijing_丽江/?from=qunarindexPa11" target="_blank">丽江旅游</a></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="h_img">
+                                <div class="p_img"> <a href="http://package.qunar.com/beijing_台湾/?from=qunarindexPa11" target="_blank"><img alt="" src="http://img1.qunarzz.com/tuan/team/2012/1102/13518658812465.jpeg" height="110" width="162"></a> </div>
+                                <div class="p_flt_bg"></div>
+                                <div class="p_tit">台湾</div>
+                                <div class="p_hover">
+                                    <h3><a href="http://package.qunar.com/beijing_台湾/?from=qunarindexPa11" target="_blank">台北清新游</a></h3>
+                                    <p><a href="http://package.qunar.com/beijing_台湾/?from=qunarindexPa11" target="_blank">推荐理由：避开台风季，去台北看场演唱会、扫购潮品。</a></p>
+                                    <p class="zt"><a class="v_route" href="http://package.qunar.com/beijing_台湾/?from=qunarindexPa11" target="_blank">查看线路</a><a href="http://package.qunar.com/beijing_台湾/?from=qunarindexPa11" target="_blank">台湾旅游</a></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="last">
+                            <div class="h_img">
+                                <div class="p_img"> <a href="http://package.qunar.com/beijing_法国/?from=qunarindexPa11" target="_blank"><img alt="" src="http://img1.qunarzz.com/tuan/team/2012/1102/13518659188329.jpeg" height="110" width="162"></a> </div>
+                                <div class="p_flt_bg"></div>
+                                <div class="p_tit">法国</div>
+                                <div class="p_hover">
+                                    <h3><a href="http://package.qunar.com/beijing_法国/?from=qunarindexPa11" target="_blank">巴黎时尚武装</a></h3>
+                                    <p><a href="http://package.qunar.com/beijing_法国/?from=qunarindexPa11" target="_blank">推荐理由：巴黎11月底开始进入打折季，法式大范儿走起！</a></p>
+                                    <p class="zt"><a class="v_route" href="http://package.qunar.com/beijing_法国/?from=qunarindexPa11" target="_blank">查看线路</a><a href="http://package.qunar.com/beijing_法国/?from=qunarindexPa11" target="_blank">法国旅游</a></p>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                    <ul class="ul_hot_rut clrfix">
+                        <li><span class="prc"><b>¥</b>2660<i>起</i></span><a href="http://package.qunar.com/pqd/list_%E8%8A%AD%E5%A0%A4%E9%9B%85_%E5%8C%97%E4%BA%AC/?from=qunarindexPal1" title="" target="_blank">泰国 微笑曼谷和浪漫芭堤雅</a></li>
+                        <li class="odd"><span class="prc"><b>¥</b>77<i>起</i></span><a href="http://package.qunar.com/pqd/list_%E4%B8%BD%E6%B1%9F_%E5%8C%97%E4%BA%AC?from=qunarindexPal1" title="" target="_blank">丽江自由行 泡吧艳遇消磨时光</a></li>
+                        <li><span class="prc"><b>¥</b>3480<i>起</i></span><a href="http://package.qunar.com/pqd/list_%E5%8F%B0%E6%B9%BE_%E5%8C%97%E4%BA%AC/?from=qunarindexPal1" title="" target="_blank">台湾环岛游 全景经典观光线</a></li>
+                        <li class="odd"><span class="prc"><b>¥</b>9500<i>起</i></span><a href="http://package.qunar.com/pqd/list_%E6%B3%95%E6%84%8F%E7%91%9E_%E5%8C%97%E4%BA%AC/?from=qunarindexPal1" title="" target="_blank">经典法意瑞 初游欧洲推荐 </a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--\当季度假热门-->
+
+            <!--热门团购排行-->
+            <div class="b_hot_wrap" id="js_b_hottuan">
+                <div class="e_hot_tit">
+                    <div class="rt_lnk">
+                        <div class="m_tab_sel">
+                            <ul><li class="cur" data-tab="city" data-tab-id="city-周末周边游特价" data-tab-active="cur" data-moreurl="http://tuan.qunar.com/qtab_around.php?ename=china&amp;from=qunarindexTuan1"><a href="javascript:void 0;">周末周边游特价</a></li><li class="" data-tab="city" data-tab-id="city-特惠自由行" data-tab-active="cur" data-moreurl="http://tuan.qunar.com/qtab_travel_d.php?ename=china&amp;from=qunarindexTuan2"><a href="javascript:void 0;">特惠自由行</a></li><li class="" data-tab="city" data-tab-id="city-特价酒店" data-tab-active="cur" data-moreurl="http://tuan.qunar.com/qtab_hotel.php?dest=5YWo5Zu9&amp;from=qunarindexTuan3"><a href="javascript:void 0;">特价酒店</a></li></ul>
+                        </div>
+                        <a href="http://tuan.qunar.com/qtab_around.php?ename=china&amp;from=qunarindexTuan1" class="lnk_more" target="_blank">更多</a></div>
+                    <h3>热门团购排行</h3>
+                </div>
+                <div style="display: block;" class="e_hot_cont">
+                    <ul style="display: block;" class="ul_hot_tuan clrfix" data-panel="city" data-panel-id="city-周末周边游特价" data-moreurl="http://tuan.qunar.com/qtab_around.php?ename=china&amp;from=qunarindexTuan1">
+                        <li>
+                            <div class="h_img"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAwOTE4NA==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_1&amp;ex_track=qunarindexTuan1" target="_blank"><img src="http://img1.qunarzz.com/tuan/team/2012/1011/13499415144904.jpeg_165x110_7fa1b829.jpg" alt="" title="" height="110" width="162"></a><a href="http://tuan.qunar.com/team.php?id=QNRMTAwOTE4NA==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_1&amp;ex_track=qunarindexTuan1" target="_blank"><em class="m_disct" data-discount="3.6"><b>3</b>.6折</em></a> </div>
+                            <div class="h_inf"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAwOTE4NA==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_1&amp;ex_track=qunarindexTuan1" title="" target="_blank">三亚3天2晚双人超值浪漫休闲之旅！</a> </div>
+                            <div class="h_prc"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAwOTE4NA==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_1&amp;ex_track=qunarindexTuan1" target="_blank"><span class="prc"><b>¥</b>1730</span></a> 市场价：¥<em class="t_c">4880</em> </div>
+                        </li>
+                        <li>
+                            <div class="h_img"> <a href="http://tuan.qunar.com/team.php?id=QNROTUwMDAw&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_2&amp;ex_track=qunarindexTuan1" target="_blank"><img src="http://img1.qunarzz.com/tuan/team/2012/0911/13473441456337.jpeg_165x110_c0113af1.jpg" alt="" title="" height="110" width="162"></a><a href="http://tuan.qunar.com/team.php?id=QNROTUwMDAw&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_2&amp;ex_track=qunarindexTuan1" target="_blank"><em class="m_disct" data-discount="2.5"><b>2</b>.5折</em></a> </div>
+                            <div class="h_inf"> <a href="http://tuan.qunar.com/team.php?id=QNROTUwMDAw&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_2&amp;ex_track=qunarindexTuan1" title="" target="_blank">仙人掌度假酒店、蜈支洲岛4天3晚自助游</a> </div>
+                            <div class="h_prc"> <a href="http://tuan.qunar.com/team.php?id=QNROTUwMDAw&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_2&amp;ex_track=qunarindexTuan1" target="_blank"><span class="prc"><b>¥</b>2488</span></a> 市场价：¥<em class="t_c">9888</em> </div>
+                        </li>
+                        <li>
+                            <div class="h_img"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAyNjAxNg==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_3&amp;ex_track=qunarindexTuan1" target="_blank"><img src="http://img1.qunarzz.com/tuan/team/2012/1018/13505432046599.jpeg_165x110_d4f27f80.jpg" alt="" title="" height="110" width="162"></a><a href="http://tuan.qunar.com/team.php?id=QNRMTAyNjAxNg==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_3&amp;ex_track=qunarindexTuan1" target="_blank"><em class="m_disct" data-discount="4.1"><b>4</b>.1折</em></a> </div>
+                            <div class="h_inf"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAyNjAxNg==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_3&amp;ex_track=qunarindexTuan1" title="" target="_blank">三亚希尔顿逸林+3选1酒店4天3晚自助游</a> </div>
+                            <div class="h_prc"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAyNjAxNg==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_3&amp;ex_track=qunarindexTuan1" target="_blank"><span class="prc"><b>¥</b>2010</span></a> 市场价：¥<em class="t_c">4890</em> </div>
+                        </li>
+                        <li class="last">
+                            <div class="h_img"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAwODI1Ng==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_4&amp;ex_track=qunarindexTuan1" target="_blank"><img src="http://img1.qunarzz.com/tuan/team/2012/1011/13499517429898.jpeg_165x110_c213ef91.jpg" alt="" title="" height="110" width="162"></a><a href="http://tuan.qunar.com/team.php?id=QNRMTAwODI1Ng==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_4&amp;ex_track=qunarindexTuan1" target="_blank"><em class="m_disct" data-discount="3.7"><b>3</b>.7折</em></a> </div>
+                            <div class="h_inf"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAwODI1Ng==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_4&amp;ex_track=qunarindexTuan1" title="" target="_blank">希尔顿逸林酒店、套餐可选4天3晚自助游</a> </div>
+                            <div class="h_prc"> <a href="http://tuan.qunar.com/team.php?id=QNRMTAwODI1Ng==&amp;from=qunarindexTuan1&amp;in_track=index_china_zhoubian_4&amp;ex_track=qunarindexTuan1" target="_blank"><span class="prc"><b>¥</b>2973</span></a> 市场价：¥<em class="t_c">7980</em> </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--\热门团购排行-->
+
+            <!--图片轮播-->
+            <div class="b_pic_csl" id="js_b_mainslider" class="hide"></div>
+            <!--\图片轮播-->
+
+            <!--banner模块-->
+            <div class="b_banner"> <abbr id="banner_home_ad1001" style="display:none;" data-type="qde" data-style="width:100%;margin:6px 0;" data-query="chan=homepage&pg=home&pos=left_mid&site=qunar&size=728x90"></abbr> </div>
+            <!--\banner模块-->
+
+            <!--热销特价门票-->
+            <div class="mp_hot_wrap" id="js_b_hotpiao" class="hide"></div>
+            <!--\热销特价门票-->
+
+            <!--精彩旅行攻略-->
+            <div class="b_travel_wrap" id="js_b_strategy">
+                <div class="e_travel_tit">
+                    <div class="rt_lnk">
+                        <div class="m_tab_sel">
+                            <ul>
+                                <li class="cur" data-tab-active="cur" data-tab="strategycat" data-tab-id="strategycat-当季热门"><a href="#">当季热门</a></li>
+                                <li class="" data-tab-active="cur" data-tab="strategycat" data-tab-id="strategycat-吃货血拼"><a href="#">吃货血拼</a></li>
+                                <li class="" data-tab-active="cur" data-tab="strategycat" data-tab-id="strategycat-闺蜜私奔"><a href="#">闺蜜私奔</a></li>
+                                <li class="" data-tab-active="cur" data-tab="strategycat" data-tab-id="strategycat-海岛迷情"><a href="#">海岛迷情</a></li>
+                                <li class="" data-tab-active="cur" data-tab="strategycat" data-tab-id="strategycat-浪漫时刻"><a href="#">浪漫时刻</a></li>
+                                <li class="" data-tab-active="cur" data-tab="strategycat" data-tab-id="strategycat-清新小镇"><a href="#">清新小镇</a></li>
+                            </ul>
+                        </div>
+                        <a class="lnk_more" href="http://travel.qunar.com/?from=qunarindexTr100" target="_blank">更多</a> </div>
+                    <h3>精彩旅行攻略</h3>
+                </div>
+                <div class="e_travel_cont" data-panel="strategycat" data-panel-id="strategycat-当季热门">
+                    <ul class="list_item clrfix">
+                        <li class="item">
+                            <div class="imgbox">
+                                <div class="t_icon"></div>
+                                <a class="t_p t_tit" href="http://travel.qunar.com/youji/3904659" target="_blank">超强攻略！法国意大利</a>
+                                <div class="t_p t_titbg"></div>
+                                <a href="http://travel.qunar.com/youji/3904659" target="_blank">
+                                    <img alt="" src="http://img1.qunarzz.com/travel/poi/1411/5b/5bff43bebd9c74d1213a9cdb.jpg" height="162" width="162">
+                                </a>
+                            </div>
+                            <div class="txtbox">
+                                <div class="t_des">独自旅行，强大自己</div>
+                                <div class="t_author clrfix"><div class="a_icon"></div><div class="a_name">廖鱼杉</div></div>
+                            </div>
+                        </li>
+
+                        <li class="item">
+                            <div class="imgbox">
+                                <a class="t_p t_tit" href="http://travel.qunar.com/youji/4621113" target="_blank">品味·甜甜的葡萄牙</a>
+                                <div class="t_p t_titbg"></div>
+                                <a href="http://travel.qunar.com/youji/4621113" target="_blank">
+                                    <img alt="" src="http://img1.qunarzz.com/travel/poi/1411/90/90fa4aa5ba42086e213a9cdb.jpg" height="162" width="162">
+                                </a>
+                            </div>
+                            <div class="txtbox">
+                                <div class="t_des">90后MM带你走遍水果牙</div>
+                                <div class="t_author clrfix"><div class="a_icon"></div><div class="a_name">暮潇楚</div></div>
+                            </div>
+                        </li>
+
+                        <li class="item">
+                            <div class="imgbox">
+                                <a class="t_p t_tit" href="http://travel.qunar.com/youji/4681329" target="_blank">天之涯海之角---三亚</a>
+                                <div class="t_p t_titbg"></div>
+                                <a href="http://travel.qunar.com/youji/4681329" target="_blank">
+                                    <img alt="" src="http://img1.qunarzz.com/travel/poi/1411/cf/cfdd5c2305b3c95c213a9cdb.jpg" height="162" width="162">
+                                </a>
+                            </div>
+                            <div class="txtbox">
+                                <div class="t_des">说走就走的冲动之旅</div>
+                                <div class="t_author clrfix"><div class="a_icon"></div><div class="a_name">胖猪猪胖猪猪</div></div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="imgbox">
+                                <a class="t_p t_tit" href="http://travel.qunar.com/youji/4685196" target="_blank">遇见最美的北京秋天</a>
+                                <div class="t_p t_titbg"></div>
+                                <a href="http://travel.qunar.com/youji/4685196" target="_blank">
+                                    <img alt="" src="http://img1.qunarzz.com/travel/poi/1411/10/109d6f01de6d8b78213a9cdb.jpg" height="162" width="162">
+                                </a>
+                            </div>
+                            <div class="txtbox">
+                                <div class="t_des">三五好友，邂逅京城的秋天</div>
+                                <div class="t_author clrfix"><div class="a_icon"></div><div class="a_name">jxik6371</div></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="text_list clrfix">
+                        <li class="list">
+                            <div class="l_sum">13886篇攻略</div>
+                            <div class="l_des"><a href="http://travel.qunar.com/p-gj300501-aodaliya" target="_blank" class="l_tit">澳大利亚：</a>飞越赤道，冬日暖阳，看世界的另一面</div>
+                        </li>
+                        <li class="list">
+                            <div class="l_sum">2502篇攻略</div>
+                            <div class="l_des"><a href="http://travel.qunar.com/p-cs302161-qingmai" target="_blank" class="l_tit">清迈：</a>有一种铭刻于心的旅行，叫做清迈！</div>
+                        </li>
+                        <li class="list">
+                            <div class="l_sum">11486篇攻略</div>
+                            <div class="l_des"><a href="http://travel.qunar.com/p-sf356275-lapulan" target="_blank" class="l_tit">拉普兰：</a>冰天雪地中，一不留神就遇见了极光！</div>
+                        </li>
+                        <li class="list">
+                            <div class="l_sum">1980篇攻略</div>
+                            <div class="l_des"><a href="http://travel.qunar.com/p-oi708334-wuyuan" target="_blank" class="l_tit">婺源：</a>田园诗般的意境，涤荡出内心的安宁</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--\精彩旅行攻略-->
+            <!--酒店全新模式-->
+            <div class="b_hot_wrap" id="js_b_hotelnewmod" class="hide"></div>
+            <!--\酒店全新模式-->
+            <!-- 旅行者 -->
+            <div class="b_hot_wrap" id="js_b_traveller" class="hide"></div>
+            <!-- \旅行者 -->
+            <abbr id="banner_home_google" style="display:none;" data-type="qde" data-style="width:100%;margin:6px 0;" data-query="chan=homepage&pg=home&pos=mid&site=qunar&size=728x90"></abbr>
+        </div>
+        <!--\左栏-->
+        <!--右栏-->
+        <div class="l_rside">
+            <!--banner模块-->
+            <div class="b_banner"> <abbr id="banner_home_rightTop" style="display:none;" data-type="qde" data-style="width:100%;margin-bottom:6px;" data-query="chan=homepage&pg=home&pos=top&site=qunar&size=230x260"></abbr> </div>
+            <div class="b_banner"> <abbr id="banner_home_rightMiddle" style="display:none;" data-type="qde" data-style="width:100%;height:90px;margin-bottom:6px;" data-query="chan=homepage&pg=home&pos=top&site=qunar&size=230x90"></abbr> </div>
+            <!-- 24小时 电话 start-->
+            <div class="b_prv_lnk">
+                <div style="display: block;" class="e_prv_tit">
+                    <div class="customer_center">
+                        <p class="custorm_tephone">去哪儿网客服电话&nbsp;<b>10101234</b></p>
+						<p class="custorm_hwphone">海外用户请拨打&nbsp;<b>+86-10-10101234</b></p>
+                        <p class="custom_24"><span class="servers_24"></span>提供<span class="num">24</span>小时服务</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 24小时 电话 end-->
+            <!--\banner模块-->
+            <!--去哪儿网提供的链接-->
+            <div class="b_prv_lnk">
+                 <div class="e_prv_tit"><a href="http://codpay.qunar.com/cod-web/home.do?fromId=homepage" target="_blank">去哪儿网“存款证明”线上办理，火热申请中</a>
+                <em class="hot" style="margin: 7px -10px 0 0;width: 10px;height: 10px;font-size: 12px;background: url(http://simg4.qunarzz.com/common/hf/header_v16.png) -78px -59px no-repeat;color: #fe0053;overflow: visible;"><i style="position: absolute; line-height: 13px;font-style: normal;overflow: visible;">热</i></em>
+                 </div>
+                <div class="e_prv_tit"><a href="http://stock.sohu.com/20140612/n400748537.shtml" target="_blank">认证导游入驻去哪儿网</a></div>
+                <div class="e_prv_tit"><a href="http://tech.sina.com.cn/i/2014-03-24/14199266800.shtml?qq-pf-to=pcqq.c2c" target="_blank">去哪儿网已通过支付卡产业数据安全标准</a></div>
+                <div class="e_prv_tit" id="ifmRightTextlink_head" style="display:none;"> 去哪儿网提供的链接 </div>
+                <div class="e_prv_cont">
+                    <abbr id="ifmRightTextlink" style="display:none;" data-type="qde_text" data-query="chan=homepage&pg=home&pos=right_top&site=qunar&qtype=js&qnum=12&type=textlink" data-style="width:100%;"></abbr>
+                </div>
+            </div>
+
+            <!--\去哪儿网提供的链接-->
+        </div>
+        <!--\右栏-->
+ 
+		<!-- capital -->
+	 
+		<!-- capital -->
+ 
+    </div>
+</div>
+ <abbr id="ad_home_right_bottom" style="display:none;" data-type="qde" data-style="width:100%;margin-bottom:6px;" data-query="chan=homepage&pg=home&pos=right_bottom&site=qunar&size=120x60&type=Floating_window"></abbr>
+<div class="qn_footer" style="border-top:1px solid #ddd;">
+    <!--#include virtual='/include_html/footer/footer_public.html' -->
+</div>
+<img id="allocateCookie" src="http://www.qunar.com/twell/cookie/allocateCookie.jsp" style="display:none" />
+<iframe id="js_ifrmHistory" style="width:1px;height:1px;visibility:hidden;position:absolute" src=""></iframe>
+<script type="text/javascript">
+
+    var SERVER_TIME = new Date('<!--#config timefmt="%Y/%m/%d" --><!--#echo var="DATE_LOCAL" -->');
+    var CLIENT_TIME = new Date();
+    var QZZVERSION = "<!--#include file='.ver' -->";
+    var IP_ADDRESS = "";
+    var __getip__ = function(obj) {
+        var city = location.search.match(/debug=city=([^&#]+)/);
+        IP_ADDRESS = city ? decodeURI(city[1]) : obj["city"];
+    };
+    document.write("<script src='http://ws.qunar.com/ips.jcp?callback=__getip__'></scr" + "ipt>");
+
+    (function(){
+        window._ba_utm_init = function(GA){
+            var ga = this;
+            window['_ba_utm_l'] = 'w';
+            window['_ba_utm_s'] = '170';
+        };
+        //-- load ga script
+        var s = document.createElement('script');
+        s.src = 'http://bc.qunar.com/js/ga.min.js';
+        var head = document.getElementsByTagName('head');
+        if(head&&head[0]) { head[0].appendChild(s); }
+    })();
+</script>
+<script src="http://qunarzz.com/jquery/prd/jquery-1.7.2.js"></script>
+<script src="http://qunarzz.com/home/prd/scripts/home@<!--#include file='ver/scripts/home.js.ver' -->.js"></script>
+<script src="http://bmrg.qunar.com/js/bmrg.js"></script>
+<script type="text/javascript">
+    if (typeof BOOMR != 'undefined') {
+        BOOMR.init({beacon_url: "http://bmrg.qunar.com/home"});
+    }
+</script>
+
+<script type="text/javascript" src="http://ch.qunar.com/c/js/clickheat.js"></script><script type="text/javascript">
+<!--clickHeatSite = 'www.qunar.com';clickHeatGroup = 'qhome';clickHeatServer = 'http://ch.qunar.com/c/click.php';initClickHeat(); //-->
+</script>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F75154a8409c0f82ecd97d538ff0ab3f3' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</body>
+</html>

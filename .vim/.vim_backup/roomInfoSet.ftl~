@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>网上开店 - 去呼呼管家</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="去呼呼管家是非标准住宿市场广为使用的客房管理系统，帮助管理者智能规划不同房型的占房计划，及价格计划，提供强有力的数据报表及收益分析，帮助管理者做出正确的决策。去呼呼管家不仅提供了房态，订单，账务，客史等基本功能，还提供渠道直连，店铺直销等协助管理者增加宣传和销售的整套解决方案。">
+        <meta name="keywords" content="非标住宿，智能门锁，密码开门，客栈管理系统，免费公寓管理系统，公寓管理，OTA数据同步，房态管理，免费PMS，房态管理系统">
+        <link rel="shortcut icon" href="${img}/base/bitbug_favicon.ico">
+		<link rel="stylesheet" href="http://q.qunarzz.com/srm/prd/styles/base@<#include '../ver/styles/base.css.ver'>.css">
+        <link rel="stylesheet" href="http://q.qunarzz.com/srm/prd/styles/dpRoomInfo@<#include '../ver/styles/dpRoomInfo.css.ver'>.css">
+		<#include '../common/config.ftl'>
+		<script type="text/javascript">
+			  CONFIG['DP_GOTOROOM_FLAG']='${roomFlag}'; //1表示跳到room tab，其他表示按Nav逻辑走
+		</script>
+	</head>
+	<body class="page page-roominfo">
+		<div ms-controller="layout" ms-include-src="layoutTpl" data-include-replace="true"></div>
+		<!-- main  -->
+		<div class="srm-main fn-clear js-roominfo-set" id="js-room-info-set">
+			<div class="srm-content">
+				<div class="dp-wrapper">
+					<div class="dp-check-tip hide" id="js-edit-disabled"></div>
+					<!-- 步骤1234分别为step1、step2、step3、step4 -->
+                   <ul class="dp-steps-box fn-clear hide" on="hotel" id="js-step">
+                        <li class="dp-step" desc="hotel" to="hotel">
+                            <a href="#nogo">
+                                <!-- <span class="dp-step-num">1</span> -->
+                                <span class="dp-step-txt">门店信息</span>
+                            </a>
+                            <div class="dp-set-tips hide" tip="审核未通过"></div>
+                        </li>
+                        <li class="dp-step" desc="room" to="room">
+                            <a class="" href="#nogo">
+                                <!-- <span class="dp-step-num">2</span> -->
+                                <span class="dp-step-txt">房型信息</span>
+                            </a>
+							 <div class="dp-set-tips hide" tip="您有房型信息审核未通过"></div>
+                        </li>
+                        <li class="dp-step" desc="picture" to="picture">
+                            <a href="#nogo">
+                                <!-- <span class="dp-step-num">3</span> -->
+                                <span class="dp-step-txt">图片信息</span>
+                            </a>
+							 <div class="dp-set-tips" tip="您有图片信息审核未通过"></div>
+                        </li>
+                        <li class="dp-step " desc="owner" to="owner">
+                            <a href="#nogo">
+                                <!-- <span class="dp-step-num">4</span> -->
+                                <span class="dp-step-txt">房东信息</span>
+                            </a>
+							<div class="dp-set-tips hide" tip="审核未通过"></div>
+                        </li>
+                         <li class="dp-step lastli" desc="cash" to="cash">
+                            <a href="#nogo">
+                                <span class="dp-step-txt">收款信息</span>
+                            </a>
+							<div class="dp-set-tips hide" tip="审核未通过"></div>
+                        </li>
+                    </ul>
+					<div class="dp-check-tip hide" id="js-check"><span class="font-red"></span></div>
+					<!-- 公寓信息+房型信息+图片信息+房东信息+收款信息的公共区域 -->
+					<div class="dp-roominfo-main" id="wrap">
+						<div class="js-content" id="js-content"></div>
+						<div class="seb-mask"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /main  -->
+		
+		<script type="text/javascript" crossorigin src="http://q.qunarzz.com/srm/prd/scripts/base@<#include '../ver/scripts/base.js.ver'>.js"></script>
+		<script type="text/javascript" src="${js}/uploadify.js"></script>
+	    <script type="text/javascript" crossorigin src="http://q.qunarzz.com/srm/prd/scripts/dpRoomInfo@<#include '../ver/scripts/dpRoomInfo.js.ver'>.js"></script>
+		
+		<!-- ga s -->
+		<#include '../common/ga.ftl'>
+		<!-- ga e -->
+		
+	</body>
+</html>

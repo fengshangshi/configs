@@ -1,0 +1,77 @@
+/**
+ * Created by he on 15/12/22.
+ */
+
+var lockStateTpl = require('../tpl/lockState.handlebars'),
+    Step = require('lib/step/step');
+
+G.message.register('room.getLockState', function(e) {
+    var args = e.args,
+        root = args.root,
+        param = args.param
+
+    var lockInfo = {
+        lockState: '',
+        hzkPwd: '',
+        isClean: String(param.isClean)
+    };
+
+    Step(
+        function() {
+            fetchRoomPassword(this.parallel());
+            getLockInfo(this.parallel());
+        },
+        function(res) {
+						console.log(lockInfo);
+            var lockStateHtml = lockStateTpl(lockInfo);
+						console.log(lockStateHtml);
+            $(root).children('.flex').html(lockStateHtml);
+
+            G.message.fire('room.roomDetailEvent', {
+                root: root,
+                roomNo: param.roomNo,
+                hotelNo: param.hotelNo
+            })
+        }
+    );
+
+    function fetchRoomPassword(next) {
+        G.ajax({
+            url: '/api/roomPassword/queryRoomPassword',
+            data: {
+                hotelNo: param.hotelNo,
+                roomNos: param.roomNo
+            },
+            success: function(res) {
+                if (res.data && res.data.length) {
+                    lockInfo.hzkPwd = res.data[0].managerPassword;
+                } else {
+                    lockInfo.hzkPwd = '';
+                }
+                next && next();
+            }
+        });
+    }
+
+    function getLockInfo(next) {
+        var roomNoLockIdMaps = [{
+            lockId: param.lockId,
+            roomNo: param.roomNo
+        }];
+        G.ajax({
+            url: '/api/lock/queryLockInfos',
+            data: {
+                hotelNo: param.hotelNo,
+                roomNoLockIdMaps: JSON.stringify(roomNoLockIdMaps)
+            },
+            success: function(res) {
+                if (res.data && res.data.roomLockStateList && res.data.roomLockStateList.length) {
+                    lockInfo.lockState = res.data.roomLockStateList[0].lockState;
+                } else {
+                    lockInfo.lockState = '';
+                }
+                next && next();
+            }
+        });
+    }
+});

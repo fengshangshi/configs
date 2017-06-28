@@ -1,0 +1,41 @@
+#parse("widget/_include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/_include/headMeta.vm")
+	<title>CRM -  去哪儿网 Qunar.com</title>
+	<link rel="stylesheet" href="${qzzUrl}/${cssPath}/resource/list.css" />
+	#parse("widget/_include/headScript.vm")
+</head>
+<body>
+    <div class="crm-container">
+        <header class="crm-header">
+	        <a href="javascript:void(0);" class="yo-ico regret" id="backBtn">&#xf07d;</a>
+            <h2 class="title">
+                <span class="title-txt" id="listTitle" data-type=""></span>
+	            <i class="yo-ico">&#xf031;</i>
+            </h2>
+	        <div class="affirm list_affirm" id="searchBox">
+		        <i class="yo-ico search-btn" id="searchBtn">&#xf067;</i>
+		        <input type="text" readonly="readonly" placeholder="公寓/地址/电话/负责人">
+		        <i class="yo-ico close-btn" id="closeBtn">&#xf077;</i>
+	        </div>
+        </header>
+        <ul class="auth-type-list">
+            #foreach ($list in $tplData.metaData.typeList)
+            <li data-type="$!{list.type}">$!{list.name}</li>
+            #end
+        </ul>
+        <div class="crm-content">
+            <section class="list-wrap js-list-wrap"></section>
+            <div class="no_house" id="noHouse">当前条件下，没有公寓</div>
+            <div class="crm-loading firstLoading"><i class="yo-ico">&#xf089;</i> 正在加载，请稍候...</div>
+            <div class="no-more-tip">无更多内容</div>
+		</div>
+	    <div class="mask-option-layer" id="mask"></div>
+        <input type="hidden" id="pageNow" value="1" />
+	</div>
+	<script src="${qzzUrl}/${jsPath}/resource/list/entry.js"></script>
+	#parse("widget/_include/footScript.vm")
+</body>
+</html>

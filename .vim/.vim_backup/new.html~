@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>发布配置</title>
+		<link href="/styles/bootstrap.min.css" rel="stylesheet">
+		<link href="/styles/jquery-ui.min.css" rel="stylesheet">
+		<style>
+			body { 
+				padding-top: 20px;
+				padding-bottom: 20px;
+				background-color: #eee;
+			}
+			.nav-pills {
+				margin-bottom: 20px;
+			}
+			.form-horizontal {
+				width: 600px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<ul class="nav nav-pills">
+				<li role="presentation">
+					<a href="/config/history">发布记录</a></li>
+				<li role="presentation" class="active">
+						<a href="/config/new">发布更新</a></li>
+			</ul>
+			<form id="configForm" class="form-horizontal" 
+				action="/config/new" method="post">
+				<div class="form-group">
+					<label for="zipPath" class="col-sm-2
+						control-label">资源包地址:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="zipPath" 
+							name="zipPath" placeholder="http://" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="version" class="col-sm-2
+						control-label">资源包版本:</label>
+					<div class="col-sm-10" style="width: 150px">
+						<input type="text" class="form-control" id="version" 
+							name="version" placeholder="1.0.0" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="loadMode" class="col-sm-2
+						control-label">下载模式:</label>
+					<div class="col-sm-10">
+						<label class="radio-inline">
+							<input type="radio" name="loadMode" id="loadMode" 
+								value="silence" checked="true"> 静默
+						</label>
+						<label class="radio-inline">
+							  <input type="radio" name="loadMode"
+								  id="loadMode" value="tips"> 提示
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="isForce" class="col-sm-2
+						control-label">强制升级:</label>
+					<div class="col-sm-10">
+						<label class="radio-inline">
+							  <input type="radio" name="isForce"
+							  id="isForce" value="0" checked="true"> 否
+						</label>
+						<label class="radio-inline">
+							  <input type="radio" name="isForce"
+							  id="isForce" value="1"> 是
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="date" class="col-sm-2
+						control-label">发布日期:</label>
+					<div class="col-sm-10" style="width: 150px">
+						<input type="text" class="form-control" id="date" 
+							name="date" placeholder="日期" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="packageSize" class="col-sm-2
+						control-label">资源包大小:</label>
+					<div class="col-sm-10" style="width: 150px">
+						<input type="text" class="form-control" id="packageSize" 
+							name="packageSize" placeholder="" required>
+					</div>
+					<label class="radio-inline" style="padding-left: 0;"> M </label>
+				</div>
+				<div class="form-group">
+					<label for="message" class="col-sm-2
+						control-label">升级说明:</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" id="message" 
+							name="message" rows="3" required></textarea>
+					</div>
+				</div>
+				<div
+					class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="button" id="preview" class="btn btn-default">预览</button>
+						<button type="submit" class="btn btn-success">立即发布</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script src="/scripts/jquery-2.1.4.min.js"></script>
+		<script src="/scripts/jquery.validate.min.js"></script>
+		<script src="/scripts/jquery-ui.min.js"></script>
+		<script src="/scripts/config/new/index.js"></script>
+	</body>
+</html>

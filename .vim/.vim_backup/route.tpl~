@@ -1,0 +1,113 @@
+<div id="sky-route-top">
+    <div id="sky-route-top-inner" class="clearfix">
+        <span id="sky-back-to-index"><i class="back-arrow">返回首页</i>|</span>
+        <ul id="sky-route-top-info" class="clearfix">
+            <li style="width: 30%;">
+                <span>
+                    <img src="/static/images/flight/location.png" />
+                </span>
+                <div>
+                    <strong>经纬度</strong>
+                    <i>
+                        <em id="sky-route-top-lng"></em>,<em id="sky-route-top-lat"></em>
+                    </i>
+                </div>
+            </li>
+            <li style="width: 20%;">
+                <span>
+                    <img src="/static/images/flight/direction.png" />
+                </span>
+                <div>
+                    <strong>方向</strong>
+                    <i id="sky-route-top-direction-info"></i>
+                </div>
+            </li>
+            <li style="width: 30%;">
+                <span>
+                    <img src="/static/images/flight/speed.png" />
+                </span>
+                <div>
+                    <strong>航速</strong>
+                    <i>
+                        <em id="sky-route-top-speed-knot"></em>kts
+                        (<em id="sky-route-top-speed-kmh"></em>km/h)
+                    </i>
+                </div>
+            </li>
+            <li style="width: 20%;">
+                <span>
+                    <img src="/static/images/flight/vspeed.png" />
+                </span>
+                <div>
+                    <strong>垂直航速</strong>
+                    <i id="sky-route-top-vspeed-info"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="sky-route-relocate"></div>
+<div id="sky-route-bottom" class="flight-summary-data-wrap">
+</div>
+<script type="text/template" id="template-sky-route-bottom">
+    <div class="flight-start-city">
+        <%:=tplData.take_off_and_land[0].departure.city_name%>
+        <%:=tplData.take_off_and_land[0].departure.byname%>
+    </div>
+    <div class="flight-end-city">
+        <%:=tplData.take_off_and_land[0].destination.city_name%>
+        <%:=tplData.take_off_and_land[0].destination.byname%>
+    </div>
+    <div class="flight-start-time">
+        <span>实际起飞</span>
+        <em>
+            <%:=tplData.take_off_and_land[0].actual_launch%>
+        </em>
+    </div>
+    <div class="flight-end-time">
+        <span>预计到达</span>
+        <em>
+            <%:=tplData.take_off_and_land[0].plan_landing%>
+        </em>
+    </div>
+    <div class="flight-start-icon-wrap"></div>
+    <div class="flight-end-icon-wrap"></div>
+    <div class="flight-voyage-wrap">
+        <div class="flight-voyage-start-wrap"></div>
+        <div class="flight-voyage-end-wrap"></div>
+        <div class="flight-voyage-process-wrap">
+            <div class="flight-voyage-process-bar"
+                 style="width: 180px;"></div>
+            <div class="flight-voyage-process-end-bar"
+                 style="width: 0;"></div>
+            <div class="flight-voyage-processer"
+                 style="left: 180px;"></div>
+            <div class="flight-altitude"
+                 style="left: 200px;">
+                <span>海拔</span>
+                <em><%:=tplData.active_info.altitude%>ft
+					<span>(<%:=tplData.active_info.v_altitude%>m)</span></em>
+            </div>
+        </div>
+    </div>
+    <div class="flight-time-wrap">
+        <div class="flight-start-time-wrap"></div>
+        <div class="flight-time">
+            <span>预计耗时</span>
+            <em>
+                <%:=tplData.take_off_and_land[0].total_time%>
+            </em>
+        </div>
+        <div class="flight-end-time-wrap"></div>
+    </div>
+    <div class="flight-distance-wrap">
+        <div class="flight-start-distance-wrap"></div>
+        <div class="flight-distance">
+            <span>预计航程</span>
+            <em>
+                <%:=tplData.take_off_and_land[0].total_voyage%>km
+            </em>
+        </div>
+        <div class="flight-end-distance-wrap"></div>
+    </div>
+</script>

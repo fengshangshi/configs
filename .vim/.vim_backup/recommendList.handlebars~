@@ -1,0 +1,19 @@
+<ul class="recommend-list">
+	{{#each this.data}}
+	<li>
+		<p class="image">
+			<a href="{{this.properties.url}}">
+				<img src="{{this.properties.imgUrl}}" alt="{{this.properties.desc}}" />
+			</a>
+		</p>
+		<p class="text">
+			<strong>{{cut this.properties.desc}}</strong>
+			<em>{{this.properties.hotThemeName}}</em>
+			<span> 
+			<i>市场价:<del>￥1000</del></i>
+			<b>￥800</b>
+			</span>
+		</p>
+	</li>
+	{{/each}}
+</ul>

@@ -1,0 +1,4 @@
+<div class="zoom">
+	<a class="zoom-in" href="###">地图放大</a>
+	<a class="zoom-out" href="###">地图缩小</a>
+</div>

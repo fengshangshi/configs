@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>跨域代理</title>
+</head>
+<body>
+<script>
+function Agent() {}
+
+// 收集代理数据
+Agent.prototype.collectData = function() {
+    var querys = this.search2query(window.location.search);
+
+    return {
+        width: querys.width || '0',
+        height: querys.height || '0',
+        options: querys.options || {}
+    };
+};
+
+// location.search转换成json
+Agent.prototype.search2query = function(search) {
+    search = search.slice(1);
+
+    if (!search) return {};
+
+    var searchs = search.split('&');
+    var querys = {};
+
+    searchs.forEach && searchs.forEach(function(item) {
+        var items = item.split('=');
+        querys[items[0]] = items[1];
+    });
+
+    return querys;
+};
+
+// 数据代理
+Agent.prototype.proxy = function(data, proxyName) {
+    var proxy = window.parent.parent.window;
+    if (!proxy) return '父级对象不存在';
+
+    proxyName = proxyName || 'setProxy';
+    if (!proxy[proxyName]) return '父级对象的(' + proxyName + ')方法不存在';
+
+    return proxy[proxyName](data);
+};
+
+/*
+ * 使用方法
+ <iframe src="" width=0 height=0></iframe>
+ * @url: http://example.com/agent.htm?width=1000&height=2000000&options=%7B%22a%22%3A123%2C%22b%22%3A%5B1%2C2%2C3%5D%2C%22c%22%3A%7B%22c1%22%3A1%2C%22c2%22%3A2%7D%7D
+ * @params: options后面为json格式，json格式需要先转移成字符串，然后再encodeURIComponent编码
+ * @author: ss.feng
+ */
+// var proxyName = 'setProxy';
+
+// 实例化
+alert(1);
+var agent = new Agent();
+agent.proxy(agent.collectData());
+</script>
+</body>
+</html>

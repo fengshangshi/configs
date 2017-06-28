@@ -1,0 +1,16 @@
+var $ = require("sky-mobile:widget/libs/zepto/zepto.js");
+var message = require("sky-mobile:widget/libs/message/message.js");
+var common = require("sky-mobile:widget/libs/base.js");
+
+var motion = function(e) {
+	console.log(e);
+	var acceleration = e.accelerationIncludingGravity; 
+	x = acceleration.x; 
+	y = acceleration.y; 
+	z = acceleration.z; 
+	console.log(x, y, z);
+};
+
+if (window.DeviceMotionEvent) {
+	$(window).on("devicemotion", motion);
+}

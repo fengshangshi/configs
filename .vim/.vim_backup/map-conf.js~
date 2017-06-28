@@ -1,0 +1,18 @@
+/**
+ *@file 地图全局配置
+ *@author fengshangshi@baidu.com
+ */
+
+define(function(require, exports) {
+	var config = {
+		host: "http://api.map.baidu.com",
+		path: "/api",
+		querys: {
+			version: "2.0",
+			callback: "skyMapInitialize"
+		},
+		accessKey: "GPxFpi970dANIKhoQh0MSXLh"
+	};
+
+	exports.conf = config;
+});

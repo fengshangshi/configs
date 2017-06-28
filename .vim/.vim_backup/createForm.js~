@@ -1,0 +1,30 @@
+/**
+ * 封装创建form提交表单
+ */
+var $ = require("jquery/jquery.js");
+
+exports.createForm = function(options) {
+	var url = options.url,
+		method = options.method || "POST",
+		name = options.name || "",
+		inputData = options.inputData || {},
+		enctype = options.enctype || "multipart/form-data";
+
+	// 对请求服务端数据加入token验证，防止csrf攻击
+	// by 冯尚实
+	var csrfToken = window["common"]["csrfToken"];
+	inputData["csrfToken"] = csrfToken;
+
+	var form = $('<form  action="'+url+'" method="POST" name="' + name + '" id="' + name + '" enctype="'+enctype+'"></form>'); 
+	
+	for(var i in inputData)
+	{
+		$('<input type="hidden" name="' + i + '" value="' + inputData[i] + '" />').appendTo(form);
+	}           
+
+    $(form).css('position', 'absolute');
+    $(form).css('top', '-1200px');
+    $(form).css('left', '-1200px');
+    $(form).appendTo('body');     
+    return form;  
+};

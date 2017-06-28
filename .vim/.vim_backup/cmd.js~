@@ -1,0 +1,49 @@
+var cmd = require('commander');
+
+
+cmd
+		.version(require('../package').version)
+		.usage('command [options]');
+
+// 初始化
+cmd
+		.command('init <type>')
+		.description('初始化服务器环境或应用程序目录')
+		.action(function(type) {
+				require('./cmd/init')(type);
+		});
+
+// 服务器
+cmd
+		.command('server <status>')
+		.description('服务器控制，升级、启动、停止、重启')
+		.option('-e, --edition <edition>', '升级到指定版本')
+		.action(function(status, options) {
+				console.log(status, options.edition);
+		});
+
+// 发布
+cmd
+		.command('release')
+		.description('应用程序发布')
+		.option('-t, --target <target>', '指定发布的目标环境')
+		.option('-w, --watch', '监听目录变化, 自动发布并重启服务器')
+		.action(function(options) {
+				global.CMDNAME = cmd._name;
+				var isWatch = options.watch || false,
+						target = options.target;
+				require('./cmd/release')(isWatch, target);
+		});
+
+// 自定义
+cmd.on('--help', function() {
+		console.log('  Examples:');
+		console.log('');
+		console.log('    服务器启动      :  ' + CMDNAME + ' server start');
+		console.log('    服务器环境初始化:  ' + CMDNAME + ' init server');
+		console.log('    发布到服务器环境:  ' + CMDNAME + ' release');
+		console.log('');
+});
+
+cmd.parse(process.argv);
+if (!cmd.args.length) cmd.help();

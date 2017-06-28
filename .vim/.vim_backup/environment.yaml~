@@ -1,0 +1,28 @@
+local:
+    path: "/v2/c"
+    dataSource: "http://srmweb3.beta.qunar.com/"
+    local: 1
+<<<<<<< HEAD
+    loginCiphertext: "YutlGIeroXPxX1mAcSVRaqwDp1PfCXG3Bf85K1kSNnttB2RUz8IeRHJpUoy61t4zOtDbDzBaxagL%2FOjEo1OzeA%3D%3D"
+=======
+    loginCiphertext: "YutlGIeroXM4kfOzCOQgLIhWNjkUEdqzBf85K1kSNntWZhXIceB%2Bi2Hu0FADNEKa3BJzsZzpqzRetd3S9YQx9g%3D%3D"
+>>>>>>> master
+    logUrl: "http://10.86.52.115:8080/beacon.gif"
+dev:
+    path: "/v2/c"
+    dataSource: ""
+    local: 0
+    loginCiphertext: ""
+    logUrl: "http://10.86.52.115:8080/beacon.gif"
+beta:
+    path: "/v2/c"
+    dataSource: ""
+    local: 0
+    loginCiphertext: ""
+    logUrl: "http://10.86.52.115:8080/beacon.gif"
+prd:
+    path: "/v2/c"
+    dataSource: ""
+    local: 0
+    loginCiphertext: ""
+    logUrl: "//dotter.qunar.com/beacon.gif"

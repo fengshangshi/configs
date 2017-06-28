@@ -1,0 +1,97 @@
+/*
+* 交易记录【日期操作】
+*@author water.li
+*/
+var $ = require("jquery/jquery");
+require("libs/jquery/jquery.qdatepicker.js");
+var date = require("module/date/dateCompare");
+var message = require("message/message.js");
+
+var DOM = {
+	START: "#start",
+	END: "#end"
+};
+
+//日期操作工具
+var dateMaker = {
+	formatDate: function(date) {
+        return date.getFullYear() + "-" + dateMaker._formatNum(date.getMonth() + 1, 2) + "-" + dateMaker._formatNum(date.getDate(), 2);
+    },
+    _formatNum: function(n, length) {
+        n = n == null ? "" : n + "";
+        for (var i = 0, len = length - n.length; i < len; i++)
+            n = "0" + n;
+        return n;
+    },
+    updateMonth: function(curr, oper, month){
+    	month = month || 3;
+    	var date;
+    	//var now = new Date(curr);
+    	var str = curr.split('-');
+		var datenow = new Date();
+		datenow.setUTCFullYear(str[0], str[1] - 1, str[2]);
+		datenow.setUTCHours(0, 0, 0, 0); 
+		var now = datenow;
+    	if(!!oper){
+    		date = new Date(now.setMonth(now.getMonth() + month));
+    	}
+    	else{
+    		date = new Date(now.setMonth(now.getMonth() - month));
+    	}
+    	return date;
+    }
+};
+
+//当前时间
+var nowD = new Date();
+var currNow = dateMaker.formatDate(nowD);
+
+//开始日期选择面板
+$(DOM.START).qdatepicker( 
+	{
+		ui : 'qunar' , 
+		//refObj : $(DOM.END),
+		defaultDay: dateMaker.updateMonth(currNow,false).getTime(),
+		maxDate: nowD,
+		multi:1,
+		on: {
+			'q-datepicker-select': function() {
+				var startVal = $(this).val(),
+					endVal = $(DOM.END).val();
+				var diff = date.GetDateDiff(startVal, endVal, "day");
+				//只有是日期范围小于88天，才发出消息
+				//否则在end区域触发消息
+				if(diff > 88 || diff<0){
+					var endV = dateMaker.updateMonth(startVal,true);
+					var endD = dateMaker.formatDate(endV);
+					if( endV>nowD){
+						endD = dateMaker.formatDate(nowD);
+					}
+					$(DOM.END).val(endD);
+				}
+				message.fire("datePickerSelect");
+			}
+		}
+});
+
+//结束日期选择面板
+$(DOM.END).qdatepicker( 
+	{
+		ui : 'qunar' , 
+		defaultDay: new Date().getTime(),
+		maxDate: nowD,
+		multi:1,
+		on: {
+			'q-datepicker-select': function() {
+				var startVal = $(DOM.START).val(),
+					endVal = $(this).val();
+				var diff = date.GetDateDiff(startVal, endVal, "day");
+				if(diff>88 || diff<0){
+					var startD = dateMaker.formatDate(dateMaker.updateMonth(endVal,false));
+					$(DOM.START).val(startD);
+				}
+				message.fire("datePickerSelect");
+				
+			}
+	}
+});

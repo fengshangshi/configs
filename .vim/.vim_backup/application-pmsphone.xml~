@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="application.xsd">
+	<versions>
+		<qapp>
+			<app version="1.0.7" minNativeVersion="1.0.0" system="android ios"/>
+			<app version="1.0.7" minNativeVersion="1.0.4" system="android"/>
+			<app version="1.0.7" minNativeVersion="1.0.0" system="ios"/>
+        </qapp>
+		<qnpp>
+			<ios version="1.0.3" message="检测到版本升级，如果您之前安装的是预览版客满满，请将其移除并移步apple store下载正式版。" uri="https://itunes.apple.com/cn/app/ke-man-man-cong-ming-nin-ke/id954741625?mt=8"/>
+			<android version="1.0.4" message="检测到版本更新"  uri="/download/npp/kemanman-v1.0.4.apk"/>
+		</qnpp>
+	</versions>
+</application>

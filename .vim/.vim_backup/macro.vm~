@@ -1,0 +1,21 @@
+#macro(numSplit $num $digits)
+    #set($nums = "$!{num}.0")
+    #set($arr = $nums.split("\."))
+    #set($int = $arr[0])
+    #set($digit = $arr[1])
+    
+    #set($pad = $digits - $digit.length())
+    #if($pad > 0)
+        #foreach($i in [1..$pad])
+            #set($digit = $digit+"0")
+        #end
+    #else
+        #set($digit = $digit.substring(0,$digits))
+    #end
+
+    #if(!$int || $int.length() == 0)
+        #set($int = "0")
+    #end
+    
+    #set($numret = [$int,$digit])
+#end

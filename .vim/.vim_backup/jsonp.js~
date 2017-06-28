@@ -1,0 +1,40 @@
+module.exports = function(url, cb, cbName) {
+	var fn = "jsonp" + new Date().getTime(),
+		callbackName = cbName || "callback",
+		script = document.createElement("script"),
+		head = document.getElementsByTagName("head")[0],
+		cleaned = false,
+		timer = null;
+
+	function cleanFn() {
+		try {
+			script.parentNode.removeChild(script);
+			script = null;
+			delete window[fn];
+		} catch(e) {};
+
+		cleaned = true;
+	}
+
+	window[fn] = function() {
+		cleanFn();
+		cb.apply(this, arguments);
+	};
+
+	url = url.replace(/\#./gi, '');
+	url += (url.indexOf("?") == -1 ? "?" : "&") + callbackName + "=" + fn;
+
+	script.src = url;
+	script.onload = script.onreadystatechange = function() {
+		!cleaned 
+			&& (!script.readyState
+					|| script.readyState === "loaded"
+					|| script.readyState === "complete")
+			&&  cleanFn;
+	};
+
+	timer = setTimeout(function() {
+		timer = null;
+		head.appendChild(script);
+	}, 20);
+};

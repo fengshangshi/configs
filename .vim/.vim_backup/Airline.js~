@@ -1,0 +1,260 @@
+/**
+ * @file 航线覆盖物
+ * @author xingda@baidu.com(Macro Xing)
+ */
+
+define(function (require) {
+  var util = require('common/util');
+  var flightUtil = require('../flight/util');
+  var flightPredict = require('flight/predict');
+  var config = require('./config');
+  var CanvasOverlay = /** @type {CanvasOverlay} */ require('./CanvasOverlay');
+  var BrokenLineShape = require('zrender/shape/BrokenLine');
+  var ImageShape = require('zrender/shape/Image');
+
+  function Airline(properties) {
+    CanvasOverlay.apply(this, arguments);
+
+    this._initDraw = false;
+  }
+
+  util.inherits(Airline, CanvasOverlay);
+
+  Airline.prototype.customInitialize = function() {
+    var mainElem = this.createMainElem({
+      paneType: config.PaneType.MARKER_PANE,
+      isFullSize: true
+    });
+
+    this.createZRender();
+    this.initFlight();
+    this.initPassedLine();
+    this.initRemainLine();
+    return mainElem;
+  };
+
+  Airline.prototype._getPassedLineShapeStyle = function() {
+    var passedPoints = this.getProperty('passedPoints');
+    passedPoints.push(passedPoints[passedPoints.length - 1]);
+    var pointList = this.pointsToOverlayPixels(passedPoints);
+
+    return {
+      pointList: pointList,
+      strokeColor: '#FFF',
+      shadowBlur : 5,
+      shadowColor : '#666',
+      shadowOffsetX : 1,
+      shadowOffsetY : -1,
+      lineWidth: 3,
+      lineCap: 'round'
+    };
+  };
+
+  Airline.prototype._getRemainLineShapeStyle = function() {
+    var properties = this.dumpProperties();
+    var remainPoints = properties.remainPoints;
+    if (!remainPoints) {
+      var destination = properties.destination;
+      var lastPoint = properties.passedPoints.pop();
+      remainPoints = [destination, lastPoint];
+    }
+    var pointList = this.pointsToOverlayPixels(remainPoints);
+
+    return {
+      pointList: pointList,
+      strokeColor: '#FFF',
+      shadowBlur : 5,
+      shadowColor : '#666',
+      shadowOffsetX : 1,
+      shadowOffsetY : -1,
+      lineWidth: 2,
+      lineCap: 'round',
+      lineType: 'dashed'
+    };
+  };
+
+  Airline.prototype._getFlightShapeStyle = function() {
+    var properties = this.dumpProperties();
+    var currentPosition = properties.currentPosition;
+
+    if (!currentPosition) {
+      currentPosition = properties.passedPoints.pop();
+    }
+
+    var point = this.pointsToOverlayPixels([currentPosition])[0];
+
+    return flightUtil.getBigImage(
+        point[0], point[1], properties.direction);
+  };
+
+  Airline.prototype.initPassedLine = function() {
+    var passedLineShape = this._passedLine = new BrokenLineShape({
+      id: 'passed-line',
+      style: this._getPassedLineShapeStyle(),
+      z: 1
+    });
+
+    var zr = this.getZRender();
+    zr.addShape(passedLineShape);
+    zr.render();
+  };
+
+  Airline.prototype.initRemainLine = function() {
+    var remainLineShape = this._remainLine = new BrokenLineShape({
+      id: 'remain-line',
+      style: this._getRemainLineShapeStyle(),
+      z: 1
+    });
+
+    var zr = this.getZRender();
+    zr.addShape(remainLineShape);
+    zr.render();
+  };
+
+  Airline.prototype.initFlight = function() {
+    var flightShape = this._flightShape = new ImageShape({
+      id: 'current-flight',
+      style: this._getFlightShapeStyle(),
+      z: 10
+    });
+
+    var zr = this.getZRender();
+    zr.addShape(flightShape);
+    zr.render();
+  };
+
+  Airline.prototype.drawPassedLine = function() {
+    /*var passedLineShape = new BrokenLineShape({
+      style: this._getPassedLineShapeStyle()
+    });
+
+    var zr = this.getZRender();
+    zr.modShape('passed-line', passedLineShape);
+    zr.refresh();*/
+
+    var zr = this.getZRender();
+    zr.delShape('passed-line');
+
+    this.initPassedLine();
+  };
+
+  Airline.prototype.drawRemainLine = function() {
+    /*var remainLineShape = new BrokenLineShape({
+      style: this._getRemainLineShapeStyle()
+    });
+
+    var zr = this.getZRender();
+    zr.modShape('remain-line', remainLineShape);
+    zr.refresh();*/
+
+    var zr = this.getZRender();
+    zr.delShape('remain-line');
+
+    this.initRemainLine();
+  };
+
+  Airline.prototype.drawFlight = function() {/*
+    var flightShape = new ImageShape({
+      style: this._getFlightShapeStyle()
+    });
+
+    var zr = this.getZRender();
+    zr.modShape('current-flight', flightShape);
+    zr.refresh();*/
+    var zr = this.getZRender();
+    zr.delShape('current-flight');
+
+    this.initFlight();
+  };
+
+  Airline.prototype.pointsToOverlayPixels = function(points) {
+    var result = [];
+    var mapInstance = this.getMapInstance();
+    var mapPoint = null;
+    var mapPixel = null;
+
+    for (var i = 0, point; point = points[i++];) {
+      mapPoint = new BMap.Point(point.lng, point.lat);
+      mapPixel = mapInstance.pointToPixel(mapPoint);
+      result.push([mapPixel.x, mapPixel.y]);
+    }
+
+    return result;
+  };
+
+  Airline.prototype.draw = function() {
+    this.stopAnimation();
+    this.fullSizeMainElem();
+
+    if (!this._initDraw) {
+      this._initDraw = true;
+    } else {
+      this.drawFlight();
+      this.drawPassedLine();
+      this.drawRemainLine();
+    }
+
+    this.animateFlight();
+  };
+
+  Airline.prototype.animateFlight = function() {
+    var properties = this.dumpProperties();
+    var zr = this.getZRender();
+    var lastPoint = properties.passedPoints.pop();
+    var speed = flightUtil.knotToKms(properties.speed);
+    var sec = properties.monitor;
+
+    var monitorPoint = flightPredict.getPoint(
+        lastPoint.lng, lastPoint.lat, speed, sec, properties.direction);
+
+    var mapPoint = new BMap.Point(monitorPoint.lng, monitorPoint.lat);
+    var mapPixel = this.getMapInstance().pointToPixel(mapPoint);
+
+    var imgStyle = flightUtil.getBigImage(
+        mapPixel.x, mapPixel.y, properties.direction);
+
+    this._animation = zr.animate('current-flight', 'style', false)
+        .when(properties.monitor * 1000, {
+          x: imgStyle.x,
+          y: imgStyle.y
+        })
+        .start();
+
+    var originalPointList = this._passedLine.style.pointList.concat();
+    originalPointList.pop();
+    originalPointList.push([mapPixel.x, mapPixel.y]);
+
+    zr.animate('passed-line', 'style', false)
+        .when(properties.monitor * 1000, {
+          pointList: originalPointList
+        })
+        .start();
+
+    var originalRemainLinePointList = this._remainLine.style.pointList.concat();
+    originalRemainLinePointList.pop();
+    originalRemainLinePointList.push([mapPixel.x, mapPixel.y]);
+
+    zr.animate('remain-line', 'style', false)
+        .when(properties.monitor * 1000, {
+          pointList: originalRemainLinePointList
+        })
+        .start();
+
+    var viewSize = this.getMapInstance().getSize();
+
+    console.log(viewSize);
+
+    zr.refresh();
+  };
+
+  Airline.prototype.stopAnimation = function() {
+    this._animation && this._animation.stop();
+    this._animation = null;
+
+    var flightShapeStyle = this._flightShape.style;
+    var flightPixel = new BMap.Pixel(flightShapeStyle.x, flightShapeStyle.y);
+    // this._properties.passedPoints.push(this.getMapInstance().pixelToPoint(flightPixel));
+  };
+
+  return Airline;
+});

@@ -1,0 +1,42 @@
+/**
+ * Created by he on 15/12/22.
+ */
+
+G.message.register('room.clearRoom', function(e) {
+    var args = e.args,
+        root = args.root,
+        cleanDirtyDom = $(root).find('.js-clearRoom, .js-dirtyRoom'),
+        ifClean = cleanDirtyDom.attr('data-isclean'),
+				ifClean = ifClean == 'true',
+        data = {
+            roomNo: args.roomNo,
+            isClean: !ifClean
+        };
+
+    G.ajax({
+        url: '/api/roomState/setRoomCleanStatus',
+        data: data,
+        success: function(res) {
+            if (res.code !== '0000') {
+                G.toast(res.msg);
+                return false;
+            }
+
+            var roomCleanName = data.isClean ? '净' : '脏';
+            G.toast('已成功置为' + roomCleanName + '房');
+
+            cleanDirtyDom.attr('data-isclean', data.isClean);
+
+						console.log(ifClean);
+            if (!ifClean) {
+                $(root).find('.js-clearRoom').show();
+                $(root).find('.js-dirtyRoom').hide();
+            } else {
+                $(root).find('.js-clearRoom').hide();
+                $(root).find('.js-dirtyRoom').show();
+            }
+
+            G.ls('room.roomStateRefresh', true);
+        }
+    })
+})

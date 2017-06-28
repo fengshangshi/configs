@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{%html framework="sky-mobile:static/libs/mod-amd.js"%}
+{%head%}
+	<meta charset="utf-8">
+	<meta name="viewport" content="
+		width=device-width,
+		user-scalable=no,
+		initial-scale=1.0,
+		minimum-scale=1.0
+		maximum-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="keywords" content="百度天眼">
+	<meta name="description" content="百度天眼，看清飞机在哪里，永不失联">
+	{%block name="block_head_meta"%}{%/block%}
+	<title>
+	{%block name="block_page_title"%}
+		百度天眼
+	{%/block%}
+	</title>
+	{%block name="block_head_common_style"%}
+		{%require name="sky-mobile:static/libs/base.css"%}
+		{%require name="sky-mobile:static/layout/layout.css"%}
+	{%/block%}
+	{%block name="block_head_page_style"%}{%/block%}
+	{%block name="block_head_common_script"%}
+		{%include file="./include/page_head_script.tpl"%}
+	{%/block%}
+	{%block name="block_head_page_script"%}{%/block%}
+{%/head%}
+{%body%}
+	{%block name="block_body_content"%}{%/block%}
+	{%block name="block_body_common_script"%}
+		{%include file="./include/page_foot_script.tpl"%}
+		{%require name="sky-mobile:static/layout/layout.js"%}
+	{%/block%}
+	{%block name="block_body_page_script"%}{%/block%}
+{%/body%}
+{%/html%}

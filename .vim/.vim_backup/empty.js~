@@ -1,0 +1,9 @@
+var attrEmpty = function(obj, arr) {
+	arr = arr || [];
+	for (var i = 0, l = arr.length; i < l; i++) {
+		if (obj[arr[i]] !== "") {
+			return false;
+		}
+	}
+	return true;
+};

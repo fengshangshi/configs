@@ -1,0 +1,83 @@
+F.use(["jquery", "message", "template","scroll"], function($, M, T,S) {
+	// tab切换
+	var events_card_hd_title_is_click = function(e) {
+		e.preventDefault();
+		// 	获取国家标题，然后切换
+		var country_index = $(this).attr("data-index");
+		$(".event_list").hide();
+		$(".country_" + country_index).show();
+		$(".events_card_hd .hd_nav li").removeClass("current");
+		$(".country_head_" + country_index).addClass("current");
+		
+	};
+	//右侧绿色滚动条
+	$(".events_card").delegate(".events_card_hd .hd_nav li", "click", events_card_hd_title_is_click);
+
+	M.register('page_card_auto_resize',function(e){
+		var el_wrapper = e.args.wrapper,
+			el_inner = e.args.inner,
+			height = e.args.minus_height;
+
+		$(el_inner).height($(el_wrapper).height() - height);
+
+		$(window).resize(function() {
+			$(el_inner).height($(el_wrapper).height() - height);
+		});
+	});
+
+
+	// 渲染前端模板
+	M.register("events-group-tag-change", function(e) {
+		var res = e.args, bt = T.template, htmlStr, tempData = {};
+		if (res.errno === 0) {
+			tempData["tplData"] = res.data;
+			htmlStr = bt('template_group_card', tempData)
+			$(".events_card_wrap").html(htmlStr);
+
+			if (/msie 8\.0/i.test(navigator.userAgent) == true) {
+				M.fire('page_card_auto_resize',{
+					wrapper: $('.events_card_wrap'),
+					inner: $('.events_card_bd'),
+					minus_height: 150
+				});
+			}
+		
+			//全部tab的slide
+			var slide_bar = new S({wrapper_id:'event_list_all',content_id:'event_list_all',stick_style:{'position':'absolute',top:20,right:10}})
+			//各国家tab的slide
+			for (var k in res.data.body) {
+			var slide_bar = new S({wrapper_id:'event_list_'+k,content_id:'event_list_'+k,stick_style:{'position':'absolute',top:20,right:10,height:$('#event_list_'+k).height()}})
+			}
+		}
+
+	});
+
+	// 第一次请求A组信息
+	var requestUrl = common["client"]["host"] + common["client"]["ajaxUrls"]["eventsGroupUrl"];
+	requestUrl += "?query=A&_=" + new Date().getTime();
+
+	$.ajax(requestUrl, {
+		success: function(res) {
+			M.fire('events-group-tag-change',res);
+		}
+	});
+	
+	// 监听对阵记录
+	var events_card_against_is_click = function(e) {
+		e.preventDefault();
+		var againstUrl = common["client"]["host"] + common["client"]["ajaxUrls"]["eventsAgainstUrl"];
+		var country = $(this).attr("data-country");
+		againstUrl += "?query=" + encodeURIComponent(country) + "&_=" + new Date().getTime();
+
+		$.ajax(againstUrl, {
+			success: function(res) {
+				M.fire('events-group-against-record',res);
+			}
+		});
+
+	}
+	$(".events_card").delegate(".against_record", "click", events_card_against_is_click);
+
+	
+});
+

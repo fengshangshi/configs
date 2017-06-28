@@ -1,0 +1,8 @@
+<div id="dialog-mobile-tips" class="dialog"
+		title="常用卡绑卡">
+	<p class="tips-content">
+		<label class="tips-content-icon"></label>
+		为保障您的账户安全，
+		请优先<a href="http://user.qunar.com/index.jsp#basic" style="color: #0087c6;">设置手机号</a>。
+	</p>
+</div>

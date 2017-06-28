@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+			overflow: auto;
+    }
+	* {
+		margin: 0;
+			padding: 0;
+	}
+</style>
+</head>
+<body>
+<h1>Test to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p style="height: 800px;border: 1px solid blue;">For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p style="height:500px;border: 1px solid red;"><em>Thank you for using nginx.</em></p>
+<script>
+	var height = Math.max(document.body.scrollHeight, document.body.clientHeight);
+	height+=50;
+	var iframe = document.createElement('iframe');
+	iframe.setAttribute('src', "http://192.168.25.185/agent.htm?height=" + height);
+	iframe.setAttribute('width', "0");
+	iframe.setAttribute('height', "0");
+	document.body.appendChild(iframe);
+</script>
+</body>
+</html>

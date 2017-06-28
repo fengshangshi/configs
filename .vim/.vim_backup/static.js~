@@ -1,0 +1,23 @@
+var url = require('url');
+var fs = require('fs');
+
+function url2path(urlStr) {
+	var urlObj = url.parse(urlStr);
+	return urlObj.path;
+}
+
+module.exports = function static(root) {
+	return function(req, res) {
+		var path = url2path(req.url);
+		function callback(err, data) {
+			if (err) {
+				res.statusCode = 404;
+			} else {
+				res.write(data);
+			}
+			res.end();
+		}
+
+		fs.readFile(root + path, callback);
+	};
+};

@@ -1,0 +1,30 @@
+.q-contenter {
+	margin-top: 0;
+	padding-top: 70px;
+
+	.not-authorized {
+		width: 550px;
+		height: 460px;
+		background: url(//source.qunarzz.com/srmweb/insurance/property/denial.jpg) no-repeat;
+		margin: 80px auto 0;
+		padding-top: 260px;
+
+		p {
+			text-align: center;
+			font-family: 'microsoft yahei';
+			font-size: 14px;
+			color: #333;
+		}
+
+		.refresh-tips {
+			color: #999;
+		}
+		
+		.tel-edit-guide {
+			display: inline-block;
+			border-radius: 20px;
+			margin-top: 10px;
+		}
+	}
+
+}

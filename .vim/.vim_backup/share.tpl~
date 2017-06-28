@@ -1,0 +1,5 @@
+<a href="###" class="links-share">
+	<span>分享给好友</span>
+</a>
+{%require name="realestate:widget/share/share.css"%}
+{%require name="realestate:widget/share/share.js"%}

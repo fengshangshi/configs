@@ -1,0 +1,75 @@
+/**
+ * 管理常用卡操作
+ * @author ss.feng
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var dialog = require("./dialog.js");
+var globalDialog = require("module/dialogTips/dialogTips.js");
+var validator = require("module/formValidator/formValidator.js");
+
+message.register("manageBankCard", function(e) {
+	var args = e.args,
+		cardId = args.cardId,
+		mobile = args.mobile,
+		areaCode = args.areaCode,
+		cardNo = args.cardNo,
+		cardName = args.cardName,
+		type = args.type,
+		dialogTypes = {
+			"0": "openBankCard",
+			"1": "closeBankCard",
+			"2": "deleteBankCard"
+		},
+		dialogTitles = {
+			"openBankCard": "常用卡开通",
+			"closeBankCard": "常用卡关闭",
+			"deleteBankCard": "常用卡解绑"
+		},
+		dialogType = dialogTypes[type],
+		dialogTitle = dialogTitles[dialogType];
+
+	dialog.showConfirmPanel({
+		cardId: cardId,
+		mobile: mobile,
+		areaCode: areaCode,
+		cardNo: cardNo,
+		cardName: cardName,
+		dialogType: dialogType,
+		dialogTitle: dialogTitle,
+		type: type
+	});
+
+	validator.initForm("#dialog-deleteBankCard form", ".dialog-button-submit",
+		{
+			"events": ["blur"]
+		}
+	);
+});
+
+message.register("showManageTips", function(e) {
+	var args = e.args,
+		cardNo = args.cardNo,
+		cardName = args.cardName,
+		type = args.type,
+		status = args.status,
+		dialogTitles = {
+			"open": "开通",
+			"close": "关闭",
+			"delete": "解绑"
+		},
+		dialogTitle = dialogTitles[type];
+
+	dialog.showConfirmTips({
+		cardNo: cardNo,
+		cardName: cardName,
+		dialogTitle: dialogTitle,
+		status: status
+	});
+});
+
+message.register("showBindingMobileTips", function(e) {
+	globalDialog.showDialogTips({
+		content: "<a href='xxxx'>xxxx</a>"
+	});
+});

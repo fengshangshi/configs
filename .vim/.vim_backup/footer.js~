@@ -1,0 +1,17 @@
+/**
+ * 页脚
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+
+function faBtnEnterHandle(e) {
+	$(this).addClass("current");
+}
+
+function faBtnLeaveHandle(e) {
+	$(this).removeClass("current");
+}
+
+$(document).delegate(".foot-about-wrap", "mouseenter", faBtnEnterHandle);
+$(document).delegate(".foot-about-wrap", "mouseleave", faBtnLeaveHandle);
+

@@ -1,0 +1,158 @@
+(function() {
+	var $ = require("realestate:widget/common/jquery/jquery-1.11.1.js");
+
+	function ZoomController(opts) {
+		opts = opts || {};
+
+		function createElementNode(tag, attrs) {
+			attrs = attrs || {};
+			var node = document.createElement(tag);
+			for (var key in attrs) {
+				node.setAttribute(key, attrs[key]);
+			}
+
+			return node;
+		}
+
+		function createTextNode(text) {
+			var node = document.createTextNode(text);
+			return node;
+		}
+
+		//创建放大按钮
+		var zOut = createElementNode("div", {
+			"class": "controller-button zoom-out"
+		});
+		var zOutSpan = createElementNode("span");
+		var zOutSpanText = createTextNode("+");
+		zOutSpan.appendChild(zOutSpanText);
+		zOut.appendChild(zOutSpan);
+
+		//创建滑块
+		var zBarBg = createElementNode("div", {
+			"class": "bar-bg"
+		});
+		var zBarBgSpan = createElementNode("span");
+		zBarBg.appendChild(zBarBgSpan);
+
+		var zControlBar = createElementNode("div", {
+			"class": "control-bar"
+		});
+		var zControlBarSpan1 = createElementNode("span");
+		var zControlBarSpan2 = createElementNode("span");
+		var zControlBarSpan3 = createElementNode("span");
+		zControlBar.appendChild(zControlBarSpan1);
+		zControlBar.appendChild(zControlBarSpan2);
+		zControlBar.appendChild(zControlBarSpan3);
+
+		var zSlide = createElementNode("div", {
+			"class": "controller"
+		});
+		zSlide.appendChild(zBarBg);
+		zSlide.appendChild(zControlBar);
+
+		//创建缩小按钮
+		var zIn = createElementNode("div", {
+			"class": "controller-button zoom-out"
+		});
+		var zInSpan = createElementNode("span");
+		var zInSpanText = createTextNode("-");
+		zInSpan.appendChild(zInSpanText);
+		zIn.appendChild(zInSpan);
+
+		//创建controller容器
+		var zController = createElementNode("div", {
+			"class": "zoom-controller"
+		});
+
+		zController.appendChild(zOut);
+		zController.appendChild(zSlide);
+		zController.appendChild(zIn);
+
+		//绑定事件
+		zOutSpan.onclick = function(e) {
+			console.log("zoomOut");
+		};
+
+		this.controller = zController;
+ 	}
+
+	ZoomController.prototype.init = function(maxZoom, minZoom) {
+		var basePx = 6,
+			controlBarHeight = basePx * (maxZoom - minZoom);
+
+		$(this.controller).find(".controller").css({
+			"height": controlBarHeight
+		});
+
+	};
+
+	ZoomController.prototype.setSlideBarPosition = function(zoom) {
+		console.log(zoom);
+		var slideBar = $(this.controller).find(".control-bar");
+		$(slideBar).css({
+			"top": 20
+		});
+	};
+
+	module.exports = ZoomController;
+})();
+/*
+(function() {
+	var $ = require("realestate:widget/common/jquery/jquery-1.11.1.js");
+
+	var ZoomController = function(opts) {
+		opts = opts || {};
+
+		var zoomOut = opts.zoomOut || function() {};
+		var zoomIn = opts.zoomIn || function() {};
+		var barSlide = opts.barSlide || function() {};
+
+		var controller = $(".zoom-controller")[0];
+
+
+		this.controller = controller;
+	};
+
+
+	function initZoomControl(map) {
+		function ZoomControl() {
+			this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+			this.defaultOffset = new BMap.Size(10, 10);
+		}
+
+		ZoomControl.prototype = new BMap.Control();
+
+		//重写initialize
+		ZoomControl.prototype.initialize = function(map) {
+			var div = $(".zoom-controller")[0];
+			map.getContainer().appendChild(div);
+
+			$(div).show();
+
+			return div;
+		};
+
+		var zCtrl = new ZoomControl();
+		map.addControl(zCtrl);
+	}
+
+	function listenMapInstance(e) {
+		var args = e.args,
+			map = args.map;
+
+		initZoomControl(map);
+	}
+
+	message.register("mapinstanceiscreated", listenMapInstance);
+
+	$(".zoom-out").on("click", function(e) {
+		console.log("zoom-out");
+	});
+
+	$(".zoom-in").on("click", function(e) {
+		console.log("zoom-in");
+	});
+
+})();
+*/

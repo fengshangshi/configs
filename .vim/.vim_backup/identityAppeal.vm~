@@ -1,0 +1,244 @@
+#parse("/widget/include/global.vm")
+#set($pageTitle = "申诉")
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>【去哪儿】申诉</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+    href="${qzzUrl}${cssPath}/security/identityAppeal.css" />
+	#parse("widget/include/scriptHeader.vm")
+  </head>
+  <body>
+      #parse("widget/header/headerForSecurity.vm")
+      <div class="appeal">
+	  	  <div class="appeal-main container">
+
+          ## 申诉第一步  身份信息填写-----start
+              <div class="appeal-process">
+                  #if(${tplData.appealState} == "ok")
+	              <div class="appeal-1 box appeal-box hide">
+	              #else
+	              <div class="appeal-1 box appeal-box">
+	              #end
+                      <div class="box-head">
+			              <div class="step">
+				              <ul class="step-3 step-main clearfix">
+				              </ul>
+				          </div>
+	        		  </div>
+	        		  <div class="box-container">
+	          		      <div class="poptip">
+						      <div class="poptip-shadow">
+						          <div class="poptip-container">
+						              <div class="poptip-arrow">
+							              <em></em>
+							              <span></span>
+						              </div>
+						              <div class="poptip-content">
+						                请填写您的真实姓名和身份证号，必须
+						                与将要上传的证件中的身份信息保持一致
+						              </div>
+						          </div>
+						      </div>
+		      			  </div>
+	          			  <form class="appeal-form id-form" name="" 
+	          				method="post" action="" >
+	            			  <div class="form-item clearfix">
+					              <label for="" class="p-label">
+					                真实姓名
+					              </label>
+					              <input 
+					              	placeholder="请输入您的真实姓名"
+				                	data-jvalidator-pattern="required&max_length[16]&notempty"
+					              	class="p-input userName" type="text">
+	            			  </div>
+	            			  <div class="form-item clearfix">
+					              <label for="" class="p-label">
+					                身份证号
+					              </label>
+					              <input 
+					              	placeholder="请输入您的身份证号"
+					              	data-jvalidator-pattern="required&idcard"
+					              	class="p-input idCard" type="text">
+	            			  </div>
+	            			  <div class="form-item clearfix">
+	            			  	  <label for="" class="p-label"></label>
+	              				  <a class="button button-o appealIdentityNext">下一步</a>
+								  <input type="hidden" name="csrfToken" value="$!{csrfToken}" />
+	            			  </div>
+	          			  </form>
+	      			  </div>
+	    		  </div>
+	    		  ##申诉第一步  身份信息填写   end
+
+	    		  ##申诉第二步  上传双证   start
+	    		  #if(${tplData.appealState} == "ok")
+            	  <div class="appeal-2 box appeal-box">
+            	  #else
+            	  <div class="appeal-2 box appeal-box hide">
+            	  #end
+		              <div class="box-head">
+		                  <div class="step">
+				              <ul class="step-3 step-main clearfix">
+				              </ul>
+			              </div>
+			          </div>
+	          		  <div class="box-container">
+	           			  <form class="appeal-form cards-form" name="" 
+	             				method="post" action="">
+	             			  <input type="hidden" name="appealUids" 
+	             			    value="$!{tplData.appealUids}" >
+              	  			  <input  type="hidden" name="applyNo" 
+              	  			    value="$!{tplData.applyNo}">
+			              	  <input  type="hidden" name="qunarTradeNo" 
+			              	    value="$!{tplData.qunarTradeNo}">
+			              	  <input  type="hidden" name="appealLoginNames"  value="$!{tplData.appealLoginNames}" >
+			              	  <input type="hidden" name="cardType" value="1" >
+			              	  <input type="hidden" name="certifyFront" >
+			              	  <input type="hidden" name="certifyBack" >
+			              	  <input type="hidden" name="otherCertifyType" value="3" >
+			              	  <input type="hidden" name="otherCertify" >
+							  <input type="hidden" name="csrfToken" value="$!{csrfToken}" />
+
+							  <h3 class="appeal-bank-title-l"> 基本信息</h3>
+				              <div class="form-item clearfix">
+					              <label for="" class="p-label">
+					                要申诉的账户名
+					              </label>
+					              <span class="form-text">
+					                $!{tplData.appealLoginNames}
+					              </span>
+				              </div>
+	            			  <div class="form-item clearfix">
+					              <label for="" class="p-label">
+					                身份证号
+					              </label>
+	              				  <span class="form-text idCardText">
+	              				  	  $!{tplData.idCard}
+	              				  </span>
+	              				  <input type="hidden" 
+	              				    value="$!{tplData.idCardIndex}" name="idCardIndex" >
+	            			  </div>
+	            			  <div class="form-item clearfix">
+					              <label for="" class="p-label">
+					                姓名
+					              </label>
+	              				  <span class="form-text userNameText"> 
+	              				      $!{tplData.userName}
+	              				  </span>
+	            			  </div>
+	            			  <div class="appeal2-title clearfix">
+								  <h3>
+								    身份证
+								  </h3>
+								  <div class="appeal2-title-detail">
+							          照片需清晰显示姓名、身份证号、签发机关、有效信息等信息。可使用临时身份证进行申诉。
+							          <span class="appeal-bank-poptip">照片规范</span>
+							          <div class="appeal-bank-poptip-con hide">
+										  <p>证件必须是清晰彩色原件电子照，</p>
+										  <p>图片大小不超过2M，jpg，jpeg，gif，png 格式。</p>
+							      	  </div>
+			      			  	  </div>
+						  	  </div>
+	            			  <div class="idcards-u clearfix">
+		         				  <div id="idContainer-z" class="upload-img-con">
+						         	  <div class="pre-img z">
+						         	  	  <img src="" width="100%" height="100%">
+						         	  	  <p class="upload-info">正面</p>
+						         	  </div>
+						              <div class="upload-img-btn">
+						         	      <span id="pickfiles-f" class="upload-btn">
+						                      上传证件照
+							              </span>
+							              <input type="file" id="uploadIdentityZ" 
+							                name = "filedata"
+							                class="input-file" accept=".jpg,.jpeg,.gif,.png" >
+						         	  </div>
+		         				  </div>
+
+						          <div id="idContainer-f" class="upload-img-con">
+						         	  <div class="pre-img f">
+						         	      <img src="" width="100%" height="100%">
+						         	      <p class="upload-info">反面</p>
+						         	  </div>
+						         	  <div class="upload-img-btn">
+						         	      <span id="pickfiles-f" class="upload-btn">
+						                    上传证件照
+							              </span>
+							              <input type="file" id="uploadIdentityF" 
+							                name = "filedata"
+							                class="input-file" accept=".jpg,.jpeg,.gif,.png" >
+						         	  </div>
+						          </div>
+		         
+	           				  </div>
+				           	  <div class="appeal2-title clearfix">
+							  	  <h3>其他证件</h3>
+							  	  <div class="appeal2-title-detail">
+							          支持证件：户口本本人页、护照、驾照、社保卡、户口迁移证、户籍证明。
+							          <span class="appeal-bank-poptip">照片规范</span>
+							          <div class="appeal-bank-poptip-con hide">
+										  <p>证件必须是清晰彩色原件电子照，</p>
+										  <p>图片大小不超过2M，jpg，jpeg，gif，png 格式。</p>
+						              </div>
+							      </div>
+							  </div>
+						      <div class="other-cards-u clearfix">
+						   		  <div id="h-idContainer-z">
+					           	  <div class="pre-img h">
+					           	      <img src="" width="100%" height="100%">
+					           	      <p class="upload-info">个人信息页</p>
+					           	  </div>
+						          <div class="upload-img-btn">
+						         	  <span id="h-pickfiles-z" class="upload-btn">上传证件照</span>
+							          <input type="file" id="uploadIdentityO" 
+							        	name = "filedata"
+							            class="input-file" accept=".jpg,.jpeg,.gif,.png" >
+						          </div>
+					          </div>
+						  </div>
+			       		  <div class="appeal2-title clearfix">
+							  <h3>
+							     联系方式
+							  </h3>
+					  	  </div>
+			           	  <div class="form-item clearfix">
+					          <label for="" class="p-label">
+				                电子邮箱
+				              </label>
+				              <input class="p-input"
+				               name = "email"
+				               placeholder="请输入您的电子邮箱"
+			               	   data-jvalidator-pattern="required&email"
+				               type="text">
+				       	  </div>
+				       	  <div class="form-item clearfix">
+					          <label for="" class="p-label">
+				                手机
+				              </label>
+				              <input class="p-input"
+				               name = "mobile"
+				               placeholder="请输入您的手机号码"
+			               	   data-jvalidator-pattern="required&phone"
+				               type="text">
+				       	  </div>
+				       	  <div class="form-item clearfix">
+				       	  	  <label for="" class="p-label"></label>
+				       	  	  <a class="button button-o appeal-2-next">提交</a>
+			              </div>
+	              	  </form>
+	          	  </div>
+	      	  </div>
+	      	  ## 申诉第二步  上传双证 ----- end
+      	  </div>
+  	  </div>
+    </div>
+
+    #parse("widget/footer/footer.vm")
+    <script type="text/javascript" 
+    src="${qzzUrl}${jsPath}/security/appeal/entry.js" ></script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+## @Describe: 远期房态
+## @author dujuan.cao@qunar.com
+
+#parse("widget/include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+#parse("widget/include/headMeta.vm")
+<title>远期房态 - ${websiteName}</title>
+<link css_public_version="base/ver/styles/public.css.ver" href="${qzzUrl}/${baseCSSPath}/public.css" rel="stylesheet">
+<link href="${qzzUrl}/${cssPath}/common/base.css" rel="stylesheet">
+<link href="${qzzUrl}/${cssPath}/pages/roomState/remote/export.css" rel="stylesheet">
+#parse("widget/include/headScript.vm")
+</head>
+<body pageid="roomstatuspage">
+
+    <!-- header -->
+    <div class="q-header fn-clear" ms-controller="header" ms-include-src="content"></div>
+    <!-- /header -->
+
+    <!-- contenter -->
+    <div class="q-contenter" id="j-contenter">
+        <div ms-controller="contenter" ms-include-src="content" data-include-replace="true" data-include-rendered="rendered"></div>
+    </div>
+    <!-- /contenter -->
+
+<script js_public_version="#include('base/ver/scripts/public.js.ver')" type="text/javascript" src="${qzzUrl}/${baseJSPath}/public.js"></script>
+<script type="text/javascript" src="${qzzUrl}/${jsPath}/common/base.js"></script>
+<script type="text/javascript" src="${qzzUrl}/${jsPath}/pages/roomState/remote/export.js"></script>
+#parse("widget/include/footScript.vm")
+</body>
+</html>

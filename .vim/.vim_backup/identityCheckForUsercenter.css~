@@ -1,0 +1,214 @@
+/**
+ * 设置交易密码样式
+ */
+require("../base.css");
+require("../../common/box.css");
+require("../../common/form.css");
+require("../../common/buttons.css");
+require("../../common/yselector.css");
+
+.logo-bar-content {
+	width: 850px;
+	height: 70px;
+	margin: 0 auto;
+	border-bottom: 3px solid #00afc7;
+}
+
+.logo-bar-content h1 strong {
+	font-size: 20px;
+	margin: 34px 0 0 20px;
+}
+
+.logo-bar-content .process-bar{
+	float: right;
+	width: 355px;
+	height: 25px;
+	background-image: url(
+		//source.qunarzz.com/site/images/pay/useraccount/page/other/20150401/bg-steps.png);
+	background-position: 0 -34px;
+	background-repeat: no-repeat;
+	margin-top: 37px;
+	overflow: hidden;
+}
+
+.process-bar span {
+	float: left;
+	width: 120px;
+	text-align: center;
+	line-height: 24px;
+}
+
+.process-bar .step-sub-01 {
+	width: 120px;
+	color: #0088a4;
+}
+
+.process-bar .step-sub-02 {
+	width: 100px;
+	color: #fff;
+}
+
+.process-bar .step-sub-03 {
+	width: 126px;
+	color: #666;
+}
+
+.top-bar-content {
+	width: 850px;
+}
+
+.top-bar .global-account {
+	margin-left: 0px;
+}
+
+.top-bar ul li.account-list-li .sp-line {
+	margin-right: 5px; 
+}
+
+.top-bar ul li .sp-line {
+	_padding-top: 8px;
+}
+
+.top-bar ul li a:hover {
+	text-decoration: none;
+}
+
+.box{
+	border: 20px solid #f5fbfc;
+	height: 100%;
+}
+
+.box-container{
+	margin-left: 0px;
+	margin-top: 30px;
+}
+
+.container {
+	width: 850px;
+	height: 465px;
+	margin: 0 auto 50px auto;
+	padding: 20px 0;
+	font-family: sans-serif;
+}
+
+.p-input{
+	width: 270px;
+	height: 28px;
+	line-height: 28px;
+	padding: 0px 10px;
+	font-family: Tahoma;
+	color: #666;
+}
+
+.button{
+	font-size: 14px;
+	padding: 0.5em 3.1em;
+	border-radius: 2px;
+}
+
+.identity-check-main .poptip{
+	width: 500px;
+	margin: 51px 10px 32px 72px;
+	color: #333;
+}
+
+.poptip .icon{
+	background: url(//source.qunarzz.com/usercenter/login/quick_login2.png) 0 0 no-repeat;
+	width: 16px;
+	height: 18px;
+	background-position: 0 -197px;
+	float: left;
+	margin-right: 5px;
+	vertical-align: -2px\9;
+	_vertical-align: 3px;
+}
+
+.select-field{
+	float: left;
+	height: 30px;
+	color: #666;
+	_margin-left: 2px;
+}
+
+.select-field select{
+	width: 315px;
+	display: none;
+}
+
+.select-field .yselector {
+	display: inline-block;
+	width: 292px;
+	vertical-align: top;
+	margin-right: 5px;
+	float: left;
+}
+
+.select-field .yselector_box {
+	border: 1px solid #e5e5e5;
+	padding: 0px 20px 0px 2px;
+}
+
+.select-field .yselector_suggest {
+	width: 290px;
+	font-size: 12px;
+}
+
+.yselector_arraw {
+	width: 30px;
+	border-left: 1px solid #ccc!important;
+	float: right;
+	margin-top: 3px;
+	display: inline;
+	height: 22px;
+	overflow: hidden;
+	margin-bottom: -15px;
+	background-image: url(//source.qunarzz.com/site/images/pay/useraccount/page/other/20150209-001/arrow.png);
+	background-repeat: no-repeat;
+	background-size: 11px 6px;
+	background-position: 9px 8px;
+	_zoom: 100%!important;
+	_height: 22px!important;
+	_border-left: 1px solid #ccc!important;
+	_width: 30px!important;
+}
+
+.yselector_input {
+	display: block;
+	height: 28px;
+	line-height: 28px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding: 0px 8px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.yselector_input span{
+	font-family: tahoma;
+}
+
+.yselector_arraw b {
+	border: none;
+	border-width: 0px;
+	font-weight: 100;
+	margin: 0px;
+	display: none;
+}
+
+.yselector_suggest a {
+	text-decoration: none;
+	padding: 0 5px 0 10px !important;
+}
+
+.yselector_suggest a:hover {
+	text-decoration: none;
+}
+
+/**
+ * 忘记卡号 by 尚实
+ */
+.forget-link {
+	font-size: 12px;
+	margin-left: 10px;
+}

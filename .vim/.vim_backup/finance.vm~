@@ -1,0 +1,32 @@
+## @Describe: 财务设置
+## @author dujuan.cao@qunar.com
+
+#parse("widget/include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+#parse("widget/include/headMeta.vm")
+<title>财务设置 - ${websiteName}</title>
+<link href="${qzzUrl}/${baseCSSPath}/public@#include('base/ver/styles/public.css.ver').css" rel="stylesheet">
+<link href="${qzzUrl}/${cssPath}/common/base@dev.css" rel="stylesheet">
+<link href="${qzzUrl}/${cssPath}/pages/config/functions/finance/export@dev.css" rel="stylesheet">
+#parse("widget/include/headScript.vm")
+</head>
+<body pageid="financeConfigpage">
+
+    <!-- header -->
+    <div class="q-header fn-clear" ms-controller="header" ms-include-src="content"></div>
+    <!-- /header -->
+
+    <!-- contenter -->
+    <div class="q-contenter" id="j-contenter">
+        <div ms-controller="contenter" ms-include-src="content" data-include-replace="true" data-include-rendered="rendered"></div>
+    </div>
+    <!-- /contenter -->
+
+<script type="text/javascript" src="${qzzUrl}/${baseJSPath}/public@#include('base/ver/scripts/public.js.ver').js"></script>
+<script type="text/javascript" src="${qzzUrl}/${jsPath}/common/base@dev.js"></script>
+<script type="text/javascript" src="${qzzUrl}/${jsPath}/pages/config/functions/finance/export@dev.js"></script>
+#parse("widget/include/footScript.vm")
+</body>
+</html>

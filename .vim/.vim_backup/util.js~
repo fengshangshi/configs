@@ -1,0 +1,9 @@
+/**
+ * utils
+ * @author: ssf.eng
+ */
+var fs = require('fs');
+
+exports.isDirectory = function(dir) {
+	return fs.existsSync(dir) && fs.statSync(dir).isDirectory();
+};

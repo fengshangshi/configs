@@ -1,0 +1,184 @@
+/**
+ * 交易记录
+ */
+require("../base.css");
+require("../../common/datepicker.css");
+require("../../common/tradeList.css");
+require("../../common/loading.css");
+
+/*重写日历样式*/
+
+.qunar-dp .q-datepicker{
+	left: -2px;
+	margin-top:1px;
+}
+
+.qunar-dp .q-datepicker{ 
+	width: 220px;
+}
+
+.qunar-dp .q-datepicker .g{ 
+	width: 220px;
+}
+
+.trade-main-title{
+	border-bottom: 2px solid #cfe4e9;
+	overflow: hidden;
+	zoom: 1;
+	height: 36px;
+	line-height: 36px;
+}
+
+.trade-main-title h3{
+	font-size: 14px;
+	font-weight: bold;
+	float: left;
+}
+
+.trade-main-title p{
+	float: right;
+	color: #999;
+}
+
+.trade-main-title .main-title-money{
+	font-size: 18px;
+	font-weight: bold;
+	float: left;
+	color: #000;
+	font-weight: bold;
+}
+
+.trade-main-title .main-title-btn{
+	color: #0184ba;
+	display: inline-block;
+	margin: 0px 20px 0px 6px;
+}
+
+.trade-main-select{
+	background-color: #f8f9fb;
+}
+
+.main-select-date,
+.main-select-type,
+.main-select-state {
+	padding: 10px 30px;
+}
+
+.main-select-date{
+	background-color: #f4f5f7;
+	padding: 30px;
+	border-bottom: 1px solid #eaeaea;
+}
+
+#start, 
+#end{
+	width: 163px;
+	height: 18px;
+	border: none;
+	/*background-color: #f4f5f7;*/
+}
+
+.select-date-text{
+	float: left;
+	color: #999;
+	font-size: 12px;
+	display: inline-block;
+	padding-right: 10px;
+}
+
+.select-date-tishi{
+	display: inline-block;
+	padding-top: 4px;
+	font-size: 12px;
+	color: #999;
+}
+
+.select-date-tishi label{
+	display: inline-block;
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin-top: 1px;
+	margin-left: 20px;
+	margin-right: 3px;
+	background-image: url(https://source.qunarzz.com/site/images/pay/useraccount/page/security/question.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.main-select-date .select-date-main{
+	float: left;
+	position: relative;
+	width: 173px;
+	height: 23px;
+	border: 1px solid #b5b5b5;
+
+}
+
+.main-select-date .select-date-line{
+	float: left;
+	padding: 0px 10px;
+}
+
+.trade-main-select .checkbox,
+.trade-main-select .radio
+{
+	margin-right: 25px;
+	font-size: 12px;
+	color: #656668;
+	display: inline-block;
+}
+
+.trade-main-select .checkbox.checked,
+.trade-main-select .radio.checked{
+	color: #000;
+}
+
+.trade-main-select .radio input,
+.trade-main-select .checkbox input{
+	vertical-align: -2px;
+}
+
+.trade-main-detail{
+	margin-top: 20px;
+}
+
+.trade-main-detail-title{
+	height: 35px;
+	line-height: 35px;
+	background-color: #f4f8f9;
+	font-size: 16px;
+	font-weight: bold;
+	padding-left: 20px;
+}
+
+table{
+	font-size: 12px;
+}
+
+table thead{
+	height: 35px;
+	line-height: 35px;
+	background-color: #f4f8f9;
+	font-weight: bold;
+	padding-left: 20px;
+}
+
+thead .oper-th{
+	text-align: center;
+}
+
+.trade-list-empty{
+	height: 80px;
+	line-height: 80px;
+	text-align: center;
+	color: #666;
+}
+
+.border{
+	border-bottom: 1px solid #eee;
+}
+
+.loading-con .loading{
+	margin: 15px auto;
+}

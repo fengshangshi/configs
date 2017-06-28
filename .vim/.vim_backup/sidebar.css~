@@ -1,0 +1,9 @@
+/*sidebar*/
+.g-sidebar{ width:195px; position:fixed; z-index: 100; left:0; top: 68px; bottom:0; border-right:1px solid #ccc; background:#f2f2f2;}
+.g-sidebar .menu li{border-bottom:1px solid #dadada}
+.g-sidebar .menu li a{color:#333;display:block;font-weight:700;padding:7px 10px}
+.g-sidebar .menu li a:hover{background-color:#f8f8f8;color:#3775c0}
+.g-sidebar .menu li a.active,.g-sidebar .menu li a.active:hover{background-color:#e0eef5;color:#3775c0;font-weight:700}
+.g-sidebar .menu li ul{margin-top:4px}
+.g-sidebar .menu li li{border-bottom:0 none;margin-bottom:4px}
+.g-sidebar .menu li li a{font-weight:400;padding:4px 10px 4px 22px}

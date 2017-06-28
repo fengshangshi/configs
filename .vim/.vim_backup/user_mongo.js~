@@ -1,0 +1,21 @@
+/**
+ * @file 用户schema
+ * @author ss.feng
+ */
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var schema = new Schema({
+		username: String,
+		nickname: String,
+		usertype: String,
+		password: String,
+		createtime: {
+				type: Date,
+				default: Date.now
+		}
+}, {
+		collection: 'users'
+});
+
+module.exports = mongoose.model('Users', schema);

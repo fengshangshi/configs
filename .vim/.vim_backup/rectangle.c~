@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+int main()
+{
+		const unsigned int MIN_SIZE = 3;
+		unsigned int width = 0;
+		unsigned int height = 0;
+
+		// Read in required width and height
+		printf("Enter values for the width and height (minimum of %u): ", MIN_SIZE);
+		scanf("%u%u", &width, &height);
+
+		if (width < MIN_SIZE) {
+				printf("Width value of %u is too small. Setting it to %u.\n", width, MIN_SIZE);
+				width = MIN_SIZE;
+		}
+
+		if (height < MIN_SIZE) {
+				printf("Height value of %u is too small. Setting it to %u.\n", height, MIN_SIZE);
+				height = MIN_SIZE;
+		}
+
+		// Output height-2 rows of width characters with * at each end and spaces inside
+		for (unsigned int j = 0; j < height - 2; ++j) {
+				printf("\n*");
+
+				// Next draw the spaces
+				for (unsigned int i = 0; i < width - 2; ++i)
+						printf(" ");
+
+				printf("*");
+		}
+
+		// Output the bottom of the box
+		printf("\n");
+		for (unsigned int i = 0; i < width; ++i)
+				printf("*");
+
+		printf("\n");
+
+		return 0;
+}

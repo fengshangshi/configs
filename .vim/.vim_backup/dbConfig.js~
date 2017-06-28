@@ -1,0 +1,8 @@
+/**
+ * @filename dbConfig.js
+ * @author ss.feng@qunar.com
+ * @description 据库配置
+ */
+module.exports = {
+	mongodb: 'mongodb://127.0.0.1/test'
+};

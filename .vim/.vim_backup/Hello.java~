@@ -1,0 +1,21 @@
+import java.io.StringWriter;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+
+public class Hello 
+{
+	public static void main(String[] args) throws Exception {
+		VelocityEngine ve = new VelocityEngine();
+		ve.init();
+
+		Template t = ve.getTemplate("hello.vm");
+		VelocityContext context = new VelocityContext();
+		context.put("name", "Eiffel Aiu");
+		context.put("site", "http://qunar.com");
+
+		StringWriter writer = new StringWriter();
+		t.merge(context, writer);
+		System.out.println(writer.toString());
+	}
+}

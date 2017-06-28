@@ -1,0 +1,13 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void)
+{
+		int s = 2;
+		for (int i = 0; i < 3; i++) {
+				printf("i=%d\n", i);
+				sleep(s);
+		}
+		printf("end\n", i);
+		return 0;
+}

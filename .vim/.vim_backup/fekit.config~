@@ -1,0 +1,56 @@
+{
+    "compiler": "modular",
+    "name": "sivir",
+    "version": "0.0.0",
+    "development": {
+        "velocity_root": "./vm/"
+    },
+    "dependencies": {
+        "jquery": "1.11.3"
+    },
+    "alias": {
+        "common": "./src/scripts/common",
+        "libs": "./src/scripts/libs",
+        "components": "./src/scripts/components",
+        "service": "./src/scripts/common/service",
+        "utils": "./src/scripts/common/utils",
+        "vue": "./src/scripts/common/utils",
+        "styles": "./src/styles"
+    },
+    "scripts": {
+        "postpack": "./verModifier.js",
+        "postmin": "./verModifier.js"
+    },
+    "refs": {
+        "cp": [
+            "vm",
+            "ver"
+        ]
+    },
+    "export": [
+        {
+            "path": "scripts/common/base.js",
+            "no_version": false
+        },
+        {
+            "path": "styles/common/base.css",
+            "no_version": false
+        },
+        {
+            "path": "scripts/pages/account/bills/entry.js",
+            "no_version": false
+        },
+        {
+            "path": "scripts/pages/account/flow/entry.js",
+            "no_version": false
+        },
+        {
+            "path": "styles/pages/account/bills/entry.css",
+            "no_version": false
+        },
+        {
+            "path": "styles/pages/account/flow/entry.css",
+            "no_version": false
+        }
+    ]
+}

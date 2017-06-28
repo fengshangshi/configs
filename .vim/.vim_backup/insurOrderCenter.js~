@@ -1,0 +1,440 @@
+/*[export]*/
+/*
+ * 订单中心保险业务
+ * @author ss.feng@qunar.com
+ */
+require("jquery");
+require("Handlebars");
+require("./common/jquery.qdatepicker.js");
+var Log = require('./common/log.js');
+var t = require("../templates/insurOrderCenter.handlebars");
+
+// 初始化日志统计实例
+var log = new Log({
+	pid: 1990,
+	pj: "insurOrder",
+	type: 1,
+	page: 0
+});
+
+/**
+ * 监听选择被投保人事件
+ */
+function iuButtonClickHandle(e) {
+	e.preventDefault();
+	var thisCheckbox = $(this).find("input[name=guestsCk]"),
+		isChecked = thisCheckbox.prop("checked");
+
+	// 设置复选框样式
+	thisCheckbox.prop("checked", !isChecked);
+
+	// 设置选择交互样式
+	if (isChecked) {
+		$(this).removeClass("selected");
+	} else {
+		$(this).addClass("selected");
+	}
+
+	// 检查选择状态，改变提交保单按钮
+	controlISButton();
+
+	// 选择按钮选中发送日志
+	var index = thisCheckbox.data("index"),
+		name = thisCheckbox.data("name"),
+		isChecked = thisCheckbox.prop("checked");
+
+	log.send({
+		action: "inscn",
+		index: index,
+		name: name,
+		isChecked: isChecked
+	});
+}
+
+function icButtonClickHandle(e) {
+	e.stopPropagation();
+
+	// 设置复选框样式
+	var target = $(this).parents(".insur-user"),
+		isChecked = $(this).prop("checked");
+
+	$(this).prop("checked", isChecked);
+
+	// 设置选择交互样式
+	if (!isChecked) {
+		$(target).removeClass("selected");
+	} else {
+		$(target).addClass("selected");
+	}
+	
+	// 检查选择状态，改变提交保单按钮
+	controlISButton();
+}
+
+// 获取被投保人选中状态数据
+function fetchInsurChecked() {
+	var checkBoxes = $("input[name=guestsCk]:checked");
+	return checkBoxes;
+}
+
+// 检查投保信息选中状态
+function checkInsur() {
+	var checkBoxes = fetchInsurChecked();
+	return checkBoxes.length > 0 ? true : false;
+}
+
+// 控制提交保单按钮状态
+function controlISButton() {
+	var isChecked = checkInsur();
+
+	if (isChecked) {
+		$("#insur-submit-button").removeClass("button-disable");
+	} else {
+		$("#insur-submit-button").addClass("button-disable");
+	}
+
+	// 计算总价
+	var checkBoxes = fetchInsurChecked(),
+		amount = 0.00;
+
+	$(checkBoxes).each(function(i) {
+		var item = checkBoxes[i];
+		amount += ( parseFloat($(item).attr("data-price")) 
+			* parseInt($(item).attr("data-count")) );
+	});
+
+
+	amount = amount.toFixed(2);
+	$("#total-amount").html(amount);
+	$("input[name=totalAmount]").val(amount);
+
+	return isChecked;
+}
+
+function isButtonClickHandle(e) {
+	e.preventDefault();
+	var isChecked = controlISButton();
+	
+	// 只有有合法的选择才会继续提交
+	if (!isChecked) {
+		return false;
+	}
+
+	$("#insur-form").submit();
+}
+
+// 格式化时间
+function formatDate(date, separator) {
+	date = new Date(date);
+	var y = date.getFullYear(),
+		m = date.getMonth() + 1,
+		d = date.getDate();
+
+	m = m < 10 ? ("0" + m) : m;
+	d = d < 10 ? ("0" + d) : d;
+
+	separator = separator || "-";
+
+	return y + "-" + m + "-" + d;
+}
+
+// 获取起始时间
+// 默认从后端获取
+// 这里的时间均为时间戳
+function fetchDate(dateStart, dateEnd, flag) {
+	var common = window["common"],
+		sysCode = common.sysCode,
+		busiType = common.busiType,
+		dateStart = dateStart || common.insurBeginDate,
+		dateEnd = dateEnd || common.insurEndDate;
+	
+	// 设置截止日期
+	changeEndDate(dateStart, dateEnd, flag);
+	// 获取被投保人列表数据
+	fetchInsurData(dateStart, dateEnd, sysCode, busiType);
+}
+
+
+// 设置截止日期等信息
+function changeEndDate(dateStart, dateEnd, flag) {
+	var weeks = ["日", "一", "二", "三", "四", "五", "六"],
+		day, dateStr, y, m, d;
+
+	day = "周" + weeks[new Date(dateEnd).getDay()];
+
+	dateEnd = formatDate(dateEnd);
+	dateStart = formatDate(dateStart);
+
+	if (flag) {
+		// 设置截止日期
+		$("#end-date").text(dateEnd);
+		// 设置截止日期的周信息
+		$("#week").text(day);
+		// 设置起止日期的范围,这里写死
+		$("#month").text(1);
+	}
+
+	//设置隐藏域的起止日期
+	$("input[name=insurBeginDate]").val(dateStart);
+	$("input[name=insurEndDate]").val(dateEnd);
+}
+
+// 获取被投保人数据
+function fetchInsurData(dateStart, dateEnd, sysCode, busiType) {
+	// 格式化截止日期
+	dateEnd = formatDate(dateEnd);
+	dateStart = formatDate(dateStart);
+
+	var orderNo = $("input[name=orderNo]").val(),
+		prdNo =  $("input[name=prdNo]").val(),
+		insurBeginDate = $("input[name=insurBeginDate]").val(),
+		insurEndDate = $("input[name=insurEndDate]").val(),
+		checkBoxes, checkBoxValues = [];
+
+
+	// 拼装请求参数
+	var data = {
+		orderNo: orderNo,
+		prdNo: prdNo,
+		insurBeginDate: dateStart,
+		insurEndDate: dateEnd,
+		sysCode: sysCode,
+		busiType: busiType
+	};
+
+	checkBoxes = fetchInsurChecked(),
+	$(checkBoxes).each(function(i) {
+		checkBoxValues.push($(this).val());
+	});
+
+	data["guestsCk"] = checkBoxValues.join(",");
+
+	$.ajax({
+		url: "/orderCenter/checkGuests",
+		data: data,
+		type: "POST",
+		dataType: "json",
+		cache: false,
+		success: function(data) {
+			if (data.success) {
+				// 判断被投保人状态
+				Handlebars.registerHelper("if", function(status, flag, options) {
+					if (options == undefined) {
+						options = flag;
+						flag = 0;
+					}
+
+					return status == flag ? 
+						options.fn(this) : options.inverse(this);
+				});
+
+				// 求单个被投保人和
+				Handlebars.registerHelper("sum", function(price, counts) {
+					return parseFloat(parseFloat(price) 
+							* parseFloat(counts[0])).toFixed(2);
+				});
+
+				Handlebars.registerHelper("index", function(counts) {
+					return counts.length > 0 ? counts[0] : 1;
+				});
+
+				// 将时间戳转化成格式化日期
+				Handlebars.registerHelper("format", function(date) {
+					var y, m, d;
+					date = new Date(date);
+					date.setDate(date.getDate() + 1);
+					date = formatDate(date);
+					return date;
+				});
+
+				// 对数组索引加一
+				Handlebars.registerHelper("addOne", function(index) {
+					return index + 1;
+				});
+
+				// 对投保份数进行判断
+				Handlebars.registerHelper("ifOnlyOne", function(applyNums, options) {
+					return applyNums.length == 1 ? 
+						options.fn(this) : options.inverse(this);
+				});
+	
+				// 需要支持投保人可购买份数
+				for ( var i = 0, l = data.obj.length; i < l; i++ ) {
+					var applyNums = [], obj = data.obj,
+						min = parseInt(obj[i].minApplyNum),
+						max = parseInt(obj[i].maxApplyNum);
+					for (; min <= max; min++) {
+						applyNums.push(min);
+					}
+					data.obj[i]["applyNums"] = applyNums;
+				}
+				
+				$("#insur-user-info-items").html(t(data.obj));
+
+				// 设置起止时间
+				changeEndDate(data.attributes.insurBeginDate, data.attributes.insurEndDate, true);
+
+				// 检查选择状态，改变提交保单按钮
+				controlISButton();
+			}
+		}
+	});
+
+}
+
+// 初始化时间组件
+function diffDate(date) {
+	var now = new Date(),
+		diff = new Date(date);
+
+	return diff.getFullYear() === now.getFullYear() 
+			&& diff.getMonth() === now.getMonth()
+			&& diff.getDate() === now.getDate();
+
+}
+
+var common = window["common"],
+	startDate = common.insurBeginDate,
+	endDate = common.insurEndDate;
+
+var now = new Date(),
+	tomorrow = new Date(startDate).getTime();
+
+	/**
+	 * 今天也可以购买
+	 */
+	if (diffDate(startDate)) {
+		var date = now.getDate();
+		date = date - 1;
+		now.setDate(date);
+	}
+
+$("#start-date").qdatepicker({
+	"ui": "qunar",
+	"minDate": now,
+	"defaultDay": tomorrow,
+	"multi": 1,
+	"on": {
+		"q-datepicker-select": function() {
+			var date = $(this).val(),
+				dates = date.split("-"),
+				y = dates[0],
+				m = dates[1] - 1,
+				d = dates[2],
+				now = new Date();
+			now.setFullYear(y, m, d);
+			fetchDate(now.getTime(), null, false);
+
+			// 日期选择
+			log.send({
+				action: "insbd",
+				date: date
+			});
+		}
+	}
+});
+
+// looger 日志统计
+function logger(e) {
+	var type = $(this).data("click-id");
+	switch (type) {
+
+		// 点击协议下载
+		case "insfile":
+			log.send({
+				action: "insfile"
+			});
+			break;
+
+		// 点击投保按钮
+		case "inspay":
+			var date = $("#start-date").val();
+			var isDisable = $(this).hasClass("button-disable") ? "1" : "0";
+			var checkboxes = fetchInsurChecked();
+			var checked = [];
+
+			checkboxes.each(function(i, item) {
+				checked.push($(item).attr("data-name") + "-" + $(item).attr("data-count"));
+			});
+
+			checked = checked.join("|");
+
+			log.send({
+				action: "inspay",
+				date: date,
+				isDisable: isDisable,
+				orderChecked: checked
+			});
+			break;
+
+		// 点击复选框
+		case "inscn":
+			var index = $(this).data("index"),
+				name = $(this).data("name"),
+				isChecked = $(this).prop("checked");
+			log.send({
+				action: "inscn",
+				index: index,
+				name: name,
+				isChecked: isChecked
+			});
+			break;
+	}
+}
+
+// 被保险人选择保险数
+function isSelectClickHandle(e) {
+	e.stopPropagation();
+}
+
+function isSelectChangeHandle(e) {
+	var parents = $(this).parent().parent(),
+		count = parseInt($(this).children("option:selected").val()),
+		price = parseFloat(parents.find("input[name=guestsCk]").data("price")),
+		totalPrice = price * count;
+
+	totalPrice = totalPrice.toFixed(2);
+
+	// 写入价格
+	parents.find(".insur-amount span").text(totalPrice);
+	parents.find("input[name=guestsCk]").attr("data-count", count);
+
+	// 修改checkbox值
+	var vals = parents.find("input[name=guestsCk]").val();
+	vals = vals.split("|");
+	vals.splice(1, 1, count);
+	vals = vals.join("|");
+
+	parents.find("input[name=guestsCk]").val(vals);
+	
+	// 检查选择状态，改变提交保单按钮
+	controlISButton();
+
+	// 发送统计
+	log.send({
+		action: "inscount",
+		count: count
+	});
+}
+
+// IE浏览器下回退时会主动填入之前的文本
+// 导致时间文本框展现有问题
+var temp_start_date = $("#start-date").val();
+!$.support.leadingWhitespace && setTimeout(function() {
+	$("#start-date").val(temp_start_date);
+}, 10);
+
+// 禁止选择份数按钮冒泡
+$("#insur-form").delegate("select[name=insur-count-select]", "click", isSelectClickHandle);
+// 选择份数
+$("#insur-form").delegate("select[name=insur-count-select]", "change", isSelectChangeHandle);
+
+$(document).delegate("a.insur-user", "click", iuButtonClickHandle);
+$(document).delegate("a.insur-user input[name=guestsCk]", "click", icButtonClickHandle);
+$(document).delegate("#insur-submit-button", "click", isButtonClickHandle);
+// 日志统计
+$(document).delegate("[data-click-id]", "click", logger);
+
+// 获取时间，初始化被投保人信息
+// 第三个参数用来配置截止日期是否更新
+fetchDate(null, null, true);

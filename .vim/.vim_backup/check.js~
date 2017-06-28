@@ -1,0 +1,50 @@
+/**
+ * 验证银行信息
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+var ajaxUrl = "/member/other/identityCheckForUsercenter/checkCardsApi.htm";
+
+//银行信息验证失败处理
+function errorHandle(data){
+	var ele = $(".identity-check-submit").parent().find(".form-other"),
+		errStr = "<span class='form-other'><i class='err'></i>" + data.errorMsg + "</span>";
+	if(ele.length == 0){
+
+		$(".identity-check-submit").parent().append(errStr);
+	}else{
+		ele.empty().append("<i class='err'></i>" + data.errorMsg);
+	}
+}
+
+//传入银行卡号（bankNo）和token来验证
+message.register("checkInfo", function(e){
+	var opts = e.args;
+	var token = $("#token").val();
+	service.ajax({
+		url: ajaxUrl,
+		data: opts,
+		onsuccess: function(data) {
+			var errorCode = parseInt(data.errorCode);
+			switch (errorCode) {
+				// 成功
+				case 0:
+					window.location = "http://user.qunar.com/userinfo/modifymobilesuccess.jsp?status=1&token="+token+"&uid="+data.uid;
+					break;
+				// 操作频繁
+				case 2:
+					window.location = "http://user.qunar.com/userVerifyInfo/edit.jsp?token=" + token;
+					break;
+				// 输入错误
+				// or 默认
+				case 1:
+				default:
+					errorHandle(data);
+					break;
+			}
+		}
+	});
+
+});

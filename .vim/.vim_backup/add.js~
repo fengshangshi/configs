@@ -1,0 +1,158 @@
+(function() {
+
+	var release = {
+		init: function() {
+			this.bind();
+		},
+
+		showPreview: function() {
+			var self = this,
+				moduleVersion = decodeURIComponent($('#moduleVersion').val()),
+				url = decodeURIComponent($('#url').val()),
+				updateType = decodeURIComponent($('#updateType').val()),
+				updateTitle = decodeURIComponent($('#updateTitle').val()),
+				updateContent = decodeURIComponent($('#updateContent').val()),
+				updateSpecialTip = decodeURIComponent($('#updateSpecialTip').val()),
+				updateSpecialColor = decodeURIComponent($('#updateSpecialColor').val());
+
+			var data = {
+				'资源版本号': moduleVersion,
+				'资源包地址': url,
+				'升级类型': updateType,
+				'提示标题': updateTitle,
+				'提示内容': updateContent,
+				'特殊提示文案': updateSpecialTip,
+				'特殊文案颜色': updateSpecialColor
+			};
+
+			self.showPreMsg(data);
+
+		},
+		submit: function() {
+			var self = this,
+				moduleVersion = decodeURIComponent($('#moduleVersion').val()),
+				url = decodeURIComponent($('#url').val()),
+				updateType = decodeURIComponent($('#updateType').val()),
+				updateTitle = decodeURIComponent($('#updateTitle').val()),
+				updateContent = decodeURIComponent($('#updateContent').val()),
+				updateSpecialTip = decodeURIComponent($('#updateSpecialTip').val()),
+				updateSpecialColor = decodeURIComponent($('#updateSpecialColor').val());
+
+			if (window.confirm('确定要发布吗？')) {
+
+				$.post('/config/add', {
+					version: moduleVersion,
+					url: url,
+					type: updateType,
+					title: updateTitle,
+					content: updateContent,
+					tip: updateSpecialTip,
+					color: updateSpecialColor
+				}, function(res) {
+					var status = res.code;
+					switch (status) {
+						case '0000':
+							window.location.href = '/config/history';
+							break;
+
+						case '9999':
+							window.location.href = '/account/login';
+							break;
+
+						default:
+							self.showMsg(res.msg);
+
+					}
+				});
+			}
+		},
+		showMsg: function(msg) {
+			$('#message').text(msg).show();
+			setTimeout(function() {
+				$('#message').hide();
+			}, 3000);
+		},
+
+		showPreMsg: function(msg) {
+			msg = JSON.stringify(msg);
+			$('#previewMessage').text(msg).show();
+			/*
+			setTimeout(function() {
+				$('#message').hide();
+			}, 3000);
+			*/
+		},
+
+		verification: function() {
+			var self = this,
+				moduleVersion = $('#moduleVersion'),
+				url = $('#url'),
+				updateType = $('#updateType'),
+				updateTitle = $('#updateTitle'),
+				updateContent = $('#updateContent'),
+				//updateSpecialTip = $('#updateSpecialTip'),
+				//updateSpecialColor = $('#updateSpecialColor');
+
+			if (!moduleVersion.val()) {
+				self.showMsg('请输入资源包版本');
+				moduleVersion.focus();
+				return false;
+			}
+			if (!url.val()) {
+				self.showMsg('请输入资源包地址');
+				url.focus();
+				return false;
+			}
+
+			if (!updateType.val()) {
+				self.showMsg('请选择升级类型');
+				updateType.focus();
+				return false;
+			}
+
+			if (!updateTitle.val()) {
+				self.showMsg('请输入提示标题');
+				updateTitle.focus();
+				return false;
+			}
+
+			if (!updateContent.val()) {
+				self.showMsg('请输入提示内容');
+				updateContent.focus();
+				return false;
+			}
+
+			return true;
+		},
+		show: function() {
+			$('#login')
+				.modal('setting', 'transition', 'vertical flip')
+				.modal('show');
+		},
+		bind: function() {
+			var self = this;
+
+			$('#moduleVersion').focus();
+			$('#submit').on('click', function() {
+				if (self.verification()) {
+					self.submit();
+				}
+			});
+
+
+			$('#previewButton').on('click', function() {
+				if (self.verification()) {
+					self.showPreview();
+				}
+			});
+
+			$('#moduleVersion').on('change', function() {
+				$('#url').val('https://hybrid.quhuhu.com/download/' + $(this).val());
+			});
+		}
+	}
+
+	$(function() {
+		release.init();
+	});
+})();

@@ -1,0 +1,47 @@
+const net = require('net');
+
+const HOST = 'localhost';
+const PORT = '8080';
+
+const server = net.createServer();
+
+server.on('close', (err) => {
+	console.log('close ', err);
+});
+
+server.on('connection', (socket) => {
+	console.log('connection: ', socket.address());
+	console.log('bufferSize: ', socket.bufferSize);
+	socket.on('end', function() {
+		console.log('server disconnected');
+	});
+	socket.on('data', function() {
+		console.log('[Client]' + data);
+		setTimeout(() => {
+			socket.write('Hi, I\'m your server');	
+		});
+	});
+});
+
+server.on('error', (e) => {
+	if (e.code == 'EADDRINUSE') {
+		console.log('Address in use, retrying...');
+		setTimeout(() => {
+			server.close();
+			server.listen(PORT, HOST);
+		}, 1000);
+	}
+});
+
+server.on('listening', () => {
+	console.log('listening ', server.address());
+});
+
+console.log('before listen');
+//server.listen(PORT, HOST);
+server.listen({
+	host: HOST,
+	port: PORT,
+	exclusive: true
+});
+console.log('after listen');

@@ -1,0 +1,27 @@
+<div id="dialog-ious" class="dialog" title="信任付签约">
+	<div class="tips">
+		<a href="{{url}}?action=1" 
+			class="button dialog-button-submit">签约成功</a>
+		<a href="{{url}}?action=2" 
+			class="button dialog-button-cancel">遇到问题</a>
+	</div>
+	<div class="ask">
+		<h4>问题解答</h4>
+		<ol>
+			<li>1.网上银行页面打不开?
+				<a href="###" target="_blank">查看</a>
+				<span>
+				答：建议使用IE浏览器，或谷歌浏览器、360浏览器等。
+				</span>
+			</li>
+			<li>2.想要提前还款，需要怎么操作?
+				<a href="###" target="_blank">查看</a>
+				<span>
+				答：请前往民生银行直销银行登录后进行还款。
+				提前还款需要支付实际借款天数的利息以及违约金。
+				具体请咨询民生银行客服电话：10100123
+				</span>
+			</li>
+		</ol>
+	</div>
+</div>

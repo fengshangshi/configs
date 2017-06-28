@@ -1,0 +1,10 @@
+#include <stdio.h>
+
+int main()
+{
+	int x = 4;
+	int *address_of_x = &x;
+	printf("x存放在：%p, x的值是：%i\n", address_of_x, *address_of_x);
+	*address_of_x = 99;
+	return 0;
+}

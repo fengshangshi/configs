@@ -1,0 +1,636 @@
+if(typeof window.QNR == "undefined"){
+	window.QNR={};
+}
+
+(function(ns){
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 **/
+
+	var formRobot=function(config){
+	
+		var d={
+			tpl: {
+				error:	'<div class="cret_pas" js-form-robot="error">'
+							+'<b class="arrow"></b>'
+							+'<div class="error_ct">'
+								+'<p><span class="icon_error"></span><span class="error_text">{content}</span></p>'
+							+'</div>'
+						+'</div>',
+				tip:	'<div class="cret_code2" js-form-robot="tip">'
+							+'<b class="arrow"></b>'
+							+'<div class="code_tip">'
+								+'<p><span class="icon_waring"></span><span class="code_text">{content}</span></p>'
+							+'</div>'
+						+'</div>',
+				require:'<div class="cret_pas" js-form-robot="error">'
+							+'<b class="arrow"></b>'
+							+'<div class="error_ct">'
+								+'<p><span class="icon_error"></span><span class="error_text">{content}</span></p>'
+							+'</div>'
+						+'</div>',
+				ok:	'<span js-form-robot="ok" class="icon_correct"></span>',
+				empty: '',
+				submiterror: '<div class="cret_pas creat_acout" js-form-robot="submiterror">'
+							+'<b class="arrow"></b>'
+							+'<div class="error_ct">'
+								+'<p><span class="icon_error"></span><span class="error_text">{content}</span></p>'
+							+'</div>'
+						+'</div>'
+			},
+			validators: {
+				"test": {
+					require: true,
+					events: ["blur","submit"],
+					tip: "请输入数字",
+					error: "错误",
+					pattern: function(){
+						return true;
+					},
+					trigger: "trigger",
+					callback: "callback",
+					tipPos: function(v){
+						return $(v).parent().parent();
+					}
+				}
+			},
+			key: "js-valid-type"
+		};
+		
+		config.validators=$.extend(d.validators,config.validators);
+	
+		this.config=$.extend(d,config);
+		
+		this.init();
+	}
+	
+	formRobot.prototype={
+	
+		init: function(){
+		
+			if(this.config.form){
+				this.dom=$(this.config.form);
+			}else{
+				throw new error("please specify form");
+			}
+			
+			this.initCtrls();
+			
+			this.initValiadators(this.config.validators);
+		
+		},
+		
+		initCtrls: function(){
+		
+			var els=this.dom.find("[js-custom-type]");
+			
+			for( var i=0,el; i<els.length; i++){
+				
+				el=$(els[i]);
+				
+				switch(el.attr("js-custom-type")){
+					case "select":
+						if(el.csSelect){
+							el.csSelect();
+						}else{
+							this.initSelect();
+						}
+						break;
+				}
+			
+			}
+		
+		},
+		
+		initSelect: function(el){
+			var name=el.attr("js-data-name");
+			var vnode=el.find("input[name='"+name+"']");
+			
+			el.val(vnode.val());
+			
+			var snode=el.find("[js-place-holder='"+name+"-show']");
+			var list=el.find("[js-place-holder='"+name+"-list']");
+			
+			var shown=false;
+			
+			snode.live("click",function(){
+				shown=!shown;
+				if(shown){
+					list.show();
+				}else{
+					list.hide();
+				}
+			});
+			
+			list.find("a[value]").live("click",function(){
+				var item=$(this);
+				v=item.attr("value");
+				
+				if(v!=vnode.attr("value")){
+					vnode.attr("value",v);
+					el.val(vnode.val());
+					snode.html(item.html());
+					el.trigger("change",[v]);
+				}
+				
+				shown=false;
+				list.hide();
+			});
+		},
+		
+		initValiadators: function(vs){
+			
+			this.vs=new _V(vs,$.extend({dom:this.dom},this.config));
+			
+			/*
+			for( var method in vs){
+				this.vs[method]=new _V(method,$.extend(vs[method],this.config,{dom:this.dom}));
+			}*/
+			
+		},
+		
+		getValidator: function(name){
+			return this.vs.getV(name);
+		},
+		
+		valid: function(type,value){
+			return this.vs.valid(type,value);
+		},
+		
+		find: function(cs){
+		
+			if(typeof cs=="undefined"){
+				return (this.dom||this.config.dom).find("["+this.config.key+"]");
+			}
+		
+			if(!(cs instanceof Array)){
+				return this.find([cs]);
+			}
+		
+			for( var i=0; i<cs.length; i++) {
+				cs[i]="["+this.config.key+"='"+cs[i]+"']";
+			}
+			
+			return (this.dom||this.config.dom).find(cs.join(","));
+		}
+	}
+	
+	ns.formRobot=formRobot;
+	
+	
+	var _V=function(data,c){
+		this.config=$.extend({
+		},c);
+		
+		this.dom=this.config.dom;
+		this.data=data;
+		
+		this.patterns=$.extend({
+			"mobile":/^1[0-9]{10}$/,
+			"cn": /^[\u4e00-\u9fa5]+$/,
+			"number": /^[\d]+$/,
+			//"idcard": /^\d{15}$|^\d{18}$/,
+			"password": /^[\x00-\xff]+$/,
+			"passport": /^[a-zA-Z0-9]{4,64}$/,
+			"idcard":function(num) {	
+
+				num = num.toUpperCase();  				
+				//身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X。   
+				if (!(/(^\d{15}$)|(^\d{17}([0-9]|X)$)/.test(num))) { 
+					return false; 
+				}
+				//校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。 
+				//下面分别分析出生日期和校验位 
+				var len, re; 
+				len = num.length; 
+				if (len == 15) {
+					
+					re = new RegExp(/^(\d{6})(\d{2})(\d{2})(\d{2})(\d{3})$/); 
+					var arrSplit = num.match(re); 
+
+					//检查生日日期是否正确 
+					var dtmBirth = new Date('19' + arrSplit[2] + '/' + arrSplit[3] + '/' + arrSplit[4]); 
+					var bGoodDay = (dtmBirth.getYear() == Number(arrSplit[2])) && ((dtmBirth.getMonth() + 1) == Number(arrSplit[3])) && (dtmBirth.getDate() == Number(arrSplit[4])); 
+					
+					if (!bGoodDay) { 
+						return false; 
+					} else {				
+						return 1;
+					}   
+				}
+				
+				if (len == 18) {
+					
+					re = new RegExp(/^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9]|X)$/); 
+					var arrSplit = num.match(re); 
+
+					//检查生日日期是否正确 
+					var dtmBirth = new Date(arrSplit[2] + "/" + arrSplit[3] + "/" + arrSplit[4]); 
+					var bGoodDay = (dtmBirth.getFullYear() == Number(arrSplit[2])) && ((dtmBirth.getMonth() + 1) == Number(arrSplit[3])) && (dtmBirth.getDate() == Number(arrSplit[4])); 
+
+					if (!bGoodDay) { 
+						return false; 
+					} else { 
+						//检验18位身份证的校验码是否正确。 
+						//校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。 
+						var valnum; 
+						var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2); 
+						var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'); 
+						var nTemp = 0, i; 
+						for(i = 0; i < 17; i ++) { 
+							nTemp += num.substr(i, 1) * arrInt[i]; 
+						} 
+						
+						valnum = arrCh[nTemp % 11];
+						if (valnum != num.substr(17, 1)) { 
+							return false; 
+						} 
+						
+						return 1; 
+					} 
+				}
+				
+				return false; 
+			}
+		},this.config.patterns);
+		
+		this.init();
+	}
+	
+	_V.prototype={
+		init: function(){
+		
+			var self=this;
+		
+			for( var i in this.data){
+				if(typeof this.data[i].pattern=="string"){
+					this.data[i].pattern=this.patterns[this.data[i].pattern];
+				}
+				
+				if(!this.data[i].events){
+					this.data[i].events=[];
+				}
+				
+				this.data[i].name=i;
+				
+				$.extend(this.data[i],{
+					showError: function(msg,tpl){
+						var t="error";
+						if(tpl){
+							t=tpl;
+						}
+						
+						var parent=self.find(this.name);
+						
+						if(this.tipPos){
+							parent=this.tipPos(parent);
+						}else{
+							parent=parent.parent();
+						}
+						
+						if(typeof msg=="undefined"){
+							msg=this[t]||"";
+						}
+						
+						self.showMessage(parent,t,msg);
+					},
+					showTip: function(msg,tpl){
+						var t="tip";
+						if(tpl){
+							t=tpl;
+						}
+						
+						var parent=self.find(this.name);
+						
+						if(this.tipPos){
+							parent=this.tipPos(parent);
+						}else{
+							parent=parent.parent();
+						}
+						
+						if(typeof msg=="undefined"){
+							msg=this[t]||"";
+						}
+						
+						self.showMessage(parent,t,msg);
+					},
+					removeTips: function(){
+						var parent=self.find(this.name);
+						
+						if(this.tipPos){
+							parent=this.tipPos(parent);
+						}else{
+							parent=parent.parent();
+						}
+						self.removeMessage(parent);
+					}
+				});
+			}
+			
+			this.initEvents();
+		},
+		
+		getV: function(name){
+			return this.data[name];
+		},
+		
+		initEvents: function(){
+			var sub=[];
+		
+			var self=this;
+			
+			//bind events
+			var node=this.dom, eve;
+			
+			var els=this.find();
+			
+			for( var i=0,el=false,v; i<els.length; i++){
+				el=$(els[i]);
+				
+				var name=el.attr(this.config.key);
+				
+				if(!(name in this.data)){
+					continue;
+				}
+				
+				if(name=="submit"){
+					this.submitNode=el;
+					continue;
+				}
+				
+				v=this.data[name];
+				
+				if(!("sync" in v)){
+					v.sync=true;
+				}
+				
+				var tipfunc=function(_el,_v){
+				
+					if(_v.tip){
+						return function(){
+							if($.trim(_el.val())==""){
+								r="tip";
+								self.update(_el,_v,r);
+							}else{
+								_v.removeTips();
+							}
+							
+							if(self.data["submit"]){
+								self.data["submit"].removeTips();
+							}
+						};
+					}else{
+						return function(){
+							_v.removeTips();
+							
+							if(self.data["submit"]){
+								self.data["submit"].removeTips();
+							}
+						}
+					}
+				}(el,v);
+				
+				if(v.sync){
+					var vfunc=function(_el,_v){
+						return function(){
+							var r=false;
+							if($.trim(_el.val())==""){
+								r="empty";
+							}else if(_v.pattern instanceof RegExp){
+								r=_v.pattern.test(_el.val());
+							}else if(typeof _v.pattern == "function"){
+								r=_v.pattern(_el.val());
+							}
+							
+							self.update(_el,_v,r);
+							return r;
+						};
+					}(el,v);
+				}else{
+				
+					var vfunc=function(_el,_v){
+						
+						return function(e){
+							if(typeof e=="undefined"){
+								var e={type:"submit"};
+							}
+							if($.trim(_el.val())==""){
+								r="empty";
+								self.update(_el,_v,r);
+							}else if(typeof _v.trigger == "function"){
+								_v.trigger(_el.val());
+							}else if(typeof _v.trigger=="string"){
+								_el.trigger(_v.trigger,[_el.val(),_v,e.type]);
+							}
+						};
+					}(el,v);
+					
+					var cvfunc=function(_el,_v){
+						return function(e,r){
+							if(typeof r=="undefined"&&_v.pattern){
+								if($.trim(_el.val())==""){
+									r="empty";
+								}else if(_v.pattern instanceof RegExp){
+									r=v.pattern.test(_el.val());
+								}else if(typeof _v.pattern == "function"){
+									r=_v.pattern(_el.val());
+								}
+							}
+							
+							//submit和update的顺序不能颠倒, 在update中会清除提交锁
+							self.checkSubmit(_el,r);
+							
+							self.update(_el,_v,r);
+							
+							r=!!r;
+							return r;
+						}
+					}(el,v);
+					
+					var dfunc=function(_el,_v){
+					
+						return function(){
+							if($.trim(_el.val())==""){
+								return "empty";
+							}
+							return _el.val()==_el.attr("oldval")&&_el.attr("js-valid")?parseInt(_el.attr("js-valid")):false;
+						}
+					}(el,v);
+					
+					el.bind(v.callback,cvfunc);
+				}
+				
+				el.bind("focus",tipfunc);
+				
+				for( var j=0; j<v.events.length; j++){
+					eve=v.events[j];
+					
+					if(eve=="submit"){
+						sub.push({v:v,el:el,func:vfunc,callback:cvfunc,valid:dfunc});
+						continue;
+					}
+					
+					if(eve=="load"){
+						vfunc();
+						continue;
+					}
+					
+					el.bind(eve,vfunc);
+				}
+				
+			}
+			
+			
+			if(sub.length){
+				this.bindSubmit(sub);
+			}
+		},
+		
+		checkSubmit: function(el,r){
+		
+			
+		
+			el.attr("js-valid",(!r||r=="tip"||r=="empty")?0:1);
+			el.attr("oldval",el.val());
+			
+			if(this.processing){
+				if(r===true&&this.submitLock){
+					this.submitLock--;
+					if(!this.submitLock){
+						this.processing=false;
+						this.dom.submit();
+					}
+				}else if(this.submitLock){
+					this.processing=false;
+				}
+			}else{
+				this.submitLock=0;
+			}
+		},
+		
+		processing: false,
+		
+		bindSubmit: function(data){
+			var self=this;
+			this.submitLock=0;
+			
+			this.dom.bind("submit",$.proxy(function(e){
+				if(this.processing){
+					return false;
+				}
+				
+				this.processing=true;
+				
+				if(e.originalEvent){
+					this.submitLock=0;
+				}
+				
+				if(this.submitNode){
+					this.update(this.submitNode,this.data.submit,"empty");
+				}
+
+				var err=0,r=false;
+				for( var i=0; i<data.length; i++){
+
+					if(data[i].v.sync){
+						
+						r=data[i].func();
+						
+						if(!r){
+							err++;
+						}else if(data[i].v.require&&(r=="empty"||r=="tip")){
+							this.update(data[i].el,data[i].v,"require");
+							err++;
+						}
+					}else{
+						
+						r=data[i].valid();
+						
+						if(!r){
+							this.submitLock++;
+							
+							data[i].func();
+							
+						}else if(data[i].v.require&&(r=="empty"||r=="tip")){
+							this.update(data[i].el,data[i].v,"require");
+							err++;
+						}
+					}
+				}
+				
+				if(err){
+					
+					if(this.submitNode){
+						this.update(this.submitNode,this.data.submit,false,"submiterror");
+					}
+					this.processing=false;
+					return false;
+				}
+				
+				
+				if(this.submitLock){
+					
+					return false;
+				}
+				
+				if(this.config.submit){
+					this.processing=false;
+					return !(this.config.submit()===false);
+				}
+				
+				this.processing=false;
+				return true;
+				
+			},this));
+		},
+		
+		valid: function(type,value){
+			if(typeof this.patterns[type]=="function"){
+				return this.patterns[type](value);
+			}else if(this.patterns[type] instanceof RegExp){
+				return this.patterns[type].test(value);
+			}
+		},
+		
+		update: function(vel,v,r,tartp){
+			var p=vel.parent();
+			var tp= typeof r=="string"? r : (r?"ok":"error");
+			
+			if(v.tipPos){
+				p=v.tipPos(vel);
+			}
+			
+			if(v[tp]===false){
+				this.removeMessage(p);
+				return;
+			}
+			
+			var msg=v[tp];
+			
+			if(tp=="require"&&msg===true){
+				msg="请填写此项";
+			}
+			
+			this.showMessage(p,tartp||tp,msg);
+		},
+		
+		showMessage: function(p,tpl,msg){
+			this.removeMessage(p);
+			//setTimeout($.proxy(function(){
+			p.append($(this.config.tpl[tpl].replace(/\{content\}/g,msg)));
+			//},this),100);
+		},
+		
+		removeMessage: function(p){
+			p.find("[js-form-robot]").remove();
+		},
+		
+		find: formRobot.prototype.find
+	}
+
+})(QNR);

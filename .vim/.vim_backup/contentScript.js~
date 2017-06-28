@@ -1,0 +1,95 @@
+/**
+ * 注入脚本
+ * @author ss.feng
+ */
+
+$("body").append(template);
+
+/**
+ * 渲染dom
+ * 把用户名和密码添加到用户界面
+ */
+function changeAccount(host, username, password) {
+	var account = config.accounts[host]; 
+	if (account && account["username"] && $(account["username"]).length > 0) {
+		$(account["username"]).val(username);
+	}
+	if (account && account["password"] && $(account["password"]).length > 0) {
+		$(account["password"]).val(password);
+	}
+}
+
+function init() {
+	var host = window.location.host;
+	var username = utils.getQueryString("otaUserName");
+	var password = utils.getQueryString("otaPwd");
+	host = utils.getDomain(host);
+
+	changeAccount(host, username, password);
+
+	var requestOptions = {
+		"type": "cache"
+	};
+
+	var allQueryString = utils.getAllQueryString();
+	// 合并透传的数据
+	$.extend(requestOptions, allQueryString);
+
+	// 发送cookie数据至background
+	chrome.extension.sendRequest(requestOptions);
+}
+
+$(document).on("click", ".js_quhuhu_button", function(e) {
+	e.preventDefault();
+	var host = window.location.host;
+
+	host = utils.getDomain(host);
+
+	/**
+	 * @action value
+	 * 0 登录成功
+	 * 1 用户名或密码错误
+	 * 2 账号被禁用
+	 * 3 登录失败,其他原因
+	 * 999 显示隐藏
+	 */
+	var action = $(this).data("action");
+
+	/**
+	 * action == 999 表示显示隐藏
+	 */
+	if (action == 999) {
+		showOrHide(this);
+		return false;
+	}
+
+	var requestOptions = {
+		"type": "cookie",
+		"action": action,
+		"host": host
+	};
+
+	var allQueryString = utils.getAllQueryString();
+	// 合并透传的数据
+	$.extend(requestOptions, allQueryString);
+
+	// 发送cookie数据至background
+	chrome.extension.sendRequest(requestOptions, function (res) {
+
+		var message = "";
+		if (res.status == 0) {
+			message = "提交成功";
+		} else {
+			message = res.errMsg;
+		}
+		$("#quhuhu_directTips").text(message);
+
+	});
+
+});
+
+$(document).on("dblclick", "#quhuhu_channelDirect", function(e) {
+	$(this).toggleClass("quhuhu_channelDirect_hidden");
+});
+
+init();

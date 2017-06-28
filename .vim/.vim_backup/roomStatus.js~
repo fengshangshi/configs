@@ -1,0 +1,4403 @@
+/**
+ * [定义房态avalon vm]
+ */
+var roomStatusVm = avalon.define({
+    $id: 'roomStatus'
+});
+
+var roomStatusMainTpl = require('tplScript/roomStatus/roomStatusMain.string');
+// 引入新增订单模板
+var newOrderTpl = require('tplScript/roomStatus/newOrder.string');
+var roomtpl = require('tplScript/roomStatustpl.js');
+var roomChangeTpl = require('tplScript/orderDetail/roomChange.string'); //换房
+var thumbRoomStatusTpl = require('tplScript/thumbRoomStatusTpl.js');
+var resentmassage = require('roomstateScript/resentmassage.js');
+var moreroom = require('roomstateScript/moreroom.js');
+// 引入筛选房型模块
+var roomSelectPanel = require('roomstateScript/roomSelectPanel.js');
+
+var orderThumbnails = require('roomstateScript/orderThumbnails.js');
+//引入房态缩略模块
+var roomStatusThumb = require('roomstateScript/thumbStatus.js');
+//引入开启房卡模块
+var openRoomCard = require('roomstateScript/makeCard.js');
+
+// 加载消息tips  js
+var noticetip = require('commonScript/noticetip.js');
+
+// 引入批量查询锁信息模块
+var queryLockInfo = require('roomstateScript/queryLockInfo.js');
+// 去哪儿网直连规则
+var protocolQunar = require('tplScript/channelLink/protocolQunar.string');
+
+//引入取消订单模板
+var cancelOrderTpl = require('tplScript/orders/orderCancel.string');
+
+//引入获取节日日历模块
+var calendarholiday = require("moduleScript/calendarholiday.js");
+
+require('moduleScript/placeholder.js');
+
+//记录订单详情数据
+var roomOrderFormData = {};
+
+//缓存缩略房态需要的节日列表
+var customHoliday = '元旦，春节，情人节，清明节，劳动节，端午节，七夕，中秋节，国庆节，圣诞节';
+
+// 记录订单所在的位置  ps 这个变量在订单详情页有用
+window.room_orderZoom_position = 0;
+
+// 是否预订成功标记
+window.isCreateOrder = null;
+
+// 改变房态请求ajax标记
+window.statusChangeAjax = null;
+
+//房态表可查询范围
+var defaultMinDate ;
+var defaultMaxDate ;
+
+var roomStatus = function() {
+    window.checkTimeoff1 = true;
+    window.checkTimeoff2 = true;
+
+    // 显示消息tips
+    noticetip.init();
+    //注册事件
+    roomstatus.init();
+}
+//判断object对象是否为空
+function isEmptyObject(obj) {
+    for(var n in obj){return false} 
+    return true; 
+}
+//设置房态表可查询范围
+(function setDefaultDate(){
+    var Today = CONFIG.DATE;
+    var TodayArr1 = Today.split("-"), TodayArr2 = Today.split("-");
+    TodayArr1[0] = parseInt(TodayArr1[0]) - 5;
+    TodayArr1[2] = qfn.toTwoNumber(parseInt(TodayArr1[2]) + 1);
+    TodayArr2[0] = parseInt(TodayArr2[0]) + 5;
+    TodayArr2[2] = qfn.toTwoNumber(parseInt(TodayArr2[2]) - 1);
+    defaultMinDate = qfn.newDate(TodayArr1.join("-"));
+    defaultMaxDate = qfn.newDate(TodayArr2.join("-"));
+})()
+//判断两个对象内容是否相同
+function isIdenticalObject(newData, oldData) {
+    // 如果旧数据和新数据没有，则不进行校对（用于日历加载延迟的毛招）
+    if (!newData.newOrderCheckInDate || !newData.newOrderCheckOutDate || !oldData.newOrderCheckInDate || !oldData.newOrderCheckOutDate) {
+        return true;
+    }
+    for(var n in newData) {
+        if(newData[n] != oldData[n]) {
+            return false;
+        }        
+    } 
+    return true; 
+}
+//为字符串添加去除空格函数
+String.prototype.trim = function() {
+    var reExtraSpace = /^\s*(.*?)\s+$/;
+    return this.replace(reExtraSpace, "$1")
+}
+// 格式化日期
+function formartDate(date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    return y + '-' + qfn.toTwoNumber(m) + '-' + qfn.toTwoNumber(d);
+}
+
+// 验证姓名
+function checkName(obj) {
+    
+    var customerNameReg = /^[\.a-zA-Z\u2E80-\u9FFF]{2,50}$/;
+    
+    var customerNameVal = $.trim($(obj).val());
+    
+    if (customerNameVal == '入住人姓名' || customerNameVal == '') {
+        
+        var tips = dialog({
+            padding : "20px 30px",
+            content : '<div class="errorTips"><span class="iconError"></span>请填写正确的入住人姓名</div>'
+        }).showModal();
+        setTimeout(function() {
+            tips.close().remove();
+        }, 1000);
+        return false;
+        
+    }
+    
+    if (customerNameReg.test(customerNameVal)) {
+        return true;
+    } else {
+        var tips = dialog({
+            padding : "20px 30px",
+            content : '<div class="errorTips"><span class="iconError"></span>请填写正确的入住人姓名</div>'
+        }).showModal();
+        setTimeout(function() {
+            tips.close().remove();
+        }, 1000);
+        return false;
+    }
+    
+}
+
+// 验证电话
+function checkTel(obj) {
+    
+    var telReg = /^1[3-9]\d{9}$/;
+    
+    var telVal = $.trim($(obj).val());
+    
+    if (telVal == '联系电话' || telVal == '') {
+        
+        var tips = dialog({
+            padding : "20px 30px",
+            content : '<div class="errorTips"><span class="iconError"></span>请填写手机号</div>'
+        }).showModal();
+        setTimeout(function() {
+            tips.close().remove();
+        }, 1000);
+        return false;
+        
+    }
+    
+    if (telReg.test(telVal)) {
+        return true;
+    } else {
+        var tips = dialog({
+            padding : "20px 30px",
+            content : '<div class="errorTips"><span class="iconError"></span>请填写正确的手机号</div>'
+        }).showModal();
+        setTimeout(function() {
+            tips.close().remove();
+        }, 1000);
+        return false;
+    }
+    
+}
+
+// 验证金额
+function checkPrice(priceVal,tipName) {
+    tipName = tipName ? tipName : "金额";
+    var priceReg = /^[0-9]{1,10}$/;
+   
+    if (priceVal) {
+        
+        if (priceReg.test(priceVal)) {
+            return true;
+        } else {
+            var tips = dialog({
+                padding : "20px 30px",
+                content : '<div class="errorTips"><span class="iconError"></span>请输入正确的' + tipName + '</div>'
+            }).showModal();
+            setTimeout(function() {
+                tips.close().remove();
+            }, 1000);
+            return false;
+        }
+        
+    } else {
+        var tips = dialog({
+            padding : "20px 30px",
+            content : '<div class="errorTips"><span class="iconError"></span>请输入' + tipName + '</div>'
+        }).showModal();
+        setTimeout(function() {
+            tips.close().remove();
+        }, 1000);
+        return false;
+    }
+    
+}
+
+// 验证备注
+function checkDes(obj) {
+    var desVal = $.trim($(obj).val());
+    if (desVal.length >= 500) {
+        var desTips = dialog({
+            padding : "20px 30px",
+            content : '<div class="errorTips"><span class="iconError"></span>备注文字过长，请填写500字符以内！</div>'
+        }).showModal();
+        setTimeout(function() {
+            desTips.close().remove();
+        }, 1000);
+        return false;
+    }
+    return true;
+}
+// 缓存当前门市价
+var roomTypePrice = 0;
+// 计算晚数
+function countDays(checkInDate,checkInTime,checkOutDate,checkOutTime){
+    var days = 0,
+        dateNum = 0,
+        ciTimeNum = 0,
+        coTimeNum = 0;
+
+    // 处理像17:00这种格式的checkInTime、checkOutTime
+    if (checkInTime.toString().indexOf(':') > 0) {
+        checkInTime = parseInt(checkInTime.toString().split(':')[0]);
+    }
+    if (checkOutTime.toString().indexOf(':') > 0 ) {
+        checkOutTime = parseInt(checkOutTime.toString().split(':')[0]);
+    }
+
+    if (checkInTime < 12 ) {
+        ciTimeNum = 1;
+    }
+
+    if (checkOutTime > 12 ) {
+        coTimeNum = 1;
+    } 
+
+    if (checkInDate != checkOutDate) {
+        dateNum = qfn.dateDiff(checkOutDate,checkInDate)
+    }
+    days = dateNum + ciTimeNum + coTimeNum;
+
+    if (days == 0) {
+        days = 1;
+    }
+    return days;
+}
+/**
+ * 房态事件
+ */
+var roomstatus = {
+    init : function () {
+
+        this.__initMain();
+
+        this.__commonStoreInit();
+
+        // 调用筛选房型模块
+        roomSelectPanel.init(this);
+
+        //调用开启房卡模块
+        openRoomCard.init();
+
+        this.__contentInit();
+        this.__bind();
+        this.__tableBind();
+        //缓存点击的房间号
+        this.roomno = null;
+        this.Data = null;
+        this.haschange = null;
+
+        //调用房态缩略模块
+        roomStatusThumb.init();
+    },
+
+    __initMain : function() {
+
+        $('#roomStatusMain').html(roomStatusMainTpl);
+
+    },
+
+     __commonStoreInit : function() {
+
+        var _this = this;
+
+        // 公寓下拉列表选择项目模块通信接口
+        roomStatusVm.$watch("hotelListOnSelect", function() {
+            
+            $("#room_select_panel").find('.room-btn-cancel').click();
+             // 获取房型数据
+            roomSelectPanel.getRoomType(GLOBAL.hotelNo);
+            // 此参数作用  全局记录房型列表查询日志 供日期翻页传参使用
+            // 作用是在切换门店的时候，清空记录  modified by xueliang.wang
+            window.roomTypeValLog = '';
+
+            // 执行房态查询
+            _this.__roomStatusQuery(roomTypeValLog);
+
+            //隐藏弹出框，通过设置层级为负值实现
+            //判断是否有滚动条
+            var rightNum = "269px";
+            var room_orderZoom = $("#room_orderZoom");
+            room_orderZoom.scrollTop(1);
+
+            if(room_orderZoom.scrollTop() != 0 ) {
+                rightNum = "284px";
+                room_orderZoom.scrollTop(0);
+            }
+            $("#room_status_content").css("right","-269px").removeClass("order-open").addClass("order-close");
+            $("#roomStatusOrderWrap").css("visibility","hidden");
+            $("#order_toggle").css("right",rightNum)
+                              //将弹出框的状态设置为0，标示关闭
+                              .attr("data-isOpen","0");
+
+            //调用房态缩略模块
+            roomStatusThumb.init();
+
+        });
+
+    },
+
+    // 新增订单
+    __newOrder : function(data, type) {
+        var newOrderData = {
+            roomNo : data.roomno,
+            roomTypeNo : data.roomtypeno,
+            date : data.date
+        }
+        // 渲染模板
+        // var render = template.compile(roomtpl.newOrder);
+        var render = template.compile(newOrderTpl);
+        var html = render(newOrderData);
+        if($("#roomStatusNewContent").length == 0) {
+            $('#roomStatusNewOrder').append("<div id='roomStatusNewContent'></div>");
+        }
+        
+        if (type == 'show') {
+            $('#roomStatusNoOrder').hide();
+            $('#roomStatusOrderDetail').hide().empty();
+            $('#roomStatusOrderTab').find('li:eq(0)').removeClass('activeA').next().addClass('activeB');
+            $('#roomStatusOrderTab').show();
+            $('#roomStatusName').html(data.roomname).show();
+            $('#roomStatusName').attr("title", data.roomname); 
+            
+            $('#roomStatusNewContent').html(html).show();
+            $('#roomStatusNewOrder').show();
+        }
+        
+        if (type == 'hide') {
+            $('#roomStatusNewContent').html(html);
+            $('#roomStatusNewOrder').hide();
+        }
+        //初始化订单详情的高度
+        publicFun.orderDetailInit();
+        // 绑定事件
+        this.__newOrderBind();
+        
+    },
+
+    // 处理日历控件中的当天被占的小时，返回默认值
+    __calendarShowData: function(newCheckInDate, currentStayData, nextStayData) {
+        var result = {
+            maxCo: -1,
+            minCi: 24,
+            defaultCheckInHour: '14:00',
+            defaultCheckOutHour: '12:00'
+        };
+
+        var serverHour = parseInt(CONFIG.TIME);
+        // 设置最大CO和最小CI
+        var maxCo = -1;
+        var minCi = 24;
+        var _len = currentStayData.length;
+        // 根据返回的timeStatus，确定最大CO
+        for (var i = _len - 1; i >= 0; i--) {
+            if (currentStayData[i] == 1 && i != 23 && currentStayData[i + 1] != 1) {
+                maxCo = i + 1;
+                break;
+            }
+        }
+
+        // 根据返回的timeStatus，确定最小CI
+        for (var j = 0; j < _len; j++) {
+            if (nextStayData[j] == 1 && j != 0 && nextStayData[j - 1] != 1) {
+                minCi = j;
+                break;
+            }
+        }
+
+        // 如果当日stay最大CO大于14:00的情况
+        if (maxCo > 14) {
+            // 如果选择的日期是当天，并且大于最大CO，默认小时为当前时间的下一整点
+            if (newCheckInDate == CONFIG.DATE && (serverHour + 1) > maxCo) {
+                defaultCheckInHour = qfn.toTwoNumber(serverHour + 1) + ':00';
+            } else {
+                // 如果当日stay最大CO大于14:00，且当前时间小于等于最大CO，新建stay入住时间默认值为最大CO。
+                defaultCheckInHour = qfn.toTwoNumber(maxCo) + ':00';
+            }
+        } else {
+            // 如果当日stay最大CO小于等于14:00，新建stay入住时间默认为14:00。
+            defaultCheckInHour = "14:00";
+        }
+
+        // 如果当日stay最小CI小于12:00的情况
+        if (minCi < 12) {
+            defaultCheckOutHour = qfn.toTwoNumber(minCi) + ':00';
+        } else {
+            defaultCheckOutHour = "12:00";
+        }
+
+        result.maxCo = maxCo;
+        result.minCi = minCi;
+        result.defaultCheckInHour = defaultCheckInHour;
+        result.defaultCheckOutHour = defaultCheckOutHour;
+
+        return result;
+    },
+
+    // 新增订单绑定事件
+    __newOrderBind : function() {
+        var _this = this;
+
+        /** 
+         *  created by dujuan.cao  start
+         *  获取dom时间元素
+        **/
+        var $newOrderCheckInDate = $('#newOrderCheckInDate');
+        var $newOrderCheckOutDate = $('#newOrderCheckOutDate');
+        var $newOrderCheckInTime = $('#newOrderCheckInTime');
+        var $newOrderCheckOutTime = $('#newOrderCheckOutTime');
+
+        // 默认入住小时
+        var defaultCheckInHour = '14:00';    
+        // 默认离店小时      
+        var defaultCheckOutHour = '12:00';
+        /**
+         *  created by dujuan.cao    end
+         */
+        
+        // 获取时间
+        var newCheckInDate = $('#newOrderSubmit').data('date');
+        var nowDate = qfn.newDate(newCheckInDate);
+        var newCheckOutDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() + 1);
+        var formartCheckoutDate = formartDate(newCheckOutDate);
+        var serverHour = parseInt(CONFIG.TIME);
+
+        // 加入订单详情滚动方法
+        $('#nightDate input').on("click",function(){
+            setTimeout(function(){
+                publicFun.windowResize();
+            })
+            
+        })
+
+        /**
+         * created by dujuan.cao   start
+         * 获取stay数据
+         **/
+        // dates 用于所要查询timeStatus的日期
+        // 查询1个及n个日期的时间订单占用情况，用逗号隔开
+        var dates = newCheckInDate + ',' + formartCheckoutDate;
+        var _data = {
+            roomno: _this.Data.roomno,
+            dates: dates
+        };
+
+        // 点击单元格的timeStatus数据
+        var currentStayData = [];
+        // 点击单元格后一天的timeStatus数据
+        var nextStayData = [];
+        // 存储后端返回的该单元格所在hour占用数据，为1的时间段被占，为0的时间段可选
+        var stayDatas = [];
+        $.ajax({
+            url: CONFIG.ROOT + '/roomState/j/calendar.do',
+            data: {
+                roomNo: _data.roomno,
+                dates: _data.dates
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function(msg) {
+                stayDatas = msg.data.itemList;
+
+                for (var i = 0, len = stayDatas.length; i < len; i++) {
+                    if (stayDatas[i].date == newCheckInDate) {
+                        // 获取当前表格的订单占用情况
+                        currentStayData = stayDatas[i].timeStatus;
+                    } else if (stayDatas[i].date == formartCheckoutDate) {
+                        // 获取右侧表格的订单占用情况
+                        nextStayData = stayDatas[i].timeStatus;
+                    }
+                }
+
+                // 获取日历初始默认值
+                var defaultData = _this.__calendarShowData(newCheckInDate, currentStayData, nextStayData);
+                // 获取最大CO
+                var maxCo = defaultData.maxCo;
+                defaultCheckInHour = defaultData.defaultCheckInHour;
+                defaultCheckOutHour = defaultData.defaultCheckOutHour;
+
+                // 日租入住日期
+                $newOrderCheckInDate.rDatepicker({
+                    defaultDate: nowDate,
+                    minDate: nowDate,
+                    maxDate: nowDate,
+                    hour: defaultCheckInHour,
+                    hourId: '#newOrderCheckInTime',
+                    callback: function(date) {
+                        // 20150228  添加根据入离时间计算晚数
+                        var days =  countDays(date,parseInt($newOrderCheckInTime.html()),$newOrderCheckOutDate.val(),parseInt($newOrderCheckOutTime.html()));
+                        $('#days').html(days);
+                        $('#rentMoney').val(roomTypePrice*days);
+                    }
+                });
+
+                
+                var resultNewCheckInDate = qfn.getPostponeDate(newCheckInDate,365);
+
+                if(qfn.dateCompare(resultNewCheckInDate.toLocaleDateString(),defaultMaxDate.toLocaleDateString()) == 1){
+                    resultNewCheckInDate = defaultMaxDate;
+                }
+
+                // 日租离店日期
+                $newOrderCheckOutDate.rDatepicker({
+                    defaultDate: newCheckOutDate,
+                    minDate: nowDate,
+                    maxDate :resultNewCheckInDate,
+                    hour: defaultCheckOutHour,
+                    hourId: '#newOrderCheckOutTime',
+                    callback: function(date) {
+                        var newOrderCheckInDateVal = $newOrderCheckInDate.val();
+                        var newOrderCheckInTimeVal = parseInt($newOrderCheckInTime.html());
+                        if (date == newOrderCheckInDateVal) {
+                            if (newOrderCheckInTimeVal < 21) {
+                                $newOrderCheckOutTime.html(qfn.toTwoNumber(newOrderCheckInTimeVal + 3) + ':00');
+                            } else {
+                                $newOrderCheckOutTime.html('23:00');
+                            }
+
+                            if (newOrderCheckInTimeVal == 23) {
+                                if (maxCo != 23) {
+                                    $newOrderCheckInTime.html('22:00');
+                                } else {
+                                    $newOrderCheckInTime.html(qfn.toTwoNumber(maxCo) + ':00');
+                                }
+                            }
+                        } else if (date == formartCheckoutDate) {
+                            $newOrderCheckOutTime.html(defaultCheckOutHour);
+                        }else {
+                            $newOrderCheckOutTime.html('12:00');
+                        }
+                        // 20150228  添加根据入离时间计算晚数
+                        var days = countDays(newOrderCheckInDateVal,newOrderCheckInTimeVal,date,parseInt($newOrderCheckOutTime.html()));
+                        $('#days').html(days);
+                        $('#rentMoney').val(roomTypePrice*days);
+
+                        // roomstatus.__getPriceChannel('0',newOrderCheckInDateVal,date);
+                    }
+                });
+
+                // 绑定入住时间
+                $newOrderCheckInTime.rTimer({
+                    timesTatus: currentStayData,
+                    callback: function(hour) {
+                        var newOrderCheckInDateVal = $newOrderCheckInDate.val();
+                        var newOrderCheckOutDateVal = $newOrderCheckOutDate.val();
+                        var newOrderCheckOutTimeVal = $newOrderCheckOutTime.html();
+                        if (newOrderCheckInDateVal == newOrderCheckOutDateVal) {
+                            if (parseInt(hour) >= parseInt(newOrderCheckOutTimeVal)) {
+                                $newOrderCheckOutTime.html(function() {
+                                    if (hour == '21:00' || hour == '22:00') {
+                                        return '23:00';
+                                    } else if (hour == '23:00') {
+                                        if (maxCo != 23) {
+                                            $newOrderCheckInTime.html("22:00");
+                                            return '23:00';
+                                        } else {
+                                            $newOrderCheckInTime.html(qfn.toTwoNumber(maxCo) + ':00');
+                                        }
+                                    } else {
+                                        return qfn.toTwoNumber(parseInt(hour) + 3) + ':00';
+                                    }
+                                });
+                            }
+                        }
+                        // 20150228  添加根据入离时间计算晚数
+                        var days = countDays(newOrderCheckInDateVal,parseInt($newOrderCheckInTime.html()),newOrderCheckOutDateVal,newOrderCheckOutTimeVal);
+                        $('#days').html(days);
+                        $('#rentMoney').val(roomTypePrice*days);
+
+                        // roomstatus.__getPriceChannel('0',newOrderCheckInDateVal,newOrderCheckOutDateVal);
+                    }
+                });
+
+                // 绑定离店时间
+                $newOrderCheckOutTime.rTimer({
+                    callback: function(hour) {
+                        var newOrderCheckInDateVal = $newOrderCheckInDate.val();
+                        var newOrderCheckOutDateVal = $newOrderCheckOutDate.val();
+                        var newOrderCheckInTimeVal = $newOrderCheckInTime.html();
+                        var nowHour = parseInt(hour,10);
+                        if (newOrderCheckInDateVal == newOrderCheckOutDateVal) {
+                            if (nowHour <= parseInt(newOrderCheckInTimeVal,10)) {
+                                $newOrderCheckInTime.html(function() {
+                                    if ((hour == '01:00' || hour == '02:00') && nowHour > maxCo) {
+                                        return '00:00';
+                                    } else if (hour == '00:00' && nowHour > maxCo) {
+                                        $newOrderCheckOutTime.html("01:00");
+                                        return '00:00';
+                                    } else if (nowHour >= maxCo + 3) {
+                                        return qfn.toTwoNumber(nowHour - 3) + ':00';
+                                    } else {
+                                        if (nowHour <= maxCo) {
+                                            if (maxCo == 23) {
+                                                $newOrderCheckOutTime.html('23:00');
+                                            } else {
+                                                $newOrderCheckOutTime.html(qfn.toTwoNumber(parseInt(maxCo + 1)) + ':00');
+                                            }
+                                        }
+                                        return qfn.toTwoNumber(parseInt(maxCo,10)) + ':00';
+                                    }
+                                });
+                            }
+                        }
+                        // 20150228  添加根据入离时间计算晚数
+                        var days = countDays(newOrderCheckInDateVal,newOrderCheckInTimeVal,newOrderCheckOutDateVal,parseInt($newOrderCheckOutTime.html()));
+                        
+                        $('#days').html(days);
+                        $('#rentMoney').val(roomTypePrice*days);
+
+                        // roomstatus.__getPriceChannel('0',newOrderCheckInDateVal,newOrderCheckOutDateVal);
+                    }
+                });
+            }
+        });
+        /**
+            created by dujuan.cao  end
+            
+         */
+
+
+        // 毛招，日历控件和时间控件点击相互隐藏
+        $('#roomStatusNewContent .dateInput').on('click', function() {
+            $('.rTimerList').hide();
+        });
+        $('#roomStatusNewContent .dateInputTime').on('click', function() {
+            $('.rDatepicker').parent().hide();
+        });
+        
+        // 获取价格渠道
+        //head
+        /*_this.__getPriceChannel('1',newCheckInDate,formartCheckoutDate);
+        var bizType = $('#newOrderType').val();
+        var roomTypeNo = $('#newOrderSubmit').data('roomtypeno');
+        _this.__queryChannel('1',newCheckInDate,formartCheckoutDate,bizType,roomTypeNo,'new','','','');*/
+                
+
+        // _this.__getPriceChannel('1',newCheckInDate,formartCheckoutDate);
+        // 获取当前房型门市价
+        _this.__queryRoomTypePrice();
+
+        var bizType = $('#newOrderType').val();
+        var roomTypeNo = $('#newOrderSubmit').data('roomtypeno');
+        _this.__queryChannel('1',newCheckInDate,formartCheckoutDate,bizType,roomTypeNo,'new','','','');
+
+        
+        // 选择价格填充价格
+        $('#roomPriceList').on('change', function() {
+            var price = $(this).find('option:selected').val();
+            $('#rentMoney').val(price);
+        });
+        
+        // 入住人姓名
+        $('#customerName').on('focus', function() {
+            if ($(this).val() == '入住人姓名') {
+                $(this).removeClass('f-gray');
+                $(this).val('');
+            }
+        }).on('blur', function() {
+            if (!$(this).val()) {
+                $(this).addClass('f-gray');
+                $(this).val('入住人姓名');
+            }
+        });
+        
+        // 联系电话
+        $('#contactorTel').on('focus', function() {
+            if ($(this).val() == '联系电话') {
+                $(this).removeClass('f-gray');
+                $(this).val('');
+            }
+        }).on('blur', function() {
+            if (!$(this).val()) {
+                $(this).addClass('f-gray');
+                $(this).val('联系电话');
+            }
+        });
+        
+        // 备注
+        $('#newOrderDes').on('focus', function() {
+            if ($(this).val() == '备注') {
+                $(this).removeClass('f-gray');
+                $(this).val('');
+            }
+        }).on('blur', function() {
+            if (!$(this).val()) {
+                $(this).addClass('f-gray');
+                $(this).val('备注');
+            }
+        });
+
+        // 绑定房态占用提示事件
+        var $iconTipSign = $(".icon-tip-sign");
+        var $iconTipWords = $(".icon-tip-sign").parent().find('.icon-tip-words');
+        $iconTipSign.hover(
+          function () {
+            $iconTipWords.show();
+          },
+          function () {
+            $iconTipWords.hide();
+          }
+        );
+        
+        var dialogLoading = null;
+        
+        // 提交订单
+        $('#newOrderSubmit').off().on('click', function() {
+            var $this = $(this);
+            var roomNo = $this.data('roomno');
+            var roomTypeNo = $this.data('roomtypeno');
+            var date = $this.data('date');
+            
+            var bizType = $('#newOrderType').val();
+            var checkInDate = $newOrderCheckInDate.val();
+            var checkOutDate = $newOrderCheckOutDate.val();
+            var checkInTime = checkInDate + ' ' + $newOrderCheckInTime.html();
+            var checkOutTime = checkOutDate + ' ' + $newOrderCheckOutTime.html();
+
+
+            var desVal = $('#newOrderDes').val();
+            if (desVal == '备注') {
+                var des = '';
+            } else {
+                var des = desVal;
+            }
+
+            // 验证入住人
+            var checkNameFlag = checkName('#customerName');
+            if (!checkNameFlag) {
+                return;
+            }
+            
+            // 验证手机
+            var checkTelFlag = checkTel('#contactorTel');
+            if (!checkTelFlag) {
+                return;
+            }
+            
+            // 验证价格
+            var priceVal = $('#rentMoney').val();
+            var checkPriceFlag = checkPrice(priceVal,"订单金额");
+            if (!checkPriceFlag) {
+                return;
+            }
+            
+            // 验证备注
+            var checkDesFlag = checkDes('#newOrderDes');
+            if (!checkDesFlag) {
+                return;
+            }
+
+            // 验证房费
+            var roomChargeVal = $.trim($('#roomCharge').val());
+            if (!(roomChargeVal == "" || roomChargeVal == 0) && !checkPrice(roomChargeVal,"已付房费")) {
+                return;
+            };
+
+            // 验证押金
+            var depositVal = $.trim($('#deposit').val());
+            if (!(depositVal == "" || depositVal == 0) && !checkPrice(depositVal,"已付押金")) {
+                return;
+            };
+
+            // 获取新增订单数据
+            var data = {
+                bizType : bizType,
+                hotelNo : window.GLOBAL.hotelNo,
+                checkInTime : checkInTime,
+                checkOutTime : checkOutTime,
+                userName : $('#userName').text(),
+                channelId : $('#roomChannelList').val(),
+                channelName : $('#roomChannelList option:selected').text(),
+                desc : des,
+                roomList : JSON.stringify([{
+                    roomTypeNo : roomTypeNo,
+                    roomNo : roomNo,
+                    customerName : $('#customerName').val(),
+                    customerTelNo : $('#contactorTel').val(),
+                    rentMoney : priceVal
+                }]),
+
+                // 以下字段调整为roomList集合
+                // 为了兼容后台接口还需要传递这些参数
+                roomTypeNo : roomTypeNo,
+                roomNo : roomNo,
+                customerName : $('#customerName').val(),
+                contactorTel : $('#contactorTel').val(),
+                rentMoney : priceVal,
+                // 押金房费新增字段
+                orderType : $('#orderType').val(),
+                roomCharge : roomChargeVal,
+                roomChargePayWay : $('#roomChargePayType').val(),
+                deposit : depositVal,
+                depositPayWay : $('#depositPayType').val()
+            }
+
+            var dialogLoading = null;
+
+
+            var newOrderData =  {
+                roomno : data.roomNo,
+                startTime : data.roomTypeNo,
+                endTime : checkInDate
+            }
+
+            if(checkInTime == checkOutTime) {
+                 dialog({
+                    //title : '提示',
+                    content : '<p class="fn-tac mb15">入住时间与离店时间相同！</p><p class="fn-tac">请重新选择日期！</p>',
+                    width : 208,
+                    padding : "30px 20px",
+                    cancelValue : "知道了",
+                    cancel : function () {
+                        return;
+                    },
+                    fixed : true
+                }).showModal();
+            }else {
+/* HEAD
+                $.ajax({
+                    url : CONFIG.ROOT + '/order/j/add',
+                    data : data,
+                    type : 'POST',
+                    dataType : 'json',
+                    beforeSend : function() {
+                        $("#loading_txt").html("正在提交，请稍后...");
+                        $("#roomStatusLoading").addClass('order-get-data-loading').show();
+                    },
+                    success : function(msg) {
+                        
+                        // 恢复加载文案
+                        $("#loading_txt").html("加载中，请耐心等待...");
+                        
+                        // 处理返回状态
+                        var checkCodeFlag = checkCode(msg);
+*/
+                // 在此添加日志判断
+                var ciTime = parseInt($newOrderCheckInTime.html().split(':')[0]);
+                var coTime = parseInt($newOrderCheckOutTime.html().split(':')[0]);
+                if ( coTime > 12 && coTime <= 18) {
+                    var content = '您选择的离店时间晚于12:00，将会占用当天房态，减少可售房量。请您确认是否继续操作。';
+                    _this.__occupyRoomStausDialog(content,data,checkInTime,checkOutTime,bizType);
+                    return;
+                }
+                
+                if ( ciTime >= 6 && ciTime < 12) {
+                    var content = '您选择的入住时间早于12:00，将会占用前一天房态，减少可售房量。请您确认是否继续操作。';
+                    _this.__occupyRoomStausDialog(content,data,checkInTime,checkOutTime,bizType);
+                    return;
+                }
+                _this.__submitOrderInfo(data,bizType);
+            }
+        });
+    },
+
+    // 离店时间占用房态提示信息
+    __occupyRoomStausDialog : function(content,data,checkInTime,checkOutTime,bizType) {
+        
+        var _this = this;
+
+        dialog({
+            //title : '提示',
+            content : '<p style="line-height:24px;">'+content+'</p>',
+            cancel : true,
+            width : 300,
+            padding : "30px 15px",
+            okValue : '提交订单',
+            onshow : function() {
+                // 记录日志
+                _this.__saveLog(checkInTime,checkOutTime);
+            },
+            ok : function () {
+                _this.__submitOrderInfo(data,bizType);
+            },
+            fixed : true
+        }).showModal();
+
+    },
+
+    // 记录提交不成功的日志
+    __saveLog : function(checkInTime,checkOutTime) {
+
+        var _this = this;
+        $.ajax({
+            url : CONFIG.ROOT + '/log/oper',
+            data : {
+                funId : '010001',
+                ext1 : window.GLOBAL.hotelNo,
+                ext2 : window.GLOBAL.hotelName,
+                ext3 : checkInTime,
+                ext4 : checkOutTime
+            },
+            type : 'POST',
+            dataType : 'json',
+            success : function(msg) {
+                // 保存完之后不需要做任何操作
+            }
+        });
+    },
+
+
+    // 提交订单信息
+    __submitOrderInfo : function(data,bizType) {
+
+        var _this = this;
+
+        $.ajax({
+            url : CONFIG.ROOT + '/order/j/add',
+            data : data,
+            type : 'POST',
+            dataType : 'json',
+            beforeSend : function() {
+                $("#loading_txt").html("正在提交，请稍后...");
+                $("#roomStatusLoading").addClass('order-get-data-loading').show();
+            },
+            success : function(msg) {
+                $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                // 恢复加载文案
+                $("#loading_txt").html("加载中，请耐心等待...");
+                
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+
+                if(msg.code == "3001"){
+                    orderdetail.__Occupiedroom(msg.data.orderOperType,bizType);
+                    return
+                }
+
+                if (!checkCodeFlag) {
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+
+                dialog({
+                    //title : '预订成功',
+                    content : '<p class="fn-tac mb15">恭喜您，预订成功！</p><p class="fn-tac">订单号为：'+ msg.data.order.orderNo +'</p>',
+                    //cancel : false,
+                    width : 208,
+                    padding : "30px 20px",
+                    cancelValue : "知道了",
+                    cancel : function () {
+                        window.room_orderZoom_position = $("#room_orderZoom").scrollTop();
+
+                        // 记录下单成功标记
+                        window.isCreateOrder = true;
+                        window.createOrderSuccess = {
+                            orderNo: msg.data.order.orderNo,
+                            roomNo: _this.Data.roomno,
+                            roomTypeNo : _this.Data.roomtypeno,
+                            date : _this.Data.date,
+                            roomName: $('#roomStatusName').html()
+                        }
+
+                        // 重新请求房态
+                        _this.__roomStatusQuery(roomTypeValLog,"1");
+                        // 新增完订单获取当前订单的list  20150323 bug:20441
+                        orderdetail.__getOrderList(_this.Data);
+
+                        /*$('#roomStatusName').html(createOrderSuccess.roomName).show();
+                        $('#roomStatusNoOrder').hide();
+                        //下单成功后，构造新增订单模板，解决下单成功后无法点击新增订单的bug
+                        var orderData = {
+                            roomno : createOrderSuccess.roomNo,
+                            roomtypeno : createOrderSuccess.roomTypeNo,
+                            roomname : createOrderSuccess.roomName,
+                            date : createOrderSuccess.date
+                        } 
+                        //新增订单
+                        roomstatus.__newOrder(orderData, 'hide');
+                        $("#order_toggle").attr('data-isopen','0');
+                        $('#order_toggle').click();*/
+
+                    },
+                    fixed : true
+                }).showModal();
+            }
+        });
+    },
+
+    // 获取门市价
+    __queryRoomTypePrice : function() {
+
+        var roomTypeNo = $('#newOrderSubmit').data('roomtypeno');
+
+        $.ajax({
+            url : CONFIG.ROOT + '/roomType/j/info',
+            data : {
+                hotelNo : window.GLOBAL.hotelNo,
+                roomTypeNo : roomTypeNo
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : function(msg) {
+
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    return;
+                }
+              
+                var totalPrice = msg.data.roomTypePrice;
+                roomTypePrice = totalPrice;
+                
+                // 默认填充金额
+                $('#rentMoney').val(totalPrice);
+                
+                // if(isRefreshData == '1') {
+                //     roomOrderFormData = publicFun.getFormData();
+                // }
+            }
+        });
+    },
+
+    // 查询渠道信息、订单类型、支付类型 flag：new--新增、edit--编辑
+    // orderTypeOptions 订单类型
+    // roomChargeOptions 房费
+    // depositOptions 押金
+    __queryChannel : function(isRefreshData,newCheckInDate,formartCheckoutDate,bizType,roomTypeNo,flag,orderTypeOptions,roomChargeOptions,depositOptions){
+
+        var _this = this;
+        var checkInTime = newCheckInDate + ' 00:00';
+        var checkOutTime = formartCheckoutDate + ' 00:00';
+
+        $.ajax({
+            url : CONFIG.ROOT + '/dict/j/commonList',
+            data : {
+                bizType : bizType,
+                roomTypeNo : roomTypeNo,
+                checkInTime : checkInTime,
+                checkOutTime : checkOutTime
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : function(msg) {
+
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                
+                 // 订单类型
+                var orderTypeHtml = '<option value="0">请选择订单类型</option>';
+                $.each(msg.data.orderTypeList, function(i, n) {
+                    orderTypeHtml += '<option value="'+ n.orderType +'">'+ n.orderTypeName +'</option>';
+                });
+                 // 支付类型
+                var payTypeHtml = '';
+                $.each(msg.data.payWayList, function(i, n) {
+                    payTypeHtml += '<option value="'+ n.payWay +'">'+ n.payWayName +'</option>';
+                });
+                $('.js-pay-type').html(payTypeHtml);
+
+                if (flag == 'new') {
+                    // 渠道
+                    var channelHtml = '';
+                    $.each(msg.data.channelList, function(i, n) {
+                        channelHtml += '<option value="'+ n.channelId +'">'+ n.channelName +'</option>';
+                    });
+                    $('#roomChannelList').html(channelHtml);
+                    $('#orderType').html(orderTypeHtml);
+                } else {
+                    $('#orderTypeNew').html(orderTypeHtml);
+                    // 当前订单类型
+                    // orderTypeOptions.orderType = 'XF';
+                    $('#orderTypeNew').find('option').each(function(){
+                        if ($(this).val() == orderTypeOptions.ordertype) {
+                            $(this).attr('selected','selected');
+                        }
+                    });
+                    // roomChargeOptions.roomChargePayType = '0';
+                    // 房费
+                    $('#roomChangeTypeNew').find('option').each(function(){
+                        if ($(this).val() == roomChargeOptions.roomchargepayway) {
+                            $(this).attr('selected','selected');
+                        }
+                    });
+                    // depositOptions.depositPayType = '1';
+                    // 押金
+                    $('#depositPayTypeNew').find('option').each(function(){
+                        if ($(this).val() == depositOptions.depositpayway) {
+                            $(this).attr('selected','selected');
+                        }
+                    });
+                }
+  
+                if(isRefreshData == '1') {
+                    roomOrderFormData = publicFun.getFormData();
+                }
+            }
+        });
+    },
+
+    // 获取价格渠道
+    __getPriceChannel : function(isRefreshData,checkInDate,checkOutDate) {
+        var roomTypeNo = $('#newOrderSubmit').data('roomtypeno');
+
+        var checkInDate = $('#newOrderCheckInDate').val();
+        var checkOutDate = $('#newOrderCheckOutDate').val();        
+        
+        $.ajax({
+            url : CONFIG.ROOT + '/roomType/j/info',
+            data : {
+                hotelNo : window.GLOBAL.hotelNo,
+                roomTypeNo : roomTypeNo
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : function(msg) {
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    return;
+                }
+
+                // 计算日期差
+                var dateDiff = qfn.dateDiff(checkOutDate, checkInDate);
+                // 计算总金额
+                var totalPrice = msg.data.roomTypePrice;
+                if (dateDiff > 0) {
+                    totalPrice = totalPrice * dateDiff;
+                }
+                
+                // 默认填充金额
+                $('#rentMoney').val(totalPrice);
+                
+                if(isRefreshData == '1') {
+                    roomOrderFormData = publicFun.getFormData();
+                }
+            }
+        });
+        
+    },
+    // 房态查询
+    __roomStatusQuery : function(roomTypeVal, isEmpty) {
+       
+        // 获取开始时间
+        var startDate = $('#startDate').val();
+        // 获取门店
+        var hotelVal = window.GLOBAL.hotelNo;
+        
+        // 清空房态表格
+        $('#roomStatusTableWrap').empty();
+        // 隐藏翻页按钮
+        $('#roomStatusPaging').hide();
+        // 加载中
+        $('#roomStatusTableLoading').show();
+        
+        if (hotelVal == '0') {
+            $("#panel_content").hide();
+            $("#roomManageEmpty").show();
+            window.location.href = CONFIG.ROOT + '/store/t/page';
+            return;
+        }
+
+        // 获取房间排序类型
+        // var roomSortType = $('#roomSort .roomSortItemChecked').data('type');
+         var _roomSortTypeVal = $.cookie('roomSortTypeVal');
+         var roomSortType = _roomSortTypeVal ? _roomSortTypeVal : 'roomTypeName';
+         if(roomTypeVal == "") {
+            roomTypeVal = undefined;
+         }
+        // 创建房态表格         
+        var data = {
+            hotelNo : window.GLOBAL.hotelNo,
+            startDate : startDate,
+            roomTypeNo : roomTypeVal,
+            roomSortType : roomSortType,
+            days : 30
+        }
+        var dateCalculate = qfn.getPostponeDate(startDate,0);
+        publicFun.renderDatepicker(dateCalculate, 30, data, isEmpty);        
+    },
+    /**
+     * 事件绑定
+     */
+    __bind : function () {
+
+        var _this = this;
+  
+        //订单详情弹出
+        $("#order_toggle").click(function (){
+            $(this).hide();
+            var order_toggle = $(this);
+            var room_orderZoom = $("#room_orderZoom");
+            var room_status_content =  $("#room_status_content");
+            var roomStatusOrderWrap = $("#roomStatusOrderWrap");
+            var scrollTopNum = room_orderZoom.scrollTop();
+
+            //判断是否有滚动条
+            var rightNum = "269px";
+            room_orderZoom.scrollTop(scrollTopNum + 1);
+
+            if(room_orderZoom.scrollTop() > scrollTopNum ) {
+                rightNum = "284px";
+                room_orderZoom.scrollTop(scrollTopNum);
+            }
+
+            
+            if(order_toggle.attr("data-isOpen") == 1) {  
+                            
+                room_status_content.animate({right:"-269px"},300,function(){
+                    $(this).removeClass("order-open").addClass("order-close");
+                    roomStatusOrderWrap.css("visibility","hidden");
+                    order_toggle.attr("data-isOpen","0");
+                    order_toggle.css("right",rightNum);
+                });
+            } else {
+                order_toggle.css("right","269px");
+                room_status_content.removeClass("order-close").addClass("order-open");
+                roomStatusOrderWrap.css("visibility","visible");
+                room_status_content.animate({right:"16px"},300,function() {                                        
+                    order_toggle.attr("data-isOpen","1");
+                });
+            }            
+        });
+
+        //向后推迟30天
+        $("#next_month").on('click',function() {
+
+            var startDate = $('#startDate');
+            var startDateValue = startDate.val();
+            var resultDate = qfn.getPostponeDate(startDateValue,30);
+            if(resultDate.getTime() > defaultMaxDate.getTime()){
+                resultDate = defaultMaxDate;
+                $(this).css("visibility","hidden");
+            }else{
+                $("#prev_month").css("visibility","visible"); 
+            }
+            startDate.off().rDatepicker({
+                defaultDate : resultDate,
+                minDate : defaultMinDate,
+                maxDate : defaultMaxDate,
+                zIndex : "99",
+                callback : function(date) {
+                    _this.__roomStatusQuery(roomTypeValLog);                    
+                }
+            });
+
+            _this.__roomStatusQuery(roomTypeValLog);
+
+        });
+
+        //向前推迟30天
+        $("#prev_month").on('click',function() {
+
+            var startDate = $('#startDate')
+            var startDateValue = startDate.val();
+            var resultDate = qfn.getPostponeDate(startDateValue,-30);;
+            if(resultDate.getTime() < defaultMinDate.getTime()){
+                resultDate = defaultMinDate;
+                $(this).css("visibility","hidden");
+            }else{
+                $("#next_month").css("visibility","visible"); 
+            }
+
+            startDate.off().rDatepicker({
+                defaultDate : resultDate,
+                minDate : defaultMinDate,
+                maxDate : defaultMaxDate,
+                zIndex : "99",
+                callback : function(date) {
+                    _this.__roomStatusQuery(roomTypeValLog);
+                }
+            });
+
+            _this.__roomStatusQuery(roomTypeValLog);
+
+        });
+
+        // 查看订单切换
+        $('#roomStatusOrderTab li:eq(0)').on('click', function() {
+            if ($('#roomStatusOrderDetail').html()) {
+                $(this).addClass('activeA').siblings().removeClass('activeB');
+                $('#roomStatusNewOrder').hide();
+                $('#roomStatusOrderDetail').show();
+            }
+        });
+        
+        // 新增订单切换
+        $('#roomStatusOrderTab li:eq(1)').on('click', function() {
+            if ($('#roomStatusNewOrder').html()) {
+                $(this).addClass('activeB').siblings().removeClass('activeA');
+                $('#roomStatusOrderDetail').hide();
+                $('#roomStatusNewOrder').show();
+                $('#addmoreorder').show();
+
+                var roomStatusNewContent = $("#roomStatusNewContent");
+                roomStatusNewContent.scrollTop(1);
+
+                if(roomStatusNewContent.scrollTop() != 0) {
+                    // roomStatusNewContent.addClass("roomStatusNewScroll");
+                    roomStatusNewContent.scrollTop(0);
+                } else {
+                    // roomStatusNewContent.removeClass("roomStatusNewScroll");
+                }
+            }
+        });
+
+        //房型表格的鼠标滚动事件
+        $(".room-order").scroll(function() {
+            var top = $(this).scrollTop();
+            $("#room_nameZoom").scrollTop(top);
+        }).scroll(function(){
+            var left = $(this).scrollLeft();
+            $('#datepicker').scrollLeft(left);
+        });
+
+
+        //管家密码变更提醒
+        $('#room_status_content').on("mouseover",".roomPassword span ",function(){     
+            if(!roomstatus.haschange){
+                roomstatus.haschange = $('<div id="roomPasswordchange"><div>');
+                roomstatus.haschange.appendTo(document.body);
+                roomstatus.haschange.css({left:($(this).offset().left-168),top:($(this).offset().top+14)});
+            }else{
+                $('#roomPasswordchange').show();
+                $('#roomPasswordchange').css({left:($(this).offset().left-168),top:($(this).offset().top+14)});
+            }
+        });
+
+        $('#room_status_content').on("mouseout",".roomPassword span ",function(){
+            $('#roomPasswordchange').hide();
+        });
+
+
+        // 一单多房点击
+        $('#addmoreorder-o').on('click',function() {
+             var dialogA = dialog({
+                height:448, 
+                width:950,
+                padding:0,
+                title : '新增多张订单',
+                content : '<div class="pop-center" id="pop-center"><div><ul class="p-ul" id= "p-ul"></ul><div class="totelmoney">总计金额：<em></em></div><textarea rows="4" class="pot-comment" id="pot-comment">备注</textarea></div></div>'+
+                          
+                          '<div class="pop-bottom"><div class="pop-submit" id="pop-submit">提交</div></div>',
+                fixed : true
+            }).showModal();
+             
+            $('.ui-popup').addClass('pop-p');
+            moreroom.init(dialogA, function() {
+                roomstatus.__roomStatusQuery(roomTypeValLog);
+            });
+        })
+        $('#addmoreorder').live('click',function() {
+             var dialogB =  dialog({
+                height:448, 
+                width:950,
+                padding:0, 
+                title : '新增多张订单',
+                content : '<div class="pop-center" id="pop-center"><div><ul class="p-ul" id= "p-ul"></ul><div class="totelmoney">总计金额：<em></em></div><textarea rows="4" class="pot-comment" id="pot-comment">备注</textarea></div></div>'+
+                          
+                          '<div class="pop-bottom"><div class="pop-submit" id="pop-submit">提交</div></div>',
+                fixed : true
+            }).showModal();
+            $('.ui-popup').addClass('pop-p');
+            moreroom.init(dialogB,function(){
+                roomstatus.__roomStatusQuery(roomTypeValLog);
+            });
+        })
+    },
+    //房态详情事件
+    __roomstatusbind : function() {
+        
+        var _this = this;
+
+        //管家密码变更
+        $('#roomStatusOrderWrap').off().on('click','#passwordchange', function() {
+
+             _this.dialogpassword = dialog({
+                title:'修改管家密码',
+                width:314,
+                content : '<div class="changepassword">'+
+                          '管家密码 <input value="请输入6位数字的密码" class="hzkPwdPassword" id="hzkPwdPassword" maxlength="6">'+
+                          '</div>'+
+                          '<div id="roomPassworderror" class="roomPassworderror">请输入6位数字的密码</div>'+
+                          '<div class="agreechange">'+
+                          '<input type="checkbox" id="agreechange" />'+
+                          '修改该门店所有房间</div></div>',
+                cancel: function() {},
+                ok: function() {
+                        var str = /^\d{6}$/;
+                        var ischecked = null;
+                        var password = $('#hzkPwdPassword').val();
+                        var tipsText = '';
+
+                        if ( $('#agreechange').is(":checked")) {
+                            ischecked = 1;
+                            tipsText = '确认要修改该门店所有房间的管家密码为'+ password +'？';
+                        } else {
+                            ischecked = 0;
+                            tipsText = '确认要修改该房间的管家密码为'+ password +'？';
+                        }
+
+                        if(str.test($('#hzkPwdPassword').val()) ) {
+                                dialog({
+                                 title:'修改管家密码',
+                                 content: tipsText,
+                                 cancel: function() {
+                                    _this.dialogpassword.show();
+                                 },
+                                 ok:function() {
+
+                                    var data = {
+                                        roomNo : _this.roomno,
+                                        hotelNo: window.GLOBAL.hotelNo,
+                                        newHzkPwd: $('#hzkPwdPassword').val(),
+                                        isAllRoom: ischecked
+                                    }
+
+                                    _this.dialogpassword.remove();
+
+                                    $.ajax({
+                                        url : CONFIG.ROOT + '/lock/j/modifyHzkPwd',
+                                        data : data,
+                                        type : 'POST',
+                                        dataType : 'json',
+                                        success : function(msg){                                   
+                                            var checkCodeFlag = checkCode(msg);
+                                            if(!checkCodeFlag) {
+                                                return;
+                                            }
+                                            _this._romstatusInit(_this.roomStatetdObj);
+                                        }
+                                    });
+                                 }
+
+                             }).showModal();
+            
+                        }else{
+                            $('#roomPassworderror').show();
+                            return false
+                        }
+                       
+                        _this.dialogpassword.close();
+                        return false
+                }
+            }).showModal();
+            _this.__hzkPwdPasswordBind();
+        });
+        
+        //打扫完毕
+        $('#btnCleanFinish').off().on('click',function(){
+            var data = {roomNo : _this.roomno};
+            var cleanFinishDlg = dialog({
+                padding : "30px 20px 54px",
+                width : 208,
+                okValue : "打扫完毕",
+                content : '<div class="fn-tac">确认房间已打扫完毕？</div>',
+                ok : function() {
+                    $.ajax({
+                        url : CONFIG.ROOT + '/room/j/clean',
+                        data : data,
+                        type : 'POST',
+                        dataType : 'json',
+                        beforeSend : function() {
+                            
+                        },
+                        success : function(msg) {
+                            var checkCodeFlag = checkCode(msg);
+                            if(!checkCodeFlag) {
+                               return;
+                            }
+                            room_orderZoom_position = $("#room_orderZoom").scrollTop();
+                            // 重新请求房态
+                            _this.__roomStatusQuery(roomTypeValLog,"1");
+                            //重新请求房间详情初始化
+                            _this._romstatusInit(_this.roomStatetdObj);
+                            //关闭打扫完毕提示框
+                            cleanFinishDlg.close().remove();
+                        }
+                    });
+                },
+                cancel : function(){
+
+                }
+            }).showModal();
+
+        });
+        $roomstatus = null;
+        $lockstatus = null;
+        $hzkPwdPassword = null;
+
+        $('#roomstatus').on('mouseover','.lockcomunicate span', function() {
+            if(!$roomstatus){
+                if($(this).data("status") == 3){
+                    $roomstatus = $('<div class="roomstatustipA"></div>');
+                }
+                $roomstatus.appendTo($(this));
+                $("#order_toggle").css("z-index","20");
+            }else{
+               $('#roomstatus .roomstatustipA').show();
+               $("#order_toggle").css("z-index","20");
+            }
+        });
+
+        $('#roomstatus').on('mouseout','.lockcomunicate span', function() {
+            $('#roomstatus .roomstatustipA').hide();
+            $("#order_toggle").css("z-index","22");
+        }); 
+
+        $('#roomstatus').on('mouseover','.lockstation span', function() {
+            if(!$lockstatus){
+                if($(this).data("lockinfo") == 2){
+                    $lockstatus = $('<div class="roomstatustipC"></div>');
+                }else if($(this).data("lockinfo") == 3){
+                    $lockstatus = $('<div class="roomstatustipB"></div>');
+                }
+                $lockstatus.appendTo($(this));
+                $("#order_toggle").css("z-index","20");
+            }else{
+                $lockstatus.show();
+                $("#order_toggle").css("z-index","20");
+            }
+        });
+
+        $('#roomstatus').on('mouseout','.lockstation span', function() {
+            $lockstatus.hide();
+            $("#order_toggle").css("z-index","22");
+        }); 
+
+
+        $('#roomstatus').on('mouseover','.hzkPwd span', function() {
+            if(!$hzkPwdPassword){
+                $hzkPwdPassword = $('<div class="roomstatustipD"></div>');
+                $hzkPwdPassword.appendTo($(this));
+                $("#order_toggle").css("z-index","20");
+            }else{
+                $('#roomstatus .roomstatustipD').show();
+                $("#order_toggle").css("z-index","20");
+            }
+        });
+
+        $('#roomstatus').on('mouseout','.hzkPwd span', function() {
+            $('#roomstatus .roomstatustipD').hide();
+            $("#order_toggle").css("z-index","22");
+        }); 
+
+
+    },
+    //管家密码弹层事件
+    __hzkPwdPasswordBind : function() {
+        //修改管家密码
+        var $hzkPwdPassword = $('#hzkPwdPassword');
+        //密码输入框事件
+        $hzkPwdPassword.on('focus', function() {
+            if($(this).val() == "请输入6位数字的密码") {
+                $(this).val("").css('color',"#333333");
+            }
+        });
+
+        $hzkPwdPassword.on('blur', function() {
+            var password = $('#hzkPwdPassword').val();
+            var str = /^\d{6}$/;
+            if($(this).val() == "") {
+                $(this).val("请输入6位数字的密码").css('color',"#aaaaaa");
+            }
+            if(str.test($('#hzkPwdPassword').val())){
+                $('#roomPassworderror').hide();
+            }else{
+                $('#roomPassworderror').show();
+            }
+        });
+
+        $hzkPwdPassword.on('keydown', function(event) {
+           if(!((event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)  ) &&  event.keyCode != 8){
+                event.preventDefault(); 
+            }
+        });
+
+
+    },
+    /**
+     * 表格绑定事件
+     */
+    __tableBind : function () {
+        var _this = this;
+
+        var $tableBody = $("#room_orderZoom table");
+        var $tableBodyTd = $("#room_orderZoom td");
+        var $datepicker = $("#datepicker td");
+        /*var $room_nameZoomTd = $("#room_nameZoom td");*/
+        var $roomStatetd = $("#room_nameZoom .roomStatetd");
+        //左侧房型表格
+        var $roomTypeTable = $("#room_nameZoom");
+
+        //房型点击事件
+        $roomStatetd.on('click',function() {
+            $('#order_toggle').show();
+            $('#roomstatus').show();
+            // $("#order_toggle").click();
+             _this.roomStatetdObj = $(this);
+            _this._romstatusInit($(this));
+
+            // if(isIdenticalObject(publicFun.getFormData(),roomOrderFormData)) {
+
+            //     if($(this).data('isclick') == 0){
+            //        _this._romstatusInit($(this));
+            //     }else{
+            //         $(this).data('isclick',0);
+            //         $("#order_toggle").click();
+            //     }
+
+            // } else {
+            //     dialog({
+            //         //title : '提示',
+            //         content : '<div class="fn-tac">是否放弃当前操作？</div>',
+            //         width : 210,
+            //         padding : "42px 20px",
+            //         fixed : true,
+            //         okValue : '放弃',
+            //         ok : function() {
+            //             _this._romstatusInit(_this.roomStatetdObj);
+            //             $('#roomStatusNewContent').empty();
+            //             roomOrderFormData = {};
+            //         },
+            //         cancel : function() {
+            //             return
+            //         }
+            //     }).showModal();
+
+            //     return false;
+            // };
+
+
+        })
+
+        // 表格滑入
+        $tableBody.on('mouseenter', 'td', function() {
+            /*var index = $(this).index();
+
+            var parentIndex = $(this).parent().index();
+            // 获取房间排序类型
+            // var roomSortType = $('#roomSort .roomSortItemChecked').data('type');
+             var _roomSortTypeVal = $.cookie('roomSortTypeVal');
+             var roomSortType = _roomSortTypeVal ? _roomSortTypeVal : 'roomTypeName';
+            
+             //var parentIndex = td.parent().index();
+             if (roomSortType == 'roomTypeName') {
+                parentIndex = $(this).parent().data('orderindex');
+             }*/
+            var $this = $(this);
+            var index = $this.data('orderitemindex');
+            var parentIndex = $this.parent().data('orderindex');
+            $($datepicker[index]).css('backgroundColor','#f7ebda');
+            $($roomStatetd[parentIndex]).css('backgroundColor','#f7ebda');
+            /*if($this.attr("class") && $this.attr("class").indexOf("status") == -1) {
+               $this.css('backgroundColor','#faeedd');
+            };*/
+            var orderDetailWidth = 0;
+            if($("#order_toggle").attr("data-isopen") == 1) {
+                orderDetailWidth = $("#room_status_content").width();
+            }
+            $(".roomBorder").removeClass('hover');
+            $this.find(".roomBorder").addClass('hover');
+            orderThumbnails.iniData(this,orderDetailWidth);        
+        });
+        
+        // 表格离开
+        $tableBody.on('mouseleave', 'td', function() {
+            /*var index = $(this).index();
+            var parentIndex = $(this).parent().index();
+            // 获取房间排序类型
+            // var roomSortType = $('#roomSort .roomSortItemChecked').data('type');
+             var _roomSortTypeVal = $.cookie('roomSortTypeVal');
+             var roomSortType = _roomSortTypeVal ? _roomSortTypeVal : 'roomTypeName';
+            
+             //var parentIndex = td.parent().index();
+             if (roomSortType == 'roomTypeName') {
+                parentIndex = $(this).parent().data('orderindex');
+             }*/
+            var $this = $(this);
+            var index = $this.data('orderitemindex');
+            var parentIndex = $this.parent().data('orderindex');
+            $($datepicker[index]).css('backgroundColor','');
+            $($roomStatetd[parentIndex]).css('backgroundColor','');
+            $this.css('backgroundColor','');
+            $this.find(".roomBorder").removeClass('hover');
+            orderThumbnails.hideOrderhumbnail();     
+        });
+        
+        // 鼠标滑动
+        $tableBody.on('mousemove', 'td', function(event) {
+            var isOrder = $(this).hasClass("hasOrder");
+            if(isOrder) {
+                var orderDetailWidth = 0;
+                if($("#order_toggle").attr("data-isopen") == 1) {
+                    orderDetailWidth = $("#room_status_content").width();
+                }
+                orderThumbnails.moveOrderhumbnail(this,event,orderDetailWidth); 
+            }        
+        });
+
+        // 有订单的房间点击查看详情
+        $tableBody.on('click', '.hasOrder', function() {
+            _this.__elasticLayer();
+            publicFun.resetTableStauts($(this),$tableBody);
+
+            var data = $(this).data();
+            var checkInDate = data.date;
+            var checkOutDate = qfn.getNextDate(checkInDate);
+            var roomTypeNo = data.roomtypeno;
+            var roomNo = data.roomno;
+            var roomName = data.roomname;
+            var doorNo = data.doorno;
+            var roomTypeName = data.roomtypename;
+            var hasLock = data.haslock;
+
+            var data = {
+                roomNo: roomNo,
+                roomTypeNo: roomTypeNo,
+                startTime: checkInDate,
+                endTime: checkInDate,
+                roomName: roomName,
+                roomTypeName: roomTypeName,
+                doorNo: doorNo,
+                isHasLock: hasLock
+            }
+            //隐藏订单缩略图
+            orderThumbnails.hideOrderhumbnail(); 
+            roomStatusVm.$fire("all!getOrderList",data);
+          
+
+        }); 
+
+        // 无订单的房间点击新增订单
+        $tableBody.on('click', '.noOrder', function(){
+            _this.__elasticLayer();
+            var data = $(this).data();
+            var checkInDate = data.date;
+            var checkOutDate = qfn.getNextDate(checkInDate);
+            var roomTypeNo = data.roomtypeno;
+            var roomNo = data.roomno;
+            var roomTypeName = data.roomtypename;
+            var doorNo = data.doorno;
+            var hasLock = data.haslock;
+
+            var data = {
+                bookingFrom: 'roomStatus', // 下单入口来源
+                bookingType: 0, // 手工订单
+                checkInDate: checkInDate, // 入住日期
+                checkOutDate: checkOutDate, // 离店日期
+                roomNo: roomNo, // 房间号
+                roomTypeNo: roomTypeNo, // 房型号
+                roomTypeName: roomTypeName, // 房型名
+                doorNo: doorNo, // 门牌号
+                isHasLock: hasLock // 是否有锁
+            }
+
+            // 调用手工下单通信接口
+            roomStatusVm.$fire('all!newBookingOrder', data);
+        });
+        
+        // 暂停房间点击
+        $tableBody.on('click', '.roomDisable', function() {
+            dialog({
+                //title : '提示',
+                width : 208,
+                padding : "30px 20px",
+                cancelValue : "知道了",
+                cancel : function () {},
+                content : '<p class="mb20 fn-tac">当前房间不可售，如有疑问请联系客服</p><p class="fn-tac">客服电话：4006812010</p>'
+            }).showModal();
+        });
+    },
+
+    __elasticLayer: function () {
+        var order_toggle = $("#order_toggle");
+        $("#room_status_content").animate({right:"-269px"},300,function(){
+            order_toggle.removeClass("order-open").addClass("order-close");
+            $("#roomStatusOrderWrap").css("visibility","hidden");
+            order_toggle.attr("data-isOpen","0");
+            order_toggle.css("right","255px");
+        });
+    },
+    //===============================================================================
+    //功能：缩略房态特有的表格绑定事件
+    //参数：无
+    //作者：zhl.zhou
+    //===============================================================================
+    __thumbTableBind : function () {
+        //左侧房型表格
+        var $roomTypeTable = $("#room_nameZoom");
+        //房型收缩点击
+        $roomTypeTable.on('click', '.expand-room-type', function(event) {
+            var $this = $(this);
+            
+            var $roomTypeItem = $this.parent().parent();
+            var $roomTypeTR = $roomTypeItem.parent();
+            var indexN = $roomTypeTR.data('indexnum');
+            var queryStrEpL = '#room_nameZoom tbody .' + indexN + '-expand';
+            var queryStrSrL = '#room_nameZoom tbody .' + indexN + '-shrink';
+            var queryStrEpR = '#room_orderZoom tbody .' + indexN + '-expand';
+            var queryStrSrR = '#room_orderZoom tbody .' + indexN + '-shrink';
+
+            //请求余量数据
+            var data = {
+                hotelNo : window.GLOBAL.hotelNo,
+                roomTypeNo : $roomTypeItem.data('roomtypeno'),
+                startDate : $('#startDate').val(),
+                days : 30,
+                queryType : "roomType"
+            };
+            $.ajax({
+                url : CONFIG.ROOT + '/roomState/j/remainRoomsAmountByRoomType',
+                data : data,
+                type : "GET",
+                dataType : "json"
+            }).done(function(msg){
+                var checkCodeFlag = checkCode(msg);
+                if(!checkCodeFlag) {
+                   return;
+                }
+                if (!!msg.data.remainingRoomsList && !!msg.data.remainingRoomsList[0] && !!msg.data.remainingRoomsList[0].remainingAmountList) {
+                    for(var j = 0;j<msg.data.remainingRoomsList[0].remainingAmountList.length;j++) {
+                        var _dayList = msg.data.remainingRoomsList[0].remainingAmountList[j];
+                        (function() {
+                            var arr = [];
+                            arr.push(_dayList.date)
+                            _dayList.isColor = publicFun.getDateList(arr)[0].isColor;
+                        })()                             
+                    }
+                    var html = publicFun.render(thumbRoomStatusTpl.remainRoomsTpl,{data:msg.data});
+                    var $obj = $(queryStrSrR);
+                    $obj.html(html);
+                    $(queryStrEpL).hide();
+                    $(queryStrEpR).hide();
+
+                    $(queryStrSrL).show();
+                    $(queryStrSrR).show();
+                    publicFun.windowResize();
+                }
+            });
+            event.preventDefault();
+        });
+        //房型展开点击
+        $roomTypeTable.on('click', '.shrink .room-type-item', function(event) {
+            var $this = $(this);
+            
+            var $roomTypeTR = $this.parent();
+            var indexN = $roomTypeTR.data('indexnum');
+            var queryStrEpL = '#room_nameZoom tbody .' + indexN + '-expand';
+            var queryStrSrL = '#room_nameZoom tbody .' + indexN + '-shrink';
+            var queryStrEpR = '#room_orderZoom tbody .' + indexN + '-expand';
+            var queryStrSrR = '#room_orderZoom tbody .' + indexN + '-shrink';
+
+            $(queryStrEpL).show();
+            $(queryStrEpR).show();
+
+           $(queryStrSrL).hide();
+           $(queryStrSrR).hide();
+           publicFun.windowResize();
+            event.preventDefault();
+        });
+    },
+    //房间详情初始化
+    _romstatusInit: function($this) {
+
+        var _this = this;
+        $('.roomStatetd').data('isclick',0);
+        $this.data('isclick',1);
+        //读取选中td的数据
+        var roomNo = _this.roomno = $this.data('roomno');
+        var roomname = $this.data('roomname');
+        var isonline = $this.data('icononline');
+        var isDirtyRoom = $this.data('roomcleanstatus');
+        var data = { roomNo : roomNo}
+
+         $.ajax({
+            url : CONFIG.ROOT + '/lock/j/lockState',
+            data : data,
+            type : 'POST',
+            dataType : 'json',
+            beforeSend : function() {
+                
+                $('#roomStatusName').html(roomname).show();
+                $("#roomStatusOrderLoading").show();
+                $('#roomStatusOrderDetail').hide();
+                $('#roomStatusNewOrder').hide();
+                $('#roomStatusOrderTab').hide();
+                $('#roomStatusNoOrder').hide();
+            },
+            success : function(msg) {
+
+                var checkCodeFlag = checkCode(msg);
+                if(!checkCodeFlag) {
+                    $this.data('isclick',0);
+                    return
+                }
+                publicFun.orderDetailLayer();
+              //获取本地是否线上售卖数据 插入masg
+                msg.data.isOnlineSale = isonline ;
+                msg.data.roomCleanStatus = msg.data.roomCleanStatus;
+
+                $("#roomStatusOrderLoading").hide();  
+                //加载模板
+                var render = template.compile(roomtpl.RoomLockDetail);
+                var html = render(msg);
+                //写入页面
+                $('#roomstatus').html(html);
+                //载入房间详情绑定事件
+                _this.__roomstatusbind();
+
+                // 更新锁标识为最新状态
+                $this.find('.j_lockStateIcon').removeClass('iconLockA iconLockB iconLockC').addClass(function() {
+                    if (msg.data.lockInfo.lockState == 1) {
+                        return 'iconLockA';
+                    } else if (msg.data.lockInfo.lockState == 2) {
+                        return 'iconLockB';
+                    } else if (msg.data.lockInfo.lockState == 3) {
+                        return 'iconLockC';
+                    }
+                });
+            }
+        });
+    },
+    /**
+     * 内容区域初始化
+     */
+    __contentInit : function () {    
+
+        var _this = this;
+
+        //根据window窗体的大小设置房型表格区域的大小
+        publicFun.windowResize();
+
+        $(window).resize(function(){
+            publicFun.windowResize();
+        });
+
+        // 房态起始日期设置
+        var defaultDate = qfn.getPostponeDate(CONFIG.DATE,-1);
+        $('#startDate').rDatepicker({
+            defaultDate : defaultDate,
+            minDate : defaultMinDate,
+            maxDate : defaultMaxDate,
+            zIndex : "99",
+            callback : function(date) {
+                _this.__roomStatusQuery(roomTypeValLog);
+            }
+        });
+
+        _this.__roomStatusQuery();
+    }
+}
+/**
+ * 公共方法模块
+ */
+var publicFun = {
+    //获取日历列表数组
+    getDateList : function (dateArr) {
+
+        var newDateArr = [];
+        var weekData = ['日','一','二','三','四','五','六'];
+
+        // 生成日期数据
+        for (var i = 0; i < dateArr.length; i++) {
+            var dataItem = dateArr[i];
+            var tempDate = qfn.newDate(dataItem);
+            var week = tempDate.getDay();
+            var weekCharacter = weekData[tempDate.getDay()];
+            var currentWeek = qfn.newDate(CONFIG.DATE).getDay();
+            var isColor = 0;
+            var dateTime = qfn.toTwoNumber(tempDate.getMonth() + 1) +"-"+ qfn.toTwoNumber(tempDate.getDate());
+
+            if(week==currentWeek && qfn.isToday(tempDate,CONFIG.DATE)) {
+                isColor = 2;
+                dateTime = "今天"
+            } else if(weekCharacter == "六"){
+                isColor = 1;
+            } else if(weekCharacter == "日") {
+                isColor = 3;
+            }
+            /*if (isColor == "2") {
+                var dataJson = {
+                    value : [dateTime,weekCharacter],
+                    isColor : isColor,
+                    isHoliday : isHoliday
+                }
+            } else {*/
+
+            var dataJson = {
+                value : [dateTime,weekCharacter],
+                isColor : isColor
+            }
+                
+            
+            newDateArr.push(dataJson);
+        }
+
+        return newDateArr;
+    },
+    // 渲染模板
+    render : function (tpl, data) {        
+        var renderResult = template.compile(tpl);
+        var html = renderResult(data);
+        return html;
+    },
+    //浏览器大小改变执行操作
+    windowResize : function () {
+        var windowHeight = $(window).height(),
+        finalHeight = windowHeight- 100,
+        room_nameZoom = $('#room_nameZoom'),
+        room_orderZoom = $('#room_orderZoom'),
+        room_nameZoomTableHeight = $('#room_nameZoom table').height(),
+        SRM_main= $('#SRM-main'),
+        rightContent = $('.rightContent');
+
+        room_nameZoom.height(finalHeight);
+        room_orderZoom.height(finalHeight);
+
+
+        room_orderZoom.width(rightContent.width());        
+        SRM_main.height(windowHeight-50);
+
+        //订单详情按钮初始化
+        var order_toggle = $("#order_toggle");
+        var room_orderZoom = $('#room_orderZoom');
+        var top = room_orderZoom.scrollTop();
+        room_orderZoom.scrollTop(1);
+        if(room_orderZoom.scrollTop() != 0) {
+            if(order_toggle.attr("data-isOpen") == 0){
+                order_toggle.css("right","269px");
+            }            
+            $("#datepicker").css("overflow-y","scroll");
+            room_orderZoom.scrollTop(top);           
+        } else {
+            order_toggle.css("right","269px");
+            $("#datepicker").css("overflow-y","hidden");
+            room_orderZoom.scrollTop(top);   
+        }
+
+        //订单详情  高度初始化
+        var orderDetailHeight = windowHeight- 80;
+        var orderDetailContentHeight = windowHeight-160;
+
+        if(orderDetailHeight < 570) {
+            $("#roomStatusOrderWrap").height(orderDetailHeight);
+            $("#roomStatusOrderDetail").height(orderDetailContentHeight);
+            $("#roomStatusNewOrder").height(orderDetailContentHeight);
+            $("#roomStatusNewContent").height(orderDetailContentHeight);
+            $("#roomStatusContent").height(orderDetailContentHeight);
+            if(orderDetailContentHeight < 450 ){
+                $('#roomStatusOrderDetail .moreorder-wrapper').height(orderDetailContentHeight-80);
+            }
+        } else {
+            $("#roomStatusOrderWrap").height(570);
+            $("#roomStatusOrderDetail").height(500);
+            $("#roomStatusNewOrder").height(500);
+            $("#roomStatusNewContent").height(500);
+            $("#roomStatusContent").height(500);
+            if(orderDetailContentHeight < 450 ){
+                $('#roomStatusOrderDetail .moreorder-wrapper').height(orderDetailContentHeight-80);
+            }
+        }
+        var roomStatusNewContent = $("#roomStatusNewContent");
+        roomStatusNewContent.scrollTop(1);
+        if(roomStatusNewContent.scrollTop() != 0) {
+            // roomStatusNewContent.addClass("roomStatusNewScroll");
+            roomStatusNewContent.scrollTop(0);
+        } else {
+            // roomStatusNewContent.removeClass("roomStatusNewScroll");
+        }    
+        //一房多单检测
+        var wrapper = $('#roomStatusOrder .moreorder-wrapper');
+        var wrapperH = $('#moreorder-p').height();
+
+        //检测高度
+        if(wrapperH > 242 || wrapper.height() < 240) {
+
+            wrapper.addClass('overheight');
+        }else{
+            wrapper.removeClass('overheight');
+        }   
+
+        //工具 区域重新定位
+        roomStatusThumb.toolsResize(); 
+
+    },
+    //弹出框
+    orderDetailLayer : function () {
+        var room_status_content =  $("#room_status_content");
+        var order_toggle = $("#order_toggle");
+        $('#roomStatusOrderLoading').hide();
+        if(order_toggle.attr("data-isOpen") == 0) {
+            room_status_content.removeClass("order-close").addClass("order-open");
+            order_toggle.css("right","269px");
+            $("#roomStatusOrderWrap").css("visibility","visible");
+            room_status_content.animate({right:"16px"},500,function(){                                        
+                order_toggle.attr("data-isOpen","1");               
+            });
+        }
+    },
+    //=============================================================================
+    //功能：表头数据处理，主要是加入了假日的判断，和getDateList的区别就是多了一层
+    //      假日的解析，这个函数只有表格时间头部使用
+    //作者：zhl.zhou
+    //=============================================================================
+    getHeaderDateList : function (dateArr) {
+        var newDateArr = [];
+        var weekData = ['日','一','二','三','四','五','六'];
+
+        // 生成日期数据
+        for (var i = 0; i < dateArr.length; i++) {
+            var dataItem = dateArr[i];
+            var tempDate = qfn.newDate(dataItem);
+            var week = tempDate.getDay();
+            var weekCharacter = weekData[tempDate.getDay()];
+            var currentWeek = qfn.newDate(CONFIG.DATE).getDay();
+            var isColor = 0;
+            var isHoliday = false;
+            var dateTime = qfn.toTwoNumber(tempDate.getMonth() + 1) +"-"+ qfn.toTwoNumber(tempDate.getDate());
+
+            //判断当前日期是否为节假日
+            var holiday = calendarholiday.getholiday(dataItem);
+
+            if(week==currentWeek && qfn.isToday(tempDate,CONFIG.DATE)) {
+                isColor = 2;
+                dateTime = "今天"
+            } else if(weekCharacter == "六"){
+                isColor = 1;
+            } else if(weekCharacter == "日") {
+                isColor = 3;
+            }
+            if (!!holiday && (customHoliday.indexOf(holiday) > -1)) {
+                isHoliday = true;
+                dateTime = holiday;
+            }
+            /*if (isColor == "2") {
+                var dataJson = {
+                    value : [dateTime,weekCharacter],
+                    isColor : isColor,
+                    isHoliday : isHoliday
+                }
+            } else {*/
+
+            var dataJson = {
+                value : [dateTime,weekCharacter],
+                isColor : isColor,
+                isHoliday : isHoliday
+            }
+                
+            
+            newDateArr.push(dataJson);
+        }
+
+        return newDateArr;
+    },
+    //=============================================================================
+    //功能：获取房态表格头部数据，包括日期和剩余房间数
+    //参数：startDate，起始时间；days，天数；dataParam，公寓数据
+    //返回：日期及其剩余房间数组
+    //作者：zhl.zhou
+    //=============================================================================
+    getRoomHeadData : function (date, day, dataParam) {
+        var _this = this;
+        var data = {
+            hotelNo : window.GLOBAL.hotelNo,
+            startDate : dataParam.startDate,
+            days : dataParam.days,
+            queryType : "hotel"
+        }
+        $.ajax({
+            url : CONFIG.ROOT + '/roomState/j/remainRoomsAmountByRoomType',
+            data : data,
+            dataType : "json",
+            type : "GET"
+        }).done(function(msg){
+            var checkCodeFlag = checkCode(msg);
+            if(!checkCodeFlag) {
+                return;
+            }
+            var roomData = [];
+            if(msg.data.remainingRoomsList && msg.data.remainingRoomsList[0] && msg.data.remainingRoomsList[0].remainingAmountList.length > 0) {
+                for(var i = 0; i < msg.data.remainingRoomsList[0].remainingAmountList.length; i++){
+                    var dataItem = msg.data.remainingRoomsList[0].remainingAmountList[i];
+                    var tempDate = [];
+                    tempDate.push(dataItem.date);
+                    var data = {
+                        dateData : _this.getHeaderDateList(tempDate)[0],
+                        remainRoom : dataItem.remainingAmount
+                    }
+                    roomData.push(data);
+                }
+                var html = _this.render(roomtpl.datepickerTpl,{"data":roomData});
+                $("#datepicker").html(html);
+            }
+        });
+    },
+    //查询数据，刷新内容区域
+    renderDatepicker : function (date, day, dataParam, isEmpty) {
+        /*var dateArr = qfn.createDateArray(qfn.getFormatDate(date),day);
+        var dateList = this.getDateList(dateArr);
+        var dataFormat = {"data":dateList}
+        var html = this.render(roomtpl.datepickerTpl,dataFormat);
+        $("#datepicker").html(html);*/
+        this.getRoomHeadData(date, day, dataParam);
+        var url = CONFIG.ROOT + '/roomState/j/table';
+        if (dataParam.roomSortType == 'roomTypeName') {
+            url = CONFIG.ROOT + '/roomState/j/stateTable';
+        }
+        $.ajax({
+            url : url,
+            data :dataParam,
+            type : 'GET',
+            dataType : 'json',
+            beforeSend : function() {
+                $("#roomStatusLoading").show();
+                $("#roomEmpty").hide();
+                $("#roomManageEmpty").hide();
+                $("#roomErrorEmpty").hide();
+            },
+            success : function(data) {
+                $("#roomStatusLoading").hide();
+
+                var checkCodeFlag = checkCode(data);
+                if(!checkCodeFlag) {
+                    return;
+                }
+
+                if(data.code == "0000") {
+                    if((dataParam.roomSortType == 'roomTypeName' && !data.data.roomTypeList) || (dataParam.roomSortType == 'roomTypeName' && data.data.roomTypeList.length == 0) || (dataParam.roomSortType != 'roomTypeName' && data.data.roomList.length == 0)) {
+
+                        if((dataParam.roomTypeNo != "" || dataParam.roomTypeNo == 0) && dataParam.roomTypeNo != undefined) {
+                            dialog({
+                                //title : "提示",
+                                width : 208,
+                                padding : "30px 20px",
+                                cancelValue : "知道了",
+                                cancel : function () {},
+                                content : '<div>该房型未添加房间号，请到“门店管理”>“门店与房型”页面，点击该房型“修改”，添加房间号。</div>'
+                            }).showModal();
+                        } else {
+                            $("#panel_content").hide();
+                            $("#roomEmpty").show(); 
+                            
+                            roomOrderFormData = {};
+                        }                       
+                        return;                   
+                    }
+
+                    
+                    $("#panel_content").show();
+                    var days = null;
+
+                    //按房型查询时，调用缩略房态逻辑
+                    if (dataParam.roomSortType == 'roomTypeName') {
+                        var tempArr = [];
+                        //对请求的数据进行重新渲染和构造 主要是对日期的再处理
+                        for(var k = 0;k < data.data.roomTypeList.length; k++){
+                            var tempdata = data.data.roomTypeList[k];
+                            
+                            for(var n = 0;n <tempdata.roomList.length;n++) {
+                                for(var m = 0;m<tempdata.roomList[n].dayList.length;m++) {
+                                    var _dayList = tempdata.roomList[n].dayList[m];
+                                    tempArr = [];
+                                    tempArr.push(_dayList.date)
+                                    _dayList.isColor = publicFun.getDateList(tempArr)[0].isColor;
+                                    if(_dayList.customerName){
+                                        var nowData = new Date(_dayList.date.substring(0,10).split("-").join(','))-0;
+                                        var checkin = new Date(_dayList.checkInTime.substring(0,10).split("-").join(','))-0;
+                                        var checkout = new Date(_dayList.checkOutTime.substring(0,10).split("-").join(','))-0;
+                                        
+                                       if(nowData > checkin && nowData < checkout){
+                                            var days =  (checkout-nowData)/86400000 
+                                        }else{
+                                            var days =  _dayList.days;
+                                        }
+                                    }
+
+                                    if(days == 1){
+                                        _dayList.end = true;
+                                        days = null;
+                                    }
+
+                                    days--;                               
+                                }
+                            }
+
+                        }
+
+                        var html = publicFun.render(thumbRoomStatusTpl.roomTypeNameTpl,data);
+                        $("#room_nameZoom").html(html);
+
+                        var orderhtml = publicFun.render(thumbRoomStatusTpl.thumbTypeRoomOrderTpl,data);
+
+                        var room_orderZoom = $("#room_orderZoom");
+                        room_orderZoom.html(orderhtml);
+
+                        roomstatus.__thumbTableBind();
+                    } else {
+                        //按房间号和脏房查询时的页面渲染
+                        //对数据进行再处理，主要是是时间数据的重新构造和渲染
+                         for(var i=0;i<data.data.roomList.length;i++) {
+                            for(var j = 0;j<data.data.roomList[i].dayList.length;j++) {
+                                var _dayList = data.data.roomList[i].dayList[j];
+                                (function() {
+                                    var arr = [];
+                                    arr.push(_dayList.date)
+                                    _dayList.isColor = publicFun.getDateList(arr)[0].isColor;
+                                })()
+                                if(_dayList.customerName){
+                                    var nowData = new Date(_dayList.date.substring(0,10).split("-").join(','))-0;
+                                    var checkin = new Date(_dayList.checkInTime.substring(0,10).split("-").join(','))-0;
+                                    var checkout = new Date(_dayList.checkOutTime.substring(0,10).split("-").join(','))-0;
+                                    
+                                   if(nowData > checkin && nowData < checkout){
+                                        var days =  (checkout-nowData)/86400000 
+                                    }else{
+                                        var days =  _dayList.days;
+                                    }
+                                }
+
+                                if(days == 1){
+                                    _dayList.end = true;
+                                    days = null;
+                                }
+
+                                days--;                               
+                            }
+                        }
+
+                        var html = publicFun.render(roomtpl.roomNameTpl,data);
+                        $("#room_nameZoom").html(html);
+
+                        var orderhtml = publicFun.render(roomtpl.roomOrderTpl,data);
+
+                        var room_orderZoom = $("#room_orderZoom");
+                        room_orderZoom.html(orderhtml);
+                    }
+
+                    roomstatus.__tableBind();
+                    publicFun.windowResize();
+
+                    /**/
+                    if(isEmpty != "1") {
+                        // 清除订单详情
+                        $('#roomStatusName').hide().empty();
+                        $('#roomStatusOrderDetail').empty();
+                        $('#roomStatusOrderTab').hide();
+                        $('#roomStatusNoOrder').show();
+                        $('#roomStatusNewOrder').hide().empty();
+                        
+                        //隐藏弹出框，通过设置层级为负值实现
+
+                        //判断是否有滚动条
+                        var rightNum = "269px";
+                        room_orderZoom.scrollTop(1);
+
+                        if(room_orderZoom.scrollTop() != 0 ) {
+                            rightNum = "284px";
+                            room_orderZoom.scrollTop(0);
+                        }
+                        $("#room_status_content").css("right","-269px").removeClass("order-open").addClass("order-close");
+                        $("#roomStatusOrderWrap").css("visibility","hidden");
+                        $("#order_toggle").css("right",rightNum);
+                        //将弹出框的状态设置为0，标示关闭
+                        $("#order_toggle").attr("data-isOpen","0");
+
+                        roomOrderFormData ={};
+                    }
+                    
+                    // 下单成功显示详情
+                    /*if (isCreateOrder) {
+                        orderdetail.__getOrderDetail(createOrderSuccess.orderNo, createOrderSuccess.roomNo);
+                        $('#roomStatusName').html(createOrderSuccess.roomName).show();
+                        $('#roomStatusNoOrder').hide();
+                        //下单成功后，构造新增订单模板，解决下单成功后无法点击新增订单的bug
+                        var orderData = {
+                            roomno : createOrderSuccess.roomNo,
+                            roomtypeno : createOrderSuccess.roomTypeNo,
+                            roomname : createOrderSuccess.roomName,
+                            date : createOrderSuccess.date
+                        } 
+                        //新增订单
+                        roomstatus.__newOrder(orderData, 'hide');
+                        $('#order_toggle').click();
+                        isCreateOrder = false;
+                    }*/
+
+                    //判断startDate 时间是否在5年范围内， 显示prev_month、next_month
+                    var resultDate = $("#startDate").val();
+
+                    if(qfn.dateCompare(resultDate,defaultMinDate.toLocaleDateString()) == 1){
+                        $("#prev_month").css("visibility","visible");
+                    }
+                    if(qfn.dateCompare(resultDate,defaultMaxDate.toLocaleDateString()) == 3){
+                        $("#next_month").css("visibility","visible");
+                    }
+
+                } else {
+                    $("#panel_content").hide();
+                    $("#roomErrorEmpty").show();
+                }  
+                if(room_orderZoom_position != 0) {
+                    room_orderZoom.scrollTop(room_orderZoom_position);
+                    room_orderZoom_position = 0;
+                }
+
+                // 调用批量查询锁信息模块
+                queryLockInfo.init({
+                    roomItems: $('#room_nameZoom .roomStatetd'),
+                    lockStateIconClassName: '.j_lockStateIcon'
+                }); 
+            }
+        });
+    },
+    //清除表格选中操作
+    resetTableStauts : function (_this, $tableBody) {
+
+        $tableBody.find('td').removeClass('statusBChecked')
+                             .removeClass('statusAChecked')
+                             .removeClass('statusCChecked')
+                             .removeClass('statusChecked')
+                             
+        var className = _this.attr("class");
+        if (_this.parent().index() == '0') {
+            $(".roomBorder",_this).css("top","0px");
+        }
+        if(className.indexOf('statusB') != -1) {
+            _this.addClass("statusBChecked").css("zIndex","8");
+        } else if(className.indexOf('statusA') != -1) {
+            _this.addClass("statusAChecked").css("zIndex","8");;
+        } else if(className.indexOf('statusC') != -1) {
+            _this.addClass("statusCChecked").css("zIndex","8");;
+        } else if(className.indexOf('noOrder') != -1) {
+            _this.css('backgroundColor',''); 
+            _this.addClass("statusChecked");
+        }
+    },
+    //获取表单数组
+    getFormData : function () {
+        var data = {};
+
+        //日租|时租
+        data.newOrderType = $("#newOrderType").val();
+        //姓名 电话
+        data.customerName = $("#customerName").val();
+        data.contactorTel = $("#contactorTel").val();
+        //入店时间
+        data.newOrderCheckInTime = $("#newOrderCheckInTime").html();
+        data.newOrderCheckInDate = $("#newOrderCheckInDate").val();
+        //离店时间
+        data.newOrderCheckOutTime = $("#newOrderCheckOutTime").html();
+        data.newOrderCheckOutDate = $("#newOrderCheckOutDate").val();
+        //渠道和价位
+        data.roomChannelList = $("#roomChannelList").val();
+        // data.roomPriceList = $("#roomPriceList").val();
+        data.roomPriceList = '';
+        //备注
+        data.newOrderDes = $("#newOrderDes").val();
+
+        //姓名 电话
+        data.customerNameNew = $("#customerNameNew").val();
+        data.customerTelnoNew = $("#customerTelnoNew").val();
+        //离店时间
+        data.dateInputTimeEdit = $("#dateInputTimeEdit").val();
+        data.checkOutTimeNew = $("#checkOutTimeNew").val();
+        //备注
+        data.desNew = $("#desNew").val();
+
+        return data;
+    },
+
+    //点击已有订单的房间
+    doCheckedRoom : function (tdEle, tableEle, data) {
+        // publicFun.resetTableStauts(tdEle,tableEle);
+        // 获取订单详情
+        orderdetail.__getOrderList(data);
+        //新增订单
+        roomstatus.__newOrder(data, 'hide');
+        
+        publicFun.orderDetailLayer();
+    },
+
+    //点击未订购房间
+    doNoCheckedRoom : function (tdEle, tableEle, data) {
+        publicFun.resetTableStauts(tdEle,tableEle);        
+         //检查是否可以新增订单
+        roomstatus.__newOrder(data, 'show');
+        publicFun.orderDetailLayer();
+        
+        $('#addmoreorder').show();      
+    },
+    //初始化订单详情
+    orderDetailInit : function () {
+        var windowHeight = $(window).height();
+        var orderDetailHeight = windowHeight-80;
+        var orderDetailContentHeight = windowHeight-160;
+
+        if(orderDetailHeight < 570) {
+            $("#roomStatusOrderWrap").height(orderDetailHeight);
+            $("#roomStatusOrderDetail").height(orderDetailContentHeight);
+            $("#roomStatusNewOrder").height(orderDetailContentHeight);
+            $("#roomStatusNewContent").height(orderDetailContentHeight);
+            // $("#roomStatusNewContent").height(orderDetailContentHeight).addClass("roomStatusNewScroll");
+            $("#roomStatusContent").height(orderDetailContentHeight);
+            if(orderDetailContentHeight < 450 ){
+                $('#roomStatusOrderDetail .moreorder-wrapper').height(orderDetailContentHeight-80);
+            }
+        }
+
+    }
+}
+
+
+// 订单详情模块
+var orderdetail = {
+    // 获取订单列表
+    __getOrderList : function(data) {
+        var _this = this;
+        _this.Data = data;
+        $.ajax({
+            url : CONFIG.ROOT + '/order/j/getOrderNoList',
+            data : {
+                roomNo : data.roomno,
+                startTime : data.date,
+                endTime : data.date
+            },
+            type : 'GET',
+            dataType : 'json',
+            beforeSend : function() {
+                $('#roomStatusOrderDetail').empty();
+                $('#roomStatusNoOrder').hide();
+                $('#roomStatusName').html(data.roomname).show();
+                $('#roomStatusName').attr("title", data.roomname);
+                $('#roomStatusOrderLoading').show();
+            },
+            success : function(msg) {
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    return;
+                }
+                
+                // 将订单列表保存到本地
+                _this.orderList = msg.data.orderNoList;
+                // 清空当前订单index
+                _this.orderIndex = 0;
+                
+                // 如果后台有默认订单索引，将本地订单索引赋值
+                if(msg.data.coor){
+                    _this.orderIndex = msg.data.coor;
+                }
+
+                // 获取当前订单号
+                //var nowOrderNo = msg.data.orderNoList[_this.orderIndex];
+
+                //var nowOrderNo = msg.data.orderNoList[0].orderNo;
+
+                _this.__setorder();
+                
+            }
+        });
+        
+    },
+
+    //订单详情分页逻辑
+    __setorder : function() {
+        // 根据订单号查询详情
+        var _this = this;
+        if (_this.orderList.length > 1) {
+            $('#roomStatusOrderLoading').hide();
+            $('#roomStatusNewOrder').hide();
+            $('#roomstatus').hide();
+            $('#roomStatusOrderTab').find('li:eq(1)').removeClass('activeB').prev().addClass('activeA');
+            $('#roomStatusOrderTab').show();
+            $('#roomStatusOrderDetail').show();
+            // 渲染模板
+            var data = { data: _this.orderList};
+
+            var roomChangeRender = template.compile(roomtpl.moreorder);
+            var roomChangeHtml = roomChangeRender(data);
+
+            $('#roomStatusOrderDetail').html(roomChangeHtml);
+
+           publicFun.orderDetailInit();
+           roomOrderFormData = publicFun.getFormData();
+
+
+            _this.__pagingBind(_this.orderList.length);
+        }else if(_this.orderList.length == 1) {
+
+            _this.__getOrderDetail(_this.orderList[0].orderNo, _this.orderList[0].roomNo, _this.orderList[0].orderLockId);
+        }
+
+    },
+    
+    // 获取订单详情
+    __getOrderDetail : function(orderNo, roomNo, orderLockId) {
+        var _this = this;
+        $.ajax({
+            url : CONFIG.ROOT + '/order/t/info',
+            data : {
+                orderNo : orderNo,
+                roomNo : roomNo,
+                orderLockId : orderLockId
+            },
+            type : 'GET',
+            dataType : 'html',
+            beforeSend : function() {
+                $('#roomStatusOrderDetail').empty();
+                $('#roomStatusOrderLoading').show();
+            },
+            success : function(detailHtml) {
+                $('#roomStatusOrderLoading').hide();
+                $('#roomStatusOrderTab').find('li:eq(1)').removeClass('activeB').prev().addClass('activeA');
+                $('#roomStatusOrderTab').show();
+                $('#roomStatusOrderDetail').html("<div id='roomStatusContent'></div>");
+                $('#roomStatusContent').html(detailHtml);
+               
+                //初始化订单详情的高度
+                publicFun.orderDetailInit();
+                $('#roomStatusOrderDetail').show();
+
+                
+                var $lockRoomPwdLeaveTime = $('#lockRoomPwdLeaveTime');
+                var pwdType = $lockRoomPwdLeaveTime.data("type");
+                // 调用倒计时,无锁房间、有锁房间离店密码倒计时
+                if($('#isHasLock').val() != "1" || pwdType == "manager"){
+                    _this.__checkTime();
+                }
+
+                // 订单详情事件绑定
+                _this.__detailBind();
+                
+                roomOrderFormData = publicFun.getFormData();
+
+                //判断是否为下单成功后的请求订单详情
+                if (window.isCreateOrder) {
+                    $('#roomStatusName').html(createOrderSuccess.roomName).show();
+                    $('#roomStatusNoOrder').hide();
+                    //下单成功后，构造新增订单模板，解决下单成功后无法点击新增订单的bug
+                    var orderData = {
+                        roomno : createOrderSuccess.roomNo,
+                        roomtypeno : createOrderSuccess.roomTypeNo,
+                        roomname : createOrderSuccess.roomName,
+                        date : createOrderSuccess.date
+                    } 
+                    //新增订单
+                    roomstatus.__newOrder(orderData, 'hide');
+                    //$("#order_toggle").attr('data-isopen','0');
+                    //$('#order_toggle').click();
+                    window.isCreateOrder = false;
+                }
+            }
+        });
+        
+    },
+    
+    // 检测倒计时
+    __checkTime : function() {
+
+        var _this = this;
+
+        var ms = 3600 * 6 * 1000;
+
+        var $lockRoomPwdLeaveTime = $('#lockRoomPwdLeaveTime');
+        var pwdType = $lockRoomPwdLeaveTime.data("type");
+        
+        if ($("#checkOutTime").html()) {
+
+            var off = true;
+            var leavetime = $("#checkOutTime").html();
+            var time1 = $('.leavetimeday'), time2 = $('.leavetimehour'), time3 = $('.leavetimeminute');
+            /*var leaveyear = leavetime.slice(0, 4);
+            var leavemonth = leavetime.slice(5, 7);
+            var leaveday = leavetime.slice(8, 10);
+            var leavehour = leavetime.slice(11, 13);
+            var leavenminute = leavetime.slice(14, 16);*/
+            leavetime = leavetime.replace(/-/g,'\/');
+            var d1 = new Date(leavetime).getTime(); //结束时间
+            var d2 = new Date(leavetime).getTime() + ms; //开始时间
+            var d3 = globalTime;
+
+            var second = 1000;
+            var minutes = 1000 * 60;
+            var hours = minutes * 60;
+            var days = hours * 24;
+            var temp = 0;
+
+            //密码有效期倒计时处理
+            if (d1 > d3) {
+                if (!!pwdType &&  (pwdType == "manager")) {
+                } else {
+                    var t = d1 - d3;
+                    time1.text( temp = Math.max(parseInt(t / days), 0), t -= temp * days, temp);
+                    time2.text( temp = Math.max(parseInt(t / hours), 0), t -= temp * hours, temp);
+                    time3.text( temp = Math.max(parseInt(t / minutes), 0), t -= temp * minutes, temp);
+                }
+            } else {
+                
+                var statusType = $('#btnStatusChange').data('type');
+                
+                if (checkTimeoff1 && statusType == "hzkeeper") {
+                    roomstatus.__roomStatusQuery(roomTypeValLog);
+                    orderdetail.__getOrderDetail($('#btnRoomChange').data('orderno'), $('#btnRoomChange').data('roomno'), $('#btnRoomChange').data('orderlockid'));
+                    checkTimeoff1 = false;
+                }
+                var d = d2 - d3;
+                if (statusType == "hzkeeper") {
+                    $('.leavetime').text('已过订单离店时间，请为客人办理离店或延住');
+                    return;
+                } else {
+                    time1.text( temp = Math.max(parseInt(d / days), 0), d -= temp * days, temp);
+                    time2.text( temp = Math.max(parseInt(d / hours), 0), d -= temp * hours, temp);
+                    time3.text( temp = Math.max(parseInt(d / minutes), 0), d -= temp * minutes, temp);
+                }
+
+                
+                if (d < 0 && checkTimeoff2 && (statusType == "manager" || pwdType == "manager")) {
+                    roomstatus.__roomStatusQuery(roomTypeValLog);
+                    orderdetail.__getOrderDetail($('#btnRoomChange').data('orderno'), $('#btnRoomChange').data('roomno'), $('#btnRoomChange').data('orderlockid'));
+                    checkTimeoff2 = false;
+                } else if (d < 0) {
+                    //$(".roomStatusOrder .buttonWrap").css("padding","0");
+                    $("#lockRoomPwdLeaveTime").hide();
+                    //$(".textWrap").hide(); //办理入住按钮不可点击，显示文案
+                    if (_this.checkTimeoutHandleID) {
+                        clearTimeout(_this.checkTimeoutHandleID);
+                        return;
+                    }
+                }
+            }
+            //暂存循环函数句柄，用于清除定时
+            _this.checkTimeoutHandleID = setTimeout(arguments.callee, 1000);
+        }
+    },
+    //统计点击打印按钮数量
+    __logStatistic : function(orderno){
+        var _this = this;
+        $.ajax({
+            url : CONFIG.ROOT + '/log/oper',
+            data : {
+                funId : '010002',
+                ext1 : "1",
+                ext2 : orderno
+            },
+            type : 'POST',
+            dataType : 'json',
+            success : function(msg) {
+                // 保存完之后不需要做任何操作
+            }
+        });
+    },
+    
+    // 订单详情事件
+    __detailBind : function() {
+        var _this = this;
+        //页面没有数据时的检测，去掉占位空间和横线
+        if ($(".buttonWrap button").length <= 0) {
+            $(".buttonWrap").css("padding","0");
+        }
+        
+        //若订单详情头部提示内容为空，则去掉头部分割线
+        if (!($(".textWrap").text().trim())) {
+            $(".textWrap").css("border-bottom","none");
+        }
+        
+        // 修改订单
+        $('#btnEditOrder').off().on('click', function() {
+            //重新设置修改弹出框的高度
+            $(this).closest('.roomStatusOrder').parent('div[i="content"]').css({
+                "height": 'auto',
+                "min-height": '444px',
+                "padding" : '0 0 10px 0'
+            });
+            _this.__updateOrder();
+        });
+        
+        // 取消订单
+        $('#btnCancelOrder').off().on('click', function() {
+            var $this = $(this);
+            var orderNo = $this.data('orderno');
+            var orderLockId = $('#btnRoomChange').data('orderlockid');
+            var orderType = $this.data('ordertype');
+            var statuscode = $this.data('statuscode');
+            var isQhuhuOrder = $this.data('isquhuhuorder');
+            if (isQhuhuOrder && orderType === "PYF") {
+                _this.__partQuhuhuOrderCancel(orderNo,orderLockId,statuscode);
+            } else {
+                _this.__cancleOrderTips(orderNo,orderLockId);
+            }
+        });
+
+        //打印订单
+        $("#orderPrintBtn").off().on('click',function() {
+            var orderno = $(this).data('orderno');
+            var rootLink = window.location.href;
+            var linkNotHttp = rootLink.substring(8);
+            if (linkNotHttp.indexOf("/") > -1) {
+                rootLink = rootLink.substring(0,linkNotHttp.indexOf("/") + 8);
+            }
+            var linkhref = rootLink + '/setting/t/initPrint?orderNo=' + orderno;
+            var customPrintDlg = dialog({
+                width : 212,
+                height : 64,
+                skin : "custom-print-btn",
+                content : '<p style="text-align:center;line-height:58px;">确定要打印订单吗？</p><a href="javascript:;" id="customPrintBtn" class="confirm-print-btn">确定</a href="javascript:;">',
+                ok :false,
+                cancel : function(){}
+                //title : "温馨提示"
+            }).showModal();
+            $("#customPrintBtn").click(function(){
+                customPrintDlg.remove();
+                window.open(linkhref,"_blank");
+                return false;
+            });
+            //统计商户点击打印按钮数量
+            _this.__logStatistic(orderno);
+        });
+        
+        // 换房
+        $('#btnRoomChange').off().on('click', function() {
+            var data = $(this).data();
+            _this.__roomChange(data);
+            isCreateOrder = false;
+        });
+
+        //开启房卡
+        if ($('#btnStartRoomCard')) {
+            $('#btnStartRoomCard').off().on('click',function(){
+                var orderLockId = $(this).data('orderlockid');
+                openRoomCard.setOrderLockId(orderLockId);
+                openRoomCard.setOrderNo($(this).data('orderno'));
+                openRoomCard.setRoomNo($(this).data('roomno'));
+                openRoomCard.setHotelNo(window.GLOBAL.hotelNo);
+                openRoomCard.getCardType();
+            });
+        }
+        
+        // 查看修改备注
+        $('#showDes').off().on('click', function() {
+
+            var html = "";
+            if( $(this).data("handwork")) {
+                html+= '<li><pre>'+$(this).data("handwork")+'</pre></li>'
+            }
+
+            if( $(this).data("channel")) {
+                html+= '<li>'+$(this).data("channel")+'</li>'
+            }
+
+            dialog({
+                title : '备注',
+                width : 350,
+                height : 150,
+                content : "<div class=\"dialogwrapper\"><ul>"+html+"</ul></div>"
+            }).showModal();
+        });
+        
+        // 改变房态
+         $('#btnStatusChange').off().on('click', function() {
+            var type = $(this).data('type');
+            var orderNo = $(this).data('orderno');
+            var lockType = $(this).data('locktype');
+            var roomNo = $(this).data('roomno');
+            var bcolk = $(this).hasClass('bcolk');
+            var orderLockId = $(this).data('orderlockid');
+            var colk = bcolk ?1:0;
+            var data = {
+                keyType : type,
+                orderNo : orderNo,
+                roomNo : roomNo,
+                lockType : lockType,
+                hasLock : colk,
+                orderLockId : orderLockId
+            };
+            _this.__checkGuaranteeType(data);
+        });
+
+        //短信手动重发功能
+        $('#orderButton').off().on('click','#resentmessage',function(){
+            if($(this).data("type") == 0){
+                var _this = $(this);
+                resentmassage.init(function(){
+                    _this.css('background','#888888');
+                    _this.data("type",1)
+                    setTimeout(function(){
+                        _this.css('background','#57b258');
+                        _this.data("type",0)
+                    },60000)
+                });
+            }
+        });
+        //管家密码变更提醒
+        $('.roomPassword span').on("mouseover",function(){    
+            if(!roomstatus.haschange){
+                roomstatus.haschange = $('<div id="roomPasswordchange"><div>');
+                roomstatus.haschange.appendTo(document.body);
+                roomstatus.haschange.css({left:($(this).offset().left-168),top:($(this).offset().top+14),zIndex:10000})
+            }else{
+                $('#roomPasswordchange').show();
+                $('#roomPasswordchange').css({left:($(this).offset().left-168),top:($(this).offset().top+14),zIndex:10000});
+            }
+        });
+
+        $('.roomPassword span').on("mouseout",function(){
+            $('#roomPasswordchange').hide();
+        });
+
+        // 绑定房态占用提示事件
+        var $iconTipSign = $(".day2price .icon-tip-sign");
+        var $iconTipWords = $(".day2price .icon-tip-sign").parent().find('.icon-tip-words');
+
+        $iconTipSign.hover(
+          function () {
+            $iconTipWords.show();
+          },
+          function () {
+            $iconTipWords.hide();
+          }
+        );
+
+        //一单多房提示事件
+        var tipsArrow = $('#moreRoomTips .arrow-up');
+        var tipsContent = $('#moreOrderContent');
+        $('#moreRoomTips').hover(
+            function () {
+                tipsArrow.show();
+                tipsContent.show();
+            },
+            function () {
+                tipsArrow.hide();
+                tipsContent.hide();
+            }
+        );
+    },
+    
+    // 修改订单
+    __updateOrder : function() {
+        
+        var _this = this;
+        
+        var fromType = $('#btnEditOrder').data('fromtype');
+        var statusCode = $('#btnEditOrder').data('statuscode');
+        var orderType = $('#btnEditOrder').data('ordertype');
+        var isQuhuhuOrder = $('#btnEditOrder').data('isquhuhuorder');
+        
+        var customerName = $('#customerNameText').text();
+        var customerTelno = $('#customerTelnoText').text();
+        var checkOutDateTime = $('#checkOutTime').text();
+        var checkInDateTime = $('#checkInTime').text();
+        var checkOutDate = checkOutDateTime.substring(0,10);
+        var checkOutTime = checkOutDateTime.substring(11,16);
+        var checkInDate = checkInDateTime.substring(0,10);
+        var checkInTime = checkInDateTime.substring(11,16);
+        var desVal = $('#showDes').data('handwork');
+        var bizType = $('#btnRoomChange').data('biztype');
+        var priceVal = $('#rentPrice').text().substring(1);
+        var orderLockId = $('#btnRoomChange').data('orderlockid');
+        // 添加押金房费
+        var roomTypeNo = $('#btnRoomChange').data('roomtypeno');
+        var orderTypeOptions = $('#orderTypeText').parent().data();
+        var roomChargeOptions = $('#roomChargePayTypeText').parent().data();
+        var depositOptions = $('#depositPayTypeText').parent().data();
+
+
+        //保存两个变量  标志是否修改入住离店时间
+        var isUpdateCheckIn = false;
+        var isUpdateCheckOut = false;
+
+        //可以修改房费：SRM或者seb、去呼呼订单 且到店现付或者已担保
+        if (fromType == 'srm') {   
+            if (statusCode != '03') {
+
+                $('<input type="text" class="inputText inputEdit" id="customerNameNew">').val(customerName).insertAfter('#customerNameText').prev().hide().parent().parent().addClass('pt2 pb2');
+                $('<input type="text" class="inputText inputEdit" id="customerTelnoNew">').val(customerTelno).insertAfter('#customerTelnoText').prev().hide().parent().parent().addClass('pt2 pb2');
+                $('<input type="text" class="inputText w60" maxlength="8" id="rentPriceNew">').val(priceVal).insertAfter('#rentPrice').prev().hide().parent().addClass('pt2 pb2');
+
+                //添加修改入住时间
+
+                $('<div class="dateInputWrapEdit"><span class="dateInputTimeEdit" id="checkInDataNew">'+ checkInTime +'</span><input type="text" class="inputText dateInput" value="'+ checkInDate +'" readonly="readonly" id="checkInTimeNew"></div>').insertAfter('#checkInTime').prev().hide().parent().parent().addClass('pt2 pb2');
+                // 20150408 修改押金房费
+
+                // 修改订单类型
+                var orderTypeEdit = '<select class="select select-order-type" id="orderTypeNew"><option>&nbsp;</option></select>';
+                $(orderTypeEdit).insertAfter('#orderTypeText').prev().hide().parent().parent().show().addClass('pt2 pb2');
+            
+                // 房费
+                var roomChargeEdit = '<div><input type="text" class="inputText" maxlength="8" id="roomChangeNew" value="' + roomChargeOptions.roomcharge + '"' +
+                                'style="width:40px;"/><span class="priceText ml5 mr5">元</span>' +
+                        '<select class="select pay-type js-pay-type" id="roomChangeTypeNew"><option>&nbsp;</option></select></div>';
+                $(roomChargeEdit).insertAfter('#roomChargePayTypeText').prev().hide().parent().parent().addClass('pt2 pb2');  
+                
+                
+                // 押金
+                var depositEdit = '<div><input type="text" class="inputText" maxlength="8" id="depositNew" value="'+ depositOptions.deposit + '"' +
+                                    'style="width:40px;"/><span class="priceText ml5 mr5">元</span>'+
+                        '<select class="select pay-type js-pay-type" id="depositPayTypeNew"><option>&nbsp;</option></select></div>';  
+                $(depositEdit).insertAfter('#depositPayTypeText').prev().hide().parent().parent().addClass('pt2 pb2');
+
+                // 初始化编辑的下拉框值
+                roomstatus.__queryChannel('1',checkInDate,checkOutDate,bizType,roomTypeNo,'edit',orderTypeOptions,roomChargeOptions,depositOptions);
+
+            }else if (statusCode == '03') {
+
+                 $('<input type="text" class="inputText w60" maxlength="8" id="rentPriceNew">').val(priceVal).insertAfter('#rentPrice').prev().hide().parent().addClass('pt2 pb2');
+            }
+        } else if (fromType != 'srm') {
+            if (statusCode != "03") {
+                if (orderType === "DB" || orderType === "XF") {
+                    // 房费
+                    var roomChargeEdit = '<div><input type="text" class="inputText" maxlength="8" id="roomChangeNew" value="' + roomChargeOptions.roomcharge + '"' +
+                                    'style="width:40px;"/><span class="priceText ml5 mr5">元</span>' +
+                            '<select class="select pay-type js-pay-type" id="roomChangeTypeNew"><option>&nbsp;</option></select></div>';
+                    $(roomChargeEdit).insertAfter('#roomChargePayTypeText').prev().hide().parent().parent().addClass('pt2 pb2'); 
+                }
+                // 押金
+                var depositEdit = '<div><input type="text" class="inputText" maxlength="8" id="depositNew" value="'+ depositOptions.deposit + '"' +
+                                    'style="width:40px;"/><span class="priceText ml5 mr5">元</span>'+
+                        '<select class="select pay-type js-pay-type" id="depositPayTypeNew"><option>&nbsp;</option></select></div>';  
+                $(depositEdit).insertAfter('#depositPayTypeText').prev().hide().parent().parent().addClass('pt2 pb2');
+                // 初始化编辑的下拉框值
+                roomstatus.__queryChannel('1',checkInDate,checkOutDate,bizType,roomTypeNo,'edit',orderTypeOptions,roomChargeOptions,depositOptions);
+
+            }
+        }
+        
+        $('<div class="dateInputWrapEdit"><span class="dateInputTimeEdit" id="dateInputTimeEdit">'+ checkOutTime +'</span><input type="text" class="inputText dateInput" value="'+ checkOutDate +'" readonly="readonly" id="checkOutTimeNew"></div>').insertAfter('#checkOutTime').prev().hide().parent().parent().addClass('pt2 pb2');
+        $('<textarea class="textarea w150" rows="2" id="desNew"></textarea>').val(desVal).insertAfter('#showDes').prev().hide().parent().parent().css('height', 'auto');
+        
+        // 隐藏其它按钮
+        $('#orderButton button').hide();
+
+        // 隐藏待收房费
+        $('#uncollectedRoomCharge').hide();
+
+
+        //为修改项增加间距
+        //$('.orderViewInfo .infoItem').addClass('mb10');
+        
+        // 创建保存按钮
+        $('<button class="buttonSmall" id="btnSaveOrder">保存</button>').appendTo('#orderButton');
+        //隐藏备注信息
+        $('.remark').hide();
+        // 隐藏分页
+        $('#orderPaging').hide();
+
+        if (bizType == 'night') {
+            _this.__InTimeNewRDatepicker(checkInDate,checkInTime,checkOutDate,checkOutTime,function(InDate,InTime,OutDate,OutTime){
+                checkInDate = InDate;
+                checkInTime = InTime;
+                checkOutDate = OutDate;
+                checkOutTime = OutTime;
+                var days = countDays(checkInDate,checkInTime,checkOutDate,checkOutTime);
+                $('#orderDetailDays').html(days);
+                $('#rentPriceNew').val(roomTypePrice*days);
+            });
+            _this.__OutTimeNewRDatepicker(checkInDate,checkInTime,checkOutDate,checkOutTime,function(InDate,InTime,OutDate,OutTime){
+                checkInDate = InDate;
+                checkInTime = InTime;
+                checkOutDate = OutDate;
+                checkOutTime = OutTime;
+                var days = countDays(checkInDate,checkInTime,checkOutDate,checkOutTime);
+                $('#orderDetailDays').html(days);
+                $('#rentPriceNew').val(roomTypePrice*days);
+
+            });
+        }
+
+        // 绑定时间控件
+        $('#dateInputTimeEdit').rTimer({
+            callback : function(hour) {
+                //表示已经操作离店时间  便于下面校验
+                isUpdateCheckOut = true;
+                var _newCheckOutDate = $("#checkOutTimeNew").val();
+                var _newHour = parseInt(hour);
+                var _newCheckInDate = '';
+                var checkInHour = '';
+                if(fromType == "srm"){
+                    if(statusCode != '03'){
+                        _newCheckInDate = $("#checkInTimeNew").val();
+                        checkInHour = parseInt($('#checkInDataNew').html());
+                    }else if(statusCode == '03'){
+                        _newCheckInDate = $("#checkInTime").html().substring(0,10);
+                        checkInHour = parseInt($("#checkInTime").html().substring(11,16));
+                    }
+                }else{
+                    _newCheckInDate = $("#checkInTime").html().substring(0,10);
+                    checkInHour = parseInt($("#checkInTime").html().substring(11,16));
+                }
+                if (_newCheckOutDate == _newCheckInDate && _newHour < (checkInHour + 1)) {
+                    $('#dateInputTimeEdit').html(qfn.toTwoNumber(checkInHour+1) + ':00');
+                }
+                checkOutTime = $('#dateInputTimeEdit').html();
+                var days = countDays(_newCheckInDate,checkInHour,_newCheckOutDate,parseInt(checkOutTime));
+                $('#orderDetailDays').html(days);
+                $('#rentPriceNew').val(roomTypePrice*days);
+
+            }
+        });
+
+        $('#checkInDataNew').rTimer({
+            callback : function(hour) {
+                //表示已经操作入店时间  便于下面校验
+                isUpdateCheckIn = true;
+                var _newCheckOutDate = $("#checkOutTimeNew").val();
+                var _newCheckInDate = $("#checkInTimeNew").val();
+               
+                var _newHour = parseInt(hour);
+                var checkOutHour = parseInt($('#dateInputTimeEdit').html());
+                if (_newCheckOutDate == _newCheckInDate && _newHour > (checkOutHour - 1)) {
+                    $('#checkInDataNew').html(qfn.toTwoNumber(checkOutHour-1) + ':00');
+                }
+                checkInTime = $('#checkInDataNew').html();
+
+                var days = countDays(_newCheckInDate,parseInt(checkInTime),_newCheckOutDate,parseInt($('#dateInputTimeEdit').html()));
+                $('#orderDetailDays').html(days);
+                $('#rentPriceNew').val(roomTypePrice*days);
+            }
+        });
+
+        // 毛招，日历控件和时间控件点击相互隐藏
+        $('#checkOutTimeNew').on('click', function() {
+            $('.rTimerList').hide();
+        });
+        $('#dateInputTimeEdit').on('click', function() {
+            $('.rDatepicker').parent().hide();
+        });
+        $('#checkInTimeNew').on('click', function() {
+            $('.rTimerList').hide();
+        });
+        $('#checkInDataNew').on('click', function() {
+            $('.rDatepicker').parent().hide();
+        });
+        
+        // 保存
+        $('#btnSaveOrder').on('click', function() {
+            
+            var priceVal = '';
+            var checkOutDateTime = $('#checkOutTimeNew').val() + ' ' + $('#dateInputTimeEdit').text();
+            var roomCharge = '';
+            var deposit = '';
+            var orderType = $('#orderTypeNew').val(); /*|| $('#orderTypeText').parent().data('ordertype')*/
+            var orderTypeName = $('#orderTypeNew').find('option:selected').text();// || $('#orderTypeText').text();
+            var roomChargeType = $('#roomChangeTypeNew').val();// || $('#roomChargePayTypeText').parent().data('roomcharge');
+            var roomChargeTypeName = $('#roomChangeTypeNew').find('option:selected').text();// || $('#roomChargePayTypeText').parent().data('roomchargepaywayname');
+            var depositPayType = $('#depositPayTypeNew').val();
+            var depositPayTypeName = $('#depositPayTypeNew').find('option:selected').text();
+           
+            if (fromType == 'srm') {
+                if (statusCode != '03') {
+                    var checkNameFlag = checkName('#customerNameNew');
+                    if (!checkNameFlag) {
+                        return;
+                    }
+                    
+                    var checkTelFlag = checkTel('#customerTelnoNew');
+                    if (!checkTelFlag) {
+                        return;
+                    }
+
+                    var checkInDateTime = $('#checkInTimeNew').val() + ' ' + $('#checkInDataNew').text();
+                    // 验证房费
+                    roomCharge = $.trim($('#roomChangeNew').val());
+                    if (!(roomCharge == "" || roomCharge == 0) && !checkPrice(roomCharge,"已付房费")) {
+                        return;
+                    };
+
+                    // 验证押金
+                    deposit = $.trim($('#depositNew').val());
+                    if (!(deposit == "" || deposit == 0) && !checkPrice(deposit,"已付押金")) {
+                        return;
+                    };
+                   
+                }else{
+                    var checkInDateTime = $('#checkInTime').html();
+                }
+                // 验证价格
+                priceVal = $('#rentPriceNew').val();
+                var checkPriceFlag = checkPrice(priceVal,"订单金额");
+                if (!checkPriceFlag) {
+                    return;
+                }
+            }else if (fromType != "srm") {
+                if (statusCode != "03") {
+                    if (orderType === "DB" || orderType === "XF") {
+                        // 验证房费
+                        roomCharge = $.trim($('#roomChangeNew').val());
+                        if (!(roomCharge == "" || roomCharge == 0) && !checkPrice(roomCharge,"已付房费")) {
+                            return;
+                        }
+                    }
+
+                    // 验证押金
+                    deposit = $.trim($('#depositNew').val());
+                    if (!(deposit == "" || deposit == 0) && !checkPrice(deposit,"已付押金")) {
+                        return;
+                    }
+                }
+                var checkInDateTime = $('#checkInTime').html();
+            }
+
+            var checkDesFlag = checkDes('#desNew');
+            if (!checkDesFlag) {
+                return;
+            }
+
+            var checkInDateTime = checkInDate +' '+checkInTime;
+            var checkOutDateTime = $('#checkOutTimeNew').val() + ' ' + $('#dateInputTimeEdit').text();
+            
+            var coTime = parseInt($('#dateInputTimeEdit').text().split(':')[0]);
+            var ciTime = parseInt(checkInTime.split(':')[0]);
+            
+            // 判断是否执行保存修改操作
+            if ( coTime > 12 && coTime <= 18 && isUpdateCheckOut) {
+                var content = '您选择的离店时间晚于12:00，将会占用当天房态，减少可售房量。请您确认是否继续操作。';
+                dialog({
+                    title : '提示',
+                    content : '<p>'+content+'</p>',
+                    cancel : true,
+                    width : 300,
+                    okValue : '提交订单',
+                    onshow : function() {
+                        // 记录日志
+                        roomstatus.__saveLog(checkInDateTime,checkOutDateTime);
+                    },
+                    ok : function () {
+                        _this.__saveUpdateOrder(fromType,statusCode,priceVal,orderLockId,checkOutDateTime,checkInDateTime,isQuhuhuOrder,orderType,orderTypeName,roomCharge,roomChargeTypeName,deposit,depositPayTypeName,roomChargeType,depositPayType);
+                    },
+                    fixed : true
+                }).showModal();
+            } else if ( ciTime >= 6 && ciTime < 12 && isUpdateCheckIn) {
+                    var content = '您选择的入住时间早于12:00，将会占用前一天房态，减少可售房量。请您确认是否继续操作。';
+                    dialog({
+                        title : '提示',
+                        content : '<p>'+content+'</p>',
+                        cancel : true,
+                        width : 300,
+                        okValue : '提交订单',
+                        onshow : function() {
+                            // 记录日志
+                            roomstatus.__saveLog(checkInDateTime,checkOutDateTime);
+                        },
+                        ok : function () {
+                            _this.__saveUpdateOrder(fromType,statusCode,priceVal,orderLockId,checkOutDateTime,checkInDateTime,isQuhuhuOrder,orderType,orderTypeName,roomCharge,roomChargeTypeName,deposit,depositPayTypeName,roomChargeType,depositPayType);
+                        },
+                        fixed : true
+                    }).showModal();
+            }else {
+                 _this.__saveUpdateOrder(fromType,statusCode,priceVal,orderLockId,checkOutDateTime,checkInDateTime,isQuhuhuOrder,orderType,orderTypeName,roomCharge,roomChargeTypeName,deposit,depositPayTypeName,roomChargeType,depositPayType);
+            } 
+        });
+
+    },
+    // 提交修改保存的订单信息
+    __saveUpdateOrder : function(fromType,statusCode,priceVal,orderLockId,checkOutDateTime,checkInDateTime,isQuhuhuOrder,orderType,orderTypeName,roomCharge,roomChargeTypeName,deposit,depositPayTypeName,roomChargeType,depositPayType){
+
+        var _this = this;
+        var roomChargeT = roomCharge ? roomCharge : "0";
+        var depositT = deposit ? deposit : "0";
+        //orderTypeName = orderTypeName != "请选择订单类型" ? orderTypeName : "";
+        var html = '<div style="margin-left:32px"><div>是否将订单信息变更为</div>';
+            
+        if (fromType == 'srm') {
+            if (statusCode != '03') {
+                html +=  '<div class="mt10"><label style="float:left">姓名：</label><span class="f-blue" style="word-break: break-all;display:inline-block;width:106px;">'+ $('#customerNameNew').val() +'</span></div>' + 
+                    '<div class="mt10">电话：<span class="f-blue">'+ $('#customerTelnoNew').val() +'</span></div>'+
+                    '<div class="mt10">价格：<span class="f-blue" style="font-family: \'Microsoft YaHei\';">￥'+ priceVal +'</span></div>'+
+                    '<div class="mt10">入住：<span class="f-blue">'+ checkInDateTime +'</span></div>';
+                if (orderTypeName != "请选择订单类型" && orderTypeName != "") {
+                    html +=  '<div class="mt10">类型：<span class="f-blue">'+ orderTypeName +'</span></div>';
+                }
+                html +=  '<div class="mt10">房费：<span class="f-blue">'+ roomChargeT+ '(' + roomChargeTypeName +')</span></div>'+
+                    '<div class="mt10">押金：<span class="f-blue">'+ depositT+ '(' + depositPayTypeName +')</span></div>';
+
+            } else if (statusCode == '03'){
+                html += '<div class="mt10">价格：<span class="f-blue" style="font-family: \'Microsoft YaHei\';">￥'+ priceVal +'</span></div>';
+            }
+        } else if (fromType != 'srm') {
+            if (statusCode != "03") {
+                if (orderType === "DB" || orderType === "XF") {      
+                    html += '<div class="mt10">房费：<span class="f-blue">'+ roomChargeT+ '(' + roomChargeTypeName +')</span></div>';
+                }
+                html += '<div class="mt10">押金：<span class="f-blue">'+ depositT+ '(' + depositPayTypeName +')</span></div>';
+            }   
+        }
+
+        html += '<div class="mt10">离店：<span class="f-blue">'+ checkOutDateTime +'</span></div>';
+            
+        dialog({
+            //title : '是否将订单信息变更为',
+            content : html,
+            width : 200,
+            fixed : true,
+            ok : function() {
+                
+                var data = {}
+                var roomNo = $('#btnRoomChange').data('roomno');
+                var customerName = '';
+                var customerTelNo = '';
+                var rentMoney = '';
+
+                if (fromType == 'srm') {
+                    if (statusCode != '03') {
+                        customerName = $('#customerNameNew').val();
+                        customerTelNo = $('#customerTelnoNew').val();
+                        rentMoney = $('#rentPriceNew').val();
+                    } else if (statusCode=='03'){
+                        rentMoney = $('#rentPriceNew').val();
+                    }
+                }
+
+                data['orderNo'] = $('#btnStatusChange').data('orderno');
+                data['comment'] = $('#desNew').val();
+                data['status'] = 0;
+
+                data.roomInfos = JSON.stringify([{
+                    roomNo : roomNo,
+                    realCHKOutTime : checkOutDateTime,
+                    customerName : customerName,
+                    customerTelno : customerTelNo,
+                    roomPrice : rentMoney,
+                    orderLockId : orderLockId
+                }]);
+
+                data['roomNo'] = roomNo;
+
+                // 以下字段调整为roomList集合
+                // 为了兼容后台接口还需要传递这些参数
+                data.customerName = customerName;
+                data.customerTelno = customerTelNo;
+                data.realCheckOutTime = checkOutDateTime;
+                data.checkInTime = checkInDateTime;
+                data.rentMoney = rentMoney;
+                data.orderLockId = orderLockId;
+                data.isCreateOrder = false;
+                if(isCreateOrder) {
+                    data.isCreateOrder = true;
+                }
+                // 押金房费
+                data.orderType = orderType;
+                data.roomCharge = roomCharge;
+                data.roomChargePayWay = roomChargeType;
+                data.deposit = deposit;
+                data.depositPayWay = depositPayType;
+
+                var room_orderZoom = $("#room_orderZoom");
+                var position = room_orderZoom.scrollTop();
+                // 查订单
+                _this.__updateOrderSubmit(data);
+                if(_this.orderDetailDialog){
+                    _this.orderDetailDialog.close().remove();
+                }
+                if(position != 0) {
+                    room_orderZoom.scrollTop(position);
+                }
+            },
+            cancel : function() {}
+        }).showModal();
+    },
+
+    // 修改入住日期
+    __InTimeNewRDatepicker : function(checkInDate,checkInTime,checkOutDate,checkOutTime,callbackFn){ 
+        var _this = this;
+        var minCheckInDate = qfn.getPostponeDate(checkOutDate,-365);
+
+        if(minCheckInDate.getTime() < defaultMinDate.getTime()){
+            minCheckInDate = defaultMinDate;
+        }
+
+        $("#checkInTimeNew").off().rDatepicker({
+            defaultDate: qfn.newDate(checkInDate),
+            maxDate: qfn.newDate(checkOutDate),
+            minDate : minCheckInDate,
+            hour: checkInTime,
+            hourId: '#checkInDataNew',
+            callback: function(date) {
+                if(date == checkOutDate){
+                   checkInTime = parseInt(checkOutTime)>12 ?  (parseInt(checkOutTime) - 3) > 12 ? qfn.toTwoNumber(parseInt(checkOutTime) - 3) + ':00' : "12:00" : (parseInt(checkOutTime) - 3) > 0 ? qfn.toTwoNumber(parseInt(checkOutTime) - 3) + ':00' : "00:00" ;
+                   $("#checkInDataNew").html(checkInTime);
+                }else{
+                   checkInTime = "14:00";
+                   $("#checkInDataNew").html(checkInTime);
+                }
+                checkInDate = $('#checkInTimeNew').val();
+                checkOutTime = $("#dateInputTimeEdit").html();
+                callbackFn(checkInDate,checkInTime,checkOutDate,checkOutTime);
+                _this.__OutTimeNewRDatepicker(checkInDate,checkInTime,checkOutDate,checkOutTime,callbackFn);
+            }
+        });
+    },
+
+    // 修改离店日期
+    __OutTimeNewRDatepicker : function(checkInDate,checkInTime,checkOutDate,checkOutTime,callbackFn){
+        var _this = this;
+        var maxCheckInDate = qfn.getPostponeDate(checkInDate,100);
+        var statusCode = $('#btnEditOrder').data("statuscode");
+        var fromType = $('#btnEditOrder').data('fromtype');
+        var maxCheckInDate = qfn.getPostponeDate(checkInDate,365);
+
+
+        if(maxCheckInDate.getTime() > defaultMaxDate.getTime()){
+            maxCheckInDate = defaultMaxDate;
+        }
+
+        if(checkInTime == "23:00") {
+            $('#checkOutTimeNew').off().rDatepicker({
+                defaultDate : qfn.newDate(checkOutDate),
+                minDate : qfn.getPostponeDate(checkInDate,1),
+                maxDate : maxCheckInDate,
+                hour : checkOutTime,
+                hourId : '#dateInputTimeEdit',
+                callback : function(){
+                    checkOutDate = $('#checkOutTimeNew').val();
+                    if (statusCode != '03' && fromType == "srm") {
+                        checkInTime = $("#checkInDataNew").html();
+                    }
+                    callbackFn(checkInDate,checkInTime,checkOutDate,checkOutTime);              
+                    _this.__InTimeNewRDatepicker(checkInDate,checkInTime,checkOutDate,checkOutTime,callbackFn);
+                }
+            });
+        } else {
+            $('#checkOutTimeNew').off().rDatepicker({
+                defaultDate : qfn.newDate(checkOutDate),
+                minDate : qfn.newDate(checkInDate),
+                maxDate : maxCheckInDate,
+                hour : checkOutTime,
+                hourId : '#dateInputTimeEdit',
+                callback : function(date) {
+                    if(date == checkInDate) {
+                        checkOutTime = parseInt(checkInTime) < 21 ? qfn.toTwoNumber(parseInt(checkInTime) + 3) + ':00' : qfn.toTwoNumber('23:00');
+                        $('#dateInputTimeEdit').html(checkOutTime);
+                    }else {
+                        checkOutTime = "12:00";
+                        $('#dateInputTimeEdit').html(checkOutTime);
+                    }
+                    checkOutDate = $('#checkOutTimeNew').val();
+                    if (statusCode != '03' && fromType == "srm") {
+                        checkInTime = $("#checkInDataNew").html();
+                    }
+                    callbackFn(checkInDate,checkInTime,checkOutDate,checkOutTime);
+                    _this.__InTimeNewRDatepicker(checkInDate,checkInTime,checkOutDate,checkOutTime,callbackFn);
+                }
+            });
+        }
+    },
+
+    //房态被占提示
+    __Occupiedroom : function(data,biztype) {
+        // if (biztype == 'hours') {
+        //     var checkInTime = $('#newOrderHoursCheckInDate').val() + ' ' + $('#newOrderHoursCheckInTime').html();
+        //     var checkOutTime = $('#newOrderHoursCheckInDate').val() + ' ' + $('#newOrderHoursCheckOutTime').val();
+        // }
+        var fromType = $('#btnEditOrder').data('fromtype');
+        var statusCode = $('#btnEditOrder').data("statuscode");
+        if (biztype == 'night') {
+            var checkInTime = $('#newOrderCheckInDate').val() + ' ' + $('#newOrderCheckInTime').html();
+            var checkOutTime = $('#newOrderCheckOutDate').val() + ' ' + $('#newOrderCheckOutTime').html();
+        }
+
+
+        if(data == 2) {
+            if(fromType == "srm"){
+                if(statusCode != '03'){
+                    var checkInTime = $('#checkInTimeNew').val() + ' ' + $('#checkInDataNew').html();
+                }else{
+                    var checkInTime = $('#checkInTime').html();
+                }  
+            }else{
+               var checkInTime = $('#checkInTime').html();
+            }
+            var checkOutTime = $('#checkOutTimeNew').val() + ' ' + $('#dateInputTimeEdit').html();
+        }
+
+        var html  = '<div id="occupiedroom" class="occupiedroom">'
+                  +    '<p>当前房间'+checkInTime+'至'+checkOutTime+'已存在预定订单，请核实以下订单信息或调整新订单的入住/离店时间。</p>'
+                  +    '<ul id="occupiedroomwrapper"></ul>'
+                  +'</div>'
+
+        var btnRoomChange = $('#btnRoomChange').length ? $('#btnRoomChange') : $("#newOrderSubmit");
+
+        var rdata = {
+            roomNo: btnRoomChange.data('roomno'),
+            checkInTime: checkInTime,
+            checkOutTime: checkOutTime,
+            orderOperType: data, 
+            orderNo: $('#btnRoomChange').data('orderno')
+        };
+
+        var dialogroom = null;
+
+         $.ajax({
+            url : CONFIG.ROOT + '/order/j/occupiedList',
+            data : rdata,
+            type : 'get',
+            async : false,
+            dataType : 'json',
+            beforeSend : function() {
+               dialogroom =  dialog({
+                    //title : '提示',
+                    content : html,
+                    //width : 208,
+                    padding : "30px 20px",
+                    cancelValue : "知道了",
+                    fixed : true,
+                    cancel : function() {}
+                }).showModal();
+            },
+            success : function(msg) {
+
+                var roomChangeRender = template.compile(roomtpl.occupiedroom);
+                var occupiedroom = roomChangeRender(msg);
+
+                $('#occupiedroomwrapper').html(occupiedroom);
+                $('#roomStatusLoading').hide();
+            }
+        });
+    },
+    
+    // 更新订单提交
+    __updateOrderSubmit : function(data) {
+       
+        var _this = this;
+        
+        var dialogLoading = null;
+
+        $.ajax({
+            url : CONFIG.ROOT + '/order/j/update',
+            data : data,  
+            type : 'POST',
+            dataType : 'json',
+            async : false,
+            beforeSend : function() {
+                // dialogLoading = dialog({
+                //     content : '<div class="loadingImg"></div><div class="fn-tac">正在操作，请稍后...</div>'
+                // }).showModal();
+                $("#loading_txt").html("正在操作，请稍后...");
+                $("#roomStatusLoading").addClass('order-get-data-loading').show();
+            },
+            success : function(msg) {
+                room_orderZoom_position = $("#room_orderZoom").scrollTop();
+                // dialogLoading.close().remove();
+
+                // 恢复加载文案
+                $("#loading_txt").html("加载中，请耐心等待...");
+                
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+
+                if(msg.code == "3001"){
+                    _this.__Occupiedroom(msg.data.orderOperType, $('#btnRoomChange').data('biztype'));
+                    return
+                }
+                if (!checkCodeFlag) {
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+                
+                // 重新请求房态
+                roomstatus.__roomStatusQuery(roomTypeValLog,'1');
+
+
+                if(data.isCreateOrder) {
+                    orderdetail.__getOrderDetail(createOrderSuccess.orderNo, createOrderSuccess.roomNo, data.orderLockId);
+                    $('#roomStatusName').html(createOrderSuccess.roomName).show();
+                    $('#roomStatusNoOrder').hide();
+                    
+                    // 强制将右边框关闭再展开
+                    // var isOpen = $("#order_toggle").data().isopen;
+                    //$("#order_toggle").attr('data-isopen','0');
+                    // if(isOpen == 0) {
+                        //$('#order_toggle').click();
+                    // }
+                } else {
+                    // 重新请求订单详情
+                    orderdetail.__setorder();
+                }  
+
+            }
+        });
+    },
+    //部分预付 去呼呼订单取消
+    __partQuhuhuOrderCancel : function (orderNo,orderLockId,statuscode) {
+        var _this = this;
+        if (statuscode && statuscode != "03") {
+            var renderHtml = template.compile(cancelOrderTpl);
+            var html = renderHtml();
+            var data = {
+                    orderNo : orderNo,
+                    status : 1,
+                    orderLockId : orderLockId
+                };
+            _this.__cancleOrderDialog(html,data,'取消订单','关闭',380,true);
+       }
+    },
+    // 20150319增加判断取消订单是否为直连订单
+    // 取消订单
+    __cancleOrderTips : function (orderNo,orderLockId){
+        var _this = this;
+        var channelCode = $('#channelId').val();
+        var content = '';
+        // var okValue = '确定';
+        var data = {
+                    orderNo : orderNo,
+                    status : 1,
+                    orderLockId : orderLockId
+                };
+        
+        // 如果为直连订单，再去判断是否开启入离审核
+        if (channelCode.indexOf('_EB') != -1) {
+            // okValue = '取消订单';
+            content = '<div class="mb20">该订单为直连订单，取消订单将会扣减因分房奖励的金币。</div><div>确认取消该订单？</div>';
+        } else {
+            content = '<div class="mb20 fn-tac">订单取消后不能恢复</div><div class="fn-tac">确定要取消此订单吗？</div>'
+        }
+        _this.__cancleOrderDialog(content,data);
+
+    },
+    // 取消订单弹框
+    __cancleOrderDialog : function(content,data,okValue,cancelValue,width,isQuhuhuOrder) {
+        okValue = okValue ? okValue : "确认取消";
+        cancelValue = cancelValue ? cancelValue : "放弃";
+        width = width ? width : 208; 
+        var _this =  this;
+         dialog({
+            width : width,
+            okValue : okValue,
+            cancelValue : cancelValue,
+            padding : "30px 20px",
+            cancel : true,
+            content : content,
+            onshow : function () {
+                var others = $('input[name="cancelReason"]');
+                others.click(function(event) {
+                    var $this = $(this);
+                    var $errorTar = $('.other-reason-error');
+                    $errorTar.eq(1).hide();
+                    if ($this.val() == "9") {
+                        $('#othersReason').removeAttr('disabled');
+                    } else {
+                        $('#othersReason').attr('disabled','true');
+                        $errorTar.eq(0).hide();
+                    }
+                });
+                $('#othersReason').keyup(function(event) {
+                    var $this = $(this);
+                    var value = $.trim($this.val());
+                    if (value.length >= 200) {
+                        var temp = value.substring(0,200);
+                        $this.val(temp);
+                        $this.text(temp);
+                    }
+                    $('.other-reason-error').eq(0).hide();
+                }).placeholder();
+                //统计字数
+                $('#othersReason').focus(function(){
+                    var editorVal, _self = this;
+                    _this.timerHolder = setInterval(function(){
+                        editorVal = $(_self).val();
+                        var len = $.trim(editorVal).length;
+                        $('.count-num').html(len);
+                    },300);
+                });
+
+                $('#othersReason').blur(function(){
+                    clearInterval(_this.timerHolder);
+                });
+            },
+            ok : function() {
+                //增加去呼呼部分预付订单处理
+                if(isQuhuhuOrder) {
+                    var checkTarget = $('input[name="cancelReason"]:checked');
+                    if (checkTarget.length < 1 || checkTarget == null) {
+                        $('.other-reason-error').eq(1).show();
+                        return false;
+                    } else {
+                        $('.other-reason-error').eq(1).hide();
+                    }
+                    data.cancelReasonCode = checkTarget.val();
+                    data.cancelReasonName = checkTarget.siblings('label').text();
+                    if (data.cancelReasonCode == "9") {      
+                        data.des = $.trim($('#othersReason').val());
+                        if (data.des === "" || data.des.length > 200) {
+                            $('.other-reason-error').eq(0).show();
+                            return false;
+                        } else {
+                            $('.other-reason-error').eq(0).hide();
+                        }
+                    }
+                }
+
+               _this.__cancelOrder(data);    
+            }
+        }).showModal();
+    },
+    
+    // 获取取消订单
+    __cancelOrder : function(data) {
+
+        var _this = this;
+        $.ajax({
+            url : CONFIG.ROOT + '/order/j/update',
+            data : data,
+            type : 'GET',
+            dataType : 'json',
+            beforeSend : function() {
+                $("#loading_txt").html("正在操作，请稍后...");
+                $("#roomStatusLoading").addClass('order-get-data-loading').show();
+            },
+            success : function(msg) {
+                
+                // 恢复加载文案
+                $("#loading_txt").html("加载中，请耐心等待...");
+                
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+                $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                // 更新金币
+                updateCoinsCount();
+
+                // 删除订单详情
+                $('#roomStatusName').hide().empty();
+                $('#roomStatusOrderDetail').empty();
+                $('#roomStatusOrderTab').hide();
+                $('#roomStatusNoOrder').show();
+                $('#roomStatusNewOrder').hide().empty();
+                
+                dialog({
+                    //title : '订单已取消',
+                    content : '<div class="mb20 fn-tac">订单已取消，您可以到订单</div><div class="fn-tac">列表中查看已取消的订单</div>',
+                    width : 208,
+                    padding : "30px 20px",
+                    cancelValue : "知道了",
+                    cancel: function () {
+                        // 重新请求房态
+                        roomstatus.__roomStatusQuery(roomTypeValLog);
+                        if(orderdetail.orderDetailDialog){
+                            orderdetail.orderDetailDialog.close().remove();
+                        }
+                    }
+                }).showModal();
+            }
+        });
+    },
+    // 获取当前server时间
+    __getCurrentHour : function() {
+
+        var _this = this,
+            currentHour = '';
+
+        $.ajax({
+            url: CONFIG.ROOT+'/setting/j/curDate',
+            type: 'GET',
+            async : false
+        }).done(function(res) {
+            var currentTime = res.split(' ')[1];
+            currentHour = parseInt(currentTime.split(':')[0]);
+        });
+        return currentHour;
+       
+    },
+
+    // 20150319办理入住添加判断是否为qunar担保订单
+    __checkGuaranteeType : function(data) {
+
+        var _this = this,
+            guaranteeType = $('#guaranteeType').val(),
+            channelCode = $('#channelId').val().toLowerCase(),
+            title = '',
+            content = '',
+            okValue = '确定',
+            width = 150,
+            isDirtyRoom = roomstatus.Data.roomcleanstatus;
+
+        var hotelLockPwdMsgSW = $('#hotelLockPwdMsgSW').val();
+
+        // 详情页guaranteeType: 2代表担保订单 1代表非担保订单
+        if (data.keyType == 'customer') {
+            title = '办理入住';
+            var currentHour = _this.__getCurrentHour();
+
+            if ( currentHour >= 6 && currentHour < 12) {
+                width = 260;
+                var content = '办理入住时间早于12:00，将会占用前一天房态，减少可售房量。请您确定是否继续操作。';
+            } else if (guaranteeType == '2' && channelCode == 'qunar_eb') {
+                width = 320;
+                okValue = '办理入住';
+                content = '<div>该订单为去哪儿网直连订单，操作办理入住可能会审核去哪儿网对应订单。审核担保订单可能会解冻客人的担保资金，如果由此产生问题，将按照<a href="javascript:;" style="color:blue;" class="qunarRule">《直连去哪儿网规则》</a>处理。</div>';
+            } else {
+                if (isDirtyRoom == 1) {
+                    width = 220;
+                    content = '<p class="dirty-room-txt">当前房间为<span class="dirty-text">脏房</span>，确定要办理入住吗？</p><p class="dirty-room-txt">入住后，房间状态将自动更改为<span class="clean-text">净房</span></p>';
+                    okValue = "办理入住";
+                } else {
+                    width = 150;
+                    content = '确定要为客人办理入住吗？';
+                }
+            }
+             // 如果为有锁房间添加是否发送密码短信
+            if (data.hasLock == '1') {
+                if (hotelLockPwdMsgSW == '1') {
+                     content += '<div style="margin-top:15px;"><label><input id="hotelSwitch" type="checkbox"  checked="checked" class="checkbox mr5" />给客人发送开门密码短信</label></div>';
+                } else {
+                     content += '<div style="margin-top:15px;"><label><input id="hotelSwitch" type="checkbox" class="checkbox mr5" />给客人发送开门密码短信</label></div>';
+                }
+            }
+            _this.__statusChangeDialog(data,title,okValue,content,width);
+
+        } else if (data.keyType == 'hzkeeper') {
+            title = '办理退房';
+            if (guaranteeType == '2' && channelCode == 'qunar_eb') {
+                width = 320;
+                okValue = '办理退房';
+                content = '<div>该订单为去哪儿网直连订单，操作办理退房可能会审核去哪儿网对应订单。审核担保订单可能会解冻客人的担保资金，如果由此产生问题，将按照<a href="javascript:;" style="color:blue;" class="qunarRule">《直连去哪儿网规则》</a>处理。</div>';
+            } else {
+                width = 150;
+                content = '确定要为客人办理退房吗？';
+            }
+            _this.__statusChangeDialog(data,title,okValue,content,width);
+
+        } else if (data.keyType == 'manager') {
+            width = 150;
+            // 打扫完毕
+            title = '打扫完毕';
+            content = '确认房间已打扫完毕吗？';
+            _this.__statusChangeDialog(data,title,okValue,content,width);
+        }
+    },
+
+    // 直连去哪儿网规则
+    __dialogProtocolQunar : function() {
+
+        dialog({
+            title : '直连去哪儿网规则',
+            content : protocolQunar,
+            width : 570,
+            height : 300,
+            fixed : true,
+            cancel: true,
+            cancelValue : '关闭',
+            onshow : function() {
+                $('#rule-close').remove();
+            }
+        }).showModal();
+
+    },
+
+    // 办理入住或者退房弹出框
+    __statusChangeDialog : function(data,title,okValue,content,width) {
+
+        var _this = this;
+        var paddingV = qfn.dialogPaddingByWidth(width);
+
+        dialog({
+            //title : title,
+            content : content,
+            width : width,
+            padding : "40px " + paddingV + 'px',
+            okValue : okValue,
+            onshow : function(){
+                if ($('.qunarRule')) {
+                    $('.qunarRule').on('click', function() {
+                        _this.__dialogProtocolQunar();
+                    }); 
+                }
+            },
+            ok : function() {
+                if (data.hasLock == '1') {
+                    var roomLockPwdMsgSW = $('#hotelSwitch').prop('checked');
+                    data.roomLockPwdMsgSW = roomLockPwdMsgSW ? 1 :0;
+                }
+                _this.__statusChange(data);
+
+            },
+            cancel : function() {}
+        }).showModal();
+
+    },
+
+    // 改变房态 
+    __statusChange : function(data){
+
+        var _this = this;
+
+        if (statusChangeAjax) {
+            statusChangeAjax.abort();
+        }
+        statusChangeAjax = $.ajax({
+            url : CONFIG.ROOT + '/lock/j/startPwd',
+            data : data,
+            type : 'GET',
+            dataType : 'json',
+            beforeSend : function() {
+                $("#loading_txt").html("正在操作，请稍后...");
+                $("#roomStatusLoading").addClass('order-get-data-loading').show();
+            },
+            success : function(msg) {
+                
+                // 恢复加载文案
+                $("#loading_txt").html("加载中，请耐心等待...");
+                
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+
+                // 重新请求房态
+                roomstatus.__roomStatusQuery(roomTypeValLog,'1');
+                // 重新请求订单详情
+                orderdetail.__getOrderList(roomstatus.Data);
+                // 重新剩余时间
+                _this.__checkTime();
+                //关闭浮层
+                if(_this.orderDetailDialog){
+                    _this.orderDetailDialog.close().remove();
+                }
+                //重新绑定事件
+                orderdetail.__detailBind();
+
+                if(msg.data.pwd.hasChanged == "1" && type == 'customer'){
+                     dialog({
+                        //title : '注意!',
+                        width : 208,
+                        padding : "30px 20px",
+                        content : "<div class=\"passwordchange\">该房间门锁通讯异常，您的管家密码暂时不能使用，请使用临时密码<br><span>"+msg.data.pwd.hzkeeperPwd+"</span>开门。请您检查门锁的连接状况，当门锁通讯恢复正常后，<br>您之前的管家密码在下次启用密码时即可恢复。</div>",
+                        cancelValue: "知道了",
+                        cancel : function() {}
+                    }).showModal();
+                }
+                
+            }
+        });
+    },
+    
+    // 换房
+    __roomChange : function(data) {
+        
+        var _this = this;
+        
+        // this.dialogRoomChangeLoading = dialog({
+        //     content : '<div class="loadingImg"></div><div class="fn-tac">加载中，请稍后...</div>'
+        // }).showModal();
+        $("#loading_txt").html("加载中，请稍后...");
+        $("#roomStatusLoading").addClass('order-get-data-loading').show();
+        
+        $.ajax({
+            url : CONFIG.ROOT + '/roomType/j/listValid',
+            data : {
+                hotelNo : window.GLOBAL.hotelNo,
+                status : 0,
+                checkInTime : data.checkintime,
+                checkOutTime : data.checkouttime,
+                bizType : data.biztype,
+                stayStatus : data.staystatus
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : function(msg) {
+
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    $("#loading_txt").html("加载中，请耐心等待...");
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+                
+                var roomTypeList = msg.data.roomTypeList;
+                _this.__getRoom(data, roomTypeList);
+                
+            }
+        });
+        
+    },
+    
+    // 获取可订房间列表
+    __getRoom : function(data, roomTypeList) {
+        var _this = this;
+        var isValidCardRoom = false;
+        var isDirtyRoom = false;
+
+        var hasRoomType = _.find(roomTypeList, function(item) {
+            return item.roomTypeNo == data.roomtypeno;
+        });
+        var roomTypeNo = hasRoomType ? data.roomtypeno : roomTypeList[0]['roomTypeNo'];
+        
+        $.ajax({
+            url : CONFIG.ROOT + '/room/j/valid',
+            data : {
+                checkInTime : data.checkintime,
+                checkOutTime : data.checkouttime,
+                bizType : data.biztype,
+                roomTypeNo : roomTypeNo,
+                stayStatus : data.staystatus,
+                flag : 'changeRoom'
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : function(msg) {
+
+                $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                // 恢复加载文案
+                $("#loading_txt").html("加载中，请耐心等待...");
+                // _this.dialogRoomChangeLoading.close().remove();
+                
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+                
+                var roomList = msg.data.roomList;
+                
+                var tempData = {
+                    roomTypeList : roomTypeList,
+                    roomList : roomList,
+                    roomTypeNo : data.roomtypeno,
+                    roomNo : data.roomno
+                }
+
+                // 渲染模板
+                var roomChangeRender = template.compile(roomChangeTpl);
+                var roomChangeHtml = roomChangeRender(tempData);
+                
+                var dialogRoomChange = dialog({
+                    title : '换房',
+                    content : roomChangeHtml,
+                    ok : function() {
+                        
+                        if ($('.moniselectc div').length == 0) {
+                            
+                            var tips = dialog({
+                                content : '<div class="errorTips"><span class="iconError"></span>当前没有可换房间</div>'
+                            }).showModal();
+                            
+                            setTimeout(function () {
+                                tips.close().remove();
+                            }, 1000);
+                            
+                            return false;
+                        }
+                        var roomname = $('#roomChangeSelectRoomType option:selected').text();
+
+                        //查询是否为三代锁
+                        $.ajax({
+                            url : CONFIG.ROOT + '/order/j/getChangeRoomTips',
+                            data : {
+                                userId : window.CONFIG.USER_ID,
+                                newRoomNo : $('#roomChangeSelectRoom').val(),
+                                oldRoomNo : data.roomno,
+                                orderNo : data.orderno,
+                                orderLockId : data.orderlockid
+                            },
+                            async : false,
+                            type : 'GET',
+                            dataType : 'json',
+                            success : function(msg) {
+                                if (msg.code === "0000") {
+                                    isValidCardRoom = true;
+                                } else {
+                                    isValidCardRoom = false;
+                                }
+                            }
+                        });
+                        //查询换房后的房间是脏房还是净房
+                        var postData = {
+                            userId : window.CONFIG.USER_ID,
+                            roomNo : $('#roomChangeSelectRoom').val()
+                        };
+                        $.ajax({
+                            url : CONFIG.ROOT + '/lock/j/lockState',
+                            data : postData,
+                            async : false,
+                            type : 'GET',
+                            dataType : 'json',
+                            success : function(msg) {
+                                if (msg.data.roomCleanStatus === "1") {
+                                    isDirtyRoom = true;
+                                } else {
+                                    isDirtyRoom = false;
+                                }
+
+                            }
+                        });
+                        var okvalue = "确定";
+                        var contentStr = '<p class="mt20 mb20 fn-tac">您确定把'+ data.roomname +'房间的订单换到</p><p class="fn-tac">'+roomname+$('#roomChangeSelectRoom').text() +'房间吗？</p>';
+                        
+                        if (isDirtyRoom && (data.statuscodemapper !== "02") && (data.statuscodemapper !== "01") && (data.statuscodemapper !== "08")) {
+                            contentStr = '<p class="mt20 mb20">' + roomname + $('#roomChangeSelectRoom').text() + '为<span class="dirty-text">脏房</span>，确定要换房吗？</p><p class="mt20 mb20">换房后，'+ roomname + $('#roomChangeSelectRoom').text() +'将自动更改为<span class="clean-text">净房</span>。<p>';
+                            okvalue = "确认换房";
+                        }
+                        if (isValidCardRoom) {
+                            contentStr = '<p class="mt20 mb20 fn-tac">' + roomname + $('#roomChangeSelectRoom').text() +'门锁版本低不支持用卡开门</p><p class="fn-tac">换房后只能用密码开门，确定要换房吗？</p>';
+                        }
+                        dialog({
+                            width : 220,
+                            padding : 20,
+                            content : contentStr,
+                            okValue : okvalue,
+                            ok : function() {
+                                _this.__confirmRoomChange({
+                                    oldOrderNo : data.orderno,
+                                    userName : encodeURIComponent($('#userName').text()),
+                                    newRoomNo : $('#roomChangeSelectRoom').val(),
+                                    oldRoomNo : data.roomno,
+                                    hotelNo : window.GLOBAL.hotelNo,
+                                    roomTypeNo : data.roomtypeno,
+                                    cleanStatus : '1',
+                                    orderLockId : data.orderlockid,
+                                    hasLock : $('#roomChangeSelectRoom div:first-child').hasClass("hasLock")?1:0
+                                });
+                                dialogRoomChange.close().remove();
+                                if(_this.orderDetailDialog){
+                                    _this.orderDetailDialog.close().remove();
+                                }
+                            },
+                            cancel : function() {
+                            }
+                        }).showModal();
+                        
+                        return false;
+                        
+                    },
+                    cancel : function() {}
+                }).showModal();
+                
+                // 绑定选择房型事件
+                _this.__selectRoomType(data);
+                //sgy 模拟select框
+                if($(".option").length != 0){
+                    $('.moniselects').text($(".option").eq(0).text()).attr("title",$(".option").eq(0).text());
+                    if($(".option").eq(0).hasClass('hasLock')){
+                        $('.moniselects').removeClass("noLock").addClass('hasLock');
+                    }
+                    
+                    $('#roomChangeSelectRoom').attr("value",$(".option").eq(0).attr("value"));
+                }
+                $('#roomChangeSelectRoom').on('click',function(){
+                    if($('#roomChangeSelectRoom + .moniselectc').hasClass('on')){
+                        $('#roomChangeSelectRoom + .moniselectc').removeClass('on');
+                        return false;
+                    }else{
+                        $('#roomChangeSelectRoom + .moniselectc').addClass('on');
+                        return false;
+                    }
+                });
+                $('.option').live('click',function(){
+                    $('#roomChangeSelectRoom + .moniselectc').addClass('on');
+                    $('#roomChangeSelectRoom').attr("value",$(this).attr("value"));
+                    if($(this).hasClass('hasLock')){
+                        $('.moniselects').removeClass('noLock');
+                        $('.moniselects').addClass('hasLock');
+                        $('.moniselects').text($(this).text()).attr("title",$(this).text());
+                    }else{
+                        $('.moniselects').removeClass('hasLock');
+                        $('.moniselects').addClass('noLock');
+                        $('.moniselects').text($(this).text()).attr("title",$(this).text());
+                    }
+                });
+
+                $(document).on('click', function() {
+                    $('.moniselectc').addClass('on');
+                });
+
+                $('.ui-dialog-grid').not($('#roomChangeSelectRoom')).on('click', function(event) {
+                    $('#roomChangeSelectRoom + .moniselectc').addClass('on');
+                });
+                
+            }
+        });
+        
+    },
+    
+    // 确定换房
+    __confirmRoomChange : function(data) {
+        var _this = this;
+        
+        // var dialogLoading = dialog({
+        //     content : '<div class="loadingImg"></div><div class="fn-tac">正在换房，请稍后...</div>'
+        // }).showModal();
+
+        /*$("#loading_txt").html("正在换房，请稍后...");
+        $("#roomStatusLoading").addClass('order-get-data-loading').show();*/
+        var loading = $.loading({onlyMask : true});
+        $.ajax({
+            url : CONFIG.ROOT + '/order/j/changeRoom',
+            data : data,
+            type : 'POST',
+            dataType : 'json',
+            success : function(msg) {
+                loading.hide();
+                var pos =  $(".roomStatetd");
+                var top = $("#room_orderZoom").scrollTop();
+                for (var i = 0; i < pos.length; i++) {
+                    if($(pos[i]).attr("data-roomno") == data.newRoomNo) {
+                        room_orderZoom_position = pos[i].offsetTop;
+                        break;
+                    }
+                }
+                // 恢复加载文案
+                //$("#loading_txt").html("加载中，请耐心等待...");
+                
+                // 处理返回状态
+                var checkCodeFlag = checkCode(msg);
+                if (!checkCodeFlag) {
+                    $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                    return;
+                }
+                $("#roomStatusLoading").removeClass('order-get-data-loading').hide();
+                
+                // 重新请求房态
+                roomstatus.__roomStatusQuery(roomTypeValLog);
+                
+                // 删除订单详情
+                $('#roomStatusName').hide().empty();
+                $('#roomStatusOrderDetail').empty();
+                $('#roomStatusOrderTab').hide();
+                $('#roomStatusNoOrder').show();
+
+                 if(msg.data.order.hasChanged == "1"){
+                         dialog({
+                            //title : '注意!',
+                            width : 208,
+                            padding : "30px 20px",
+                            content : "<div class=\"passwordchange\">该房间门锁通讯异常，您的管家密码暂时不能使用，请使用临时密码<br><span>"+msg.data.order.hzkPwd+"</span>开门。请您检查门锁的连接状况，当门锁通讯恢复正常后，<br>您之前的管家密码在下次启用密码时即可恢复。</div>",
+                            cancelValue: "知道了",
+                            cancel : function() {}
+                        }).showModal();
+                    }
+            }
+        });
+        
+    },
+    
+    // 选择房型
+    __selectRoomType : function(data) {
+        
+        var _this = this;
+        
+        $('#roomChangeSelectRoomType').on('change', function() {
+            var roomTypeNo = $(this).val();
+            $.ajax({
+                url : CONFIG.ROOT + '/room/j/valid',
+                data : data,
+                type : 'GET',
+                dataType : 'json',
+                data : {
+                    checkInTime : data.checkintime,
+                    checkOutTime : data.checkouttime,
+                    bizType : data.biztype,
+                    roomTypeNo : roomTypeNo,
+                    stayStatus : data.staystatus,
+                    flag : 'changeRoom'
+                },
+                success : function(msg) {
+                    // 处理返回状态
+                    var checkCodeFlag = checkCode(msg);
+                    if (!checkCodeFlag) {
+                        return;
+                    }
+                    var roomStr = '';
+                    
+                    $.each(msg.data.roomList, function(i, n) {
+                        if(msg.data.roomList[i].hasLock == "1"){
+                            roomStr += '<div class="option hasLock" title="'+ n.doorNo +'" value="'+ n.roomNo +'">'+ n.doorNo +'</div>';
+                        }else{
+                            roomStr += '<div class="option" title="'+ n.doorNo +'" value="'+ n.roomNo +'">'+ n.doorNo +'</div>';
+                        }
+                    });
+                    $('.moniselectc').html(roomStr);    
+                    if($('.moniselectc div').eq(0).hasClass('hasLock')){
+                        $('.moniselects').text($('.moniselectc div').eq(0).text()).attr("title",$('.moniselectc div').eq(0).text());
+                        $('.moniselects').removeClass('noLock').addClass('hasLock');
+                    }else{
+                        $('.moniselects').text($('.moniselectc div').eq(0).text()).attr("title",$('.moniselectc div').eq(0).text());
+                        $('.moniselects').removeClass('hasLock');
+                    }
+                    $('#roomChangeSelectRoom').attr("value",$('.moniselectc div').eq(0).attr('value'));
+                }
+            });
+            
+        });
+        
+    },
+    // 获取订单详情
+    __getmoreOrderDetail : function(orderNo, roomNo, orderLockId) {
+        
+        var _this = this;
+        
+        $.ajax({
+            url : CONFIG.ROOT + '/order/t/info',
+            data : {
+                orderNo : orderNo,
+                roomNo : roomNo,
+                orderLockId : orderLockId
+            },
+            type : 'GET',
+            dataType : 'html',
+            async : false,
+            success : function(detailHtml) {
+
+                var html = '<div class="roomStatusOrder" id="roomStatusOrder">'+ detailHtml +'</div>';
+                orderdetail.orderDetailDialog.content(html);
+                _this.__detailBind();
+                orderdetail.__detailBind();
+            }
+        });
+    },
+    
+    // 分页事件
+    __pagingBind : function(length) {
+        
+        var _this = this;
+        var wrapper = $('#roomStatusOrder .moreorder-wrapper');
+        var wrapperH = $('#moreorder-p').height();
+
+        //检测高度
+        if(wrapperH > 242 || wrapper.height() < 240) {
+
+            wrapper.addClass('overheight');
+        }else{
+            wrapper.removeClass('overheight');
+        }
+
+        $('.moreorder-ordercontent').on('click',function(){
+            var orderno = $(this).parents('ul').attr('value');
+            var roomNo = $(this).parents('ul').data('roomno');
+            var orderLockId = $(this).parents('ul').data('orderlockid');
+            var roomStatusName = $('#roomStatusName').html();
+            var title = roomStatusName;
+            if (title.length>15) {
+                title = title.substring(0,15)+'...';
+            };
+           _this.orderDetailDialog = dialog({
+                    skin : 'orderDetailDialog',
+                    title : title,
+                    width : 270,
+                   /* height : 500,
+                    padding : '10px 10px 20px 10px',*/
+                    height : 444,
+                    padding : '0 0 20px 0',
+                    fixed: true,
+                    onshow : function(){
+                        $('.art-ui-dialog-title').attr('title',roomStatusName);
+                    }
+                }).showModal();
+            orderdetail.__getmoreOrderDetail(orderno, roomNo, orderLockId);
+
+            // 重新剩余时间
+            orderdetail.__checkTime();
+        })
+        
+       
+        
+    }
+    
+}
+
+var updateCoinsCount = function() {
+    roomStatusVm.$fire('all!updateCoinsCount');
+}
+
+// 重新请求房态通信接口
+roomStatusVm.$watch('roomStatusRefresh', function() {
+    roomstatus.__roomStatusQuery(roomTypeValLog);
+})
+
+exports.init = roomStatus;

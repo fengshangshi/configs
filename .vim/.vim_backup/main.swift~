@@ -1,0 +1,6 @@
+import Foundation
+
+var p = Person(name: "Kenshin")
+
+print("name=\(p.name)")
+p.showMessage()

@@ -1,0 +1,42 @@
+{
+	"tplData": {
+		"claimInfo": {
+			"amount": 24.00,
+			"claimDate": "",
+			"applyDate": "2015-12-22",
+			"status": 1,
+			"rules": [
+				{
+					"title": "",
+					"time": "2",
+					"timeText": "起飞前2小时之前",
+					"changeFee": "201",
+					"signText": "不可签转"
+				},
+				{
+					"title": "",
+					"time": "2",
+					"timeText": "起飞前2小时之后",
+					"changeFee": "335",
+					"signText": "不可签转"
+				}
+			]
+		},
+
+		"alterTicketInfo": {
+			"eTicketNo": "2342342342243",
+			"alterFlightNo": "2342423",
+			"alterFlightDate": "2014-23-22",
+			"alterReason": "不好太"
+		},
+
+		"beneficiaryInfo": {
+			"name": "冯尚实",
+			"idNum": "22003********2324",
+			"bank": "工商银行",
+			"cardNo": "2023424243242443",
+			"phone": "137734242342",
+			"extraInfo": "快点打钱给我"
+		}
+	}
+}

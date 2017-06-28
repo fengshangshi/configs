@@ -1,0 +1,15 @@
+/**
+ * @file 构建配置文件
+ * @author ss.feng@qunar.com
+ */
+var fs = require('fs');
+
+var configJSON = sugar.dataDir + '/config.json';
+
+exports.build = function(data) {
+	fs.writeFile(configJSON, JSON.stringify(data), function(error) {
+		if (error) {
+			logger.error('Writting config.json error: ' + error);
+		}
+	});
+};

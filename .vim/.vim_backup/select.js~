@@ -1,0 +1,55 @@
+/**
+ * 处理选择框
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+require("jquery/jquery.selector.js");
+var message = require("message/message.js");
+
+message.register("initSelector", function(e) {
+	var args = e.args,
+		selectors = args.selectors || {};
+	
+	for (var i in selectors) {
+		$(i).yselector({
+			onchange: function(data) {
+				if (typeof selectors[i] === "function") {
+					selectors[i].call(null, data);
+				}
+			}
+		});
+	}
+});
+
+/*
+//初始化
+$("#identityType").yselector({
+	onchange: function(obj) {
+				  
+
+	console.log(obj);
+				  return;
+				  var pattern = {
+					  "IDENTITYCARD": "notEmpty & idCard",
+	"PASSPORT": "notEmpty & passport",
+	"OFFICERCERT": "notEmpty"
+				  };
+				  $("#cardNumber").attr({
+					  "data-jvalidator-pattern":
+					  pattern[obj.value]
+				  });
+			  }
+});
+
+$("#validMonth").yselector({
+	onchange: function(obj) {
+		console.log(obj);
+	}
+});
+
+$("#validYear").yselector({
+	onchange: function(obj) {
+		console.log(obj);
+	}
+});
+*/

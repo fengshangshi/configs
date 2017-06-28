@@ -1,0 +1,56 @@
+#parse("widget/_include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/_include/headMeta.vm")
+    <title>BD收益系统</title>
+    <link rel="stylesheet" href="${qzzUrl}/${cssPath}/earnTotal.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    #parse("widget/_include/headScript.vm")
+</head>
+<body>
+#set($data = $tplData.earnData)
+<div class="earn-contanier">
+    <header class="earn-header">
+        <h2 class="title">       
+                <span class="title-txt">我的收益（预期）</span>
+        </h2>
+    </header>
+    <div class="earn-content">
+        <div class="earn-total">
+            <div class="month"><i class="js-jump fa fa-calendar fa-size"></i><span id="js-date"></span>累计收益</div>
+            <div class="number" id="js-total"></div>
+            <div class="tips">注：业务调整，目前收益不准，请7.8号之后查看。</div>
+        </div>
+        <div class="earn-list">
+            <ul>
+                <li>
+                    <a id="js-sroOrderTotal" href="javascript:void(0)"></a>
+                    <div class="earn-des">智能售收益</div>
+                </li>
+                <li>
+                    <a id="js-froOrderTotal" href="javascript:void(0)"></a>
+                    <div class="earn-des">置换房收益</div>
+                </li>
+                <li>
+                    <a id="js-autoOrderTotal" href="javascript:void(0)"></a>
+                    <div class="earn-des">自动确认收益</div>
+                </li>
+                <li>
+                    <a id="js-fxOrderTotal" href="javascript:void(0)"></a>
+                    <div class="earn-des">分销收益</div>
+                </li>
+            </ul>
+        </div>
+        <div class="date-box">
+            <h2>请选择时间<span id="slideBtn">收起</span></h2>
+            <ul id="js-monthlist"></ul>
+        </div>
+    </div>
+    <input type="hidden" id="js-year">
+    <input type="hidden" id="js-month">
+</div>
+<script src="${qzzUrl}/${jsPath}/earnTotal/entry.js"></script>
+#parse("widget/_include/footScript.vm")
+</body>
+</html>

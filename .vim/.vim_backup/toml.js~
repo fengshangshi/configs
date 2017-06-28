@@ -1,0 +1,4 @@
+require('toml-require');
+
+var config = require('./config.toml');
+console.log(config);

@@ -1,0 +1,80 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-骆驼卡</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/card/cardDetail.css" />
+</head>
+<body class="asset asset-camel-card">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main module">
+			<div class="module-hd clearfix">
+				<h3 class="process-bar">
+					使用详情
+				</h3>
+			</div>
+			<div class="module-bd">
+				<div class="detail-wrap">
+					<div class="box-head">
+						<h4>$!{tplData.type}$!{tplData.status}</h4>
+					</div>
+					<div class="box-body">
+						<div class="box-body-title">
+							<span class="title-item">
+								<label>流水号</label>
+								<span>$!{tplData.tradeNo}</span>
+							</span>
+							<span class="title-item">
+								<label>充值时间</label>
+								<span>$!{tplData.time}</span>
+							</span>
+						</div>
+						<div class="box-body-table">
+							<table class="data-list">
+								<thead>
+									<tr>
+										<th width="150">交易类型</th>
+							            <th width="*">交易描述</th>
+										<th width="350">充值卡号</th>
+										<th width="250">充值金额(￥)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											$!{tplData.type}
+										</td>
+										<td>
+											$!{tplData.description}
+										</td>
+										<td>
+											$!{tplData.cardNo}
+										</td>
+										<td>
+											$!{tplData.amount}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+</body>
+</html>
+
+
+

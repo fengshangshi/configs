@@ -1,0 +1,8 @@
+/**
+ * 初始化 config.settings
+ */
+
+Q.initSettings({
+    pageKey: 'insuranceTab', // 页面key值，表示当前页面唯一ID
+    navKey: 'propertyTab' // 导航Key值，表示当前页面的导航ID
+});

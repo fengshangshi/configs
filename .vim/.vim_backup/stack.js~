@@ -1,0 +1,132 @@
+function Stack() {
+		this.dataStore = [];
+		this.top = 0;
+		this.push = push;
+		this.pop = pop;
+		this.peek = peek;
+		this.clear = clear;
+		this.length = length;
+}
+
+
+
+function push(element) {
+		this.dataStore[this.top++] = element;
+}
+
+function pop() {
+		return this.dataStore[--this.top];
+}
+
+function peek() {
+		return this.dataStore[this.top - 1];
+}
+
+function length() {
+		return this.top;
+}
+
+function clear() {
+		this.top = 0;
+}
+
+
+// 递归
+function fact(n) {
+		var s = new Stack();
+		while (n > 1) {
+				s.push(n--);
+		}
+
+		var product = 1;
+		while (s.length() > 0) {
+				product *= s.pop();
+		}
+		return product;
+}
+
+/*
+// 回文判断
+function isPalindrome(word) {
+		var s = new Stack();
+
+		for (var i = 0; i < word.length; ++i) {
+				s.push(word[i]);
+		}
+
+		var rword = '';
+		while (s.length() > 0) {
+				rword += s.pop();
+		}
+
+		return word == rword ? true : false;
+}
+
+var word = 'hello';
+if (isPalindrome(word)) {
+		print(word + ' is a palindrome.');
+} else {
+		print(word + ' is not a palindrome');
+}
+var word = 'racecar';
+if (isPalindrome(word)) {
+		print(word + ' is a palindrome.');
+} else {
+		print(word + ' is not a palindrome');
+}
+
+/*
+// 数制间的相互转换
+function mulBase(num, base) {
+		var s = new Stack();
+
+		do {
+				s.push(num % base);
+				num = Math.floor(num /= base);
+		} while (num > 0);
+
+		var converted = '';
+		while(s.length() > 0) {
+				converted += s.pop();
+		}
+
+		return converted;
+}
+
+var num = 32;
+var base = 8;
+var newNum = mulBase(num, base);
+print(num + ' conerted to base ' + base + ' is ' + newNum);
+
+var num = 125;
+var base = 8;
+var newNum = mulBase(num, base);
+print(num + ' conerted to base ' + base + ' is ' + newNum);
+
+
+
+
+var s = new Stack();
+s.push('David');
+s.push('Raymond');
+s.push('Bryan');
+
+print('length: '+s.length());
+print(s.peek());
+
+var popped = s.pop();
+print('The popped element is: ' + popped);
+
+print(s.peek());
+s.push('Cynthina');
+print(s.peek());
+
+s.clear();
+print('length: '+s.length());
+print(s.peek());
+s.pop();
+s.pop();
+print(s.top);
+s.push('Clayton');
+print(s.peek());
+*/

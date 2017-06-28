@@ -1,0 +1,128 @@
+/**
+ * footer.css
+ * @auhtor ss.feng
+ */
+.footer {
+	width: 1200px;
+	margin: 0 auto;
+	text-align: center;
+	padding: 20px 0;
+}
+
+.footer p, 
+.footer .foot-links {
+	padding-bottom: 12px;
+	color: #999;
+}
+
+.footer p a, 
+.footer .foot-links a {
+	color: #999;
+	line-height: 12px;
+}
+
+.footer .foot-links .hl,
+.footer .foot-links a:hover {
+	color: #f55;
+	text-decoration: none;
+}
+
+.foot-about-wrap {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	position: relative;
+}
+
+.foot-about-wrap .about-link {
+	display: inline-block;
+	padding: 5px 25px 5px 5px;
+	border: 1px solid #fff;
+	background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/footer_arrows.png)
+		no-repeat 95px -35px;
+	_background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-010/footer_arrows.png)
+		no-repeat 95px -35px;
+	*position: relative;
+	*top: 5px;
+}
+
+.footer .foot-about-wrap .about-link:hover {
+	color: #999;
+}
+
+.current .about-link {
+	border: 1px solid #ccc;
+	background-position: 95px 10px;
+}
+
+.about-list {
+	position: absolute;
+	left: 0;
+	bottom: 23px;
+	*bottom: 18px;
+	background: #fff;
+	width: 110px;
+	border: 1px solid #ccc;
+	text-align: left;
+	display: none;
+	*width: 114px;
+}
+
+.current .about-list {
+	display: block;
+}
+
+.foot-about-wrap .about-list a {
+	display: block;
+	line-height: 22px;
+	padding: 0 5px;
+}
+
+.foot-about-wrap .about-list a:hover {
+	background: #e2e2e2;
+	color: #666;
+}
+
+.footer-icon {
+	display: inline-block;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150108-01/footer-v10.png);
+	height: 30px;
+	margin: 0 3px;
+}
+
+.icon-ov {
+	width: 101px;
+	background-position: 0 0;
+}
+
+.icon-pci {
+	width: 49px;
+	background-position: -106px 0;
+}
+
+.icon-itrust {
+	width: 91px;
+	background-position: -160px 0;
+}
+
+.icon-beian {
+	width: 78px;
+	background-position: -256px 0;
+}
+
+.icon-ec {
+	width: 87px;
+	background-position: -339px 0;
+}
+
+.icon-cnnic {
+	width: 88px;
+	background-position: -431px 0;
+}
+
+.h24 {
+	display: inline-block;
+	background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/24h.png)
+		no-repeat;
+	padding-left: 20px;
+}

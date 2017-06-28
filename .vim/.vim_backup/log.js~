@@ -1,0 +1,12 @@
+var Log = require("log");
+
+// 初始化
+var log = new Log({
+		pid: "101",
+		...
+});
+
+// 发送日志
+log.send({
+		// 具体的参数
+});

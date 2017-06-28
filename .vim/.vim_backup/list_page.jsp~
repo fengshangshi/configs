@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<title>【去哪儿网】用户账户我的红包</title> 
+<meta content="" name="keywords" />
+<meta content="" name="description" />
+<link href="/static/payment/prd/styles/coupon@<jsp:include page="/include/ver/styles/coupon.css.ver" flush="true"/>.css" rel="stylesheet" type="text/css"/>
+<script>
+    pageTitle = "红包";
+</script>
+</head>
+<body>
+<%@include file='/include/prd/paycenter/header_styles.html'%>
+<div class="q_header q_header_paycenter">
+    <%@include file='/include/prd/paycenter/header_main.html'%>
+</div>
+
+<div class="q_pagecontainer">
+    <div class="q_pagewrap">
+        <div class="q_page">
+            <div class="l_s175m770 clr_after">
+                <!--left-->
+                <div class="l_s175 q_ucsidebar_account_item5_1">
+                   <!--ucsidebar-->
+                   	<jsp:include page="/menu/aside.htm"/>
+                   	<!--\ucsidebar-->
+                </div>
+                <!--/left-->
+                <!--right-->
+                <div class="l_m770">
+                    <!--breadcrumb-->
+                    <div class="b_ucbreadcrumb"> <a href="http://user.qunar.com/userinfo/index.jsp#basic" target="_top">个人中心</a><em>&gt;</em><span>我的账户</span><em>&gt;</em><span>我的红包</span> </div>
+                    <!--\breadcrumb-->
+                    <h2 class="coupon-title coupon-down" id="showCouponBox">红包领取 </h2>
+                    <div class="coupon-verf" id="verfBox">
+                        <span class="coupon-tip">兑换密码为短信中的16位数字</span>
+                        <div class="coupon-inpts"><span class="coupon-inpt-title">红包卡号</span>
+                            <span class="coupon-inpt-list">
+                            <input type="text" name="couponNo" maxlength="19" class="card-inpt"/>
+                            </span>
+                            <span class="error-msg" id="couponMsg"></span>
+                        </div>
+                        <div class="coupon-btn" id="addCoupon">验证并添加红包</div>
+                    </div>
+                    <ul class="coupon-tab" id="couponTab">
+                        <li class="tab_item tab_active" data-traget="unused" data-status="1"><span>未使用红包</span></li>
+                        <li class="tab_item" data-traget="used" data-status="3"><span>已使用红包</span></li>
+                        <li class="tab_item" data-traget="expired" data-status="4"><span>已过期红包</span></li>
+                    </ul>
+                    <!--unused-->
+                    <p class="add-success" id="addSuccess">添加红包成功</p>
+                    <div class="coupon-list" data-box="unused" data-status ="1">
+                    	<div class="box"></div>
+                    	<div class="pages"></div>
+                    </div>
+                    <!--used-->
+                    <div class="coupon-list hide" data-box="used" id="usedBox" data-status ="3">
+                   		<div class="box"></div>
+                    	<div class="pages"></div>
+  					  <!--detail-->                  
+                    </div>
+                    <!--expired-->
+                    <div class="coupon-list hide" data-box="expired" data-status ="4">
+                    	<div class="box"></div>
+                    	<div class="pages"></div>
+                    </div>
+                    <div class="coupon-list hide" id="detailBox">
+                    </div>
+                    <a class="up-button hide" href="javascript:;" id="topBtn"></a>
+                </div>
+                <!--right-->
+                <div class="clr"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="qn_footer">
+    <div class="inner">
+        <%@include file='/include/footer/ssl_footer_public.html'%>
+    </div>
+</div>
+<script type="text/javascript" src="/static/payment/prd/scripts/coupon@<jsp:include page="/include/ver/scripts/coupon.js.ver" flush="true"/>.js"></script>
+</body>
+</html>

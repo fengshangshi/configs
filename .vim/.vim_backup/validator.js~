@@ -1,0 +1,12 @@
+/**
+ * 验证表单信息
+ */
+var $ = require("jquery/jquery.js");
+var validator = require("common/formValidator/formValidator.js");
+
+validator.initForm("#claimApplyForm", ".submit-button", {
+	"events": ["blur"],
+	"successCallback": function() {
+		$("#insuranceForm").submit();
+	}
+});

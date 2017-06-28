@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿网】保险商城-投保</title>
+	<link rel="stylesheet"
+		href="//qunarzz.com/insurance_mall/prd/styles/orderCenter.css" />
+
+	<script>
+		window["common"] = {
+			isAdult: true,
+			orderNo: 1,
+			prdNo: 2
+		};
+	</script>
+</head>
+<body>
+	<div class="header"></div>
+	<div class="container">
+		<div class="inner-container clearfix">
+			<div class="main">
+				<div class="module">
+					<div class="module-hd clearfix">
+						<h3>保险信息</h3>
+						<div class="more">
+							<b class="icons icons-bao"></b>
+							全程预定保障
+							去哪儿都放心
+						</div>
+					</div>
+					<div class="module-bd">
+						<ol class="insurance-info">
+							<li>
+								<label>保险名称</label>
+								<div class="field">
+									<h4>泰康去哪儿乘客出行意外险</h4>
+								</div>
+							</li>
+							<li>
+								<label>保险时间</label>
+								<div class="field">
+									<span class="date-start-wrap">
+										<input type="text" id="date-start" value="" />
+									</span>
+									<span>至</span>
+									<span class="date-end-wrap">
+										<em id="date-end">0000-00-00</em>
+										<em id="date-week"></em>
+										共<em id="date-total">0</em>个月
+									</span>
+								</div>
+							</li>
+							<li>
+								<label>保险价格</label>
+								<div class="field">
+									<span>
+										<strong>￥109.00</strong>/份
+									</span>
+								</div>
+							</li>
+							<li>
+								<label>适用区域</label>
+								<div class="field">
+									<span>全球</span>
+								</div>
+							</li>
+							<li>
+								<label>适用年龄</label>
+								<div class="field">
+									<span>18-80周岁</span>
+								</div>
+							</li>
+							<li>
+								<label>保障范围</label>
+								<div class="field">
+									<span>保险期间1个月，航空意外伤害身故260万元，航空意外伤害伤残最高260万，
+									航空意外医疗500元，0免赔，100%赔付，单份产品30元。</span>
+								</div>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<div class="module">
+					<div class="module-hd clearfix">
+						<h3>被保人信息</h3>
+					</div>
+					<div class="module-bd">
+						<ol class="insurance-user-list">
+							<li>
+								<a href="" class="user-info">
+									<input type="checkbox" name="insurance-user" value="" />
+									<span class="user-name">张晓晓</span>
+									<span class="id-card">331003198303071977</span>
+									<span class="insur-count">1份</span>
+									<span class="total-amount">￥109.00</span>
+								</a>
+							</li>
+						</ol>
+						<ol class="insurance-user-list">
+							<li>
+								<a class="user-info" href="\#\#\#">
+									<div class="inner-user-info">
+										<input type="checkbox" name="insurance-user" value="1" />
+										<strong>张晓晓</strong>
+										<span>身份证号</span>
+										<em>331003*********4328</em>
+									</div>
+									<div class="total-amount">
+										<div class="inner-amount">
+											<strong>￥318.00</strong>
+										</div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a class="user-info selected" href="\#\#\#">
+									<div class="inner-user-info">
+										<input type="checkbox" checked="checked" 
+											name="insurance-user" value="1" />
+										<strong>张晓晓</strong>
+										<span>身份证号</span>
+										<em>331003*********4328</em>
+									</div>
+									<div class="total-amount">
+										<div class="inner-amount">
+											<strong>￥318.00</strong>
+										</div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<div class="user-info disable">
+									<div class="inner-user-info">
+										<input type="checkbox" name="insurance-user" value="1" disabled="disabled" />
+										<strong>张晓晓</strong>
+										<span>身份证号</span>
+										<em>331003*********4328</em>
+										<span>提示：已投保</span>
+									</div>
+								</div>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<div class="module submit-move-scope">
+					<div class="module-hd clearfix">
+						<h3>保险详情</h3>
+					</div>
+					<div class="module-bd">
+						<div class="insurance-detail">
+							<h4>国华旅行航意险：</h4>
+							<p>
+								<label>保障内容:</label>
+								<span>
+									保险期间1个月，航空意外伤害身故260万元，航空意外伤害伤残最高260万， 航空意外医疗500元，0免赔，100%赔付，单份产品30元。
+								</span>
+							</p>
+							<p>
+								<label>投保说明:</label>
+								<span>
+									请致电国华人寿24小时服务热线95549 。
+								</span>
+							</p>
+							<p>
+								<label>理赔说明:</label>
+								<span>
+									请致电国华人寿24小时服务热线95549 。
+								</span>
+							</p>
+							<p>
+								<label>退保说明:</label>
+								<span>
+									保单未生效（未进入保险期间）全额退保，保单生效及终止（进入保险期间后）不可退保。
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="insurance-submit-wrap">
+					<div class="arrow-left-top"></div>
+					<div class="arrow-right-top"></div>
+					<div class="arrow-right-bottom"></div>
+					<div class="submit-bg"></div>
+					<div class="insurance-submit">
+						<div class="insurance-price-wrap">
+							<span>支付<strong>￥745.00</strong></span>
+							<a class="button-submit" href="\#\#\#">
+								同意协议并投保
+							</a>
+						</div>
+						<div class="insurance-protocol">
+							<a href="\#\#\#">《泰康e顺(2014)交通意外伤害保险条款》</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="aside"></div>
+		</div>
+	</div>
+	<div class="footer"></div>
+	<script src="//qunarzz.com/insurance_mall/prd/scripts/orderCenter.js"></script>
+</body>
+</html>

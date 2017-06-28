@@ -1,0 +1,183 @@
+/*[export]*/
+/**
+ * 信任付样式
+ */
+require("../../base.css");
+require("../common.css");
+require("../../../common/menu.css");
+require("../../../common/jquery-ui.css");
+
+.signIous-wrap {
+}
+
+.signIous-intro {
+	
+}
+
+.signIous-intro-banner {
+	height: 137px;
+	background: url(//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/banner.jpg)
+		repeat-x;
+}
+
+.signIous-intro-content {
+	background: #fcfcfc;
+	padding: 20px;
+	overflow: hidden;
+}
+
+
+.signIous-intro-content li {
+	float: left;
+	padding: 95px 70px 10px;
+	background-repeat: no-repeat;
+}
+
+.signIous-intro-content li h3,
+.signIous-intro-content li p {
+	text-align: center;
+}
+
+.signIous-intro-content li h3 {
+	font-size: 14px;
+	color: #666;
+}
+
+.signIous-intro-content li p {
+	color: #999;
+}
+
+.signIous-intro-content li.split-line {
+	border-right: 1px dotted #e4e6e6;
+}
+
+.signIous-intro-content li.ious-apply-quota {
+	background-image: url(//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/icon_01.png);
+	background-position: center top;
+}
+
+.signIous-intro-content li.ious-refund-way {
+	background-image: url(//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/icon_02.png);
+	background-position: center 10px;
+}
+
+.signIous-intro-content li.ious-refund-rate {
+	background-image: url(//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/icon_03.png);
+	background-position: center 5px;
+}
+
+.signIous-intro-content li.ious-open {
+	background-image: url(//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/icon_04.png);
+	background-position: center 5px;
+}
+
+.signIous-apply-wrap {
+	padding: 20px;
+
+}
+
+.signIous-apply-wrap .item input {
+	height: auto;
+	width: auto;
+}
+
+.signIous-apply-wrap .item label {
+	display: inline-block;
+	width: 78px;
+	color: #999;
+	vertical-align: 5px;
+}
+
+.signIous-apply-wrap .item .button-submit {
+	margin: 0;
+	font-size: 14px;
+	font-family: simsun;
+}
+
+/*
+ * ui-dialog css patch
+ */
+.ui-dialog .ui-dialog-content {
+	padding: 0;
+}
+
+.dialog .tips {
+	padding: 30px 0 30px;
+	text-align: center;
+}
+
+.dialog .ask {
+	border-top: 1px dotted #ccc;
+	padding: 20px 30px;
+	line-height: 20px;
+	color: #999;
+}
+
+.dialog .ask h4 {
+	background: url(//source.qunarzz.com/site/images/pay/useraccount/common/info.png)
+		no-repeat 0 2px;
+	padding-left: 20px;
+}
+
+.dialog .ask a {
+	width: 44px;
+	height: 17px;
+	overflow: hidden;
+	margin-left: 5px;
+	color: #0069ca;
+	display: inline-block;
+	background: url(//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/arrows_dialog.png)
+		no-repeat 32px -7px;
+	text-decoration: none;
+	*height: 16px;
+	*vertical-align: 6px;
+	_vertical-align: 8px;
+}
+
+.dialog .ask a.show {
+	background-position: 32px 7px;
+}
+
+.dialog .ask li span {
+	display: none;
+}
+
+.dialog .ask li span.show {
+	display: block;
+	color: #666;
+}
+
+.dialog .button {
+	margin: 0 10px;
+}
+
+.dialog .dialog-button-cancel,
+.dialog .dialog-button-submit {
+	width: 120px;
+	border: 1px solid #e5e5e5;
+	background: #eee;
+	color: #6c6c6c;
+	font-size: 14px;
+	font-family: simsun;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+
+.signIous-apply-wrap .item {
+	overflow: hidden;
+	*zoom: 1;
+}
+
+.signIous-apply-wrap .item label {
+	margin-top: 2px;
+}
+
+.signIous-apply-wrap .item input {
+	vertical-align: 0;
+	*vertical-align: -4px;
+}
+
+.form-other span {
+	color: #666;
+}

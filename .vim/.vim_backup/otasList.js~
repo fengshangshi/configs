@@ -1,0 +1,209 @@
+var params = require('common/params');
+avalon.templateCache["contentTpl"] = require("view");
+var innId = params.get('innId');
+var listURL = "/customer/ota/list.json";
+var items = [],
+	itemsMap = {};
+var setAutoAssignRoomUrl = "/customer/settings/options/enableAutoAssigningRoom.json";
+
+
+var	bindingDialogVM = require('dialogs/bindingDialog.js');
+
+var otasVM = avalon.define({
+    $id: "content",
+    contentTpl: "contentTpl",
+    chooseOTA : chooseOTA,
+    items : [],
+    listReady : false,
+    currentInn : params.getInn().id,
+    updateOTA : function(item){
+		avalon.mix(true,itemsMap[item.code],item,STAUTS_MAP[item.bindStatus]);
+    	otasVM.items = items;
+    },
+    updateAutoRoomStatus : function(otaId, status) {
+		var otaItem = itemsMap[otaId];
+
+		if(!status) { //还原状态
+			if(itemsMap[otaItem.code].autoAssignStatus !== 'unsupported'){
+				itemsMap[otaItem.code].autoAssignStatus = 'disabled';
+			}
+		}else {
+			itemsMap[otaItem.code].autoAssignStatus = status;
+		}
+
+		 otasVM.items = items;
+
+    },
+    setAutoAssignRoom:function(type,item){
+    	var str,
+    		code = item.code;
+		if(type === 'enabled'){
+			str = "开启自动分房功能后，当剩余房间数满足订单需求，并且客人无特殊需求时，客满满为您的新订单自动安排房间。\n确认开启自动分房功能吗？";
+		}else{
+			str = "关闭自动分房功能后，客满满无法为您的新订单自动安排房间。\n并且本月的返佣等级将没有机会被评为最高等级A。\n确定关闭自动分房功能吗？"
+		}
+		if(confirm(str)) {
+			avalon.ajax({
+				'type' : 'POST',
+				'url' : setAutoAssignRoomUrl,
+				'dataType' : 'json',
+				'cache' : false,
+				'data' : "channel=" + code + "&innId=" + innId + "&enabled=" + type,
+				'success' : function(json) {
+					if(json.status === 0){
+						otasVM.updateAutoRoomStatus(code, type);
+
+					}else{
+						if(json.message){
+							PMS.alert(json.message);
+						}
+					}
+				}
+			});
+		}
+    },
+    openEB : function(item){
+    	var url = EBMap[item.code];
+    	window.open(url);
+    },
+    tabs : getTabsOpts(),
+    $baseUrl : window.COMMON_URLS["OTAS_MANANGE"]
+});
+
+var STAUTS_MAP = {
+	"IN_PROCESS" : {
+		statusText : "审核中...",
+		className : "inProcess"
+	},
+	"BINDED" : {
+		statusText : "绑定房间",
+		className : "binded"
+	},
+	"UNBIND" : {
+		statusText : "申请打通",
+		className : "applyFor"
+	},
+	"WAIT" : {
+		statusText : "等待打通",
+		className : "waitingForOpen"
+	},
+	"SYNC_FAIL" : {
+		statusText : "同步失败",
+		className : "syncFail"
+	},
+	"UPGRADE": {
+		statusText : "系统升级，暂停服务",
+		className : "waitingForOpen"
+	}
+}
+
+var EBMap = {
+	// 去哪儿
+	"qunar" : "http://ebooking.qunar.com/",
+	// 携程
+	"ctrip" : "https://ebooking.ctrip.com/",
+	// 艺龙
+	"elong" : "http://ebooking.elong.com/",
+	// 青芒果
+	"qmango" : "http://hotel.qmango.com/",
+	// 美团
+	"meituan" : "http://e.meituan.com/account/login",
+	// 淘宝网
+	"taobao" : "https://login.taobao.com/",
+	// 同程网
+	"tongcheng" : "http://www.ly.com/",
+	// Agoda
+	"agoda" : "https://ycs4.agoda.com/zh-cn/Login",
+	// booking.com
+	"booking" : "https://admin.booking.com/hotel/hoteladmin/?lang=zh"
+}
+
+function init(){
+	// $.getJSON(listURL + params.getInn().id ,function(json){
+	avalon.getJSON(listURL + "?innId=" + params.getInn().id + "&t=" + new Date().getTime(),function(json){
+	// avalon.getJSON(listURL + 6 ,function(json){
+		otasVM.items = updateLocalMap(json.data);
+		__checkElong();
+		otasVM.listReady = true;
+	});
+
+}
+
+
+function __checkElong(){
+	var _items = otasVM && otasVM.$model && otasVM.$model.items || [];
+	for(var i=0,len=_items.length;i<len;i++){
+		if(_items[i].code === "elong" && _items[i].bindStatus === "WAIT"){
+			PMS.alert('因系统原因，暂时无法与艺龙进行对接，正在奋力修复中，请您稍候再试！');
+			break;
+		}
+	}
+}
+
+function updateLocalMap(_items){
+	for(var i=0,len=_items.length;i<len;i++){
+		var _item = _items[i];
+		if (_item.code == 'ctrip' || _item.code == 'qmango' || _item.code == 'elong') _item.bindStatus = 'UPGRADE';
+		_item.statusText = STAUTS_MAP[_item.bindStatus].statusText;
+		_item.className = STAUTS_MAP[_item.bindStatus].className;
+		_item.type = "";
+		items.push(_items[i]);
+		itemsMap[_items[i].code] = _items[i];
+	}
+
+	return items;
+}
+
+
+
+function chooseOTA(item){
+	if(item){
+		switch(item.bindStatus){
+			case "BINDED" :
+				chooseBinding(item);
+				break;
+			case "UNBIND" :
+
+				if(item.code === 'ctrip'){
+					if(confirm("客满满暂时只能帮您实现自动开关房哦\n对于在携程网产生的订单，暂时还需劳烦您手工记录下\n您确定申请开通对接吗？")) {
+						chooseApplyFor(item);
+					}
+					break;
+				}
+				chooseApplyFor(item);
+				break;
+			default :
+		}
+	}
+}
+
+function chooseBinding(item){
+	otasVM.$fire("all!ota-Binding",item);
+}
+
+function chooseApplyFor(item){
+	otasVM.$fire("all!ota-ApplyFor",item);
+}
+
+function getTabsOpts(){
+	var inns = params.get('inns');
+	var tabs = [],
+		active = 1;
+	var currentInn = params.getInn().id;
+	for(var i=0,len=inns.length;i<len;i++){
+		if(currentInn === inns[i].id) {
+			active = i;
+		}
+		tabs.push({
+			title : inns[i].name,
+			name : inns[i].name,
+			id : inns[i].id
+		})
+	}
+	return tabs;
+}
+
+module.exports = {
+	otasListVM : otasVM,
+	init : init
+};

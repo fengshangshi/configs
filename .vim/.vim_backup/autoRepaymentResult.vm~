@@ -1,0 +1,47 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付自动还款</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/autoRepaymentResult.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content ious-open-result">
+			#if($!{tplData.errorCode} == "0")
+				<div class="result-panel">
+					<div class="result-content success-bg">
+						<h3 class="summary">您的自动还款银行卡已关联成功</h3>
+						<p class="detail"><span class="countdown">3</span>秒后自动跳转</p>
+					</div>
+				</div>
+			#else
+				<div class="result-panel">
+					<div class="result-content error-bg">
+						<h3 class="summary">关联银行卡失败</h3>
+						<p class="detail">您可以到<a href="/member/asset/ious/autoRepaymentForm.htm">此处</a>重新签约</p>
+						<p class="detail"><span class="countdown">3</span>秒后自动跳转</p>
+					</div>
+				</div>
+			#end
+			</div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script 
+		src="${qzzUrl}${jsPath}/asset/ious/autoRepaymentResult/entry.js">
+	</script>
+	<!-- ${tplData} -->
+</body>
+</html>

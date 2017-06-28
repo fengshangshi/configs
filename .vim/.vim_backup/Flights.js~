@@ -1,0 +1,159 @@
+/**
+ * @file 航班集合的覆盖物
+ * @author xingda@baidu.com(Macro Xing)
+ */
+
+define(function(require) {
+    'use strict';
+
+    var util = require('common/util');
+    var template = require('common/template');
+    var env = require('common/environment');
+    var CanvasOverlay = require('./CanvasOverlay');
+    var ImageShape = require('dep/zrender/shape/Image');
+    var LabelArrowMarker = require('marker/LabelArrowMarker');
+    var flightImage = require('./flightimage');
+
+    var MARKER_TPL = '' +
+        '<span class="marker-flight-no">$${flightNo}</span>' +
+        '<span class="marker-flight-city">$${departureCityName}' +
+        '</span>' +
+        '-' +
+        '<span class="marker-flight-city">$${destinationCityName}' +
+        '</span>';
+
+    function Flights(properties) {
+        CanvasOverlay.apply(this, arguments);
+
+        this._markers = [];
+    }
+
+    util.inherits(Flights, CanvasOverlay);
+
+    Flights.prototype.draw = function() {
+        var me = this;
+        setTimeout(function() {
+            var asyncLock = env.get('asyncLock');
+            if (asyncLock) {
+                return;
+            }
+            me.fullSizeMainElem();
+            me.clearAllShapes();
+            me.clearAllMarkers();
+            me.addFlightShapes();
+        }, 0);
+    };
+
+    Flights.prototype.clearAllMarkers = function() {
+        var markers = this._markers;
+        for (var i = 0, marker; marker = markers[i++];) {
+            marker.dispose();
+        }
+
+        this._markers = [];
+    };
+
+    Flights.prototype.addMarker = function(content, point, skin) {
+        var marker = new LabelArrowMarker({
+            skin: skin,
+            container: this.getMainElem(),
+            content: content,
+            position: {
+                left: point.x,
+                top: point.y
+            }
+        });
+
+        marker.show();
+        this._markers.push(marker);
+    };
+
+    Flights.prototype.addFlightShapes = function() {
+        var flightList = this.getProperty('flightList');
+        var zr = this.getZRender();
+        var me = this;
+
+        for (var i = 0, flight; flight = flightList[i++];) {
+            (function(flight, context) {
+                var flightNo = flight.flight_no;
+                if (!flightNo) {
+                    return;
+                }
+
+                var takeOffAndLand = flight.take_off_and_land[0];
+                var customInfo = {
+                    flightNo: flightNo,
+                    departureCityName: takeOffAndLand.departure.city_name,
+                    destinationCityName: takeOffAndLand.destination.city_name
+                };
+
+                var markerContent = template.render(MARKER_TPL, customInfo);
+
+                var activeInfo = flight.active_info;
+                var imageShape = new ImageShape({
+                    id: flightNo,
+                    style: context._getFlightShapeStyle(
+                        activeInfo.current_position, activeInfo.direction),
+                    highlightStyle: {
+                        sy: 30
+                    },
+                    clickable: true,
+                    onclick: function(eventPacket) {
+                        context.fire('flightclick', {
+                            flightNo: eventPacket.target.id
+                        });
+                    },
+					/*
+                    onmouseover: function(eventPacket) {
+                        context.clearAllMarkers();
+                        var target = eventPacket.target;
+                        var flightNo = target.id;
+                        context.addMarker(markerContent, {
+                            x: target.style.x + 15,
+                            y: target.style.y + 15
+                        });
+                    },
+                    onmouseout: function(eventPacket) {
+                        context.clearAllMarkers();
+                    }
+					*/
+                });
+
+                context.addShape(imageShape);
+                context._animateFlightShape(flightNo, activeInfo);
+
+            })(flight, this);
+        }
+
+        zr.render();
+    };
+
+    Flights.prototype._getFlightShapeStyle = function(currentPoint, direction) {
+        var currentPixel = this.getPixelByPoint(
+            currentPoint.lng, currentPoint.lat);
+        return flightImage.getSmallFlightImageStyle(
+            currentPixel.x, currentPixel.y, direction);
+    };
+
+    Flights.prototype._animateFlightShape = function(shapeId, activeInfo) {
+        var zr = this.getZRender();
+
+        var interval = activeInfo.interval * 1000;
+        var targetPoint = activeInfo.target_position;
+        var targetPixel = this.getPixelByPoint(
+            targetPoint.lng, targetPoint.lat);
+        var direction = activeInfo.direction;
+
+        var flightImageStyle = flightImage.getSmallFlightImageStyle(
+            targetPixel.x, targetPixel.y, direction);
+
+        zr.animate(shapeId, 'style', false)
+            .when(interval, {
+                x: flightImageStyle.x,
+                y: flightImageStyle.y
+            })
+            .start();
+    };
+
+    return Flights;
+});

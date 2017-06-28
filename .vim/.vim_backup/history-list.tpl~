@@ -1,0 +1,10 @@
+<script type="text/template" id="template-search-history-list">
+<% if (tplData.length > 0) { %>
+<ul class="search-history-list">
+	<%for (var i = (tplData.length - 1); i >= 0; i--) { %>
+		<li><a href="###"><span><%:=tplData[i]%></span></a></li>
+	<% } %>
+</ul>
+<a href="###" class="search-history-list-clear-button"
+<% } %>
+</script>

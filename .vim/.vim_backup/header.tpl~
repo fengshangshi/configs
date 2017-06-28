@@ -1,0 +1,8 @@
+<header class="header clearfix">
+	<nav>
+		<a href="###" class="about-button">搜索飞机</a>
+		<a href="###" class="search-start-button">搜索飞机</a>
+		<h1><span class="logo">百度天眼</span></h1>
+	</nav>
+</header>
+{%script%}require("./header.js");{%/script%}

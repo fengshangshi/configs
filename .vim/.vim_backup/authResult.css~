@@ -1,0 +1,65 @@
+/*[export]*/
+/**
+ * 实名认证结果页面（成功或失败）
+ */
+require("../base.css");
+require("../../common/step.css");
+require("../../common/box.css");
+
+.auth-main  .box{
+	border: 16px solid #f3f3f3;
+}
+
+.box-container{
+	width: 600px;
+	margin: 36px auto;
+}
+
+.success-container,
+.fail-container{
+	width: 460px;
+}
+
+.box-container .success-icon{
+	width: 64px;
+	height: 64px;
+	float: left;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/success-icon.png);
+	_background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-003/success.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	margin-right: 15px;
+}
+
+.box-container .fail-icon{
+	width: 64px;
+	height: 64px;
+	float: left;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/fail-icon.png);
+	_background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-001/fail.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	margin-right: 15px;
+}
+
+.box-container .title{
+	font-size: 24px;
+}
+
+.box-container .info{
+	padding-left: 81px;
+}
+
+.box-container p{
+	font-size: 12px;
+	color: #333;
+}
+
+.box-container .auto-jump{
+	color: #999;
+}
+
+.f-c-blue{
+	color: #0066ff;
+	padding: 0px 5px;
+}

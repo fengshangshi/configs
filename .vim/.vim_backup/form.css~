@@ -1,0 +1,113 @@
+/**
+ * 表单组件样式
+ * author water.li
+ * Date 2014-12-11
+ */
+.form {
+	font-size: 16px;
+}
+.form,
+.form *{
+	list-style: none;
+}
+.form fieldset {
+	border: 0;
+}
+.form legend {
+	display: none;
+}
+.form-item {
+	margin-bottom: 20px;
+	zoom: 1;
+}
+.form-item .p-label {
+	float: left;
+	width: 170px;
+	padding-top: 8px;
+	margin-right: 16px;
+	text-align: right;
+	font-size: 12px;
+	color: #999;
+}
+.form-item .form-required {
+	color: red;
+	font-family: SimSun;
+	font-size: 14px;
+	margin-right: 6px;
+}
+.p-input {
+	padding: 10px 9px;
+	line-height: 18px;
+	border: 1px solid #c1c1c1;
+	color: #555;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+input::-webkit-input-placeholder{
+	font-size: 12px;
+	font-weight: 100;
+	color: #ccc;
+}
+
+input::-moz-placeholder{
+	font-size: 12px;
+	font-weight: 100;
+	color: #ccc;
+}
+
+input::-ms-input-placeholder{
+	font-size: 12px;
+	font-weight: 100;
+	color: #ccc;
+}
+
+.form-other {
+	margin-left: 8px;
+	position: relative;
+	display: inline-block;
+	zoom: 1;
+	font-size: 12px;
+	color: red;
+	margin-top: 7px;
+	vertical-align: top;
+}
+
+.form-other i{
+	width: 16px;
+	height: 17px;
+	float: left;
+	margin-top: 0px;
+	margin-right: 5px;
+}
+
+.form-other i.ok{
+	background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150122-001/success.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-009/success.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.form-other i.err{
+	background: url(
+		http://simg1.qunarzz.com/usercenter/login/quick_login2.png) 0 0 no-repeat;
+	background-position: 0 -142px;
+}
+
+.form-item .form-explain {
+	margin: 0;
+	padding: 8px 0 0;
+	font-size: 12px;
+	color: #B2B2B2;
+}
+
+.form-item .form-text{
+	display: inline-block;
+	margin-top: 7px;
+	font-weight: bold;
+	color: #555;
+	font-size: 14px;
+}

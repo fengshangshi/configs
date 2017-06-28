@@ -1,0 +1,12 @@
+/**
+ * @filename logConfig.js
+ * @description 日志相关配置
+ * @author ss.feng@qunar.com
+ */
+module.exports = {
+	access: {
+		filename: 'access-%DATE%.log',
+		frequency: 'daily',
+		verbose: false
+	}
+};

@@ -1,0 +1,85 @@
+/**
+ * @file 控制器模板
+ * @author ss.feng
+ */
+'use strict'
+
+const type = require('sugar-type');
+
+// 控制器基础类
+class Controller {
+    constructor(req, res, err) {
+        if (err) {
+            logger.error(err);
+        }
+
+        if (type.isRequest(req) === false) {
+            throw new Error('Controller: "req" is illegal!');
+        }
+
+        if (type.isResponse(res) === false) {
+            throw new Error('Controller: "res" is illegal!');
+        }
+
+        this.req = req;
+        this.res = res;
+    }
+
+    // cookie
+    cookie() {
+
+    }
+
+    // 设置头部
+    setHeader() {
+
+    }
+
+    // 批量设置头部
+    setHeaders() {
+
+    }
+
+    // 渲染模板
+    display() {
+
+    }
+
+    // JSON
+    json() {
+
+    }
+
+    // 附件
+    attachment() {
+
+    }
+
+    // 下载
+    download() {
+
+    }
+
+    // 跳转
+    redirect() {
+
+    }
+
+    // JSONP
+    jsonp() {
+
+    }
+
+    // end
+    end() {
+
+    }
+
+    // __end http.server.response的end方法
+    // 其他方法最终都通过这个方法与客户端交互
+    __end() {
+
+    }
+
+    // __get
+}

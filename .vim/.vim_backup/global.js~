@@ -1,0 +1,41 @@
+module.exports = {
+    "version": "0.0.4",
+    "website": "去呼呼工作日报平台",
+    "websiteUrl": "http://aspwork.corp.qunar.com",
+    "dept": "酒店云事业部",
+
+    // 调试模式
+    "debug": true,
+
+    // 开发环境数据库配置
+    "devDb": {
+        //"url": "mongodb://127.0.0.1:27017/asp_work",
+		'url': 'mongodb://192.168.253.91:6228/asp_work',
+        "user": "asp_work",
+        "pass": "asp_work~!@#"
+    },
+
+    // 线上环境数据库配置
+    "proDb": {
+        "url": "mongodb://127.0.0.1:6228/asp_work",
+        "user": "asp_work",
+        "pass": "asp_work~!@#"
+    },
+
+    // 邮件服务配置
+    "mail": {
+        "host": "mail.corp.qunar.com",
+        "port": 8025,
+        "user": "asp_work_sender",
+        "pass": "Vr47J((b",
+        "from": "asp_work_sender@qunar.com"
+    },
+
+    // 系统管理员邮箱
+    "systemMail": "yingran.wang@qunar.com",
+
+    // 静态资源路径
+    "cssPath": "/static/css",
+    "jsPath": "/static/js",
+    "imgPath": "/static/images"
+}

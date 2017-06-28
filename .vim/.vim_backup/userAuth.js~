@@ -1,0 +1,15 @@
+/**
+ * @file 用户验证
+ * @author ss.feng
+ */
+module.exports = function() {
+		return function(req, res) {
+				var cookieUid = req.cookies.uid,
+						sessionUid = req.session.uid;
+
+				if (!cookieUid || !sessionUid || cookieUid != sessionUid) {
+						res.redirect('/account/login');
+						return true;
+				}
+		};
+};

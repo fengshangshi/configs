@@ -1,0 +1,5 @@
+var app = exports = module.exports = {};
+
+app.handle = function handle(req, res, callback) {
+
+};

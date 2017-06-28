@@ -1,0 +1,106 @@
+/**
+ * Created by dujuan.cao on 2016/06/27.
+ */
+
+var index = require('../tpl/index.string'),
+    native = require('common/service/hyNative.js'),
+    queryUnreadCount = require('common/module/queryUnreadCount.js');
+
+require('common/module/commonEvent.js');
+require('../../room/roomState/entry.js');
+require('../../more/index/entry.js');
+require('../../order/orderList/entry.js');
+require('../../notice/noticeList/entry.js');
+require('../../report/reportDetail/entry.js');
+
+var views = [
+    'room.roomState',
+    'order.orderList',
+    'notice.noticeList',
+    'report.reportDetail',
+    'more.index'
+];
+
+QApp.defineView('app.index', {
+    html: index,
+    classNames: ['yo-flex'],
+
+    modules: [{
+        name: 'content',
+        container: '.appContainer',
+        views: views,
+        defaultTag: views[0],
+        renderAll: true
+    }],
+
+    bindEvents: {
+        'beforeShow': function() {
+            //检测是否登录
+            if (!G.ls.has('login.userInfo')) {
+                native.invokeNative('openWebView', {
+                    url: '/srmweb_hy/html/login.html'
+                })
+                return false;
+            }
+        },
+
+        'show': function() {
+            var self = this,
+                root = self.root;
+
+            function showNewNotice() {
+                queryUnreadCount(function() {
+                    if (G.ls('common.unreadCount')) {
+                        $(root).find('.js-navBar').find('.new-notice').show();
+                    } else {
+                        $(root).find('.js-navBar').find('.new-notice').hide();
+                    }
+                });
+            }
+
+            //首页即请求,以后每次切换tab都请求
+            if (G.ls.has('login.userInfo')) {
+                showNewNotice();
+            }
+
+            $(root).off().on('click', '.js-navBar .nav-btn', function() {
+                // $(root).off().on('touchstart', '.js-navBar .nav-btn', function() {
+                var me = $(this),
+                    index = me.index();
+
+                if (me.hasClass('active')) return;
+
+                G.ls('room.roomStateRefresh', true);
+                G.ls('order.listRefresh', true);
+                G.ls('report.reportDetailRefresh', true);
+
+                me.addClass('active').siblings().removeClass('active')
+
+                self.modules.content.launch(views[index]);
+
+                setTimeout(function() {
+                    showNewNotice();
+                }, 0);
+            })
+
+			/*
+            if (location.hash.indexOf('$notice$') !== -1) {
+                $(root).find('.notice-navbtn').trigger('click');
+            }
+			*/
+
+			// 对push消息进行处理，这里与native进行交互
+			native.registerNative('invokeHyNotice', function(res) {
+				if (res.messageType == '14') {
+					QApp.router.backTo('app.index', {param: {}});
+					$(root).find('.notice-navbtn').trigger('click');
+				}
+			});
+        },
+        'actived': function() {
+
+        }
+    },
+
+    ready: function() {}
+})

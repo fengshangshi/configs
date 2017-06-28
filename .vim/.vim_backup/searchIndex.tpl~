@@ -1,0 +1,4 @@
+<div id="SKYSearchIndex" class="search-index-wrap">
+	{%widget name="sky-mobile:widget/search/searchIndex/header.tpl"%}
+</div>
+{%script%}require("./searchIndex.js");{%/script%}

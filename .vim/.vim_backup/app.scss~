@@ -1,0 +1,6 @@
+/*全局组件*/
+@import url("styles/components/account_sidebar.css");
+require("styles/components/account_sidebar.css");
+
+/*页面组件*/
+@import url("./components/searcher.css");

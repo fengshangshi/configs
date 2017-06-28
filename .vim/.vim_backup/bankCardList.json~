@@ -1,0 +1,71 @@
+{
+    "errorCode": 0,
+    "errorMsg": "",
+    "data": {
+        "pageCount": 5,
+        "pageSize": 7,
+        "pageNum": 2,
+        "creditCount": 2,
+        "mobile": "137****6733",
+        "areaCode":"86",
+        "debitCount": 1,
+        "cardList": [
+            {
+                "cardId": "123",
+                "cardNo": "************23242",
+                "cardName": "中国银行",
+                "cardIcon": "",
+                "cardType": 0,
+                "cardStatus": 1,
+                "cardHolderName": "冯尚实"
+            },
+
+            {
+                "cardId": "234",
+                "cardNo": "**************23242",
+                "cardName": "招商银行",
+                "cardIcon": "",
+                "cardType": 1,
+                "cardStatus": 1,
+                "cardHolderName": "冯尚实"
+            },
+            {
+                "cardId": "123",
+                "cardNo": "************23242",
+                "cardName": "中国银行",
+                "cardIcon": "",
+                "cardType": 0,
+                "cardStatus": 1,
+                "cardHolderName": "冯尚实"
+            },
+            {
+                "cardId": "234",
+                "cardNo": "**************23242",
+                "cardName": "招商银行",
+                "cardIcon": "",
+                "cardType": 1,
+                "cardStatus": 1,
+                "cardHolderName": "冯尚实"
+            },
+            {
+                "cardId": "123",
+                "cardNo": "************23242",
+                "cardName": "中国银行",
+                "cardIcon": "",
+                "cardType": 0,
+                "cardStatus": 1,
+                "cardHolderName": "冯尚实"
+            },
+
+            {
+                "cardId": "234",
+                "cardNo": "**************23242",
+                "cardName": "招商银行",
+                "cardIcon": "",
+                "cardType": 1,
+                "cardStatus": 1,
+                "cardHolderName": "冯尚实"
+            }
+        ]
+    }
+}

@@ -1,0 +1,77 @@
+<div ms-controller="roomFloorSetting" data-include-replace="true" >
+    <div class="config-roomfloor font-yahei config-roomnoeditsort" id="roomFloorSetting">
+        <div class="main-wrap">
+            <div class="table-title mb10">楼层设置</div>
+            <form id="floorForm">
+                <ul>
+                    <li class="floor-item"
+                        ms-repeat-item="floorList"
+                        ms-class-1="is-edit:item.isEdit" ms-class-2="tip-bottom:$index<4"
+                        ms-if-loop="item.floorNo!==0"
+                        ms-data-floorno="item.floorNo">
+                        <input type="text" ms-duplex="item.floorNo" ms-if="item.isEdit&&$index<4"
+                        class="validate[custom[floorForm], max[999], min[-999]]"
+<<<<<<< HEAD
+                        data-errormessage="请输入-999~999且不为0的楼层"
+=======
+                        data-errormessage="只可输入-999~999的非0整数"
+>>>>>>> master
+                        data-prompt-position="topLeft:0,60px">
+                        <input type="text" ms-duplex="item.floorNo" ms-if="item.isEdit&&$index>=4"
+                        class="validate[custom[floorForm], max[999], min[-999]]"
+                        data-errormessage="请输入-999~999且不为0的楼层"
+                        data-prompt-position="topLeft:0,-24px">
+                        <span class="floor-no" ms-if="!item.isEdit">{{item.floorNo}}楼</span>
+                        <i class="i-icon delete-ico" ms-click="onDelete(item.floorNo)">&#xf1cf;</i>
+                        <a href="javascript:void(0);" class="confirm-btn" ms-class="disabled:!item.floorNo" ms-click="onConfirm(item.floorNo)">确定</a>
+                        <a href="javascript:void(0);" class="cancel-btn" ms-click="onCancel($index)">取消</a>
+                    </li>
+                    <li class="add-btn" ms-click="onAddItem" ms-class="disabled: !canAdd">
+                        <i class="i-icon">&#xf1c5;</i>
+                        <span>新增楼层</span>
+                    </li>
+                </ul>
+            </form>
+            <div>
+                <div class="table-title mb10 mt10">您可以拖动房间号改变房间所属楼层</div>
+                <table class="table mb0 table-layout">
+                    <thead>
+                        <tr>
+                            <td class="pl20" width="140">楼层</td>
+                            <td class="pl20">房间号</td>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="table-body" id="roomNos">
+                    <table class="table table-layout mb0">
+                        <tbody>
+                            <tr class="hover-pointer hover-handle" ms-repeat-item="roomFloorList">
+                                <td width="140" class="pl20">
+                                    <label class="w100">{{item.floorNo|showFloor}}</label>
+                                </td>
+                                <td class="pl20 pr20">
+                                    <div class="room-drag-wrap fn-clear"
+                                        ms-attr-data-floorno="item.floorNo"
+                                        ms-class-1="{{'room-dragsort-con'+$index}}">
+                                        <span class="room-item room-item-use mr5 mb3 mt3"
+                                            ms-repeat-roominfo="item.roomInfoList"
+                                            ms-attr-data-roomno="roominfo.roomNo">
+                                            {{roominfo.doorNo}}
+                                        </span>
+                                        <span class="room-item room-item-hide">
+                                        </span>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="q-not-data" ms-if="isEmpty">
+                    <i class="q-icon"></i>暂无楼层数据
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,504 @@
+.flight-detail {
+	width: 100%;
+	height: 136px;
+	background: #fff;
+	position: absolute;
+	bottom: -136px;
+	left: 0;
+	z-index: 1;
+}
+
+.flight-detail-title {
+	text-align: center;
+	font-size: 12px;
+	height: 25px;
+	border-bottom: 1px solid #dadada;
+	line-height: 25px;
+	color: #7a7a7a;
+}
+
+.flight-detail-title em {
+	color: #3e3e3e;
+	margin: 0 2px;
+}
+
+.flight-detail-title img {
+	vertical-align: -2px;
+	margin-right: 5px;
+}
+
+.flight-detail-info {
+	padding: 12px 0;
+	font-size: 12px;
+	border-bottom: 1px solid #dadada;
+}
+
+.flight-detail-info-start,
+.flight-detail-info-status,
+.flight-detail-info-end {
+	float: left;
+}
+
+.flight-detail-info-end {
+	float: right;
+}
+
+.flight-detail-info-status {
+	width: 22%;
+	background: url(./flight.png) no-repeat center top;
+	background-size: 63px 23px;
+}
+
+.flight-detail-info-start,
+.flight-detail-info-end {
+	width: 39%;
+}
+
+.flight-detail-info-start {
+	text-align: right;
+}
+
+.flight-detail-info-status strong {
+	display: block;
+	width: 36px;
+	height: 36px;
+	color: #fff;
+	text-align: center;
+	margin: 8px auto 0;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 35px;
+	border-radius: 35px;
+}
+
+.flight-detail-info-status em {
+	display: block;
+	width: 100%;
+	height: 9px;
+	font-size: 9px;
+	text-align: center;
+	margin-top: 24px;
+	color: #989797;
+}
+
+.flight-city {
+	font-size: 18px;
+	color: #3d3d3d;
+	height: 24px;
+}
+
+.flight-time {
+	width: 100px;
+}
+
+.flight-airport {
+	height: 19px;
+	color: #7a7a7a;
+	font-size: 10px;
+	-webkit-text-size-adjus: none;
+}
+
+.flight-detail-info-start .flight-time {
+	background: url(./take-off-icon.png) no-repeat;
+	background-position: left 10px;
+	background-size: 18px 9px;
+	float: right;
+}
+
+.flight-detail-info-end .flight-time {
+	background: url(./landing-icon.png) no-repeat;
+	background-position: right 10px;
+	background-size: 16px 10px;
+}
+
+.flight-time-plan {
+	color: #7a7a7a;
+	font-size: 12px;
+}
+
+.flight-time-plan em {
+	color: #3d3d3d;
+	margin: 0 2px;
+	font-family: Arial;
+}
+
+.flight-time-real {
+	font-size: 14px;
+}
+
+.flight-time-real em {
+	font-family: Arial;
+	color: #f89311;
+	margin: 0 2px;
+	font-weight: 700;
+}
+
+.flight-detail-data-tips {
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.flight-detail-data-tips a {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: #0080d9;
+}
+
+.flight-detail-data-tips a span {
+	display: inline-block;
+	width: 11px;
+	height: 6px;
+	background: url(./down-arrow-icon.png) no-repeat;
+	background-size: 11px 6px;
+	margin-left: 5px;
+	vertical-align: 1px;
+}
+
+.flight-data-outer-wrap {
+	width: 100%;
+}
+
+.flight-data-inner-wrap {
+	padding: 10px;
+}
+
+.flight-real-time-data {
+	background: rgba(0, 0, 0, 0.8);
+	height: 40px;
+	line-height: 12px;
+}
+
+.flight-summary-data {
+	background: rgba(0, 0, 0, 0.8);
+	height: 88px;
+}
+
+.flight-track-data,
+.flight-speed-data,
+.flight-position-data {
+	float: left;
+	margin: 0 2%;
+	padding-top: 8px;
+	line-height: 12px;
+	overflow: hidden;
+}
+
+.flight-track-data strong em,
+.flight-speed-data strong em,
+.flight-position-data strong em {
+	color: #cecece;
+}
+
+.flight-track-data {
+	width: 30%;
+	background: url(./trace-icon.png) no-repeat 10% 12px;
+	background-size: 20px 16px;
+}
+
+.flight-speed-data {
+	width: 28%;
+	background: url(./speed-icon.png) no-repeat 10% 14px;
+	background-size: 23px 13px;
+}
+
+.flight-position-data {
+	width: 30%;
+	background: url(./position-icon.png) no-repeat 10% 10px;
+	background-size: 20px 20px;
+}
+
+.flight-real-time-data span,
+.flight-real-time-data strong {
+	display: block;
+	font-size: 10px;
+	overflow: hidden;
+}
+
+.flight-real-time-data span {
+	color: #878787;
+}
+
+
+.flight-real-time-data strong {
+	color: #fff;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.flight-track-data span,
+.flight-track-data strong {
+	margin-left: 35%;
+}
+
+.flight-speed-data span,
+.flight-speed-data strong {
+	margin-left: 40%;
+}
+
+.flight-position-data span,
+.flight-position-data strong {
+	margin-left: 35%;
+}
+
+
+.flight-summary-data {
+	position: relative;
+	font-size: 12px;
+	color: #fff;
+}
+
+.flight-summary-data-start-city,
+.flight-summary-data-end-city {
+	position: absolute;
+	top: 64px;
+	width: 120px;
+	height: 24px;
+	line-height: 24px;
+	font-size: 10px;
+}
+
+.flight-summary-data-start-city {
+	left: 0;
+	text-align: left;
+	padding-left: 5px;
+}
+
+.flight-summary-data-end-city {
+	right: 0;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.flight-summary-data-start-icon,
+.flight-summary-data-end-icon {
+	position: absolute;
+	top: 17px;
+	width: 12px;
+	height: 47px;
+}
+
+.flight-summary-data-start-icon {
+	left: 22px;
+	background: url(./circle-blue-icon.png) no-repeat;
+	background-size: 12px 47px;
+}
+
+.flight-summary-data-end-icon {
+	right: 22px;
+	background: url(./circle-blue-icon.png) no-repeat;
+	background-size: 12px 47px;
+}
+
+.flight-summary-data-voyage-wrap {
+	position: absolute;
+	top: 42px;
+	left: 34px;
+	right: 34px;
+	bottom: 29px;
+}
+
+.flight-voyage-start-wrap,
+.flight-voyage-end-wrap {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background: url(./dashed-icon.png) no-repeat;
+	background-size: 575px 17px;
+}
+
+.flight-voyage-start-wrap {
+	left: 0;
+	right: calc(100% / 2);
+	background-position: left top;
+}
+
+.flight-voyage-end-wrap {
+	left: calc(100% / 2);
+	right: 0;
+	background-position: right top;
+}
+
+.flight-voyage-process-wrap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 17px;
+}
+
+.flight-voyage-process-bar,
+.flight-voyage-process-end-bar {
+	float: left;
+	height: 17px;
+}
+
+.flight-voyage-process-bar {
+	background: url(./line-icon.png);
+	background-size: 575px 17px;
+}
+
+.flight-voyage-process-end-bar {
+	background: url(./line-end-icon.png) no-repeat;
+	width: 29px;
+	background-size: 29px 17px;
+}
+
+.flight-voyage-current-processer {
+	position: absolute;
+	top: -2px;
+	left: 29px;
+	background: url(./processer-icon.png) no-repeat;
+	background-size: 6px 28px;
+	width: 6px;
+	height: 28px;
+}
+
+.flight-altitude {
+	position: absolute;
+	top: 4px;
+	left: 50%;
+}
+
+.flight-altitude span,
+.flight-altitude em {
+	display: block;
+	line-height: 12px;
+}
+
+.flight-altitude span {
+	color: #b3b3b4;
+	font-size: 10px;
+}
+
+.flight-altitude em {
+	color: #fff;
+	font-size: 12px;
+	font-family: Arial;
+	width: 100px;
+}
+
+.flight-altitude em span {
+	display: inline-block;
+}
+
+.flight-predict-info-wrap,
+.flight-predict-info-start-line,
+.flight-predict-info-end-line,
+.flight-predict-info {
+	position: absolute;
+}
+
+.flight-predict-info-wrap {
+	top: 10px;
+	left: 32px;
+	bottom: 20px;
+	right: 32px;
+}
+
+.flight-predict-info-wrap span,
+.flight-predict-info-wrap em {
+	display: block;
+}
+
+
+.flight-predict-info-start-line,
+.flight-predict-info-end-line {
+	top: 10px;
+	width: 22%;
+	height: 20px;
+}
+
+.flight-predict-info-start-line {
+	left: 0;
+	background: url(./line-blue-icon.png) no-repeat left top;
+}
+
+.flight-predict-info-end-line {
+	right: 0;
+	background: url(./line-blue-icon.png) no-repeat right top;
+}
+
+.flight-predict-info {
+	top: 0;
+	left: 50%;
+	width: 56%;
+	height: 30px;
+	margin-left: -28%;
+	line-height: 10px;
+	color: #b3b3b4;
+	overflow: hidden;
+}
+
+.flight-predict-info-time,
+.flight-predict-info-voyage {
+	float: left;
+	width: 60px;
+	text-align: center;
+	font-size: 10px;
+	line-height: 12px;
+}
+
+.flight-predict-info em {
+	font-family: Arial;
+	font-size: 12px;
+	color: #fff;
+}
+
+.detail-header {
+	width: 100%;
+	height: 44px;
+	background: rgba(0, 128, 217, 1);
+	position: absolute;
+	left: 0; 
+	top: -44px;
+	z-index: 3;
+}
+
+.detail-header nav {
+	padding: 0 10px;
+	height: 100%;
+}
+
+.go-prev-button {
+	float: left;
+	height: 44px;
+	width: 25px;
+	text-indent: -999em;
+	background: url(/static/images/prev.png) no-repeat left center;
+	background-size: 14px 22px;
+}
+
+.flight-summary-wrap,
+.flight-real-time-wrap {
+	position: absolute;
+	left: 0;
+	z-index: 3;
+}
+
+.flight-summary-wrap {
+	bottom: 44px;
+}
+
+.flight-real-time-wrap {
+	top: -44px;
+}
+
+.flight-status-0 {
+	background: rgba(22, 207, 118, 0.4);
+}
+
+.flight-status-1 {
+	background: rgba(0, 128, 217, 0.4);
+}
+
+.flight-status-2 {
+	background: rgba(22, 22, 22, 0.4);
+}
+
+.flight-status-3 {
+	background: rgba(240, 104, 62, 0.4);
+}
+
+.flight-status-5 {
+	background: rgba(145, 177, 194, 0.4);
+}

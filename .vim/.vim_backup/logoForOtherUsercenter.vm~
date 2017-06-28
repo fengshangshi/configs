@@ -1,0 +1,16 @@
+##logo
+<div class="logo-bar">
+	<div class="logo-bar-content clearfix">
+		<h1>
+			<a href="http://www.qunar.com">去哪儿网，聪明你的旅行</a>
+			<strong>$!{pageTitle}</strong>
+		</h1>
+		<div class="process-bar step step-02">
+			<span class="step-sub-01">修改号码</span>
+			<span class="step-sub-01">验证身份</span>
+			<span class="step-sub-01">完成</span>
+		</div>
+	</div>
+</div>
+##/logo
+

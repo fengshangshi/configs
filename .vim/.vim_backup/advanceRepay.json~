@@ -1,0 +1,9 @@
+{
+	"errorCode": "010000",
+	"errorMsg": "服务器泡妞去了",
+	"data": {
+		"totalRepayAmount": "3010.00",
+		"lastDueDate": "2014/12/31",
+		"prcpAmount": "3000"
+	}
+}

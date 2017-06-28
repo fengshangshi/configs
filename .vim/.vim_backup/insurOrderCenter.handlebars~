@@ -1,0 +1,61 @@
+{{#each this}}
+    {{#if this.status 0}}
+    <li>
+        <a href="javascript:void(0);" class="insur-user selected">
+            <div class="checkbox">
+                <input type="checkbox" 
+                    name="guestsCk" 
+                    checked="checked" 
+					data-click-id="inscn"
+					data-index="{{addOne @index}}"
+					data-name="{{this.insurNm}}"
+                    data-price="{{this.price}}"
+					data-count="{{index this.applyNums}}"
+                    value="{{this.token}}|{{index this.applyNums}}" />
+            </div>
+            <div class="user-info-name">{{this.insurNm}}</div>
+            <div class="user-info-idCard">{{this.insurIdNo}}</div>
+            <div class="insur-count">
+				{{#ifOnlyOne this.applyNums}}
+				1份
+				{{else}}
+					<select name="insur-count-select" data-click-id="inscount">
+						{{#each this.applyNums}}
+							<option value="{{this}}">{{this}}份</option>
+						{{/each}}
+					</select>
+				{{/ifOnlyOne}}
+			</div>
+            <div class="insur-amount">
+				¥<span>{{sum this.price this.applyNums}}</span>
+			</div>
+        </a>
+    </li>
+    {{else}}{{#if this.status 1}}
+    <li>
+        <div class="insur-user disable">
+            <div class="checkbox"></div>
+            <div class="user-info-name" title="{{this.insurNm}}">{{this.insurNmShort}}</div>
+            <div class="user-info-idCard">{{this.insurIdNo}}</div>
+            <div class="insur-count">
+                超出投保范围(年龄在30天至90周岁内)
+            </div>
+            <div class="insur-amount"></div>
+        </div>
+    </li>
+    {{else}}
+    <li>
+        <div class="insur-user disable">
+            <div class="checkbox"></div>
+            <div class="user-info-name">{{this.insurNm}}</div>
+            <div class="user-info-idCard">{{this.insurIdNo}}</div>
+            <div class="insur-count overflow">
+                如需再次购买请将日期
+                <br />
+                调整为{{format this.insurEndDate}}之后
+            </div>
+            <div class="insur-amount buy"></div>
+        </div>
+    </li>
+    {{/if}}{{/if}}
+{{/each}}

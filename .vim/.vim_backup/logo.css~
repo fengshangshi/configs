@@ -1,0 +1,24 @@
+/*logo相关*/
+
+.trends-logo {
+	float: left;
+}
+
+.trends-logo strong {
+	display: inline-block;
+	width: 106px;
+	height: 34px;
+	overflow:hidden;
+	line-height: 999em;
+	background: url(./logo.png) no-repeat;
+}
+
+.realestate-logo {
+	display: inline-block;
+	font: 16px/1em "mirosoft yahei", Arail;
+	height: 16px;
+	padding-left:10px;
+	margin-left:10px;
+	border-left: 1px solid #fcd866;
+	margin-top: 17px;
+}

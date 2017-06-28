@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net/el" %>
+<div class="page-title">
+	<h2>部门信息</h2>
+</div>
+
+<form id="archiveForm" class="archive-form">
+    <div class="form-group">
+        <label for="departmentCode" class="control-label">部门编码:</label>
+        <div class="control-cont">
+            <input maxlength="20" type="text" id="departmentCode" class="validate[required,custom[onlyNumberSp]] form-control js-departmentcode" data-errormessage="部门编码只能为数字" data-errormessage-value-missing="请填写部门编码" placeholder="请填写部门编码">
+            <div class="fn-important">*</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="departmentName" class="control-label">部门名称:</label>
+        <div class="control-cont">
+            <input type="text" maxlength="20" id="departmentName" autocomplete="off" class="validate[required] form-control js-departmentname" data-errormessage-value-missing="请填写部门名称" placeholder="请填写部门名称">
+            <div class="q-icon fn-important">*</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="parentName" class="control-label">上级部门:</label>
+        <div class="control-cont">
+            <input id="parentName" readonly="readonly" type="text" autocomplete="off" class=" form-control" onclick="showDepartment('parentName','menuContentModify');">
+					  <input type="hidden" class="js-departmentvalue" />
+				    <span class="combo-arrow" style="height: 20px;"	onclick="showDepartment('parentName','menuContentModify');" >&nbsp;</span>
+        </div>
+				<input type="text" type="hidden"  style="visibility:hidden;height: 1px; width:1px; " id="departmentModify"  name="departmentModify" />
+				<div id="menuContentModify" class="menuContent" style="display: none; position: absolute;">
+					<ul id="departmentTreeModify" class="ztree"></ul>
+					<input id="tCancelModify" type="button"  onclick="departmentCancel('modify', 'departmentInputModify', 'departmentModify');" class="btn" value="取消">
+					<input id="tCommit" type="button"  onclick="departmentCommit('modify');" class="btn btn-primary" value="确定">
+				</div>
+    </div>
+
+    <div class="form-group">
+        <label for="remark" class="control-label">备注:</label>
+        <div class="control-cont remark-txt">
+            <textarea class="form-control js-remark" id="remark" rows="5" placeholder="请填写备注"></textarea>
+        </div>
+    </div>
+    <div class="form-btn-wrap">
+    	<a href="javascript:void(0);" class="btn btn-primary js-save">保存</a>
+    	<a href="javascript:void(0);" onclick="javascript:history.back(-1);" class="btn">取消</a>
+    </div>
+</form>
+<div class="form-tip">
+    <p>提示：部门编码按照两位数为一级</p>
+</div>
+
+<div class="modal hide fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+        <h3 id="myModalLabel">提示</h3>
+    </div>
+    <div class="modal-body">
+        <div class="modal-msg js-msg"></div>
+    </div>
+    <div class="modal-footer">
+        <button href="#" class="btn btn-primary" type="submit" data-dismiss="modal">确定</button>
+    </div>
+</div>

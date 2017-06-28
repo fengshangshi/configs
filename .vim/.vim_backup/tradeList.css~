@@ -1,0 +1,75 @@
+/**
+ * 交易记录样式
+ * author water.li
+ * Date 2014-12-27
+ */
+ 
+.trade{
+	font-size: 14px;
+}
+
+.trade .box-head{
+	height: 38px;
+	line-height: 38px;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 0px 20px;
+}
+
+.trade table{
+	width: 100%;
+	color: #666;
+}
+
+.trade tbody td{
+	vertical-align: middle;
+	padding: 10px 0;
+	color: #666;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+
+.trade thead th{
+	background: #f7f7f7;
+	border-top: 1px solid #e7e7e7;
+	color: #999;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+
+.trade-item td.orderNo{
+	word-break: break-all;
+	word-wrap: break-word;
+	padding-right: 10px;
+}
+
+.trade-item td.oper{
+	text-align: center;
+	color: #0084bb;
+	cursor: pointer;
+}
+
+.trade-item td.money i{
+	display: inline-block;
+	margin-left: 5px;
+	width: 11px;
+	height: 11px;
+	background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/page/index/jiantou.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	cursor: pointer;
+
+}
+
+.trade-item .money.plus{
+	color: #48b83b;
+}
+
+.trade-item .money.minus{
+	color:#ff5555;
+}
+
+.trade-money-poptip{
+	width: 268px;
+}

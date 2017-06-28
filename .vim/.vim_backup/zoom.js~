@@ -1,0 +1,7 @@
+var $ = require("sky-mobile:widget/libs/zepto/zepto.js");
+var message = require("sky-mobile:widget/libs/message/message.js");
+
+$(".zoom").delegate(".zoom-in", "click", function(e) {
+	e.preventDefault();
+	message.fire("zoom-in-button-is-click");
+});

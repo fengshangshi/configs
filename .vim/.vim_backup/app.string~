@@ -1,0 +1,17 @@
+<!--账单查询-->
+<v-header :nav-id="navId"></v-header>
+
+<div class="container">
+
+	<div class="leftbar">
+		<v-aside :nav-id="subNavId"></v-aside>
+	</div>
+
+	<div class="rightbar">
+		<div class="contener">
+			<v-searcher></v-searcher>
+			<v-billlist></v-billlist>
+		</div>
+	</div>
+
+</div>

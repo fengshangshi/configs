@@ -1,0 +1,36 @@
+/**
+ * 封装ajax
+ * @author ss.feng@qunar.com
+ */
+var $ = require("zepto/zepto");
+
+module.exports = function(options) {
+	var url = options.url,
+		data = options.data || {},
+		type = options.type || "POST",
+		dataType = options.dataType || "json",
+		jsonp = options.jsonp || "callback",
+		async = options.async || true,
+		onsuccess = options.onsuccess || function() {},
+		onerror = options.onfail || function() {};
+
+	var ajaxOptions = {
+		data: data,
+		type: type,
+		dataType: dataType,
+		cache: false,
+		async: async,
+		success: function(data, status, xhr) {
+			onsuccess.call(xhr, data);
+		},
+		error: function(xhr, error) {
+			onerror.call(xhr, error);
+		}
+	};
+
+	if (dataType === "jsonp") {
+		ajaxOptions["jsonp"] = jsonp;
+	}
+
+	$.ajax(url, ajaxOptions);
+};

@@ -1,0 +1,15 @@
+/**
+ *@file 格式化数字
+ *@author ss.feng
+ */
+module.exports = function(str, length) {
+	if (!str || typeof str != "string") {
+		return "";
+	}
+	str = str.replace(/[^\d]/g, "");
+	if (!length || typeof length != "number") {
+		return str;
+	}
+	var re = new RegExp("(\\d{"+ length +"})(?=\\d)", "g");
+	return str.replace(re, "$1 ");
+};

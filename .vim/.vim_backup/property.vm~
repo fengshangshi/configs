@@ -1,0 +1,33 @@
+## @Describe: 保险-财险 
+## @author ss.feng@qunar.com
+
+#parse("widget/include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+#parse("widget/include/headMeta.vm")
+<title>财险 - 保险 - ${websiteName}</title>
+<link css_public_version="base/ver/styles/public.css.ver" href="${qzzUrl}/${baseCSSPath}/public.css" rel="stylesheet">
+<link href="${qzzUrl}/${cssPath}/common/base.css" rel="stylesheet">
+<link href="${qzzUrl}/${cssPath}/pages/insurance/property/export.css" rel="stylesheet">
+#parse("widget/include/headScript.vm")
+</head>
+<body navkey="roomStatusTab" pagekey="roomStatusTab">
+
+    <!-- header -->
+    <div class="q-header fn-clear" ms-controller="header" ms-include-src="content"></div>
+    <!-- /header -->
+
+    <!-- contenter -->
+    <div class="q-contenter" id="j-contenter">
+        <div ms-controller="contenter" ms-include-src="content" data-include-replace="true" data-include-rendered="rendered"></div>
+    </div>
+    <!-- /contenter -->
+
+<script type="text/javascript" js_public_version="base/ver/scripts/public.js.ver" src="${qzzUrl}/${baseJSPath}/public.js"></script>
+<script type="text/javascript" src="${qzzUrl}/${jsPath}/common/base.js"></script>
+<script type="text/javascript" src="${qzzUrl}/${jsPath}/pages/insurance/property/export.js"></script>
+#parse("widget/include/footScript.vm")
+</body>
+</html>
+

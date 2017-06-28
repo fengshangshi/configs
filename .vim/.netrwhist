@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/Users/fengshangshi/Documents/git/work/sivir/src/scripts/pages/account/flow/components/flowList'
+let g:netrw_dirhist_2='/Users/fengshangshi/Documents/git/work/sivir/src/scripts/pages/account/bills/components/searcher'
+let g:netrw_dirhist_3='/Users/fengshangshi/Documents/git/work/sivir/src/scripts/pages/account/flow/components/flowList/dialog'
+let g:netrw_dirhist_4='/Users/fengshangshi/Documents/git/work/sivir/mock/data/order'
+let g:netrw_dirhist_5='/Users/fengshangshi/Documents/git/work/sivir/src/scripts/pages/account/bills/components/billList'
+let g:netrw_dirhist_6='/Users/fengshangshi/Documents/git/work/sivir/src/scripts/pages/account/flow/components/flowList/dialog'

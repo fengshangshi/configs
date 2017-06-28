@@ -1,0 +1,475 @@
+/*[export]*/
+/*
+ * 订单中心保险业务样式
+ * @author ss.feng@qunar.com
+ */
+require("reset.css");
+require("q_datepicker.css");
+
+/*reset.css中居然有important*/
+html,
+body {
+	background: #fff !important;
+}
+
+/*页头容器*/
+#orderCenter-header {
+	height: 100px;
+	background: #fff;
+	border-bottom: 2px solid #00aec7;
+}
+
+#orderCenter-header .q_header_logo {
+	display: none;
+}
+
+/*页尾容器*/
+.foot {
+	height: 178px;
+	background: #fff;
+}
+
+.foot .inner {
+	width: 976px;
+	margin: 0 auto;
+}
+
+/*内容容器*/
+.body {
+	background: #ececec;
+}
+
+.body .inner {
+	padding: 15px 0;
+	margin: 0 auto;
+	width: 976px;
+	overflow: hidden;
+}
+
+/*投保主要内容区域*/
+.main {
+	float: left;
+	width: 688px;
+	background: #fff;
+	border-top: 2px solid #00aec7;
+}
+
+.main .module {
+	padding: 0 15px;
+}
+
+.main .module-hd {
+	border-bottom: 2px solid #eee;
+	height: 30px;
+	padding-top: 12px;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+.main h3 {
+	float: left;
+	font-size: 18px;
+}
+
+.main h4 {
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.main .more {
+	float: right;
+	line-height: 28px;
+}
+
+.main .more img {
+	vertical-align: -4px;
+}
+
+.main strong {
+	font-weight: 700;
+}
+
+/*保险信息*/
+.insur-info-items {
+	padding-bottom: 10px;
+}
+
+.insur-info-items li {
+	height: 30px;
+	width: 100%;
+}
+
+.insur-info-items label,
+.insur-info-items .field {
+	float: left;
+	vertical-align: top;
+}
+
+.insur-info-items label {
+	width: 100px;
+	padding-right: 25px;
+	font-size: 14px;
+	text-align: right;
+	color: #999;
+}
+
+.insur-info-items .field {
+	width: 480px;
+	line-height: 21px;
+}
+
+/*被投保人信息*/
+.insur-user-info-items {
+	padding-bottom: 10px;
+}
+
+.insur-user-info-items li {
+	padding-bottom: 10px;
+}
+
+.insur-user {
+	display: block;
+	height: 48px;
+	border: 1px solid #fff;
+	background: #fcfcfc;
+	overflow: hidden;
+}
+
+a.insur-user:hover {
+	border: 1px solid #ccc;
+}
+
+a.selected,
+a.selected:hover {
+	border-color: #00a3d2;
+	background: #fff;
+}
+
+.insur-user .checkbox,
+.insur-user .user-info-name,
+.insur-user .user-info-idCard,
+.insur-user .insur-count,
+.insur-user .insur-amount {
+	float: left;
+	text-align: center;
+	line-height: 48px;
+	height: 48px;
+}
+
+.insur-user .checkbox {
+	width: 50px;
+	padding-top: 17px;
+	line-height: normal;
+	*padding-top: 12px;
+	_zoom: 1;
+}
+
+.insur-user .user-info-name {
+	width: 82px;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: left;
+}
+
+.insur-user .user-info-idCard {
+	width: 182px;
+}
+
+.insur-user .insur-count {
+	width: 256px;
+}
+
+.insur-user .insur-count select {
+	width: 60px;
+	font: 12px arial;
+}
+
+.insur-user .overflow {
+	padding-top: 6px;
+	line-height: 18px;
+}
+
+.insur-user .insur-amount {
+	width: 76px;
+	font-family: arial;
+}
+
+.insur-user .insur-amount,
+.insur-user .insur-count,
+.insur-user .user-info-idCard,
+.insur-user .user-info-name,
+.insur-user .checkbox{
+	overflow: hidden;
+}
+
+.insur-user .buy {
+	background: url(//source.qunarzz.com/site/images/pay/insurance_mall/page/insurOrderCenter/buy.png)
+		no-repeat center;
+	_background-image: url(//source.qunarzz.com/site/images/pay/insurance_mall/page/insurOrderCenter/20150211-001/buyForIE6.png);
+}
+
+.disable * {
+	color: #ccc;
+}
+
+/*保险提交按钮及须知*/
+.insur-patch {
+	padding: 20px 50px 40px;
+}
+
+.insur-submit {
+	height: 40px;
+	overflow: hidden;
+}
+
+.insur-submit span em,
+.insur-submit span strong {
+	color: #f60;
+}
+
+.insur-submit span strong {
+	font-size: 22px;
+}
+
+.insur-submit span {
+	*vertical-align: 6px;
+}
+
+/*投保提交按钮*/
+.button {
+	display: inline-block;
+	padding: .5em 2.2em;
+	color: #fff;
+	font-size: 14px;
+	background: #f60;
+	border-radius: 2px;
+	margin-right: 10px;
+	vertical-align: 2px;
+}
+
+.button-disable {
+	background: #afafaf;
+	color: #fff;
+}
+
+.insur-protocal a:hover {
+	text-decoration: underline;
+}
+
+.insur-notice {
+	padding-top: 20px;
+}
+
+.insur-notice-content {
+	border: 1px solid #ccc;
+	padding: 10px 20px;
+	margin-top: 5px;
+}
+
+.insur-notice-content p {
+	overflow: hidden;
+	line-height: 22px;
+	_zoom: 1;
+}
+
+.insur-notice-content p label,
+.insur-notice-content p span {
+	float: left;
+}
+
+.insur-notice-content p label {
+	padding-right: 10px;
+	color: #999;
+}
+
+.insur-notice-content p span {
+	color: #666;
+}
+
+.insur-notice-content p span {
+	width: 430px;
+}
+
+/*边栏容器*/
+.aside {
+	float: right;
+	width: 272px;
+	background: #f4fbff;
+}
+
+/*航班信息*/
+.air-info .module-hd,
+.air-info .module-bd, 
+.air-info .module-ft {
+	padding: 12px 15px;
+}
+
+.air-info .module-hd,
+.air-info .module-bd {
+	background: #f4fbff;
+}
+
+.air-info .module-hd {
+	padding-bottom: 0;
+}
+
+.air-info .module-bd {
+	overflow: hidden;
+}
+
+.air-info h4 {
+	border-bottom: 1px dotted #c7e0ee;
+	padding-bottom: 10px;
+}
+
+.air-info .module-hd img {
+	vertical-align: -4px;
+}
+
+.air-info .module-ft {
+	background: #fff;
+}
+
+.air-start,
+.air-end {
+	width: 50%;
+}
+
+.air-start {
+	float: left;
+}
+
+.air-end {
+	float: right;
+	text-align: right;
+}
+
+.air-info h5 {
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.air-info strong {
+	font-weight: 700;
+}
+
+.air-info .module-bd {
+	background: url(//source.qunarzz.com/site/images/pay/insurance_mall/page/insurOrderCenter/arrow-to-right.png)
+		no-repeat center;
+	_background-image: url(//source.qunarzz.com/site/images/pay/insurance_mall/page/insurOrderCenter/arrow-to-rightForIE6.png);
+	_zoom: 1;
+}
+
+.air-info .module-bd strong {
+	font-size: 14px;
+}
+
+.air-info .module-ft label {
+	padding-right: 10px;
+	color: #999;
+}
+
+/*日期组件*/
+.start-date {
+	width: 168px;
+	height: 20px;
+	float: left;
+	margin-top: -3px;
+}
+
+.start-date input {
+	width: 158px;
+}
+
+/*重写日历样式*/
+.qunar-dp {
+	width: 158px;
+}
+
+.qunar-dp .dp-info .dp-text {
+	line-height: 14px;
+}
+
+.qunar-dp .q-datepicker {
+	left: -2px;
+	margin-top:1px;
+}
+
+.qunar-dp .q-datepicker { 
+	width: 220px;
+}
+
+.qunar-dp .q-datepicker .g { 
+	width: 220px;
+}
+
+.insur-submit em,
+.insur-amount,
+#insur-price {
+	font-family: arial;
+}
+
+/**
+ * 业务线图标
+ */
+.order-type h4 {
+	background: url(//source.qunarzz.com/site/images/pay/insurance_mall/order_icon.png)
+		no-repeat 0 4px;
+	padding-left: 22px;
+}
+
+.order-type-hotel h4 {
+    background-position: -5px -29px;
+}
+
+.order-type-tuan h4 {
+    background-position: -3px -69px;
+}
+
+.order-type-TRAIN h4 {
+    background-position: -4px -108px;
+}
+
+.order-type-FLIGHT h4 {
+    background-position: -3px -148px;
+}
+
+.order-type-ticket h4 {
+    background-position: -3px -188px;
+}
+
+.order-type-pick h4 {
+    background-position: -3px -227px;
+}
+
+.order-type-vocation h4 {
+    background-position: -5px -267px;
+}
+
+.order-type-travel h4 {
+    background-position: -3px -307px;
+}
+
+.order-type-car h4 {
+    background-position: -3px -346px;
+}
+
+.order-type-visa h4 {
+    background-position: -5px -383px;
+}
+
+.order-type-around h4 {
+    background-position: -4px -423px;
+}
+
+.order-type-local h4 {
+    background-position: -7px -462px;
+}
+
+.order-type-longline h4 {
+    background-position: -3px -501px;
+}
+
+.order-type-deposit h4 {
+    background-position: -4px -540px;
+}

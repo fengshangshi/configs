@@ -1,0 +1,12 @@
+<div id="dialog-simple-tips" class="dialog"
+		title="{{dialogTitle}}">
+	<p class="tips-content">
+		<label class="tips-content-icon"></label>
+		{{dialogContent}}
+		<br />
+		<span>{{time dialogTime}}</span>
+	</p>
+	<p>
+		<span class="dialog-submit">确定</span>
+	</p>
+</div>

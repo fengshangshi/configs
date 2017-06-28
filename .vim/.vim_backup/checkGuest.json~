@@ -1,0 +1,82 @@
+{
+    "success": true,
+    "msg": "",
+    "attributes": {
+        "insurBeginDate": 1423298234084,
+        "insurEndDate": 1423268234084
+    },
+    "obj": [
+        {
+            "insurNm": "冯尚实",
+            "insurIdType": 0,
+            "insurIdNo": "xxxxxxx",
+            "insurBirth": "1423298234084",
+            "insurGender": 0,
+            "age": 34,
+            "day": 12666,
+            "isAdult": true,
+            "status": 0,
+            "insurOrderNo": null,
+            "insurBeginDate": 1423298234084,
+            "insurEndDate": 1423298234084,
+            "price": "30.01",
+            "token": "dsfdfsdfsd",
+            "minApplyNum": "1",
+            "maxApplyNum": "1"
+        },
+        {
+            "insurNm": "冯尚实",
+            "insurIdType": 0,
+            "insurIdNo": "xxxxxxx",
+            "insurBirth": "1423298234084",
+            "insurGender": 0,
+            "age": 34,
+            "day": 12666,
+            "isAdult": true,
+            "status": 0,
+            "insurOrderNo": null,
+            "insurBeginDate": 1423298234084,
+            "insurEndDate": 1423298234084,
+            "price": "30.03",
+            "token": "dsfdfsdfsd",
+            "minApplyNum": "1",
+            "maxApplyNum": "5"
+        },
+        {
+            "insurNm": "冯尚实",
+            "insurIdType": 0,
+            "insurIdNo": "xxxxxxx",
+            "insurBirth": "1423298234084",
+            "insurGender": 0,
+            "age": 34,
+            "day": 12666,
+            "isAdult": true,
+            "status": 1,
+            "insurOrderNo": null,
+            "insurBeginDate": 1423298234084,
+            "insurEndDate": 1423298234084,
+            "price": "30.01",
+            "token": "dsfdfsdfsd",
+            "minApplyNum": "1",
+            "maxApplyNum": "5"
+        },
+        {
+            "insurNm": "冯尚实",
+            "insurIdType": 0,
+            "insurIdNo": "xxxxxxx",
+            "insurBirth": "1423298234084",
+            "insurGender": 0,
+            "age": 34,
+            "day": 12666,
+            "isAdult": true,
+            "status": 2,
+            "insurOrderNo": null,
+            "insurBeginDate": 1423298234084,
+            "insurEndDate": 1423298234084,
+            "price": "30.03",
+            "token": "dsfdfsdfsd",
+            "minApplyNum": "1",
+            "maxApplyNum": "5"
+        }
+    ]
+}

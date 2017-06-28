@@ -1,0 +1,219 @@
+/*[export]*/
+@import url(styles/libs/bootstrap-combined.min);
+@import url(styles/common/base.css);
+@import url(styles/libs/validationEngine.css);
+@import url(styles/common/pagination.scss);
+@import url(styles/common/tabs.css);
+
+.btn-link {
+    color: #00969e;
+}
+.q-btnbar {
+    margin-top: 10px;
+}
+
+.q-panel {
+    padding: 15px;
+}
+
+.q-btn {
+    margin: -10px 0 20px 0;
+}
+
+.q-panel .q-btnbar {
+    margin: -15px 0 0;
+}
+
+.input-edit {
+    display: inline-block;
+    margin-bottom:2px;
+}
+
+.m-top {
+    margin-top: 15px;
+}
+
+.back {
+    color: #4cae4c;
+}
+
+.back:hover, .back:focus {
+    color: #4cae4c;
+}
+
+.mod-hd  {
+    background: #f7f7f7;
+}
+.mod-hd .info-label {
+    font-weight: bold;
+    width: auto;
+ }
+
+ .customer {
+    color: #00969e;
+}
+
+/* 操作模块 */
+.q-oprt {
+    padding: 0 15px;
+}
+
+/* 门店绑定弹窗 */
+.bind-hotel-wrap {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.bind-hotel-list {
+    max-height: 205px;
+    overflow-y: auto;
+}
+.bind-tips {
+    color: #888;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.bind-confirm-tips {
+    margin-bottom: 5;
+}
+
+.no-content {
+    min-height: 300px;
+    line-height: 300px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.bind-hotel-wrap input[type="checkbox"],
+.table input[type="checkbox"] {
+    margin-top: 0;
+}
+
+.choosed-wrap p {
+    margin-bottom: 5px;
+}
+.choosed-hotel {
+    max-height: 80px;
+    overflow-y: auto;
+}
+.choosed-hotel .q-icon {
+    cursor: pointer;
+}
+.choosed-name {
+    margin-right: 20px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.td-disabled {
+    color: #aaa;
+}
+
+/* 签约列表 */
+.signed-list {
+    line-height: auto;
+    position: relative;
+}
+.signed-list .q-oprt {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -15px;
+}
+.signed-list .info-cont,
+.signed-list .info-label {
+    line-height: 1.6;
+    padding: 10px 15px 8px;
+    vertical-align: middle;
+}
+.signed-list .info-cont {
+}
+/* 提示弹窗内容 */
+.remind-tip {
+    width: 300px;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+.leftbar {
+    float: left;
+    width: 10%;
+    border-right: 1px solid #ddd;
+}
+
+.rightbar {
+    float: right;
+    width: 90%;
+}
+
+.agreementlist {
+    width: 100%;
+}
+
+.agreementlist li {
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.agreementlist li:hover {
+    color: #449d44;
+    cursor: pointer;
+}
+
+.thisagreement {
+    color: #449d44;
+    background-color: #fff;
+    position: relative;
+    z-index: 99;
+    width: 101%;
+}
+
+.clear {
+    clear: both;
+}
+
+.del-bottom {
+    box-shadow: 0 0 0 !important;
+}
+
+/* 日志 */
+.log-more,
+.log-more:hover {
+    text-decoration: none;
+    font-size: 20px;
+}
+.log-detail-wrap {
+    background: #fff;
+    padding: 10px;
+    position: absolute;
+    right: 35px;
+    width: 400px;
+    max-height: 360px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 2px 10px #ddd;
+}
+.table-bordered {
+    border-collapse: collapse;
+}
+
+.paging-wrap {
+    text-align: right;
+}
+.paging-wrap .q-pagination {
+    vertical-align: middle;
+    display: inline-block;
+    height: auto;
+    padding-top: 0;
+}
+
+.btn-group .btn {
+		margin-right: 0;
+}
+
+.btn-group {
+		padding-bottom: 20px;
+}

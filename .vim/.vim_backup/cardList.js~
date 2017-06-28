@@ -1,0 +1,43 @@
+/**
+ * 常用卡功能
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+
+message.register("showCardList", function(e) {
+	$(".bankCard-list").find("li.hidden").removeClass("hidden");
+});
+
+message.register("hideCardList", function(e) {
+	$(".bankCard-list")
+	.find("li:not(:first)")
+	.filter(":not(:last)")
+	.addClass("hidden");
+});
+
+message.register("clickCardList", function(e) {
+	var args = e.args,
+		target = args.target;
+
+	var bankCode = $(target).data("bankcode");
+	var storeIndex = $(target).data("storeindex");
+	var bankName = $(target).data("bankname");
+	var cardNo = $(target).data("cardno");
+	$("#cardList-form input[name=bankCode]").val(bankCode);
+	$("#cardList-form input[name=storeIndex]").val(storeIndex);
+	$("#cardList-form input[name=bankName]").val(bankName);
+	$("#cardList-form input[name=cardNo]").val(cardNo);
+
+	message.fire("fetchProvince", {
+		bankCode: bankCode,
+		form: "#cardList"
+	});
+
+
+	target = $(target).parent();
+	$(target).prependTo(".bankCard-list");
+
+	$(".bankCard-more span").removeClass("up").text("全部展开");
+	message.fire("hideCardList");
+});

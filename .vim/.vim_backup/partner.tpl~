@@ -1,0 +1,5 @@
+<a href="###" class="links-partner">
+	<span>合作伙伴</span>
+</a>
+{%require name="realestate:widget/header/partner/partner.css"%}
+{%require name="realestate:widget/header/partner/partner.js"%}

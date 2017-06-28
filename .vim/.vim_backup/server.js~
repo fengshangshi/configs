@@ -1,0 +1,64 @@
+//console.log(VIEWENGINE);
+
+
+//
+// const http = require('http');
+// const path = require('path');
+// const Controller = require('../sugar-base-controller');
+//
+// global.Controller = Controller;
+// const indexController = require('./app/controller/indexController');
+//
+// const server = http.createServer((req, res) => {
+//     //console.log(req.method, req.url);
+//     global.ROOT = __dirname;
+//     global.VIEWENCODING = 'utf8';
+//     global.VIEWENGINE = 'ejs';
+//     global.VIEWROOT = path.join(ROOT, 'views');
+//
+//     let controller = indexController.GET;
+//     let index = new controller(req, res);
+//     index.exec();
+// });
+// server.listen(8000);
+
+const url = require('url');
+const path = require('path');
+const http = require('http');
+
+// 加载controller基类
+const BaseController = require('../../sugar-base-controller');
+const utils = require('../../sugar-utils');
+
+global.Controller = BaseController;
+global.VIEWENCODING = 'utf8';
+global.VIEWENGINE = 'ejs';
+global.VIEWROOT = path.join(ROOT, 'views');
+
+const server = http.createServer((req, res) => {
+    // 交给路由的逻辑
+    // 把http.method和http.url交给sugar-router处理
+    let method = req.method;
+    //let url = req
+
+    let pathname = url.parse(req.url).pathname;
+    pathname = utils.convert(pathname);
+    console.log(pathname);
+
+    let file = path.join(ROOT, 'app/controller', pathname +  '.js');
+    let Controller = require(file);
+    //let method = req.method.toUpperCase();
+
+    if (Controller[method]) {
+        let controller = new Controller[method](req, res);
+        controller.exec();
+    }
+});
+
+server.on('listening', () => {
+    console.log(server.address().port);
+})
+
+exports.listen = function(port, callback) {
+    server.listen(port, callback);
+}

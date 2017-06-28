@@ -1,0 +1,8 @@
+.location {
+	display: none; 
+	width: 20px;
+	height: 20px;
+	border: 1px solid #ececec;
+	background: #fff;
+	border-radius: 2px;
+}

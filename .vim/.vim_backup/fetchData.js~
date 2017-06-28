@@ -1,0 +1,30 @@
+/**
+ * @desc 自动填充组件获取数据
+ * @author ss.feng
+ */
+
+// ajax
+var ajax = require('service/resource');
+
+var api = function(options) {
+	var url = options.url || '';
+	var type = options.type || 'GET';
+	var data = options.data || {};
+	var onsuccess = options.onsuccess || function() {};
+
+	// 必须需要url参数
+	if (!url) {
+		throw new Error('components "autocomplete" missing "url" param.');
+	}
+
+	ajax({
+		url: url,
+		type: type,
+		data: data,
+		success: function(res) {
+			onsuccess(res);
+		}
+	});
+};
+
+module.exports = api;

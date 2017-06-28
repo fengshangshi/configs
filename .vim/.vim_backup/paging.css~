@@ -1,0 +1,68 @@
+.paging-panel {
+	text-align: right;	
+	padding: 0 10px 0;
+}
+
+.jump-page-code {
+	display: inline-block;
+	vertical-align: middle;
+	height: 40px;
+}
+
+.jump-page-code input {
+	width: 50px;
+	display: inline-block;
+	margin: 0 5px;
+}
+
+.jump-page-code button {
+	margin: -3px 0 0 15px;
+}
+
+.q-pagination {
+	overflow: hidden;
+	height: 40px;
+	padding: 5px 10px 0 10px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.q-pagination ul {
+	display: inline-block;
+}
+
+.q-pagination ul li {
+	display: inline-block;
+}
+
+.q-pagination .current {
+	background: #53ac73;
+	color: #fff;
+	cursor: default;
+}
+
+.q-pagination .prev, 
+.q-pagination .next {
+	color: #53ac73;
+}
+
+.q-pagination .active .prev, 
+.q-pagination .active .next {
+	background: #f5f5f5;
+	color: #999;
+	cursor: default;
+}
+
+.q-pagination a, .q-pagination span {
+	float: left;
+	color: #555;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: center;
+	padding: 3px 6px;
+	margin: 0 5px 0 0;
+	background: #f5f5f5;
+	line-height: 14px;
+	min-width: 0px;
+	border-radius: 2px;
+}

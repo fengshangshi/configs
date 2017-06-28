@@ -1,0 +1,78 @@
+html,
+body {
+	height: 100%;
+}
+
+.quhuhu_channelDirect {
+	width: 220px;
+	height: 100%;
+	padding: 20px 15px;
+	background: rgba(65,140,198,0.95);;
+	position: fixed;
+	top: 0;
+	left: 100%;
+	z-index: 2147483647;
+	color: #fff;
+	text-align: left;
+	animation: right_animation 1s ease-in-out forwards;
+}
+
+@keyframes right_animation {
+	from {
+		-webkit-transform: translate3d(0,0,0);
+	}
+
+	to {
+		-webkit-transform: translate3d(-250px,0,0);
+	}
+}
+
+.quhuhu_channelDirect_hidden {
+	animation: hide_animation 0.5s ease-in-out forwards;
+}
+
+@keyframes hide_animation {
+	from {
+		-webkit-transform: translate3d(-250px,0,0);
+	}
+
+	to {
+		-webkit-transform: translate3d(-20px,0,0);
+	}
+}
+
+.quhuhu_channelDirect h1 {
+	padding: 20px 0;
+	font-size: 18px;
+	font-family: "microsoft yahei";
+	text-align: center;
+	color: #fff;
+}
+
+.quhuhu_channelDirect p {
+	font-size: 14px;
+	line-height: 20px;
+	font-family: "microsoft yahei";
+	color: #fff;
+	padding-bottom: 20px;
+}
+
+.quhuhu_channelDirect .quhuhu_directTips {
+	text-align: center;
+	font-size: 14px;
+	color: red;
+}
+
+.quhuhu_channelDirect .quhuhu_button {
+	width: 180px;
+	display: block;
+	font-size: 14px;
+	font-family: "microsoft yahei";
+	padding: 10px;
+	margin: 20px auto;
+	text-align: center;
+	background: #fff;
+	color: #000;
+	border: none;
+	border-radius: 2px;
+}

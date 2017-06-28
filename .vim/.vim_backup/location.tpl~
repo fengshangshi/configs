@@ -1,0 +1,2 @@
+<a class="location"></span>
+{%script%}require("./location.js");{%/script%}

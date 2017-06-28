@@ -1,0 +1,73 @@
+.md {
+	background: #f3fbfe;
+}
+
+.md-hd,
+.md-bd,
+.md-ft {
+	padding: 15px 12px;
+}
+
+.md-ft {
+	background: #fff;
+	padding-top: 5px;
+}
+
+.md-hd {
+	padding-bottom: 0;
+}
+
+.md-hd h4 {
+	border-bottom: 1px dotted #d1dce0;
+	padding-bottom: 12px;
+}
+
+.md-bd {
+	overflow: hidden;
+}
+
+.order-info {
+	color: #63676a;
+}
+
+.order-info .md-bd {
+	background: url(http://source.qunarzz.com/site/images/pay/insurance/www/page/suggest/alterTicket/arrow.png)
+		no-repeat center center;
+}
+
+.order-start-info,
+.order-end-info {
+	width: 50%;
+}
+
+.order-start-info {
+	float: left;
+}
+
+.order-end-info {
+	float: right;
+	text-align: right;
+}
+
+.order-start-info p,
+.order-end-info p {
+	padding-top: 5px;
+}
+
+.order-start-info h5,
+.order-end-info h5 {
+	font-size: 16px;
+}
+
+.order-start-info strong,
+.order-end-info strong {
+	font-weight: 700;
+}
+
+.md-ft p {
+	padding-top: 10px;
+}
+
+.md-ft label {
+	color: #999;
+}

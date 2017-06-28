@@ -1,0 +1,79 @@
+/**
+ * 获取旅行卡列表
+ * @author ss.feng@qunar.com
+ */
+require("handlebars/handlebars.js");
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var template = require("../template/qunarCardList.handlebars");
+var pageHtml = require("module/page/page.js");
+var service = require("module/service/ajax.js");
+
+// 获取旅行卡
+message.register("fetchQunarCardList", function(e) {
+	var args = e.args,
+		page = args.page || 1,
+		step = args.step || 10,
+		type = args.type || 3,
+		sortName = args.sortName || "obtainTime",
+		sortOrder = args.sortOrder || "desc";
+
+	var data = {
+		pageNum: page,
+		pageSize: step,
+		type: type,
+		sortName: sortName,
+		sortOrder: sortOrder
+	};
+	
+	//更新列表数据
+	service.ajax({
+		url: "/member/asset/qunarCard/fetchQunarCardsApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			// 对数据列表的判断
+			Handlebars.registerHelper("if", function(list, options) {
+				return list.length > 0 ? 
+					options.fn(this) : options.inverse(this);
+			});
+
+			// 状态
+			Handlebars.registerHelper("status", function(status) {
+				var text = "";
+				switch (status) {
+					case 0:
+						text = "可使用";
+						break;
+					case 1:
+						text = "已用完";
+						break;
+					case 2:
+						text = "已过期";
+						break;
+				}
+				return text;
+			});
+
+			$(".detail-wrap .data-list tbody").html(template(data));
+			$(".detail-wrap .page-wrap").html(pageHtml(data.data.page));
+		}
+	});
+});
+
+message.register("fetchQunarCardTotal", function(e) {
+	//更新金额总数
+	service.ajax({
+		url: "/member/asset/qunarCard/qunarCardTotalApi.htm",
+		onsuccess: function(data) {
+			//更新旅行卡总额，可用金额，可用个数
+			if(data.errorCode == 0){
+				$(".summary-left strong").html(data.data.usableMoney || "0.00");
+				$(".summary-middle strong").html(data.data.usableMoney || "0.00");
+				$(".summary-right strong").html(data.data.usableCount || "0");
+			}
+			
+		}
+	});
+});
+
+message.fire(["fetchQunarCardList", "fetchQunarCardTotal"]);

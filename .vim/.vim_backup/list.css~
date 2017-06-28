@@ -1,0 +1,75 @@
+/*[export]*/
+@charset "UTF-8";
+/*
+ * @Describe: crm list
+ * @author ming.zhou@qunar.com
+ * @date  2015.07.14
+ */
+@import url('../../libs/reset.css');
+@import url('../../common/header.css');
+@import url('../../common/layout.css');
+@import url('../../common/dialog.css');
+@import url('../../common/button.css');
+
+.list-item {
+    position: relative;
+    font-size: .12rem;
+    padding: .08rem .15rem .1rem;
+    border-bottom: 1px solid #c7ced4;
+    background: #fff;
+}
+.list-item .crm-btn {
+    margin-top: .08rem;
+}
+.list-hd {
+    font-size: .18rem;
+    margin-bottom: .03rem;
+}
+.list-bd {
+    margin-bottom: .03rem;
+}
+.list-ft {
+    color: #888;
+}
+.apt-name,
+.apt-adress {
+    width: 2.1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+}
+.list-info {
+    position: absolute;
+    right: .1rem;
+    top: .15rem;
+    font-size: .1rem;
+    text-align: right;
+    line-height: 1.2;
+}
+
+.status-default {
+
+}
+.status-nopass {
+    color: #f00;
+}
+.status-pass {
+    color: #00acee;
+}
+.info-time {
+    color: #888;
+}
+/* tag-remind */
+.tag-remind-time,
+.tag-remind-type {
+    color: #fff;
+    background: #fa4666;
+    padding: .01rem .02rem;
+    margin: 0 .05rem;
+}
+
+.tag-remind-type {
+    background: #ff6558;
+}

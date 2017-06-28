@@ -1,0 +1,8 @@
+process.on('message', function(m) {
+		console.log(m);
+		process.send({type: 't', result: {a: 11});
+});
+
+process.on('SIGHUP', function() {
+		process.exit();
+});

@@ -1,0 +1,62 @@
+.searcher-panel {
+	background: #fff;
+	border-radius: 2px;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+	padding: 10px 10px 0 10px;
+	margin: 0 0 15px 0;
+}
+
+.form-inline li {
+	float: left;
+	margin: 0 20px 10px 0;
+	font-size: 14px;
+}
+
+.form-inline .form-control	{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.form-inline label {
+	font-weight:400;
+}
+
+.btn-delicate {
+	color: #53ac73;
+	background: #fff;
+	border-color: #ddd;
+}
+
+.form-control {
+	color: #555;
+	background: #fff;
+	border: 1px solid #ddd;
+}
+
+.form-control:focus {
+	border-color: #64be6c;
+	outline: 0;
+	box-shadow: none;
+}
+
+
+.form-inline .form-control {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.input-sm {
+	height: 30px;
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 2px;
+}
+
+.account-type-panel {
+	padding-left: 15px;
+}
+
+.account-type-panel ul {
+	margin-bottom: 0;
+}

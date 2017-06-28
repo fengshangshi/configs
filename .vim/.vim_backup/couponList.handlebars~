@@ -1,0 +1,36 @@
+{{#if data.list}}
+    {{#each this.data.list}}
+    <tr>
+        <td>{{couponName}}</td>
+        <td>{{couponNoDecode}}</td>
+        <td>{{obtainTime}}</td>
+        <td>{{disableTime}}</td>
+        <td>￥{{amount}}</td>
+        <td>￥{{balance}}</td>
+        <td>
+            <span class="status-{{couponStatus}}">
+                {{status couponStatus}}
+            </span>
+        </td>
+        <td>
+			<a href="
+				{{#option couponNo}}
+					http://pricelock.qunar.com/detailOrder?cardNo={{couponNo}}
+				{{else}}
+					/member/asset/coupon/couponDetail.htm?couponNo={{couponNo}}
+				{{/option}}
+			"
+			{{#option couponNo}}
+				target="_blank"
+			{{/option}}
+			>
+                查看详情
+            </a>
+        </td>
+    </tr>
+    {{/each}}
+{{else}}
+    <tr>
+        <td colspan="8">暂无红包</td>
+    </tr>
+{{/if}}

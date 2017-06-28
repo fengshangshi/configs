@@ -1,0 +1,4 @@
+var GET_index = function(req, res, next) {
+		res.render('time');
+};
+exports.GET_index = GET_index;

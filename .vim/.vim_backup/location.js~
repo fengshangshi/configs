@@ -1,0 +1,55 @@
+/**
+ *@file 地理定位
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+
+var util = require("libs/util/util"); 
+/*
+ *@method 检查是否支持获取当前位置
+ */
+var isSupportGeo = function() {
+	return !!navigator.geolocation;
+}
+
+/*
+ *@method 获取当前地理位置信息
+ */
+var getGeoLocation = function() {
+	if (!isSupportGeo) {
+		return false;
+	}
+
+	var args = arguments,
+		success = args[0],
+		error = args[1];
+
+	if (util.type(success) !== "function") {
+		success = function() {};
+	}
+
+	if (util.type(error) != "function") {
+		error = function() {};
+	}
+	
+	navigator.geolocation.getCurrentPosition(
+		function(position) {
+			var coords = position.coords,
+				lng = coords.longitude,
+				lat = coords.latitude;
+			success.call(null, {
+				lng: lng,
+				lat: lat
+			});
+		},
+
+		function(message) {
+			error.call(null, error);
+		}
+	);
+}
+
+exports.isSupportGeo = isSupportGeo;
+exports.getGeoLocation = getGeoLocation;
+
+});

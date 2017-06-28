@@ -1,0 +1,17 @@
+var config = {
+    "nirvana": {
+        //"host": "http://nirvana.beta2.qunar.com"
+        "host": "http://nirvana.corp.qunar.com:80"
+    },
+    "timeout": 4
+}
+module.exports = {
+    // 获取相关信息
+    "getSmsMessage": {
+        "type": "http",
+        "method": "post",
+        "host": config.nirvana.host,
+        "path": "",
+        "timeout": config.timeout
+    }
+}

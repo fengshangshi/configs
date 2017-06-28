@@ -1,0 +1,164 @@
+/**
+ * 播放声音
+ **/
+// 查询声音是否播放功能
+var queryHotelFeatureApi = require('common/api/queryHotelFeatureSettings');
+
+// 声音列表
+var noticeTypeFileMap = {
+    "remind_general": "new_remind.mp3",
+    "remind_useCar": "new_remind.mp3",
+    "remind_frontDesk": "new_remind.mp3",
+    "message_wait_confirm_qunar": "wait_confirm_qunar.mp3",
+    "message_wait_confirm_ctrip": "wait_confirm_ctrip.mp3",
+    "message_wait_confirm_elong": "wait_confirm_elong.mp3",
+    "message_wait_confirm_qmango": "wait_confirm_qmango.mp3",
+    "message_wait_confirm_meituan": "wait_confirm_meituan.mp3",
+    "message_auto_confirm_qunar": "auto_confirm_qunar.mp3",
+    "message_auto_confirm_ctrip": "auto_confirm_ctrip.mp3",
+    "message_auto_confirm_elong": "auto_confirm_elong.mp3",
+    "message_auto_confirm_qmango": "auto_confirm_qmango.mp3",
+    "message_auto_confirm_meituan": "auto_confirm_meituan.mp3",
+    "message_auto_assign_qunar": "auto_assign_qunar.mp3",
+    "message_auto_assign_ctrip": "auto_assign_ctrip.mp3",
+    "message_auto_assign_elong": "auto_assign_elong.mp3",
+    "message_auto_assign_qmango": "auto_assign_qmango.mp3",
+    "message_auto_assign_quhuhu": "auto_assign_quhuhu.mp3",
+    "message_auto_assign_meituan": "auto_assign_meituan.mp3",
+    "message_auto_assign_quhuhudianpuzhixiao": "auto_assign_quhuhudianpuzhixiao.mp3",
+    "message_order_change": "new_message.wav",
+    "message_order_cancel": "new_message.wav",
+    "message_account_statement": "new_message.wav",
+    "message_other": "new_message.wav",
+    "announcement_system": "new_message.wav"
+};
+
+var channels = {
+    '去哪儿网': 'qunar',
+    '携程': 'ctrip',
+    '艺龙': 'elong',
+    '青芒果': 'qmango',
+    '直销': 'quhuhudianpuzhixiao',
+    '去呼呼': 'quhuhu',
+    '美团': 'meituan'
+};
+
+var time = 0,
+    step = 0,
+    countTitle = '',
+    titleList = [document.title, '新消息'];
+
+// 闪烁title 5s
+var twinkleTitle = function() {
+    time++;
+    step = time % 2;
+
+    var curTitle = titleList[step];
+
+    if (step == 1) {
+        curTitle += countTitle;
+    }
+
+    document.title = curTitle;
+
+    // 回到正常网页title
+    if (time >= 20) {
+        document.title = titleList[0];
+        return;
+    }
+    setTimeout(twinkleTitle, 400);
+}
+
+// 获取未读消息数量
+var getUnreadNoticeCount = function() {
+    time = 0;
+    step = 0;
+    countTitle = '';
+    Q.ajax({
+        url: '/api/msg/queryTotalCount',
+        type: 'POST',
+        data: {
+            readStatus: 0
+        },
+        success: function(res) {
+            if (res.code != '0000') {
+                return;
+            }
+
+            var data = res.data || {},
+                unreadCount = data.totalCount || 0;
+
+
+            step = 0;
+            time = 0;
+            countTitle = unreadCount > 0 ?
+                "（" + unreadCount + "）" : "";
+            twinkleTitle();
+        }
+    });
+}
+
+// 创建音乐播放器
+var createPlayer = function(msg) {
+    var noticeType = msg.messageType;
+
+    if (noticeType == 'message_wait_confirm' ||
+        noticeType == 'message_auto_confirm' ||
+        noticeType == 'message_auto_assign') {
+
+        var flag = false,
+            content = msg.content;
+
+        // 毛招，diff渠道字符汉字
+        for (var key in channels) {
+            if (!flag && content.indexOf(key) != -1) {
+                noticeType += '_' + channels[key];
+                flag = true;
+            }
+        }
+    }
+
+    var player = noticeTypeFileMap[noticeType];
+    // 消息类型没有对应的音乐则返回
+    if (!player) {
+        player = 'new_message.wav';
+    }
+
+
+    getUnreadNoticeCount();
+
+    var url = '//source.kztpms.com/srmweb/notice/' + player;
+    // var url = '/*[urlPrex]*/' + '/res/notice/' + player;
+
+    var audio = document.getElementById('audio');
+    if (audio && !audio.paused) {
+        audio.pause();
+    }
+
+    this.music = $('<div id="music"></div>');
+    this.music.appendTo('body');
+
+    if ($.browser.mozilla || $.browser.chrome) {
+        this.music.html('<audio id="audio" controls="controls" style="display:none" ' +
+            'autoplay="autoplay"><source src="' + url + '" type="audio/mpeg" /></audio>');
+        return;
+    }
+
+    this.music.html('<embed id="audio" src="' + url + '" loop="0" autostart="true" hidden="true"></embed>');
+}
+
+// 获取声音开关
+var getSoundEnabled = function(msg) {
+    queryHotelFeatureApi({
+        callback: function(data) {
+            if (!res.data.soundEnabled) {
+                return;
+            }
+
+            // 新建播放器
+            createPlayer(msg);
+        }
+    });
+}
+
+module.exports = getSoundEnabled;

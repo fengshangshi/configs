@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+		printf("My name is %s\nI live in %s\n", "冯尚实", "丰台区开阳里");
+		printf("I live in %s\n", "丰台区开阳里");
+		return 0;
+}

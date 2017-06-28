@@ -1,0 +1,86 @@
+/**
+ * Created by he on 15/12/24.
+ */
+
+var dataHandle = require('./dataHandle.js'),
+    native = require('common/service/hyNative.js');
+
+G.message.register('login.doLogin', function(e) {
+    var args = e.args,
+        loginNo = args.loginNo,
+        password = args.password,
+        loginBtn = args.loginBtn,
+        deviceInfo = G.ls('common.deviceInfo') || {},
+        platform = deviceInfo.platform && deviceInfo.platform.toLowerCase(),
+        data = {
+            loginNo: loginNo,
+            password: password,
+            source: 'APP'
+        };
+
+    function login(param) {
+        loginBtn.addClass('loginIng');
+
+        param = param || '';
+
+        G.ajax({
+            url: '/account/j/login?param=YutlGIeroXMnpiZDjMsSZ5G7AeIyset0Uw0yF06HV7iwzfOIlaRaFxqGsvfM%2B8lHLBg0rZtJ8rpVmufWTy14kA%3D%3D',
+            //url: '/account/j/login?param=' + encodeURIComponent(param),
+            data: {
+                login: true
+            },
+            noValidateLogin: true,
+            success: function(res) {
+                loginBtn.removeClass('loginIng');
+
+                if (res.code !== '0000') {
+                    G.toast(res.msg);
+                    return;
+                }
+
+                //把用户信息存入本地存储
+                var userInfo = G._.pick(res.data.userInfo,
+                    'loginNo',
+                    'token',
+                    'userId',
+                    'userImgUrl',
+                    'userName',
+                    'displayName');
+
+                G.ls('login.userInfo', userInfo);
+
+                G.ls('login.loginNo', loginNo);
+
+                //每次登录都会获取权限列表并存储
+                //只有获取了权限列表, 才算完全登录成功
+                // dataHandle.stepSerialPrivilege({
+                //     onComplete: function() {
+                //告诉app用户登录了
+                native.invokeNative('login', {
+                    jpushKey: res.data.userInfo.userId
+                });
+
+                //登录成功, 跳往首页
+                native.invokeNative('openWebView', {
+                    url: '/srmweb_hy/html/app.html'
+                })
+
+                //     }
+                // });
+            },
+            error: function() {
+                loginBtn.removeClass('loginIng');
+            }
+        })
+    }
+
+    if (platform === 'ios' || platform == 'android') {
+        native.invokeNative('encrypt', {
+            value: JSON.stringify(data)
+        }, function(res) {
+            login(res.responseData.encryptString);
+        })
+    } else {
+        login();
+    }
+})

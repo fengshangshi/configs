@@ -1,0 +1,16 @@
+var docElem = document.documentElement,
+	initWidth = 320,
+	initFontSize = 100;
+	resizeEvt = 'orientationchange' in window ? 
+			'orientationchange' : 'resize';
+
+function setRem(width) {
+	width = width < 540 ? width : 540;
+	docElem.style.fontSize = width / initWidth * initFontSize + 'px';
+}
+
+setRem(window.innerWidth);
+
+window.addEventListener(resizeEvt, function () {
+	setRem(window.innerWidth);
+}, false);

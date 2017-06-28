@@ -1,0 +1,260 @@
+$(document).ready(function(){
+	$("li").removeClass("active");
+	$("#archive").addClass("active");
+	editArchive();
+	editFlag = $.href().param('editFlag');
+	if(editFlag == 'add') {
+		departmentCodeSuggest();
+	}
+});
+
+function editArchive() {
+
+	var oldParentName = decodeURIComponent($.href().param('parentName')),
+		oldDepartmentCode = $.href().param('departmentCode'),
+		oldDepartmentName = decodeURIComponent($.href().param('departmentName')),
+		oldDepartmentDesc = localStorage.getItem('remark'),
+		editFlag = $.href().param('editFlag');
+
+	$('#departmentCode').val(oldDepartmentCode);
+	$('.js-remark').val(oldDepartmentDesc);
+	if(editFlag === 'add') {
+		$('#parentName').val(oldDepartmentName);
+		$('#departmentName').val('');
+		$('#remark').val('');
+	} else {
+		$('#parentName').val(oldParentName);
+		$('#departmentName').val(oldDepartmentName);
+	}
+	$('.js-save').on('click', function() {
+
+		// 绑定验证组件
+		$('#archiveForm').validationEngine({
+			maxErrorsPerField: 1,
+			scroll: false
+		});
+		// 验证必填项
+		var status = $('#archiveForm').validationEngine(
+			'validate');
+		if (!status) {
+			return false;
+		}
+		var parentId = $.href().param('parentId'),
+			departmentCode = $('.js-departmentcode').val(),
+			departmentName = $('.js-departmentname').val(),
+			departmentDesc = $('.js-remark').val(),
+			parentName = $('#parentName').val(),
+			departmentId = $.href().param('departmentId'),
+			data;
+
+		if(editFlag === 'add') {
+			data = {
+				parentId: departmentId,
+				departmentCode: departmentCode,
+				departmentName: departmentName,
+				departmentDesc: departmentDesc
+			}
+		} else {
+			data = {
+				departmentId: departmentId,
+				departmentCode: departmentCode == oldDepartmentCode ? '' : departmentCode,
+				departmentName: departmentName == oldDepartmentName ? '' : departmentName,
+				departmentDesc: departmentDesc == oldDepartmentDesc ? '' : departmentDesc
+			}
+		}
+		if(oldParentName === parentName && oldDepartmentCode === departmentCode && oldDepartmentName === departmentName && oldDepartmentDesc === departmentDesc) {
+			history.back(-1);
+		}
+		$.ajax({
+			url: '/department/addOrUpdate.do',
+			type:"post",
+			data: data,
+			success:function(res){
+				//res = JSON.parse(res);
+				if(res.ret != '0') {
+					$('#myModal').find('.js-msg').html(res.errmsg);
+					$('#myModal').modal('show');
+
+					return false;
+				} else {
+					$('#myModal').find('.modal-footer').remove();
+					$('#myModal').find('.js-msg').html('保存成功');
+					$('#myModal').modal('show');
+					setTimeout(function() {
+						$('#myModal').modal('hide');
+						window.location.href = '/department/archive.do';
+					},2000)
+
+				}
+			},
+			error:function(){
+
+			}
+		});
+	});
+
+}
+
+// 部门编码suggest
+function departmentCodeSuggest() {
+	var parentId = $.href().param('departmentId');
+	$.ajax({
+		url: '/department/getSuggestCode.do',
+		type: 'POST',
+		data: {
+			parentId: parentId
+		},
+		success: function(res) {
+			$('#departmentCode').val(res.dataMap.suggestCode)
+		}
+
+	});
+}
+
+$.extend($, {
+	//处理url相关方法
+	href: function(){
+		var value = window.location.href,
+			re = new RegExp(),
+			result;
+
+		value = value.replace(/#.*/, '');
+
+		return {
+
+			search: function(q) {
+				return (document.location.search.match(new RegExp(
+					"(?:^\\?|&)" + q + "=(.*?)(?=&|$)")) || [
+					'', null
+				])[1];
+			},
+
+			getValue : function(){
+				return value;
+			},
+
+			replace : function(){
+				value = value.replace(arguments[0], arguments[1])
+				return this;
+			},
+
+			append : function(paramString){
+				value = value + "&" + paramString;
+				return this;
+			},
+
+			path : function(path){
+				value = value.indexOf('?') != -1 ? value.replace(/\/[^\/]*\?/, '/' + path + '?') : value.replace(/\/[^/]*$/, '/' + path + '?');
+				return this;
+			},
+
+			param : function(){
+				var argu = arguments,
+					len = argu.length;
+
+				if (len === 0) {
+
+					//消除所有参数
+					value = value.replace(/\?(.)*/, '?');
+					return this;
+				}
+
+				if (len === 1 && typeof argu[0] === 'string') {
+					re.compile('[&?]' + argu[0] + '=([^=&?#]*)');
+					return value.match(re) ? value.match(re)[1] : '';
+
+				}
+
+				if(len === 2) {
+					re.compile('[&?]' + argu[0] + '=([^=&?#]*)');
+					result = value.match(re);
+					value = result ? value.replace(argu[0] + '=' + result[1], argu[0] + '=' + argu[1])
+						: (value + (value.indexOf('?') == -1 ? '?' : (value.indexOf('?') == value.length - 1 ? '' : '&')) + argu[0] + '=' +  argu[1]);
+					return this;
+				}
+
+				if(typeof argu[0] === 'object') {
+					var i, obj = argu[0];
+					for( i in obj ) {
+						argu.callee(i, obj[i]);
+					}
+				}
+				return this;
+			},
+
+			exec : function(){
+				window.location.href = value;
+			}
+		}
+	}
+})
+
+
+//打开树形结构
+function showDepartment(departmentInput, menuContent) {
+	var departmentObj = $("#" + departmentInput + "");
+	//点击按钮的偏移量
+	var departmentInputOffset = $("#" + departmentInput+ "").offset();
+	$("#" + menuContent + "").css({
+		left : 109 + "px",
+		top : 19 +"px"
+	}).slideDown("fast");
+
+	$("body").bind("mousedown", onBodyDownD);
+}
+
+// 展开所有节点
+function zTreeOnNodeCreatedAdd(event, treeId, treeNode) {
+	var treeObj = $.fn.zTree.getZTreeObj("departmentTree");
+	treeObj.expandAll(true);
+};
+// 点击树的时候更改节点
+function selectDepartment(e, treeId, treeNode) {
+    var departmentTree = $.fn.zTree.getZTreeObj("departmentTree"),
+    	nodes = departmentTree.getSelectedNodes(),
+    	v = "",
+    	id = "";
+	departmentTree.updateNode(treeNode);
+	nodes.sort(function compare(a,b){return a.id-b.id;});
+	for (var i=0, l=nodes.length; i<l; i++) {
+		v += nodes[i].departmentName + ",";
+		id += nodes[i].id + ",";
+	}
+	if (v.length > 0 ) v = v.substring(0, v.length-1);
+	if (id.length > 0 ) id = id.substring(0, id.length-1);
+	var departmentObj = $("#departmentInput");
+
+	departmentObj.attr("value", v);
+	departmentObj.attr("data-id", id);
+}
+// 展开所有节点
+function zTreeOnNodeCreated(event, treeId, treeNode) {
+	var treeObj = $.fn.zTree.getZTreeObj("departmentTreeModify");
+	treeObj.expandAll(true);
+};
+// 点击树的时候更改节点
+function selectDepartmentModify(e, treeId, treeNode) {
+    var departmentTree = $.fn.zTree.getZTreeObj("departmentTreeModify"),
+    	nodes = departmentTree.getSelectedNodes(),
+    	v = '',
+    	id = '';
+
+	departmentTree.updateNode(treeNode);
+	nodes.sort(function compare(a,b){return a.id-b.id;});
+	for (var i=0, l=nodes.length; i<l; i++) {
+		v += nodes[i].departmentName + ",";
+		id += nodes[i].id + ",";
+	}
+	if (v && v.length > 0 ) v = v.substring(0, v.length-1);
+	if (v && id.length > 0 ) id = id.substring(0, id.length-1);
+	var departmentObj = $("#departmentInputModify");
+	departmentObj.attr("value", v);
+	departmentObj.attr("data-id", id);
+
+	// 未选择任何节点时，点击确定按钮直接关闭下拉菜单，输入框中值为初始值
+	if(!v) {
+		hideDepartment('menuContentModify');
+		$('#departmentInputModify').val($('.js-departmentvalue').val());
+	}
+
+}

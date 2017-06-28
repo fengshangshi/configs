@@ -1,0 +1,66 @@
+<div class="flight-data-outer-wrap flight-real-time-wrap"></div>
+<script type="text/template" id="flight-real-time-template">
+<div class="flight-data-inner-wrap">
+	<div class="flight-real-time-data">
+		<div class="flight-track-data">
+			<span>轨道</span>
+			<strong><%:=tplData.active_info.direction%>°</strong>
+		</div>
+		<div class="flight-speed-data">
+			<span>航速</span>
+			<strong><%:=tplData.active_info.speed%>kts</strong>
+		</div>
+		<div class="flight-position-data">
+			<strong><%:=tplData.active_info.current_position.lat%>N</strong>
+			<strong><%:=tplData.active_info.current_position.lng%>E</strong>
+		</div>
+		</div>
+	</div>
+</div>
+</script>
+<div class="flight-data-outer-wrap flight-summary-wrap"></div>
+<script type="text/template" id="flight-summary-template">
+<div class="flight-data-inner-wrap">
+	<div class="flight-summary-data">
+		<div class="flight-summary-data-start-icon"></div>
+		<div class="flight-summary-data-end-icon"></div>
+		<div class="flight-summary-data-start-city">
+			<%:=tplData.take_off_and_land[0].departure.city_name%>
+			<%:=tplData.take_off_and_land[0].departure.byname%></div>
+		<div class="flight-summary-data-end-city">
+			<%:=tplData.take_off_and_land[0].destination.city_name%></div>
+			<%:=tplData.take_off_and_land[0].destination.byname%></div>
+		<div class="flight-summary-data-voyage-wrap">
+			<div class="flight-voyage-start-wrap"></div>
+			<div class="flight-voyage-end-wrap"></div>
+			<div class="flight-voyage-process-wrap">
+				<div class="flight-voyage-process-bar"
+					style="width: 0;"></div>
+				<div class="flight-voyage-process-end-bar"
+					style="width: 0;"></div>
+				<div class="flight-voyage-current-processer"
+					style="left: 26px;"></div>
+				<div class="flight-altitude">
+					<span>海拔</span>
+					<em><%:=tplData.active_info.altitude%>ft
+						<span></span></em>
+				</div>
+			</div>
+		</div>
+		<div class="flight-predict-info-wrap">
+			<div class="flight-predict-info-start-line"></div>
+			<div class="flight-predict-info-end-line"></div>
+			<div class="flight-predict-info">
+				<div class="flight-predict-info-time">
+					<span>预计耗时</span>
+					<em><%:=tplData.take_off_and_land[0].total_time%></em>
+				</div>
+				<div class="flight-predict-info-voyage">
+					<span>预计航程</span>
+					<em><%:=tplData.take_off_and_land[0].total_voyage%>km</em>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</script>

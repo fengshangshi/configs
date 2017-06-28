@@ -1,0 +1,74 @@
+/**
+ * 资金输入
+ * @author ss.feng
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+
+function createTipsHTML(target, text) {
+	var html = "<span class='form-other'>" + text + "</span>";
+	$(target).parent().find(".form-other").remove();
+	$(target).parent().append(html);
+}
+
+function createSuccessTips(target) {
+	var html = "<i class='ok'></i>";
+	createTipsHTML(target, html);
+}
+
+function createFailTips(target, text) {
+	var html = "<i class='err'></i>" + text;
+	createTipsHTML(target, html);
+}
+
+function amountCheck(e) {
+	var args = e.args,
+		target = args.target,
+		balance = $(target).data("balance"),
+		maxAmount = window["common"].maxAmount,
+		minAmount = window["common"].minAmount,
+		value = $.trim($(target).val());
+
+	if (value.length == 0) {
+		createFailTips(target, "不能为空");
+		return false;
+	} else {
+		createSuccessTips(target);
+	}
+
+	if (!/^(([1-9]\d*)|\d)(\.\d{1,2})?$/.test(value)) {
+		createFailTips(target, "必须符合金额格式");
+		return false;
+	} else {
+		createSuccessTips(target);
+	}
+
+	value = parseFloat(value);
+
+	if (value <= 0) {
+		createFailTips(target, "金额必须大于0");
+		return false;
+	} else {
+		createSuccessTips(target);
+	}
+
+	if (value > balance) {
+		createFailTips(target, "可提现金额只有" + balance + "元");
+		return false;
+	} else {
+		createSuccessTips(target);
+	}
+
+	if (value < minAmount || value > maxAmount) {
+		createFailTips(target, "限额"+ minAmount +"-"+ maxAmount +"元以内");
+		return false;
+	} else {
+		createSuccessTips(target);
+	}
+
+	return true;
+}
+
+message.register("amountCheck", amountCheck);
+
+module.exports = amountCheck;

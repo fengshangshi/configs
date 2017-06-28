@@ -1,0 +1,66 @@
+var $ = require("sky-mobile:widget/libs/zepto/zepto.js");
+var message = require("sky-mobile:widget/libs/message/message.js");
+var config = require("sky-mobile:widget/libs/config/config.js");
+var overlayUtil = require('overlay/util');
+
+
+var initConf = config.map.init,
+	ajaxApi = config.ajaxApi;
+
+/*
+ *按照默认经纬度获取飞机
+ */
+message.register("map-instance-is-created", function(e) {
+	var longitude = initConf.longitude,
+		latitude = initConf.latitude,
+		radius = initConf.radius;
+
+	var map = e.args.map,
+		bounds = map.getBounds();
+
+
+	var northEast = bounds.getNorthEast(),
+		southWest = bounds.getSouthWest();
+
+	bounds = southWest.lat + "," + southWest.lng + ","
+			+ northEast.lat + "," + northEast.lng;
+
+	bounds = encodeURIComponent(bounds);
+
+	var coord = encodeURIComponent(latitude + "," + longitude);
+
+	var ALL_FLIGHTS_OVERLAY_ID = 'all-flights';
+
+	var url = ajaxApi.get_flight_list_by_coordinate
+			+ "?bounds=" + bounds
+			+ "&_=" + new Date().getTime();
+	
+
+	$.ajax({
+		url: url,
+		dataType: "json",
+		success: function(data) {
+			data = data.data;
+			require(['overlay/Flights'], function(Flights) {
+		        var overlay = overlayUtil.getOverlay(ALL_FLIGHTS_OVERLAY_ID);
+		        if (!overlay) {
+		          	overlay = new Flights({
+		            	flightsData: data.list
+		          	});
+		          	overlay.on('flightclick', function(e) {
+		            	message.fire('flight-real-data-button-is-click', {
+			              	flight_no: e.flightNo
+			            }, true);
+		          	});
+		          	overlayUtil.addOverlay(ALL_FLIGHTS_OVERLAY_ID, common.map, overlay);
+		        } else {
+			        overlayUtil.showOverlay(ALL_FLIGHTS_OVERLAY_ID);
+			        overlayUtil.modOverlay(ALL_FLIGHTS_OVERLAY_ID, {
+			            flightsData: data.list
+			        }, true);
+		        }
+	        });
+		},
+		timeout: 5000
+	});
+});

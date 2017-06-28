@@ -1,0 +1,11 @@
+<div class="controller">
+	<div class="type-controller">
+		<a class="type-satellitea" href="###"><span>卫星</span></a>
+		<a class="type-normal" href="###"><span>地图</span></a>
+	</div>
+	<div class="zoom-controller">
+		<a class="zoom-in" href="###">地图放大</a>
+		<a class="zoom-out" href="###">地图缩小</a>
+	</div>
+</div>
+{%script%}require("./controller.js");{%/script%}

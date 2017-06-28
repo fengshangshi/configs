@@ -1,0 +1,49 @@
+'use strict';
+
+/*
+const PI = 3.1415;
+console.log(PI);
+
+PI = 3;
+const foo;
+
+foo = 1;
+
+console.log(foo);
+
+if (true) {
+		console.log(MAX);
+		const MAX = 5;
+}
+
+console.log(MAX);
+
+var message = "Hello!";
+let age = 25;
+
+const message = "Goodbye!";
+const age = 30;
+
+const foo = {};
+foo.prop = 123;
+
+foo.prop = 456;
+console.log(foo.prop);
+
+foo = {};
+
+const a = [];
+a.push("Hello");
+a.length = 0;
+console.log(a);
+a = ["Dave"];
+*/
+
+/*
+const foo = Object.freeze({});
+
+foo.prop = 123;
+*/
+
+import de from "./constants.js";
+console.log(a);

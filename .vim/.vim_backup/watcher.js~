@@ -1,0 +1,43 @@
+/**
+ * @file 去哪儿watcher平台
+ * @author ss.feng
+ */
+var Watcher = require('sugar-watcher');
+
+
+// 从全局读取watcher相关配置节点
+var configure = config.watcher;
+
+// 拼接前缀节点
+var mergePrefix = function(key) {
+    return configure.prefix + '.' + key;
+};
+
+// watcher实例化
+var watcher = new Watcher(
+    // watcher配置
+    {
+        // 发送频率、服务器、端口
+        rate: configure.rate,
+        host: configure.host,
+        port: configure.port
+    },
+
+    // watcher出错回调函数
+    function(err) {
+        logger.error(err);
+    }
+);
+
+// 暴露接口
+// 计数功能
+exports.count = function(key) {
+    key = mergePrefix(key);
+    watcher.count(key);
+};
+
+// 计时
+exports.time = function(key) {
+    key = mergePrefix(key);
+    watcher.time(key);
+};

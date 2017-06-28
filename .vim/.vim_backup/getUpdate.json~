@@ -1,0 +1,60 @@
+{
+		"code": "0",
+		"msg": "处理成功",
+		"data": {
+				"hotelName": [
+						{
+								"id": "123",
+								"name": "中关村公寓",
+								"operator": "冯尚实",
+								"operateTime": "2015-12-23 18:22:22",
+								"source": "PMS"
+						},
+						{
+								"id": "456",
+								"name": "中关村第二公寓",
+								"operator": "冯尚实",
+								"operateTime": "2015-12-23 18:22:22",
+								"source": "PMS"
+						}
+				],
+
+				"city": [
+						{
+								"id": "123",
+								"name": "香港",
+								"operator": "冯尚实",
+								"operateTime": "2015-12-23 18:22:22",
+								"source": "PMS"
+						}
+				],
+
+				"contactMobile": [
+						{
+								"id": "123",
+								"name": "13552343434",
+								"operator": "冯尚实",
+								"operateTime": "2015-12-23 18:22:22",
+								"source": "PMS"
+						}
+				],
+
+				"address": [
+						{
+								"id": "123",
+								"address": "新中关购物中心三层",
+								"operator": "冯尚实",
+								"operateTime": "2015-12-23 18:22:22",
+								"source": "PMS"
+						}
+				]
+		},
+
+		"qid": "qid",
+		"hotelId": "1234",
+		"quhuhuId": "quhuhuId",
+		"hotelName": "中关村公寓",
+		"city": "北京",
+		"contactMobile": "13717996733",
+		"address": "address"
+}

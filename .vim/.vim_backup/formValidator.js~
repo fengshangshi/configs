@@ -1,0 +1,66 @@
+var $ = require("jquery/jquery.js");
+require("validator/index.js");
+
+var formValidater = {
+	msgBox : ".form-other",
+	errorBox : ".form-other i.err",
+	initForm: function ( formSelector ,submitBtn ,options ) {
+		var me = this;
+		var jv = $(formSelector).jvalidator();
+		options = options || {};
+		$(formSelector).delegate(submitBtn,'click',function(evt){
+			evt.preventDefault();
+		  jv.validateAll(function( result , elements ){
+		    if( result ) {
+		      !!options.successCallback && options.successCallback.call(me);
+		    } else {
+		      me.moveTop();
+		    }
+		  });
+		});
+		if( options.events ) {
+		  var successStr = "<span class='form-other'><i class='ok'></i></span>",
+		  	  failStr = "<span class='form-other'><i class='err'></i></span>";
+		  jv.when( options.events );
+
+		  jv.success(function(){
+		  	var p = $(this.element).parent(),
+		  		msgBox = p.find(me.msgBox);
+
+		  	if(msgBox.length<=0){
+		  		p.append(successStr);
+		  	}else{
+		  		$(this.element).siblings(me.msgBox).show().html("<i class='ok'></i>");
+		  	}
+
+		  });
+
+		  jv.fail(function( $event , errors ){
+		  	//提示文案
+			var message = errors[0].message;
+			if (errors[0].value) {
+				message = message.replace(/%argu/, errors[0].value);
+			}
+		  	var msg = $(this.element).data("placeholder") || message,
+		  	    p = $(this.element).parent(""),
+		  		msgBox = p.find(me.msgBox);
+
+		  	if(msgBox.length<=0){
+		  		p.append(failStr);
+		  		$(this.element).siblings(me.msgBox).show().append(msg);
+		  	}else{
+		  		$(this.element).siblings(me.msgBox).show().html("<i class='err'></i>"+msg);
+		  	}
+		  });
+		}
+	},
+	moveTop: function(){
+		var me = this;
+		$('html, body').animate({
+			scrollTop: $(me.errorBox).eq(0).offset().top - 50
+		}, 500);
+	}
+ 
+}
+
+module.exports = formValidater;

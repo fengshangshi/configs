@@ -1,0 +1,14 @@
+
+var data = [
+		{"author": "Pete Hunt", "text": "This is one comment"},
+		{"author": "Jordan Walke", "text": "This is *another* comment"}
+];
+
+exports.GET_index = function(req, res, next) {
+		res.json(data);
+};
+
+exports.POST_index = function(req, res, next) {
+		data.push(this.POST);
+		res.json(data);
+};

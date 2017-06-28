@@ -1,0 +1,274 @@
+.search-wrap {
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	position: absolute;
+	top: 0;
+	right: -100%;
+	z-index: 3;
+	overflow: scroll;
+}
+
+.search-header {
+	width: 100%;
+	height: 44px;
+	background: rgba(0, 128, 217, 0.9);
+}
+
+.search-header nav {
+	padding: 0 10px;
+	height: 100%;
+}
+
+.go-prev-button,
+.search-close-button {
+	height: 44px;
+	text-indent: -999em;
+}
+
+.go-prev-button {
+	float: left;
+	width: 25px;
+	background: url(/static/images/prev.png) no-repeat left center;
+	background-size: 14px 22px;
+}
+
+.search-close-button {
+	float: right;
+	width: 25px;
+	background: url(/static/images/search.png) no-repeat center center;
+	background-size: 25px 24px;
+}
+
+h1 {
+	margin: 0 50px;
+	height: 44px;
+	text-align: center;
+}
+
+h1 span {
+	width: 100%;
+	height: 100%;
+	display: block;
+	font-size: 18px;
+	line-height: 44px;
+	color: #fff;
+	overflow: hidden;
+}
+
+h1 span.logo {
+	text-indent: -999em;
+	background: url(/static/images/logo.png) no-repeat center center;
+	background-size: 88px 28px;
+}
+
+
+/*搜索框*/
+.search-inner-wrap {
+	padding: 10px 10px 0 10px;
+}
+
+.search {
+	height: 35px;
+	margin-top: 11px;
+	border: 1px solid #0080d9;
+	border-radius: 45px;
+	background: url(./search.png) no-repeat 10px center;
+	background-size: 22px 22px;
+	position: relative;
+}
+
+.search-clear,
+.search-submit {
+	display: block;
+	float: right;
+	margin: 8px 2px 0;
+}
+
+.search-clear {
+	width: 19px;
+	height: 19px;
+	background: rgba(212, 212, 212, 1)
+		url(./close.png) no-repeat center center;
+	background-size: 9px 9px;
+	border-radius: 10px;
+	text-indent: -999em;
+	margin-top: 9px;
+	display: none;
+}
+
+.search-submit {
+	width: 34px;
+	height: 20px;
+	line-height: 20px;
+	color: #0080d9;
+	text-decoration: none;
+	text-align: center;
+	font-size: 14px;
+	margin-right: 10px;
+}
+
+.search-input {
+	width: calc(100% - 118px);
+	height: 30px;
+	font-size: 18px;
+	color: #3d3d3d;
+	float: left;
+	margin: 3px 0 0 40px;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	-webkit-appearance: none;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+.search-input::-webkit-input-placeholder {
+	font-size: 14px;
+	line-height: 24px;
+}
+
+.search-message {
+	color: #f0683e;
+	font-size: 14px;
+	height: 44px;
+	border-bottom: 1px solid #dfdfdf;
+	display: none;
+	text-align: center;
+	line-height: 44px;
+}
+
+.search-history-list {
+
+}
+
+.search-history-list li {
+	height: 44px;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+.search-history-list a {
+	display: block;
+	padding: 0 47px;
+	height: 44px;
+	line-height: 46px;
+	background: url(./history.png) no-repeat 10px center;
+	background-size: 21px 21px;
+	text-decoration: none;
+	font-size: 18px;
+	color: #3d3d3d;
+}
+
+.search-history-list-clear-button {
+	display: block;
+	height: 44px;
+	padding: 10px 0;
+	line-height: 44px;
+	color: #aeaeae;
+	font-size: 18px;
+	text-align: center;
+	text-decoration: none;
+}
+
+.search-result-label {
+	border-bottom: 1px solid #dfdfdf;
+	padding: 7px 0;
+	text-align: center;
+}
+
+.search-result-label span {
+	color: #f89311;
+	font-size: 14px;
+}
+
+.search-result-list {
+	
+}
+
+.search-result-list li {
+	padding: 15px 0;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+.search-result-list li:active {
+	
+}
+
+.flight {
+	font-size: 12px;
+	color: #7a7a7a;
+	height: 18px;
+	padding-left: 20px;
+}
+
+.flight img {
+	vertical-align: -2px;
+}
+
+.flight em {
+	color: #3d3d3d;
+	margin: 0 5px;
+}
+
+.flight-info {
+	height: 40px;
+	color: #3d3d3d;
+}
+
+.flight-start,
+.flight-status,
+.flight-end {
+	float: left;
+	height: 100%;
+	overflow: hidden;
+}
+
+.flight-status {
+	width: 20%;
+	background: url(./flight.png) no-repeat center top;
+	background-size: 63px 23px;
+}
+
+.flight-start,
+.flight-end {
+	width: 40%;
+}
+
+.flight-start {
+	text-align: right;
+}
+
+.flight-info .city {
+	font-size: 17px;
+	height: 24px;
+	line-height: 22px;
+	overflow: hidden;
+}
+
+.flight-info .time {
+	font-size: 12px;
+}
+
+.flight-status strong {
+	display: block;
+	font-size: 12px;
+	padding-top: 25px;
+	text-align: center;
+	color: #0080d9;
+}
+
+.flight-status-3 {
+	color: #f0683e;
+}
+
+.flight-status-2 {
+	color: #9c9c9c;
+}
+
+.flight-status-1 {
+	color: #0080d9;
+}
+
+.flight-status-0 {
+	color: #84e3b2;
+}
+

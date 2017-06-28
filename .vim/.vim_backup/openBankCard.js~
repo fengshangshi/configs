@@ -1,0 +1,22 @@
+/**
+ * 开通常用卡操作
+ * @author ss.feng
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var dialog = require("./dialog.js");
+
+message.register("openBankCard", function(e) {
+	var args = e.args,
+		cardId = args.cardId,
+		mobile = args.mobile,
+		dialogType = "openCard",
+		dialogTitle = "开通常用卡支付功能";
+
+	dialog.show({
+		cardId: cardId,
+		mobile: mobile,
+		dialogType: dialogType,
+		dialogTitle: dialogTitle
+	});
+});

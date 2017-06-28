@@ -1,0 +1,14 @@
+{
+    "code": "0000",
+    "msg": "处理成功",
+    "data": [
+        {
+            "code": "beijing",
+            "name": "北京"
+        },
+        {
+            "code": "shanghai",
+            "name": "北海"
+        }
+    ]
+}

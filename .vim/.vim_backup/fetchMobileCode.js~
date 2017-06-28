@@ -1,0 +1,90 @@
+/**
+ * 获取银行短信验证码
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchMobileCode", function(e) {
+	var data = $(".bankCard-wrap form").serialize();
+
+	$(target).addClass("button-gray").text("请求中...");
+	$(target).parent().find(".form-other").remove();
+	
+	service.ajax({
+		url: "/member/security/mobileCodeApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			if (data.errorCode == 0) {
+				// 保存messageId
+				$("#messageId").val(data.messageId);
+				//$(target).parent().find(".form-other").empty().append('<i class="ok"></i>验证码已发送，请查收！');
+			} else {
+				$("#vCode").parent()
+					.find(".form-other").remove();
+				var errHtml = [
+						"<span class='form-other'>",
+						"<i class='err'></i>",
+						data.errorMsg,
+						"</span>",
+					].join("");
+				$("#vCode").parent().append(errHtml);
+
+				$(target).removeClass("button-gray").text("重新获取");
+				clearTimeout(timer);
+				isVCodeRequested = false;
+			}
+		},
+		onerror: function(){
+			$(target).removeClass("button-gray").text("重新获取");
+			clearTimeout(timer);
+			isVCodeRequested = false;
+		}
+	});
+});
+
+var isVCodeRequested = false,
+	target,
+	timer = null;
+// 获取手机号验证码
+message.register("vCodeCountDown", function(e) {
+	var args = e.args,
+		startTime = 60,
+		endTime = 0;
+	target = args.target;
+
+	var showCountDownTime = function(ele, time) {
+		var tpl = "再次发送($TIME$s)",
+			text = tpl.replace(/\$TIME\$/, time);
+
+		$(ele).addClass("button-gray").text(text);
+	};
+
+	var resetCountDownTime = function(ele) {
+		var text = "重新发送";
+		$(ele).removeClass("button-gray").text(text);
+	};
+
+
+	var time = startTime;
+	if (isVCodeRequested) {
+		return false;
+	}
+	isVCodeRequested = true;
+	var countDownTime = function(target) {
+		timer = setTimeout(function() {
+			if (time > 0) {
+				showCountDownTime(target, time--);
+				countDownTime(target);
+			} else {
+				resetCountDownTime(target);
+				isVCodeRequested = false;
+			}
+		}, 1000);
+	};
+	showCountDownTime(target, time--);
+	countDownTime(target);
+
+	message.fire("fetchMobileCode");
+});

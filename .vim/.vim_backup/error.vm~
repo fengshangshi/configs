@@ -1,0 +1,3 @@
+#set($layout = "./_layout/layout.vm")
+A:xxxxx
+B:xxxxx

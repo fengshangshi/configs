@@ -1,0 +1,7 @@
+{
+		"demo": {
+				"type": "http",
+				"method": "get",
+				"timeout": 8
+		}
+}

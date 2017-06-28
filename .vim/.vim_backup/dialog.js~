@@ -1,0 +1,27 @@
+/**
+ * 显示dialog tips
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+require("jquery/jquery.ui.js");
+require("handlebars/handlebars.js");
+var template = require("../template/dialog.handlebars");
+
+// 配置dialog
+var dialogTipsConfig = {
+	modal: true,
+	draggable: false,
+	resizable: false,
+	width: 800,
+	height: 310,
+	closeText: ""
+};
+
+exports.show = function(data) {
+	var dialog = "#dialog-earlyRepay";
+	$(dialog).remove();
+
+
+	$("body").append(template(data));
+	$(dialog).dialog(dialogTipsConfig);
+};

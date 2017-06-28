@@ -1,0 +1,59 @@
+// var globalConst = window.globalConst = {"innId":6 ,"nickname":"","userId":1,"inns":[{"id":6,"name":"suba","cityCode":"beijing","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1,"ECOIN_MANAGE":0,"GOLD_COIN_MANAGE":0}},{"id":17,"name":"测试客栈","cityCode":"北京","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":24,"name":"ccc","cityCode":"aaaa","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":25,"name":"Qa客栈","cityCode":"大理","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":26,"name":"天山丽水","cityCode":"北京","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":27,"name":"权限测试使用1","cityCode":"月球","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":40,"name":"啊啊啊","cityCode":"北京","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":43,"name":"品质伊犁","cityCode":"北京","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":49,"name":"ddd","cityCode":"dd","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1}},{"id":50,"name":"诺亚方舟/:","cityCode":"西藏","rules":{"MODIFY":1,"ACCOUNT_INFO":1,"DELETE_ORDER":1,"ROOM_STATUS":1,"CHANNER_MANAGE":1,"SETTING":1,"OTAS_MANANGE":1,"BOOKING_MANAGE":1,"BOOKING":1,"CHECK_OUT":1,"ADVANCED_SETTING":1,"CHARGE":0,"OPERATE_REPORT":1,"STATISTICS":1,"MODIFY_PRICE":1,"MESSAGE_MODIFY":1,"CHECK_IN":1,"SOURCE_REPORT":1,"JOURNAL_ACCOUNT_REPORT":1,"ROOM_STATUS_SEARCH":1,"LOG_VIEW":1,"ROOM_MANAGE":1,"BOOKING_VIEW":1,"LOG_VIEW":1,"ROOM_STAT_SE":1}}]};
+
+var pk = require('params.js');
+
+var globalConst = window.globalConst ||{};
+var innsPower = globalConst.inns ||[];
+for(var i=0,len=innsPower.length; i<len; i++) {
+	globalConst.inns[i]['rules']["CHECK_IN_AND_CHECK_OUT"] = innsPower[i]['rules']["CHECK_IN"];
+	globalConst.inns[i]['rules']["BOOKING_AND_MODIFY"] = innsPower[i]['rules']["BOOKING"];
+}
+
+// var inns = globalConst.inns;
+// for(var i=0;i<inns.length;i++){
+// 	var rules = inns[i].rules;
+// 	for(var key in rules){
+// 		rules[key] = Math.random() > 0.5 ? 1 : 0
+// 	}
+// }
+
+pk.set({
+	"innId" : globalConst.innId || "", //当前页面的SEQ
+	"nickname" : globalConst.nickname || "",
+	"userId" : globalConst.userId || "",
+	"inns" : globalConst.inns || [],
+	"isBoss" : globalConst.isBoss || false
+});
+
+var inns = pk.get("inns");
+var innsMap = (function(){
+	var o = {};
+	for(var i=0,len=inns.length;i<len;i++){
+		o[inns[i].id] = inns[i];
+	}
+	return o;
+})();
+
+pk.set("inn", innsMap[pk.get('innId')]);
+pk.getInn = function(id){
+	if(id){
+		return innsMap[id] || {};
+	}
+	return pk.get("inn") || {};
+}
+
+// 打印设置
+var printSetting = window.printSetting;
+if(printSetting){
+	if(pk.get('innId') == printSetting['innId'] && printSetting['userSwitch'] && printSetting['innSwitch'] && printSetting['checkIn']['on']){
+		printSetting['checkInSwitch'] = true;
+	}else{
+		printSetting['checkInSwitch'] = false;
+	}
+	if(pk.get('innId') == printSetting['innId'] && printSetting['userSwitch'] && printSetting['innSwitch'] && printSetting['checkOut']['on']){
+		printSetting['checkOutSwitch'] = true;
+	}else{
+		printSetting['checkOutSwitch'] = false;
+	}
+	pk.set("printSetting",printSetting);
+}

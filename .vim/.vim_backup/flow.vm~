@@ -1,0 +1,20 @@
+## @desc 流水查询页面
+## @author ss.feng@qunar.com
+
+#parse("__include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>流水查询 - ${websiteName}</title>
+<link rel="stylesheet" href="${qzzUrl}/${cssPath}/common/base.css">
+<link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/account/flow/entry.css">
+#parse("__include/headScript.vm")
+</head>
+<body>
+		<div id="app"></div>
+
+		<script src="${qzzUrl}/${jsPath}/common/base.js"></script>
+		<script src="${qzzUrl}/${jsPath}/pages/account/flow/entry.js"></script>
+</body>
+</html>

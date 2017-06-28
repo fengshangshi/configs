@@ -1,0 +1,22 @@
+/* @Describe: 倒计时
+ * @author ss.feng@qunar.com
+ * @date  2016.05.05
+ */
+
+(function() {
+    var ele = document.getElementById("countdown"),
+        i = 4,
+        timer = setInterval(countDown, 1000);
+
+
+    function countDown() {
+        if (i === 0) {
+            clearInterval(timer);
+            window.location.href = "/privilege/index.htm"
+        }
+        ele.innerText = i--;
+    }
+
+
+
+})();

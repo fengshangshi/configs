@@ -1,0 +1,53 @@
+
+const path = require('path');
+
+const Router = require('sugar-router');
+const Scan = require('sugar-scan');
+
+const scan = new Scan({
+	path: '../app/controller',
+	ext: '.js',
+});
+
+class Controller {
+
+}
+
+global.Controller = Controller;
+
+const files = scan.files;
+const routers = new Map;
+
+for (let [key, value] of files.entries()) {
+	console.log(path.parse(key));
+	let file = path.join(value, path.parse(key).base);
+	//let router = new Router(file);
+	//console.log(router.name);
+
+	// 1. 扫描出所有的js文件，过滤出含Controller后缀的文件
+	if (/Controller$/.test(file)) {
+		//console.log(file);
+		let router = new Router(file);
+		let controller = require(key);
+
+		console.log(controller.GET);
+		// 将lib设置的前置/后置处理器放入到router实例中
+		// 将用户配置的公共的前置/后置处理器放入到router实例中
+		// 需要通过controller的method方法获取到该controller的前置/后置处理器，放入到router实例中
+		let handler = [router, controller];
+		routers.set(router.name, handler);
+	}
+	
+	
+	// 2. 通过路径生成router实例，router中包含前置/后置处理器的处理方法
+	//
+	// 3. 以router实例的name为key，【router实例，require的controller文件】为value的组装成数据结构
+	//
+	// 4. 路由来时，按照一定的策略生成name，获取上述3实现的路由对象，执行前置处理器，最后执行controller。
+	//
+	//
+	// 5. 用户调用this.display或其他响应浏览的动作时，按照一定的策略生成name，获取路由对象中的后置处理器执行，
+	// 最后执行浏览器响应动作
+}
+
+console.log(routers);

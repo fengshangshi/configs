@@ -1,0 +1,43 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付申请处理中</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/signIous.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content">
+                <div class="result-tips">
+                    <div class="result-tips-content tips-process">
+                        <h2>暂未收到银行返回的结果</h2>
+                        <p>
+							请耐心等待, 您可以返回
+                            <a href="/member/">我的账户</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script 
+		src="${qzzUrl}${jsPath}/asset/signIous/index/entry.js">
+	</script>
+</body>
+</html>
+
+
+
+

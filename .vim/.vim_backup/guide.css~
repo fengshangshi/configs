@@ -1,0 +1,23 @@
+.search-guide {
+	z-index: 2;
+	background: #fff;
+	right: -100%;
+}
+
+.search-index-wrap,
+.search-list-wrap {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+}
+
+.search-index-wrap {
+	z-index: 1;
+}
+
+.search-list-wrap {
+	z-index: 2;
+}

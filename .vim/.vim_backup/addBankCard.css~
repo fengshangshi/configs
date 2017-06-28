@@ -1,0 +1,187 @@
+/*[export]*/
+/**
+ * 添加常用卡样式
+ */
+require("../../base.css");
+require("../../../common/menu.css");
+require("../../../common/jquery-ui.css");
+require("../../../common/yselector.css");
+
+.bankCard-wrap {
+    padding: 20px 0 0 120px;
+}
+
+.bankCard-wrap .item {
+    margin-bottom: 20px;
+    height: 30px;
+    zoom: 1;
+}
+
+.bankCard-wrap .item label,
+.bankCard-wrap .item .field {
+    display: inline-block;    
+    vertical-align: top;
+    *display: inline;
+    *zoom: 1;
+}
+
+.bankCard-wrap .item label {
+    float: left;
+    width: 80px;
+    height: 36px;
+    line-height: 36px;
+    color: #999;
+    text-align: right;
+    margin-right: 20px;
+}
+
+.bankCard-wrap .item .field {
+	width: 600px;
+    float: left;
+}
+
+.bankCard-wrap .item .field input {
+    height: 32px;
+    line-height: 32px;
+    float: left;
+}
+
+.bankCard-wrap .item input,
+.select-bank-button {
+    width: 248px;
+    height: 34px;
+    border: 1px solid #e5e5e5;   
+    outline: none;
+    padding: 0 10px;
+}
+
+.select-bank-button {
+	float: left;
+	background: url(http://source.qunarzz.com/site/images/pay/useraccount/common/arrows.png)
+		no-repeat 240px 15px;
+    _background: url(
+        http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-005/arrows.png) no-repeat 240px 15px;
+}
+
+.bankCard-wrap .item input:hover,
+.select-bank-button:hover {
+    border: 1px solid #59bec6;
+}
+
+.bankCard-wrap .item input.middle-input,
+.bankCard-wrap .item input.short-input {
+    /*height: 28px;*/
+}
+
+.bankCard-wrap .item input.middle-input {
+    width: 220px;
+}
+
+.bankCard-wrap .item input.short-input {
+    width: 130px;
+}
+.bankCard-wrap .item label.middle-label {
+    height: 32px;
+    line-height: 32px;
+}
+
+.select-bank-content {
+    padding: 2px 15px;
+    cursor: pointer;
+}
+
+.select-bank-content em {
+    display: block;
+    text-align: center;
+    line-height: 30px;
+}
+
+.select-bank-content * {
+    vertical-align: top;
+    display: inline-block;
+}
+
+.select-bank-content span {
+    padding: 5px 10px 0 2px;
+    color: #e3e3e3;
+}
+
+.select-bank-content strong {
+    padding-top: 6px;
+    color: #333;
+}
+
+.bankCard-info-submit .button-submit {
+    margin-left: 105px;
+    display: inline-block;
+    padding: .5em 2em;
+    background: #fe8100;
+    color: #fff;
+}
+
+.bankCard-info-submit .button-submit:hover {
+    background: #ff7400;
+    text-decoration: none;
+}
+
+.button-vcode {
+    display: inline-block;
+    margin: 6px 10px;
+    background: #0e68f2;
+    padding: .2em 2.0em;
+    color: #fff;
+}
+
+.button-vcode:hover {
+    background: #0a53ed;
+    text-decoration: none;
+}
+
+.bankCard-wrap .item select {
+	width: 80px;
+	margin-right: 5px;
+	visibility: hidden;
+}
+
+.bankCard-wrap .item .yselector {
+	display: inline-block;
+    float: left;
+    margin-top: 2px;
+	width: 80px;
+	vertical-align: top;
+	margin-right: 5px;
+    *display: inline;
+    *zoom: 1;
+}
+
+.bankCard-wrap .item .yselector_box {
+	border: 1px solid #e5e5e5;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.bankCard-wrap .item .yselector_input {
+	text-align: center;
+}
+
+.bankCard-wrap .item .yselector_suggest {
+	width: 78px;
+}
+
+.bankCard-wrap .item .select-bank-hidden {
+	float: left;
+	padding: 0;
+	height: 0;
+	width: 0;
+	visibility: hidden;
+	position: absolute;
+}
+
+.vCode-validator-hidden .form-other {
+	display: none;
+}
+
+.button-gray,
+.button-gray:hover {
+	background: #c1c1c1;
+}

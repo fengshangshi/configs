@@ -1,0 +1,35 @@
+/**
+ * @desc 异常错误处理
+ * @author ss.feng
+ */
+
+var error = function() {
+	var msgs = {
+		'9999': '系统异常,请稍后重试'
+	};
+	
+	var error = function(res) {
+		var code = res.code;
+
+		// 非异常
+		if (code == '0') return false;
+
+		var msg = msgs[code] ? msgs[code] : (res.msg ? res.msg : '系统错误');
+		
+		G.dialog({
+			title: '提示',
+			content: '<div style="font-size: 14px;width:100%;text-align:center">' + msg + '</div>',
+			fixed: true,
+			width: 320,
+			cancelValue: '知道了',
+			cancel: function() {}
+		}).showModal();
+
+		// 存在异常
+		return true;
+	};
+
+	return error;
+}();
+
+module.exports = error;

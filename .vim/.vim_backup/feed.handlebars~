@@ -1,0 +1,16 @@
+<ul>
+	<li class="list-item">
+		<h4 class="list-hd">
+			<span class="apt-name">北京祥云有限公司北京祥云有限公司北京祥云有限公司</span>
+		</h4>
+		<div class="list-bd"><span>这里是姓名</span><span class="tag-remind-time">还剩3天</span></div>
+		<div class="list-ft">
+			<span class="apt-adress">地址很长很长地址很长很长地址很长很长地址很长很长地址很长很长地址很长很长地址很长很长地址很长很长地址很长很长</span>
+		</div>
+		<div class="list-info">
+			<p class="status-default">被退回</p>
+			<p class="info-time">2015-01-03</p>
+			<a href="" class="crm-btn">分配</a>
+		</div>
+	</li>
+</ul>

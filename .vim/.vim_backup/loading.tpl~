@@ -1,0 +1,6 @@
+<div class="loading-wrap">
+	<div class="loading"></div>
+</div>
+
+<div class="message-wrap">定位失败，稍后再试</div>
+{%script%}require("./loading.js");{%/script%}

@@ -1,0 +1,83 @@
+{
+    "__info__": {
+        "description": "根据输入的航班号搜索相应的航班信息",
+        "params": {
+            "flight_no": {
+                "description": "航班号",
+                "type": "string",
+                "additional_remarks": ""
+            }
+        }
+    },
+
+    "error": 0,
+
+    "data": {
+        "flight_list": [
+            {
+                "flight_no": "CA6688",
+                "base_info": {
+                    "flight_no": "CA6688",
+                    "company": {
+                        "name": "中国航空",
+                        "icon": ""
+                    }
+                },
+                "take_off_and_land": [
+                    {
+                        "departure": {
+                            "city_name": "乌鲁木齐乌鲁木齐",
+                            "point": {
+                                "lng": 116.38,
+                                "lat": 39.9
+                            }
+                        },
+                        "destination": {
+                            "city_name": "上海",
+                            "point": {
+                                "lng": 121.48,
+                                "lat": 31.22
+                            }
+                        },
+                        "plan": {
+                            "launch": 1408783299482,
+                            "landing": 1408786000000
+                        }
+                    }
+                ]
+            },
+            {
+                "flight_no": "CA6688",
+                "base_info": {
+                    "flight_no": "CA6688",
+                    "company": {
+                        "name": "中国航空",
+                        "icon": ""
+                    }
+                },
+                "take_off_and_land": [
+                    {
+                        "departure": {
+                            "city_name": "乌鲁木齐乌鲁木齐",
+                            "point": {
+                                "lng": 116.38,
+                                "lat": 39.9
+                            }
+                        },
+                        "destination": {
+                            "city_name": "上海",
+                            "point": {
+                                "lng": 121.48,
+                                "lat": 31.22
+                            }
+                        },
+                        "plan": {
+                            "launch": 1408783299482,
+                            "landing": 1408786000000
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,13 @@
+var chokidar =require('chokidar');
+
+module.exports = function() {
+		var cwd = process.cwd();
+		var watcher = chokidar.watch(cwd,  {
+				ignored: '*.test' 
+		});
+
+		watcher.on('all', function(event, path) {
+				console.log(event, path);
+				console.log('重启成功');
+		});
+};

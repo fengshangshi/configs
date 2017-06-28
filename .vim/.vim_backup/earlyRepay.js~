@@ -1,0 +1,164 @@
+/**
+ * 提前还款
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+var globalDialog = require("module/dialogTips/dialogTips.js");
+var dialog = require("./dialog.js");
+var format = require("utils/amountFormat.js");
+
+require("handlebars/handlebars.js");
+var template = require("../template/earlyRepay.handlebars");
+
+message.register("earlyRepay", function(e) {
+	var args = e.args,
+		target = args.target;
+
+	var loanProvideNo = $(target).data("loanprovideno");
+
+	var data = {
+		loanProvideNo: loanProvideNo
+	};
+
+	service.ajax({
+		url: "/member/asset/ious/advanceRepayPage.htm",
+		data: data,
+		onsuccess: function(data) {
+			if (data.errorCode == "000000") {
+				data.data["loanProvideNo"] = loanProvideNo;
+				dialog.show(data.data);
+				message.fire("fetchEarlyRepayAmount", {
+					amount: data.data.prcpAmount
+				});
+			} else {
+				globalDialog.showDialogTips({
+					"title": "信任付提示",
+					"content": data.errorMsg
+				});
+			}
+		}
+	});
+});
+
+
+// 错误提示html片段
+function createErrorHtml(text) {
+	var errHtml = '<span class="form-other"><i class="err"></i>$$TEXT$$</span>';
+	return errHtml.replace(/\$\$TEXT\$\$/, text);
+
+}
+
+// 检查提前还款的金额是否符合条件
+function checkAmount(amount) {
+	var principalAmount = $(".dialog .principal input[name=totalRepay]").val();
+	var errHtml = "";
+	
+	// 跟dom很耦合
+	$(".principal-wrap .filed").find(".form-other").remove();
+
+	// 增加金额格式判断 
+	var reg_flag = 0;
+	if (/[^\d\.]+/.test(amount)) {
+		reg_flag++;
+	}
+
+	// 金额不能为空
+	if (amount == "") {
+		errHtml = createErrorHtml("金额不能为空");
+	// 金额中包含非法字符
+	} else if (reg_flag > 0) {
+		errHtml = createErrorHtml("金额不能包含非法字符");
+	} else if (parseFloat(amount) <= 0) {
+		errHtml = createErrorHtml("金额必须大于0");
+	} else if (parseFloat(amount) > principalAmount) {
+		errHtml = createErrorHtml("金额不能大于待还款总额");
+	}
+
+	if (errHtml == "") {
+		$(".principal-wrap .filed .tips").show();
+		return true;
+	}
+
+	$(".principal-wrap .filed").append(errHtml);
+	$(".principal-wrap .filed .tips").hide();
+	return false;
+}
+
+// 获取提前还款的利息本金
+message.register("fetchEarlyRepayAmount", function(e) {
+	var args = e.args,
+		amount = args.amount,
+		loanProvideNo = $(".dialog .principal input[name=loanProvideNo]").val();
+
+	/**
+	 * 如果输入的金额不符合规范
+	 * <= 0 || > 还款总额
+	 */
+	if (!checkAmount(amount)) {
+		message.fire("resetEarlyRepayAmount");
+		return false;
+	}
+
+	amount = format(amount, 2);
+
+	// 从服务端取数据
+	var data = {
+		loanProvideNo: loanProvideNo,
+		advanceRepaymentPrincipal: amount
+	};
+
+	service.ajax({
+		url: "/member/asset/ious/advanceRepayQuery.htm",
+		data: data,
+		onsuccess: function(data) {
+			if (data.errorCode == "000000") {
+				data = data.data;
+				/**
+				 * 对返回的数据进行校验，确定为合法的返回才执行
+				 */
+				var value = $(".dialog .principal input[name=advanceRepaymentPrincipal]").val();
+
+				if (parseFloat(data.principal) == parseFloat(value)) {
+					message.fire("changeEarlyRepayAmount", {
+						data: data
+					});
+				} else {
+					message.fire("resetEarlyRepayAmount");
+				}
+			} else {
+				globalDialog.showDialogTips({
+					"title": "信任付提示",
+					"content": data.errorMsg
+				});
+			}
+		}
+	});
+});
+
+// 提交提前还款按钮
+message.register("submitEarlyRepayAmount", function(e) {
+	var args = e.args,
+		amount = args.amount;
+
+	if (checkAmount(amount)) {
+		$("#dialog-form").submit();
+	}
+
+});
+
+// 改变提前还款列表
+message.register("changeEarlyRepayAmount", function(e) {
+	var args = e.args,
+		data = args.data;
+
+	$(".dialog .total-detail tbody").html(template(data));
+	$(".dialog .total-principal strong").text(data.total);
+});
+
+// 重置提前还款列表
+message.register("resetEarlyRepayAmount", function(e) {
+	$(".dialog .total-detail tbody td").empty();
+	$(".dialog .total-principal strong").text("0.00");
+});

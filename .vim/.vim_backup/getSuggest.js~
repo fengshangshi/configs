@@ -1,0 +1,289 @@
+var vm = avalon.define({
+    $id: 'getSuggest'
+});
+
+var getSuggest = {
+
+    // 负责人列表
+    getSysUser: function (type) {
+        G.ajax({
+            url: '/common/accountSuggest.htm',
+            type: 'POST',
+            success: function(res) {
+                $('.js-name').autocomplete({
+                    lookup: dataMap(res.data, 'accountName'),
+                    onSelect: function (suggestion) {
+
+                        // 转移给他人
+                        if(type == 'account') {
+
+                            // 过50毫秒再将id赋值，防止改变input值时被清空
+                            setTimeout(function() {
+                                vm.$fire('all!getAccountId', suggestion.data.accountGuid);
+                            }, 50);
+                            vm.$fire('all!getAccountName', suggestion.data.accountName);
+
+                        } else if(type == 'director') { // 查询负责人
+
+                            setTimeout(function() {
+                                vm.$fire('all!directorId', suggestion.data.accountGuid);
+                            }, 50);
+
+                            vm.$fire('all!directorName', suggestion.data.accountName);
+
+                        }
+
+
+                    }
+                });
+            }
+        });
+    },
+
+    // 手机号对应商户账号
+    getAccountGuid: function (vm1) {
+        var data = {
+                mobile: vm1.accountTel
+            }
+        G.ajax({
+            url: '/common/mobileSuggest.htm',
+            type: 'POST',
+            data: data,
+            success: function(res) {
+                $('.js-mobile').autocomplete({
+                    lookup: dataMap(res.data, 'mobile'),
+                    params: data,
+                    onSelect: function (suggestion) {
+
+                        $('.js-accountguid').val(suggestion.data.accountGuid);
+                        vm1.accountTel = suggestion.data.mobile;
+                    }
+                });
+            }
+        });
+    },
+
+    // 省份列表
+    getAllProvince: function (vm1) {
+        G.ajax({
+            url: '/common/getAllProvince.htm',
+            type: 'POST',
+            success: function(res) {
+                $('.js-province').autocomplete({
+                    lookup: dataMap(res.data, 'names'),
+                    onSelect: function (suggestion) {
+
+                        $('.js-provinceid').val(suggestion.data.codes);
+                        vm1.provinceName = suggestion.data.names;
+                        vm.$fire('all!addProvince');
+                    }
+                });
+            }
+        });
+    },
+
+    // 区域列表
+    getAllDepartment: function (vm1) {
+        G.ajax({
+            url: '/common/departmentSuggest.htm',
+            type: 'POST',
+            success: function(res) {
+                $('.js-department').autocomplete({
+                    lookup: dataMap(res.data, 'departmentName'),
+                    onSelect: function (suggestion) {
+
+                        $('.js-departmentid').val(suggestion.data.departmentCode);
+                        vm1.departmentName = suggestion.data.departmentName;
+                    }
+                });
+            }
+        });
+    },
+
+    // 门店suggest
+    getHotelList: function(name, no) {
+        $(name).autocomplete({
+            serviceUrl: '/common/getHotelByNames.htm',
+            type: 'POST',
+            paramName: 'hotelName',
+            transformResult: function(response) {
+                response = JSON.parse(response);
+
+                return {
+                    suggestions: $.map(response.data, function(dataItem) {
+                        return {
+                            value: dataItem.hotelName,
+                            data: dataItem
+                         };
+                    })
+                };
+            },
+            onSelect: function (suggestion) {
+
+                $(no).val(suggestion.data.hotelNo);
+                $(name).html(suggestion.data.hotelName);
+            }
+        });
+    },
+
+    // 城市列表
+    getDepartmentList: function (name, no) {
+        G.ajax({
+            url: '/common/departmentSuggestPermission.htm',
+            type: 'POST',
+            success: function(res) {
+                $(name).autocomplete({
+                    lookup: dataMap(res.data, 'departmentName'),
+                    onSelect: function (suggestion) {
+                        $(no).val(suggestion.data.departmentCode);
+                        $(name).html(suggestion.data.departmentName);
+                        vm.$fire('all!searchBD');
+                    }
+                });
+            }
+
+        });
+
+    },
+
+    // 城市列表
+    getCityList: function (name, no) {
+        G.ajax({
+            url: '/common/getAllCity.htm',
+            type: 'POST',
+            success: function(res) {
+                $(name).autocomplete({
+                    lookup: dataMap(res.data, 'names'),
+                    onSelect: function (suggestion) {
+                        $(no).val(suggestion.data.codes);
+                        $(name).html(suggestion.data.names);
+                        vm.$fire('all!searchCustomer');
+                        vm.$fire('all!changeVMCityName', suggestion.data.names);
+                    }
+                });
+            }
+
+        });
+
+    },
+
+    // 商户名称suggest
+    getCustomerNo: function(name, no, cityCode) {
+        $(name).autocomplete({
+            serviceUrl: '/customer/getCustomerSuggest.htm',
+            type: 'POST',
+            paramName: 'customerName',
+            params: {
+                cityCode: cityCode
+            },
+            transformResult: function(response) {
+                response = JSON.parse(response);
+
+                return {
+                    suggestions: $.map(response.data, function(dataItem) {
+                        return {
+                            value: dataItem.customerName,
+                            data: dataItem
+                         };
+                    })
+                };
+            },
+            onSelect: function (suggestion) {
+
+                $(no).val(suggestion.data.customerNo);
+                $(name).html(suggestion.data.customerName);
+            }
+        });
+    },
+
+    // BDsuggest
+    getBDList: function(name, no, departmentCode) {
+        G.ajax({
+            url: '/common/getAccountByDepartmentCode.htm',
+            type: 'POST',
+            data: {
+                departmentCode: departmentCode
+            },
+            success: function(res) {
+                $(name).autocomplete({
+                    lookup: dataMap(res.data, 'accountName'),
+                    onSelect: function (suggestion) {
+                        $(no).val(suggestion.data.accountGuid);
+                        $(name).html(suggestion.data.accountName);
+                    }
+                });
+            }
+
+        });
+    },
+
+    // 获取商圈列表
+    getAreaList: function (name, no, cityCode) {
+        G.ajax({
+            url: '/qid/api/cityProvince/listArea.do',
+            data: {
+                cityCode: cityCode
+            },
+            type: 'POST',
+            success: function(res) {
+                if(res.code != 0) {
+                    G.popupUtil.msg('请先选择城市');
+                    return false;
+                }
+                $(name).autocomplete({
+                    lookup: dataMap(res.data, 'names'),
+                    onSelect: function (suggestion) {
+                        $(no).val(suggestion.data.codes);
+                        $(name).html(suggestion.data.names);
+                    }
+                });
+            }
+
+        });
+
+    },
+
+    // 获取行政区域列表
+    getDomainList: function (name, no, cityCode) {
+        G.ajax({
+            url: '/qid/api/cityProvince/listDomain.do',
+            type: 'POST',
+            data: {
+                cityCode: cityCode
+            },
+            success: function(res) {
+                if(res.code != 0) {
+                    G.popupUtil.msg('请先选择城市');
+                    return false;
+                }
+                $(name).autocomplete({
+                    lookup: dataMap(res.data, 'names'),
+                    onSelect: function (suggestion) {
+                        $(no).val(suggestion.data.codes);
+                        $(name).html(suggestion.data.names);
+                    }
+                });
+            }
+
+        });
+
+    }
+
+}
+/**
+ * 数据映射
+ * @return {[type]}
+ */
+function dataMap(data, key) {
+    var itemList = [];
+    data = data || [];
+    $.each(data, function(index, item) {
+        itemList.push({
+            value: item[key],
+            data: item
+        });
+    });
+    return itemList;
+}
+
+module.exports = getSuggest;

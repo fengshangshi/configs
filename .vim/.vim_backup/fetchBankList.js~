@@ -1,0 +1,28 @@
+/**
+ * 获取银行列表
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+var dialog = require("./dialog.js");
+
+message.register("showBankList", function(e) {
+	var args = e.args,
+		username = args.username,
+		idCard = args.idCard,
+		offset = args.offset;
+
+	service.ajax({
+		url: "/member/security/bankCard/fetchBankListApi.htm",
+		onsuccess: function(data) {
+			data["username"] = username;
+			data["idCard"] = idCard;
+			dialog.showBankListPanel(data, offset);
+		}
+	});
+});
+
+message.register("closeBankList", function(e) {
+	dialog.closeBankListPanel();
+});

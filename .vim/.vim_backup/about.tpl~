@@ -1,0 +1,37 @@
+<div class="about-wrap">
+	<header class="search-header clearfix">
+		<nav>
+			<a href="###" class="go-prev-button">返回</a>
+			<h1><span>关于百度天眼</span></h1>
+		</nav>
+	</header>
+	<div class="about-content-wrap">
+		<p class="about-content">
+		百度天眼是百度开发的一款航班实时信息查询产品，
+		用户在百度天眼可以看到全中国的飞机实时动态，
+		同时这里也有最专业的飞机数据，
+		享受像塔台工作人员一样监控飞机的体验。
+		同时，当你的家人或朋友正在乘坐飞机，通过百度天眼，
+		您所关注的人与您就不会失联。</p>
+		<h3>反馈内容</h3>
+		<div class="textarea-wrap">
+			<div>
+				<textarea id="feedback-content" 
+				placeholder="欢迎提供您在使用中遇到的问题或宝贵建议
+				"></textarea>
+			</div>
+		</div>
+		<h3>联系方式</h3>
+		<div class="textarea-wrap">
+			<div>
+				<input id="contact-content" type="text" 
+					placeholder="比如您的邮箱/QQ/电话，便于我们及时回复您"/>
+			</div>
+		</div>
+		<div class="feedback-message"></div>
+		<div class="feedback-submit-wrap">
+			<a id="feedback-submit" href="###">提&nbsp;&nbsp;交</a>
+		</div>
+	</div>
+</div>
+{%script%}require("./about.js");{%/script%}

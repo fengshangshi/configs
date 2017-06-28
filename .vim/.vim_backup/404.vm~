@@ -1,0 +1,21 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/error.css" />
+</head>
+<body class="error">
+	<div class="error-info">
+		<h1>对不起，您访问的页面不存在</h1>
+		<p>
+			您可以访问
+			<a href="/member/">账户首页</a>
+		</p>
+	</div>
+</body>
+</html>

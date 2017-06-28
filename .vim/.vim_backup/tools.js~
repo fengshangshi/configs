@@ -1,0 +1,462 @@
+// 命名空间RP
+var RP = {};
+
+/**
+ * @fileOverview 事件派发
+ * @author shangshi
+ * @mail   fengshangshi@baidu.com
+ * @date   2013-02-12 update
+ * @version 1.1.0 update
+ * @return 
+ * RP.MessageCenter.register();
+ * RP.MessageCenter.fire();
+ * RP.MessageCenter.remove();
+ **/
+
+RP.MessageCenter = (function() {
+
+	// 避免__listener__对象暴露,所有方法都放在构造函数里
+	var Events = function() {
+		// 内部事件对象
+		var __listener__ = {};
+
+		// 往内部注册事件
+		this.register = function() {
+			var args = arguments;
+			if (args[0] === undefined) return this; // 不再继续执行下面的逻辑
+
+			var __register__ = function(type, fn) {
+				// 此处使用的__listener__需要寻找两个作用域
+				if (typeof __listener__[type] === 'undefined') {
+					__listener__[type] = [fn];
+				} else {
+					__listener__[type].push(fn);
+				}
+				
+			};
+
+			var type = args[0], fn = args[1], messages = [], message = {}, i = 0, l;
+
+			// 对事件类型的一些判断
+			if (type instanceof Array) {
+				messages = type;
+			} else {
+				message[type] = fn;
+				messages = [message];
+			}
+			for (l = messages.length; i < l; i++) {
+				for (type in messages[i]) {
+					if (typeof type === 'string' && typeof messages[i][type] === 'function') {
+						__register__.call(this, type, messages[i][type]);
+					}
+				}
+			}
+
+			return this;
+		};
+
+		// 分发事件
+		this.fire = function() {
+			var args = arguments;
+			if (args[0] === undefined) return this; // 不再继续执行下面的逻辑
+			var __fire__ = function(type, args) {
+				if (__listener__[type]) {
+					var events = {
+						type: type, 
+						target: this,
+						args: args || {} // 用户自行传递的参数
+					};
+
+					// 执行回调函数的具体逻辑，就是遍历一个数组，挨个触发回调函数
+					for (var i = 0, l = __listener__[type].length; i < l; i++) {
+						__listener__[type][i].call(this, events);
+					}
+				}
+			}
+
+			var type = args[0], params = args[1], messages = [], message = {}, i = 0, l;
+
+			// 对参数进行处理，统一格式
+			if (type instanceof Array) {
+				messages = type;
+			} else {
+				message[type] = params;
+				messages = [message];
+			}
+
+			// 对需要触发的事件进行进一步处理
+			for (l = messages.length; i < l; i++) {
+				// 传递自定义参数时
+				if (Object.prototype.toString.call(messages[i]) === '[object Object]') {
+					for (type in messages[i]) {
+						if (typeof type === 'string') {
+							__fire__.call(this, type, messages[i][type]);
+						}
+					}
+				} else if (typeof messages[i] === 'string') {
+					__fire__.call(this, messages[i]);
+				}	
+			}
+
+			return this;
+		};
+
+		// 移除事件
+		this.remove = function() {
+			var args = arguments;
+			if (args[0] === undefined) return this; // 不再继续执行下面的逻辑
+			// 可以移出所有的事件的订阅
+			// 如果第一个参数为true，表示清空事件对象
+			if (args[0] === true) {
+				__listener__ = {}; // 重新定义一个新的对象
+				return this; // 不再继续执行下面的逻辑
+			}
+			var __remove__ = function(type, fn) {
+				if (__listener__[type] instanceof Array) {
+					if (typeof fn === 'function') {
+						for (var i = 0, l = __listener__[type].length; i < l; i++) {
+							if (__listener__[type][i] === fn) {
+								__listener__[type].splice(i, 1);
+								break;
+							}
+						}
+					} else if (fn instanceof Array) {
+						for (var i = 0, l = fn.length; i < l; i++) {
+							__listener__(type, fn[i]);
+						}
+					} else {
+						delete __listener__[type];
+					}
+				}
+			};
+
+			var type = args[0], fn = args[1], i = 0, l;
+			
+			// 对事件类型的一些判断
+			if (typeof type === 'string') {
+				__remove__.call(this, type, fn);
+			} else if (type instanceof Array) {
+				for (l = type.length; i < l; i++) {
+					__remove__.call(this, type[i], fn);
+				}
+			} else if (Object.prototype.toString.call(type) === '[object Object]') {
+				for (var t in type) {
+					__remove__.call(this, t, type[t]);
+				}
+			}
+
+			return this;
+		};
+
+	};
+
+	return new Events;
+})();
+
+
+
+
+/**
+ * @fileOverview JSONP
+ * @author shangshi
+ * @mail   fengshangshi@baidu.com
+ * @date   2012-12-12 update
+ * @version 1.0.1 update
+ * @param
+ * requestUrl 请求的url
+ * callbackFn 回调函数 不是函数名 函数名由JSONP方法内部生成传递给服务器
+ * callbackName callback名 跟服务器交互用 默认为callback 例如:http://www.baidu.com/?callback=jsonp2342234
+ **/
+RP.JSONP = function(requestUrl, callbackFn, callbackName) {
+	var fn = 'jsonp' + new Date().getTime(),
+		callName = callbackName || 'callback',
+		script = document.createElement('script'),
+		head = document.getElementsByTagName('head')[0],
+		cleaned = false, timer = null,
+		clean = function() {
+			try {
+				script.parentNode.removeChild(script);
+				script = null;
+				delete window[fn];
+			} catch(e) {};
+			cleaned = true;
+		};
+
+	window[fn] = function() {
+		clean();
+		callbackFn.apply(this, arguments);
+	};
+	
+	requestUrl = requestUrl.replace(/\#./gi, '');
+	requestUrl += (requestUrl.indexOf('?') == -1 ? '?' : '&') + callName + '=' + fn;
+	script.src = requestUrl;
+	script.onload = script.onreadystatechange = function() {
+		!cleaned && (!script.readyState || script.readyState === 'loaded' || script.readyState === 'complete') && clean();
+	};
+	
+	// 防止进程阻塞 之前在ie9+下200ms会出错 改成20ms
+	timer = setTimeout(function() {
+		timer = null;
+		head.appendChild(script);
+	}, 20);
+};
+
+// 动画
+RP.FX = {
+
+	
+	/*
+	** 淡入淡出
+	** options.start 透明度起始值
+	** options.end 透明度结束值
+	** options.onfinish 动画完毕执行回调	
+	** options.onstart 动画开始执行回调	
+	** opitons.speed 透明度改变速度
+	** options.timeout 动画时间
+	*/
+	Fade: function(element, options) {
+
+		// 操作节点
+		element = ( typeof element === 'string' ? document.getElementById(element) : element );
+
+		element.effect = element.effect || {};
+		// 清除动画
+		if (element.effect.fade) clearTimeout(element.effect.fade);
+
+		// 对选项队列默认操作
+		options = options || {};
+
+		var start = options.start || getElementOpacity(element) || 100,
+			end = options.end || 0,
+			speed = options.speed || 1,
+			timeout = options.timeout || 40,
+			onstart = ('[object Function]' == Object.prototype.toString.call(options.onstart) ? options.onstart : function() {}),
+			onfinish = ('[object Function]' == Object.prototype.toString.call(options.onfinish) ? options.onfinish : function() {});
+
+
+		function getElementOpacity(element) {
+
+			var opacity;
+
+			if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
+				opacity = element.currentStyle.filter.indexOf('opacity') >= 0 ? (parseFloat(element.currentStyle.filter.match(/opacity=([^)]*)/)[1])) + '' : 100;
+			} else {
+				opacity = 100 * element.ownerDocument.defaultView.getComputedStyle(element, null)['opacity'];
+			}
+
+		}
+
+		onstart.call(element);
+
+
+		function __FADE_FX__() {
+
+			start = start < end ? Math.min(start + speed, end) : Math.max(start - speed, end);
+			element.style.opacity = start / 100;
+			element.style.filter = 'alpha(opacity=' + start + ')';
+
+			if (Math.round(start) == end) {
+				if (element.effect.fade) clearTimeout(element.effect.fade);
+				element.style.opacity = end / 100;
+				element.style.filter = 'alpha(opacity=' + end + ')';
+				onfinish.call(element);	
+			} else {
+				element.effect.fade = setTimeout(arguments.callee, timeout);
+			}
+
+		}
+
+		__FADE_FX__();
+	},
+
+	/*
+	** 位移
+	** options.startPos 开始位置坐标
+	** options.endPos 结束位置坐标
+	** options.onfinish 动画完毕执行回调	
+	** options.onstart 动画开始执行回调	
+	** opitons.speed 位移改变速度
+	** options.timeout 动画时间
+	*/
+	Move: function(element, options) {
+		// 操作节点
+		element = ( typeof element === 'string' ? document.getElementById(element) : element );
+
+		element.effect = element.effect || {};
+		// 清除动画
+		if (element.effect.move) clearInterval(element.effect.move);
+
+		// 对选项队列默认操作
+		options = options || {};
+
+		var startPos = options.startPos  || getElementPosition(element) || {'left': null, 'top': null},
+			endPos = options.endPos || {'left': null, 'top': null},
+			speed = options.speed || 10,
+			timeout = options.timeout || 40,
+			args = options.args,
+			onstart = ('[object Function]' == Object.prototype.toString.call(options.onstart) ? options.onstart : function() {}),
+			onfinish = ('[object Function]' == Object.prototype.toString.call(options.onfinish) ? options.onfinish : function() {}),
+			style = element.style,
+			styleArray = [];
+
+
+		function getElementPosition(element) {
+			var pos = {
+				left: element.offsetLeft, 
+				top: element.offsetTop
+			};
+
+			while(element = element.offsetParent) {
+				pos.left += element.offsetLeft;
+				pos.top += element.offsetTop;
+			}
+
+			return pos;
+		}
+		
+		style['position'] = 'absolute';
+		if ('number' == typeof startPos['left'] && 'number' == typeof endPos['left']) styleArray.push('left');
+		if ('number' == typeof startPos['top'] && 'number' == typeof endPos['top']) styleArray.push('top');
+
+		onstart.apply(element, args);		
+		element.effect.move = setInterval(function(){
+
+			for (var i = 0, l = styleArray.length; i < l; i++) {
+				startPos[styleArray[i]] += (endPos[styleArray[i]] - startPos[styleArray[i]]) * speed / 100;
+				style[styleArray[i]] = startPos[styleArray[i]] + 'px';
+			}
+
+			for (i = 0, l = styleArray.length; i < l; i++) {
+				if (Math.round(startPos[styleArray[i]]) == endPos[styleArray[i]]){
+					if (i != styleArray.length - 1) continue;
+				} else {
+					break;
+				}
+				for (var i = 0; i < styleArray.length; i++) {
+					style[styleArray[i]] = endPos[styleArray[i]] + 'px';
+				}
+				clearInterval(element.effect.move);
+				onfinish.apply(element, args);	
+			}
+			
+
+		}, timeout);
+
+
+	}
+};
+
+/**
+ * @fileOverview 随机数生成器
+ * @author shangshi
+ * @mail   fengshangshi@baidu.com
+ * @date   2012-12-12 
+ * @version 1.0.0 
+ * @usage RP.Random(start, end);
+ * @param end可以省略，省略之后会生成0到start范围的随机数
+ **/
+RP.Random = function(start, end) {
+	if ('[object Number]' != Object.prototype.toString.call(start)) return 0;
+	if ('[object Number]' != Object.prototype.toString.call(end)) {
+		end = start;
+		start = 0;
+	}
+	return Math.floor(Math.random() * end + start);
+};
+
+/**
+ * @fileOverview 点击日志发送器
+ * @author shangshi
+ * @mail   fengshangshi@baidu.com
+ * @date   2013-02-12 
+ * @version 1.0.0 
+ * @usage var log = new Log({});
+ * @param 参数以object的形式发送 log_url和pid有默认值，可以修改
+ * @return send() 只暴露send方法发送日志
+ **/
+RP.Log = function(options) {
+	function processParams(options) {
+		var params = [], url, pid, key;
+		for (key in options) {
+			if (key == 'log_url' || key == 'pid') {
+				continue;
+			}
+			params.push(key + '=' + encodeURIComponent(options[key]));
+		}
+		return params.join('&');
+	}
+
+	options = options || {};
+
+	// 生成实例时的选项处理
+	var params = processParams(options), 
+		url = options.log_url || 'http://nsclick.baidu.com/v.gif', 
+		pid = options.pid || '312';
+
+
+	this.send = function(options) {
+		var path = encodeURIComponent(window.document.location.href), 
+			image = new Image(),
+			src = url + '?pid=' + pid +'&' + params + '&' + processParams(options) + '&path=' + path + '&_' + new Date().getTime(),
+			key = 'shangshi_log_send_' + Math.floor( Math.random() * 2147483648 ).toString(36);
+
+		window[key] = image;
+
+		image.onload = image.onerror = image.onabort = function() {
+			image.onload = image.onerror = image.onabort = null;
+			window[key] = null;
+
+			image = null;
+		};
+
+		image.src = src;
+
+		return this;
+	};
+};
+
+// 摘自tangram cookie api
+// 因jquery的基础库里去掉了cookie的部分
+RP.Cookie = {
+    _isValidKey: function (key) {     
+        return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
+    },
+
+    set: function(key, value, options) {
+        if (!RP.Cookie._isValidKey(key)) {
+            return;
+        }
+         
+        options = options || {};
+        //options.path = options.path || "/"; // meizz 20100402 设定一个初始值，方便后续的操作
+        //berg 20100409 去掉，因为用户希望默认的path是当前路径，这样和浏览器对cookie的定义也是一致的
+         
+        // 计算cookie过期时间
+        var expires = options.expires;
+        if ('number' == typeof options.expires) {
+            expires = new Date();
+            expires.setTime(expires.getTime() + options.expires);
+        }
+         
+        document.cookie =
+            key + "=" + value
+            + (options.path ? "; path=" + options.path : "")
+            + (expires ? "; expires=" + expires.toGMTString() : "")
+            + (options.domain ? "; domain=" + options.domain : "")
+            + (options.secure ? "; secure" : ''); 
+    },
+
+    get: function(key) {
+        if (RP.Cookie._isValidKey(key)) {
+            var reg = new RegExp("(^| )" + key + "=([^;]*)(;|\x24)"),
+                result = reg.exec(document.cookie);     
+            if (result) {
+                return result[2] || null;
+            }
+        }      
+        return null;
+    }
+};
+
+
+exports = RP;

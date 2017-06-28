@@ -1,0 +1,439 @@
+<%
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Cache-Control","no-store");
+	response.setDateHeader("Expires", 0);
+	response.setHeader("Pragma","no-cache");
+%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>    
+<%@ page session="false" %>
+<%@ page import="java.util.Map" %>
+<%
+	Map date = (Map)request.getAttribute("date");
+	String wts =(String) request.getAttribute("wts");
+	// 获得当前搜索的request_id
+    String searchRequestId = request.getAttribute("_APT_SEARCH_REQUESTID").toString();
+	
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>${city.cityName}公寓-${city.cityName}公寓预订-${city.cityName}公寓价格查询-去哪儿网Qunar.com</title>
+		<meta name="keywords" content="${city.cityName}公寓，${city.cityName}公寓预订/预定，${city.cityName}公寓查询" />
+		<meta name="description" content="${city.cityName}酒店式公寓/家庭旅馆价格查询，${city.cityName}住宿预订服务。比酒店更实惠，家一般地温馨，全程预订保障，即时确认预订，去哪儿网公寓，开启居家之旅。" />
+		<link rel="stylesheet" href="http://qunarzz.com/apt_web/prd/styles/list@<%@include file="ver/styles/list.css.ver" %>.css" />
+		<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?1dac56f5532e14d5fd9e94b9f306d334";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+		</script>
+		<script>
+		var _apt_home_request_id = '';
+		var _apt_search_request_id = '<%=searchRequestId%>';
+		var _apt_detail_request_id = '';
+		</script>
+	</head>
+	<body class="page page-list">	
+       	<div class="g-header">
+			<%@include file="/include_html/prd/gongyu/header_styles.html"%>
+			<div class="q_header q_header_gongyu page_header_gongyu">
+			<%@include file="/include_html/prd/gongyu/header_main.html"%>
+			</div>
+		</div>
+		
+		<div class="g-wrapper">
+
+			<!-- search:s -->
+			<div class="g-search g-filter-countnum" >
+				<div class="g-search-content fn-clear">
+					<form action="/roomType/t/list" method="get" id="searchForm">
+						<div class="g-search-item fn-left mr10">
+							<input type="text" autocomplete="off" class="g-search-input g-search-city" id="toCity" name="cityName" value="${city.cityName}" readonly="readonly">
+							<input type="hidden" autocomplete="off" name="cityCode" value="${city.cityCode}" id="toCityCode">
+							<input type="hidden" name="aptHomeId" id="aptHomeId" value="">
+							<input type="hidden" name="aptSearchId" id="aptSearchId"  value="<%=searchRequestId%>">
+							<input type="hidden" name="aptDetailId" id="aptDetailId"  value="">
+							<input type="hidden" name="from" id="searchFrom"  value="">
+							<span class="g-search-icon-city" id="toCityIcon"></span>
+							<div class="g-city-layer fn-hide" id="cityLayer">
+								<div class="g-city-nav" id="cityNav">
+								
+								</div>
+								<a class="g-city-close" id="cityClose" title="关闭"></a>
+								<div class="g-city-content">
+									<ul class="fn-clear" id="cityList" >
+										
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="g-search-item fn-left mr10">
+							<div class="g-search-text">入住</div>
+							<input type="text" autocomplete="off" name="checkInTime" class="g-search-input g-search-date" value="${date.checkInTime}" readonly="readonly" id="checkInDate">
+						</div>
+						<div class="g-search-item fn-left mr10">
+							<div class="g-search-text">退房</div>
+							<input type="text" autocomplete="off" name="checkOutTime" class="g-search-input g-search-date" value="${date.checkOutTime}" readonly="readonly" id="checkOutDate">
+						</div>
+						<div class="g-search-item fn-left ">
+							<input type="hidden" name="searchType" id="searchType" value="0">
+							<input type="hidden" name="searchQuery" id="searchQuery" value="">
+							<input type="text"  class="g-search-input g-search-position" id="search" maxlength="20" autocomplete="off"  value="请输入公寓名、位置"  data-change="0">
+							<div class="hotArea none">
+								
+							</div>
+						</div>
+						<div class="g-search-item fn-right">
+							<button type="submit" class="g-search-submit" id="searchSubmit"></button>
+						</div>
+					</form>
+				</div>
+				
+			</div>
+			<!-- search:e -->
+	
+			<!-- filter:s -->
+			<div class="g-content-wrapper g-filter-roomnum">
+			<div class="g-filter" id="filter">
+				<!-- 广告推广栏  -->
+				<div class="g-banner l-banner js-banner"></div>
+				<div class="g-banner r-banner js-banner"></div>
+				<c:if test="${fn:length(tradingList) > 0 || fn:length(areaList) > 0}">
+				<div class="g-filter-row fn-clear">
+					<div class="g-filter-type g-filter-type-b g-noborder" id="roomPosition">房间位置</div>
+					<div class="g-filter-content">
+						<div class="g-filter-position">
+							<div class="position-nav g-noborder" id="positionNav">
+								<ul>
+								<!-- isShow:是否展开 -->
+									<c:if test="${fn:length(tradingList) > 0}">
+									<li title="点击展开商圈" isShow="0" >
+										商圈<span class="business"></span>
+									</li></c:if>
+									<c:if test="${fn:length(areaList) > 0}">
+									<li title="点击展开行政区" isShow="0">
+										行政区<span class="district"></span>
+									</li></c:if> 
+								</ul>
+							</div>
+							<div class="position-content" id="positionContent">
+								<c:if test="${fn:length(tradingList) > 0}">
+								<div class="position-domain" id="positionDomain">
+									<ul class="fn-clear">
+										<c:forEach items="${tradingList}" var="item" varStatus="status">
+											<li <c:if test="${status.index >= 14 }">class="hide" data-type="position"</c:if>>
+												<a href="javascript:;" class="item"  data-value="${item.code}" title="${item.name}"><c:choose><c:when test="${fn:length(item.name) > 6}">${fn:substring(item.name, 0, 6)}...</c:when><c:otherwise>${item.name}</c:otherwise></c:choose></a>
+											</li>
+										</c:forEach>							
+									</ul>
+									<c:if test="${fn:length(tradingList) > 14}">
+										<div class="position-more">
+											<a href="javascript:;" id="domainShowMore"><i>更多</i><span class="icon-arrow-down"></span></a>	
+										</div>
+									</c:if>
+								</div>
+								</c:if>
+								<div class="position-area" id="positionArea" <c:if test="${fn:length(tradingList) == 0}">style="display:block"</c:if> >
+									<ul class="fn-clear">
+										<c:forEach items="${areaList}" var="item" varStatus="status">
+											<li <c:if test="${status.index >= 16 }">class="hide"</c:if>>
+											<a href="javascript:;" class="item" data-value="${item.code}" title="${item.name}"><c:choose><c:when test="${fn:length(item.name) > 6}">${fn:substring(item.name, 0, 6)}...</c:when><c:otherwise>${item.name}</c:otherwise></c:choose></a>
+											</li>
+										</c:forEach>
+									</ul>
+									<c:if test="${fn:length(areaList) > 16}">
+										<div class="position-more">
+											<a href="javascript:;" id="areaShowMore">更多</a>
+											<span class="icon-arrow-down"></span>
+										</div>
+									</c:if>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</c:if>
+				<div class="g-filter-row fn-clear g-filter-countnum" >
+					<div class="g-filter-type">宜住人数</div>
+					<div class="g-filter-content fn-clear">
+						<div class="g-filter-unlimited unlimited-active" id="peoplenumberUn">
+							<a href="javascript:;">不限</a>
+						</div>
+						<div class="g-filter-options">
+							<ul class="fn-clear">
+								<c:forEach items="${personList}" var="item">
+									<li><a href="javascript:;" class="checkbox" name="peoplenumber" data-value="${item.code}">${item.name}</a></li>
+								</c:forEach>
+							</ul>
+						</div>
+					</div>
+					<span class="bed-many">
+						床数
+					</span>
+					<div class="bed-choose">
+						<div class="bed-read">
+							<input type="text" class="bed_text" value="不限" key="0" readonly>
+							<span class="bed-arrow"></span>
+						</div>
+						
+						<div class="zselect">	
+							<ul>
+								<li key="0">不限</li>
+								<li key="1">1张</li>
+								<li key="2">2张</li>
+								<li key="3">3张</li>
+								<li key="4">4张</li>
+								<li key="5">5张</li>
+							    <li key="6">6张</li>
+								<li key="7">7张</li>
+								<li key="8">8张</li>
+							    <li key="9">8+张</li>	
+						    </ul>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="g-filter-row fn-clear g-filter-roomnum">
+					<div class="g-filter-type g-filter-type-room g-noborder" id="roomPosition">租住户型</div>
+					<div class="g-filter-content">
+						<div class="g-filter-position g-filter-bed">
+							<div class="position-nav" id="roomNav">
+								<div class="g-filter-unlimited unlimited-active roomlayoutsUn" id="roomlayoutUn">
+									<a href="javascript:;">不限</a>
+								</div>
+								<ul class="rent-room">
+								<!-- isShow:是否展开 -->
+									<li title="点击展开整体出租" isShow="0" class="whole-room" id="whole-room" key="wholerent">
+										整体出租<span class="arrowwhole"></span>
+									</li>
+									<li title="点击展开单间出租" isShow="0" class="single-room" id="single-room" key="roomrent">
+										单间出租<span class="arrowsingle"></span>
+									</li>
+								</ul>
+							</div>
+							<div class="rentRoom" id="rentRoom">
+								<div class="g-filter-content  g-whole-room fn-clear">
+			 						<div class="g-filter-options g-filter-options-room">
+										<ul class="fn-clear">
+										<c:forEach items="${layoutList}" var="item">
+											<li><a href="javascript:;" class="checkbox" name="wholelayouts" key="layouts" data-value="${item.code}">${item.name}</a></li>
+										</c:forEach>
+										</ul>
+									</div>
+								</div>
+								<div class="g-filter-content g-single-room fn-clear ">
+									<div class="g-filter-options g-filter-options-room">
+										<ul class="fn-clear">
+										<c:forEach items="${layoutList}" var="item">
+											<li><a href="javascript:;" class="checkbox" name="singlelayouts" key="layouts" data-value="${item.code}">${item.name}</a></li>
+										</c:forEach>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>		
+				<div class="g-filter-row no-border fn-clear">
+					<div class="g-filter-type">设施服务</div>
+					<div class="g-filter-content">
+						<div class="g-filter-unlimited unlimited-active" id="facilitieUn">
+							<a href="javascript:;">不限</a>
+						</div>
+						<div class="g-filter-options" id="facilitieContent">
+							<ul class="fn-clear">
+								<c:forEach items="${facilitiesList}" var="item" varStatus="status">
+									<li <c:if test="${status.index >= 7 }">class="hide"</c:if>><a href="javascript:;" class="checkbox" name="facilities" data-value="${item.code}">${item.name}</a></li>
+								</c:forEach>
+							</ul>
+						</div>
+						<c:if test="${fn:length(facilitiesList) >= 7}">
+							<div class="g-filter-more">
+								<a href="javascript:;" id="facilitieShowMore"><i>更多</i><span class="icon-arrow-down"></span></a>
+							</div>
+						</c:if>
+					</div>
+				</div>
+				
+				<div class="g-filter-row fn-clear">
+					<div class="g-filter-type">价格范围</div>
+					<div class="g-filter-content">
+						<div class="g-filter-unlimited unlimited-active" id="priceUn">
+							<a href="javascript:;">不限</a>
+						</div>
+						<div class="g-filter-options">
+							<ul class="fn-clear">
+								<li>
+									<a href="javascript:;" class="checkbox" name="prices" data-value="0"><span class="fn-rmb">¥</span>150以下</a>
+								</li>
+								<li>
+									<a href="javascript:;" class="checkbox" name="prices" data-value="1"><span class="fn-rmb">¥</span>150-200</a>
+								</li>
+								<li>
+									<a href="javascript:;" class="checkbox" name="prices" data-value="2"><span class="fn-rmb">¥</span>200-300</a>
+								</li>
+								<li>
+									<a href="javascript:;" class="checkbox" name="prices" data-value="3"><span class="fn-rmb">¥</span>300-400</a>
+								</li>
+								<li>
+									<a href="javascript:;" class="checkbox" name="prices" data-value="4"><span class="fn-rmb">¥</span>400以上</a>
+								</li>
+							</ul>
+						</div>
+						<div class="g-filter-diyprice">
+							<ul class="fn-clear">
+								<li>自定义</li>
+								<li><input type="text" class="input-text" maxlength="5" id="diyPriceFrom"></li>
+								<li>-</li>
+								<li><input type="text" class="input-text" maxlength="5" id="diyPriceTo"></li>
+								<li><button class="button" class="button" id="diyPriceButton">确定</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>				
+				</div>
+			<!-- filter:e -->
+			<!-- selectreason:s -->
+			<div class="g-sorter-wapper">
+			<div class="selectreason fn-clear" id="selectreason">
+				<div class="selectreason-count selectreason-son"><em id="hotelCount"></em>个房源满足条件</div>
+				<div class="selectreason-icon selectreason-son" id="selectreason-icon">
+					<ul class="fn-clear">
+					</ul>
+				</div>
+				<div class="selectreason-son removeFilter">
+				<a href="javascript:;" id="removeFilter">清除筛选项</a>
+				</div>
+			</div>
+			<!-- selectreason:e -->
+			<!-- sort:s -->
+			<div class="g-sorter fn-clear" id="sorterNav">
+				<div class="g-sorter-panel" id="sorter">
+					<ul class="fn-clear">
+						<li class="sorter-active" id="defSorter" data-ordertype="0">
+							<span class="sorter-default">
+								<a href="javascript:;">默认排序</a>
+							</span>
+						</li>
+						<li id="priceSorter" data-ordertype="1" data-sorttype="0" title="价格由低到高">
+							<div class="sorter-asc">
+								<span class="sorter-price">
+									<a href="javascript:;">价格</a>
+								</span>
+							</div>
+						</li>
+						<li id="scoreSorter" data-ordertype="2" data-sorttype="1" title="评分由高到低">
+							<div class="sorter-desc">
+								<span class="sorter-grade">
+									<a href="javascript:;">评分</a>
+								</span>
+							</div>
+						</li>
+						<li id="areaSorter" data-ordertype="4" data-sorttype="1" title="面积由高到低">
+							<div class="sorter-desc">
+								<span class="sorter-grade">
+									<a href="javascript:;">面积</a>
+								</span>
+							</div>
+						</li>
+						<li id="sellSorter" data-ordertype="5" data-sorttype="1" title="销量由高到低">
+							<div class="sorter-desc">
+								<span class="sorter-grade">
+									<a href="javascript:;">销量</a>
+								</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="hotel-filter" id="hotelFilter">
+					<ul>
+						<li><a href="javascript:;" class="checkbox" name="goldenRoom" data-value="0">精选房源</a></li>
+						<li><a href="javascript:;" class="checkbox" name="livingDiscount" data-value="0">连住有优惠</a></li>
+					</ul>
+				</div>
+			</div>
+			</div>
+			
+			<!-- sort:e -->
+	
+			<!-- loading:s -->
+			<div id="loading" class="g-loading">
+	            <div class="loading">
+	                <p class="msg">请稍等,您查询的结果正在实时搜索中...</p>
+	                <div><img width="114" height="16" src="http://source.qunar.com/site/images/loading.gif" alt="loading"></div>
+	                <p class="msg2">想去哪儿就去哪儿</p>
+	            </div>
+	            <p class="msg3"> 如果您在60秒后仍无法看到搜索结果，请同时按下键盘上的<b>Ctrl+F5</b>强制刷新页面</p>
+	        </div>
+	        <!-- loading:e -->
+	
+			<!-- hotel list:s -->
+			<form action="${wts}order/orderForm.do" method="get" target="_blank"  id="bookingForm">
+				<input type="hidden" name="hotelNo" value="" id="qhotelNO">
+				<input type="hidden" name="roomTypeNo" id="qroomTypeNo">
+				<input type="hidden" name="from" id="qfrom">
+				<input type="hidden" name="checkinTime" id="qcheckinTime">
+				<input type="hidden" name="checkoutTime" id="qcheckoutTime">
+				<input type="hidden" name="price" id="qprice">
+				<input type="hidden" name="pricecut" id="qpricecut">
+				<input type="hidden" name="deposits" id="qdeposits">
+				<input type="hidden" name="scale" id="qscale">
+				<input type="hidden" name="pricePlanCode" id="qpricePlanCode">
+				<input type="hidden" name="cityCode" id="qcityCode" value="${city.cityCode}">
+				<input type="hidden" name="searchQuery" id="qsearchQuery">
+				<input type="hidden" name="aptHomeId" id="qaptHomeId">
+				<input type="hidden" name="aptSearchId" id="qaptSearchId">
+				<input type="hidden" name="aptDetailId" id="qaptDetailId">
+				<input type="hidden" name="type" id="qtype">
+				<input type="hidden" name="pricePlanType" id="qpricePlanType">
+				<input type="hidden" name="cityName" id="qcityName" value="${city.cityName}">
+				<div class="g-hotel" id="hotelWrapper"></div>
+			</form>
+			<!-- hotel list:e -->
+	
+			<!-- pager:s -->
+			<div class="g-pager fn-clear">
+				<div id="pager"></div>
+			</div>
+			<!-- pager:e -->
+			
+			<!-- goodhotel:s -->
+			<div class="g-goodhotel fn-clear">
+				<div id="goodhotel"></div>
+			</div>
+			<!-- goodhotel:e -->
+		</div>
+		</div>
+		<div class="g-icons g-icons-list">
+			<ul>
+				<li class="g-icons-text">智能安心住，乐享去呼呼</li>
+				<li class="g-icons-weixin" id="g-icons-weixin"><a><span></span></a></li>
+				<li class="g-icons-weibo"><a href="http://weibo.com/quhuhu" target="_blank" title="去呼呼的微博"><span></span></a></li>
+				<li class="g-icons-youku"><a href="http://i.youku.com/u/UMTYyNjk3Njg3Mg==" target="_blank" title="去呼呼梦想家"><span></span></a></li>
+			</ul>
+			<div class="g-icons-weixinpng" id="g-icons-weixinpng"></div>
+		</div>
+      	<div class="g-footer-partner">去呼呼是去哪儿网旗下非标准住宿品牌，致力于打造全国最大的住宿预订平台，该平台由北京云端漫行软件科技有限公司负责运营</div>
+		  <div class="qn_footer">
+		<%@include file="/include_html/footer/footer_public.html"%>
+		</div>
+
+		<!-- script:s -->
+		<script type="text/javascript">
+			var BASE_PATH = '<%=request.getContextPath()%>';
+			var SERVER_DATE = '<%=date.get("current")%>';
+			var DATE_CHECKINDATE = '<%=date.get("checkInTime")%>';
+			var DATE_CHECKOUTDATE = '<%=date.get("checkOutTime")%>';
+			var areaNameGlobal = '${requestScope.areaNameGlobal}';
+		</script>
+		<script type="text/javascript" src="http://qunarzz.com/apt_web/prd/scripts/base@<%@include file="ver/scripts/base.js.ver" %>.js"></script>
+		<script type="text/javascript" src="http://qunarzz.com/apt_web/prd/scripts/list@<%@include file="ver/scripts/list.js.ver" %>.js"></script>
+		<!-- script:e -->
+	</body>
+</html>

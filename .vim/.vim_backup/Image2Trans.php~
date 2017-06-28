@@ -1,0 +1,376 @@
+<?php
+/**
+ * @name Service_Page_Image2Trans
+ * @desc 实物图片识别翻译接口
+ * @author fengshangshi@baidu.com
+ */
+
+class Service_Page_Image2Trans
+{
+    // 错误信息状态码
+    private $ERROR_CODE = array(
+        // 成功
+        "SUCCESS"=> array(
+            "error"=> 0,
+            "message"=> "成功",
+        ),
+
+        // 客户端错误-缺少参数
+        "CLIENTIMAGEERROR"=> array(
+            "error"=> 100,
+            "message"=> "客户端错误:缺少参数",
+        ),
+
+        // 客户端错误-图片太小
+        "CLIENTIMAGESIZEERROR"=> array(
+            "error"=> 101,
+            "message"=> "客户端错误:图片太小",
+        ),
+
+        // 客户端错误-图片格式不对
+        "CLIENTIMAGEFORMATERROR"=> array(
+            "error"=> 102,
+            "message"=> "客户端错误:图片格式不对",
+        ),
+
+        // 上游服务器错误-图片识别获取索引服务超时
+        "UPSTREAMINDEXTIMEOUTERROR"=> array(
+            "error"=> 200,
+            "message"=> "服务器错误:图片识别获取索引超时",
+        ),
+
+        // 上游服务器错误-图片识别获取文本服务失败
+        "UPSTREAMTEXTERROR"=> array(
+            "error"=> 201,
+            "message"=> "服务器错误:图片识别获取文本失败",
+        ),
+
+        // 上游服务器错误-图片识别获取索引服务失败
+        "UPSTREAMINDEXERROR"=> array(
+            "error"=> 202,
+            "message"=> "服务器错误:图片识别获取索引失败",
+        ),
+
+        // 上游服务器错误-图片识别获取索引服务数据为空
+        "UPSTREAMINDEXEMPTYERROR"=> array(
+            "error"=> 203,
+            "message"=> "服务器错误:图片识别索引数据为空",
+        ),
+
+        // 上游服务器错误-请求翻译服务失败
+        "UPSTREAMTRANSERROR"=> array(
+            "error"=> 300,
+            "message"=> "服务端错误:请求翻译服务失败",
+        ),
+
+        // 人工干预数据-数据删除完
+        "DELETEQUERYERROR"=> array(
+            "error"=> 500,
+            "message"=> "服务器错误:人工干预数据"
+        ),
+    );
+
+    // 生成基本的错误信息
+    private function create_error_info($type, $result = array()) {
+        // 对错误信息进行merge
+        $result = array_merge($result, $this->ERROR_CODE["$type"]);
+        // 打印错误日志
+        $this->print_log("c_error", $result);
+        // 返回结果
+        return $result;
+    }
+
+    // 打印日志
+    private function print_log($type, $log = array()) {
+        Bd_Log::addNotice($type, $log);
+    }
+
+    private function filter_query($query_list) {
+        // 读取敏感词配置文件
+        $conf = Bd_Conf::getAppConf("sensitive");
+        // 删除列表
+        $delete_list = $conf["delete"];
+        // 替换列表
+        $filter_list = $conf["filter"];
+
+        // 1、过滤删除列表
+        if ($delete_list) {
+            foreach ($delete_list as $delete) {
+                $index = array_search($delete, $query_list);
+                if ($index !== false) {
+                    unset($query_list[$index]);
+                    $this->print_log("c_delete", array("word"=> $delete,));
+                }   
+            }
+        }
+
+        // 2、过滤替换列表
+        if ($filter_list) {
+            foreach($query_list as &$query) {
+                foreach ($filter_list as $filter) {
+                    if ($query == $filter["word"]) {
+                        $replace_list = $filter["replace"];
+                        shuffle($replace_list);
+                        $replace = $replace_list[0];
+						$this->print_log("c_replace", 
+							array("word"=> $query, "replace"=> $replace,));
+                        $query = $replace;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 3、数据被过滤完
+        if ( count($query_list) <= 0 ) {
+            return false;
+        }
+
+        // 4、返回经过过滤的query列表
+        return $query_list;
+    }
+
+    private function get_content($url, $data) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+        $result = curl_exec($ch);
+        $ch_errno = curl_errno($ch);
+        if ($ch_errno == 0) {
+            return $result;
+        } else {
+			$this->print_log("c_curl_error", 
+				array("ch_errno"=> $ch_errno, ));
+        }
+        return false;
+    }
+
+    private function face2text($image) {
+        $black_words = Bd_Conf::getAppConf("blackword/word");
+        $conf = Bd_Conf::getAppConf("face2text");
+        $url = $conf["url"];
+        $appid = $conf["appid"];
+        $type = $conf["type"];
+        $encoding = $conf["encoding"];
+        $image = base64_encode($image);
+        $score = $conf["score"];
+        $replace = $conf["replace"];
+        $send_data = "appid=$appid&type=$type&encoding=$encoding&image=$image";  
+        $gss_result = $this->get_content($url, $send_data);
+        if ($gss_result !== false) {
+            $gss_result = json_decode($gss_result, true);
+            if ($gss_result["errno"] == 0) {
+                $ret = $gss_result["ret"][0];
+                $name = $ret["name"];
+                $simi = $ret["simi"];
+                // 会进行分值的判断
+                if ($simi > $score && in_array($name, $black_words)) {
+					$this->print_log("c_filter_leader", 
+						array("word"=> $name, "replace"=> $replace, ));
+                    return array(
+                        $replace,
+                    );
+                }
+            }
+        }
+        return false;
+
+    }
+    
+    // 方法入口
+    public function execute($image) {
+
+        // 1
+        // =============================================
+        // 判断图片信息
+        if ( isset($image) ) {
+            if ( $image["type"] == "image/jpeg" && $image["size"] > 0 ) {
+                $image = @file_get_contents( $image["tmp_name"] );
+            } else {
+                $image = "";
+            }
+        }
+
+        if ( empty($image) ) {
+            return $this->create_error_info("CLIENTIMAGEERROR");
+        }
+
+        $need_image2trans = true;
+
+        //优先识别国旗、队服
+        $flower = new Service_Data_IDL();
+        $text_result[0] = $flower->getSoccerInfo($image);
+        if (!empty($text_result[0]))
+        {
+            $need_image2trans = false;
+        }
+
+        //优先识别花卉
+        if ($need_image2trans) {
+            $flower = new Service_Data_IdlFlower();
+            $text_result = $flower->getFlowerInfo($image);
+            if (!empty($text_result[0]))
+            {
+                $need_image2trans = false;
+            }
+        }
+
+
+        // 插入人脸识别 过滤掉领导人面孔 by 尙实 2014/01/09 
+        if ($need_image2trans) {
+            $text_result = $this->face2text($image);
+            if ($text_result !== false && count($text_result) > 0) {
+                $need_image2trans = false;
+            }
+        }
+
+        // 2
+        // ============================================
+        // 图片验证正常后，准备数据上游服务器发送识别请求
+        // 如果人脸识别之后就无需经过实物识别了
+        if ($need_image2trans) {
+            $rand = mt_rand();
+            $send_pre_data = array(
+                "jsonrpc"=> "2.0",
+                "id"=> $rand,
+            );
+            $send_data = array(
+                "method"=> "nlp.object",
+                "params"=> array(
+                    "query_id"=> "$rand",
+                    // 跟后端的定义，需要对二进制的图片进行base64的转码
+                    "image"=> base64_encode($image),
+                ),
+            );
+            $send_data = array_merge($send_pre_data, $send_data);
+            $send_path = array( "pathinfo"=> "" );
+            $backend_name = "image2index";
+            $gss_result = ral($backend_name, "post", $send_data, "", $send_path);
+
+            // 记录日志
+            $this->print_log("c_data", array(
+                "query_id"=> $rand, 
+                "gss_result"=> json_encode($gss_result), 
+            ));
+
+            // 对图片识别服务返回的数据进行错误过滤
+            // gss_result == false ral请求或者超时错误,属于环境部署问题
+            // error判断, 上游服务返回数据的检查,属于接口问题
+
+            if ( $gss_result == false ) {
+                return $this->create_error_info("UPSTREAMINDEXTIMEOUTERROR");
+            }
+
+            if (array_key_exists("error", $gss_result)) {
+                $error = $gss_result["error"];
+                $errno = $error["code"];
+                switch ($errno) {
+                    case -1:
+                        return $this->create_error_info("CLIENTIMAGESIZEERROR");
+                        break;
+                    case -404:
+                        return $this->create_error_info("CLIENTIMAGEFORMATERROR");
+                        break;
+                    default:
+                        return $this->create_error_info("UPSTREAMINDEXERROR");  
+                        break;
+                }   
+            }
+
+            // 对索引进行有效性判断
+            $index_result = $gss_result["result"]["tag_top_5"];
+            foreach ( $index_result as $index_array ) {
+               $index_data[] = $index_array["index"];
+               $weight_data[] = $index_array["value"];
+            }
+
+            if ( count($index_data) <= 0 ) {
+                return $this->create_error_info("UPSTREAMINDEXEMPTYERROR");
+            }
+
+            // 3
+            // =================================================
+            // 用索引获取text数据，请求index->text映射服务器
+            $send_data = array(
+                "method"=> "batch_search_str",
+                "params"=> $index_data,
+            );
+            $send_data = array_merge($send_pre_data, $send_data);
+            $send_path = array( "pathinfo"=> "layer1_tag_name" );
+            $backend_name = "index2text";
+            $gss_result = ral($backend_name, "post", $send_data, "", $send_path);
+
+            // 对获取文本映射服务返回的数据进行错误过滤
+            if ( $gss_result == false ) {
+                return $this->create_error_info("UPSTREAMTEXTERROR");
+            }
+
+            // 获取文本结果
+            $text_result = $gss_result["result"];
+
+            if ( count($text_result) <= 0 ) {
+                return $this->create_error_info("UPSTREAMTEXTERROR");
+            }
+        }
+
+        // 4
+        // =================================================
+        // 图片识别服务完成,对识别之后的query进行翻译
+        // 目前的翻译接口不支持批量翻译 so 需要循环多次请求
+        $backend_name = "text2trans";
+        $send_path = array( "pathinfo"=> "public/2.0/bmt/translate" );
+        $send_data = array(
+            "from"=> "zh",
+            "to"=> "en",
+            "client_id"=> "7shWMUhvDGaDKlvSHpH5iLqo",
+        );
+
+        // 循环多次请求翻译结果
+        // 增加敏感词过滤，过滤读取配置文件 by 尙实 2014/01/07
+        // 实物识别把RMB上的毛主席头像识别成粉色的小猪等
+        $text_result = $this->filter_query($text_result);
+        // 人工干预数据，删除完了
+        if ($text_result === false) {
+            return $this->create_error_info("DELETEQUERYERROR");
+        }
+
+        // 干预之后，继续逻辑
+        foreach ( $text_result as $text ) {
+            $send_data["q"] = $text;
+            $gss_result = ral($backend_name, "post", $send_data, "", $send_path);
+            if ( $gss_result != "false" ) {
+                // 需要对翻译返回的结果进行json decode
+                $gss_result = json_decode($gss_result, true);
+                if ( isset($gss_result["trans_result"]) && count($gss_result["trans_result"]) > 0 ) {
+                    $trans_result[] = $gss_result["trans_result"][0];
+
+                }
+            }
+        }
+
+        // 对翻译结果为空进行错误过滤
+        if ( count($trans_result) <= 0 ) {
+            return $this->create_error_info("UPSTREAMTRANSERROR");
+        }
+
+        for ( $i = 0; $i < count($trans_result); $i++ ) {
+            $trans_result[$i]["weight"] = $weight_data["$i"] == null ? 0 : $weight_data["$i"];
+        }
+
+        // 5
+        // ====================================================
+        // Good, all ready
+        $result = $this->create_error_info("SUCCESS");
+        $result["data"] = $trans_result;
+
+        // 记录日志
+        $this->print_log("c_result_list", $trans_result);
+
+        return $result;
+
+    }
+}

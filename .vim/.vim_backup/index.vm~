@@ -1,0 +1,452 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/index.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="index">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="index-content">
+		<div class="index-member clearfix">
+		    <table class="index-member-table">
+		        <tbody>
+		          <tr>
+		          	##账户余额模块--------start
+		            <td class="index-balance">
+			            <div class="wrap">
+			              	<div class="index-member-container">
+			  					<div class="index-member-content">
+							        <div class="index-member-header clearfix">
+								        <h3>
+								        	<span class="left-line"></span>
+								        	账户余额
+								        </h3>
+							      	</div>
+			    				  	<div class="index-member-body clearfix">
+				      				    <div class="index-member-amount float-left">
+				      				    	<input type="hidden" 
+				      				    		   class="amount-hidden" 
+				      				    		   value="$!{account}">
+				      						<strong class="amount"></strong>
+				      						<span class="fen"></span>
+				      					  	元
+				      				    </div>
+							        	<ul class="index-member-actions clearfix">
+								        	<li>
+								        		<a 
+								        			href="/member/asset/balance/recharge.htm" 
+								        			class="button" 
+								        			title="充值">
+								        			充值
+								        		</a>
+								        	</li>
+								        	<li>
+								        		<a href="/member/asset/balance/withdrawApply.htm" 
+								        		   class="button button-white-s" 
+								        		   title="提现">
+								        			提现
+								        		</a>
+								        	</li>
+								        	<li>
+								        		<a href="/member/asset/balance/refund.htm" 
+								        		   class="button button-white-s" 
+								        		   title="资金退回">
+								        			资金退回
+								        		</a>
+								        	</li>
+							        	</ul>
+			    				  	</div>
+			    				  	<i class="index-member-visible-icon"></i>
+			  				    </div>
+						  	</div>
+			            </div>
+		            </td>
+		            ##账户余额模块--------end
+
+		            ##用户资产模块--------start
+		            <td class="index-assets index-member-2rows-2col" rowspan="2">
+		                <div class="wrap">
+		                	<div class="index-member-container">
+		                  		<div class="">
+		                    		<div class="index-member-header clearfix">
+					          			<h3>
+					          				<span class="left-line"></span>
+					          				账户资产
+					          			</h3>
+					        		</div>
+					        		<div class="index-member-body clearfix">
+					        			<div class="asset-item clearfix">
+					        			#if(${accountCamel} && ${accountCamel} > 0)
+											<span class="float-left w-100 camelcard">
+												<i></i>
+												骆驼卡
+											</span>
+											<span class="float-left">
+												<label class="c-blue">
+													$!{accountCamel}
+												</label>元
+											</span>
+										#else
+											<span class="float-left w-100 camelcard-gray">
+												<i></i>
+												骆驼卡
+											</span>
+											<span class="float-left">
+												<label class="c-gray">
+													0.00
+												</label>元
+											</span>
+										#end
+											<a class="xiangqing float-right hide" 
+												href="/member/asset/card/" 
+												target="_blank">详情</a>
+										</div>
+
+										<div class="asset-item clearfix">
+					        			#if(${accountQyb} && ${accountQyb} > 0)
+											<span class="float-left w-100 qunarBaby">
+												<i></i>
+												趣游宝
+											</span>
+											<div class="qunarBaby-label">
+												<div class="arrow"></div>
+												高收益理财										
+											</div>
+											<span class="float-left">
+												<label class="c-blue">
+													$!{accountQyb}
+												</label>元
+											</span>
+										#else
+											<span class="float-left w-100 qunarBaby-gray">
+												<i></i>
+												趣游宝
+											</span>
+											<div class="qunarBaby-label">
+												<div class="arrow"></div>
+												高收益理财												
+											</div>
+											<span class="float-left">
+												<label class="c-gray">
+													0.00
+												</label>元
+											</span>
+										#end
+											<a class="xiangqing float-right hide" 
+												href="/member/asset/qunarBaby/" >详情</a>
+										</div>
+
+										<div class="asset-item clearfix">
+										#if($refundAmount > 0)
+											<span class="float-left w-100 refund">
+												<i></i>
+												待退款
+											</span>
+											<span class="float-left">
+												<label class="c-blue">
+													$!{refundAmount}
+												</label>元
+											</span>
+											
+										#else
+											<span class="float-left w-100 refund-gray">
+												<i></i>
+												待退款
+											</span>
+											<span class="float-left">
+												<label class="c-gray">
+													0.00
+												</label>元
+											</span>
+										#end
+											<a class="xiangqing float-right hide" 
+												href="http://order.qunar.com/refund.html" 
+												target="_blank">详情</a>
+										</div>
+											
+										
+					          			<div class="asset-item clearfix">
+					          			#if(${bingCardJson} > 0)
+								            <span class="float-left w-100 bankcard">
+								            	<i></i>常用卡
+								            </span>
+								            <span class="float-left">
+								            	<label class="c-blue">
+								            		$!{bingCardJson}
+								            	</label>张
+								            </span>
+					            		#else
+							            	<span class="float-left w-100 bankcard-gray">
+							            		<i></i>常用卡
+							            	</span>
+							            	<span class="float-left">
+							            		<label class="c-gray">
+							            			$!{bingCardJson}
+							            		</label>张
+							            	</span>
+					            		#end
+						            		<a class="xiangqing float-right hide" 
+						            			href="/member/asset/bankCard/">
+						            			详情
+						            		</a>
+					          			</div>
+					        			<div class="asset-item clearfix">
+								        #if($!{couponJson.num} > 0)
+								            <span class="float-left w-100 coupon">
+								            	<i></i>红包
+								            </span>
+								            <span class="float-left">
+								            	<label class="c-blue">
+								            		$!{couponJson.num}
+								            	</label>个
+								            </span>
+								        #else
+					         				<span class="float-left w-100 coupon-gray">
+					         					<i></i>红包
+					         				</span>
+					         				<span class="float-left">
+					         					<label class="c-gray">$!{couponJson.num}</label>个
+					         				</span>
+					         			#end
+					            			<a class="xiangqing float-right hide" 
+					            				href="/member/asset/coupon/">
+					            				详情
+					            			</a>
+					        			</div>
+					        		</div>
+					      		</div>
+					    	</div>
+		              	</div>
+		            </td>
+		            ##用户资产模块--------end
+
+		            ##账户信息模块--------start
+		            <td class="index-userinfo" rowspan="2">
+			            <div class="index-member-main wrap">
+			              	<div class="index-member-container">
+			                	<div class="index-member-content">
+			                		<div class="index-member-header clearfix">
+							          	<h3>
+							          		<span class="left-line"></span>
+							          		账户信息
+							          	</h3>
+							        </div>
+							        <div class="index-userinfo-main clearfix">
+							        	<div class="icon">
+							        		<img width="100%" height="100%" src="$!{userPicture}">
+							        	</div>
+							        	<p class="info">
+							        	  	<span>昵称</span>
+							        	  	<span class="text-overflow">$!{loginName}</span>
+							        	</p>
+							        	<p class="info">
+							        	  	<span>手机号</span>
+							        	  	#if(${areaCode} && ${areaCode}!="")
+							        	  		#if( ${phoneNo} )
+							        	  			+$!{areaCode}-$!{phoneNo}
+							        	  		#end
+							        	  	#else
+							        	  		#if( ${phoneNo} && ${phoneNo}!="" )
+							        	  			$!{phoneNo}
+							        	  		#else
+							        	  			未设置
+							        	  		#end
+
+							        	  	#end
+							        	</p>
+							        </div>
+			                	</div>
+			                	<div class="index-userinfo-auth clearfix">
+							        #if(${authState} == 0)
+							          <div class="icon step1"></div>
+							          <span class="explain">
+							          	  您还未通过实名认证，
+							          </span>
+							          <a class="operation" href="/member/security/auth.htm" target="_blank">
+							          	  立即认证
+							          </a>
+		                            #elseif(${authState} == 1)
+		                              <div class="icon step1"></div>
+							          <span class="explain">
+							          	  您已完成身份验证，
+							          </span>
+							          <a class="operation" href="/member/security/auth.htm" target="_blank">
+							          	  继续实名认证
+							          </a>
+		                            #elseif(${authState} == 2)
+		                              <div class="icon step2"></div>
+							          <span class="explain">
+							          	  您已通过去哪儿网实名认证，
+							          </span>
+							          <a class="operation" href="/member/security/index.htm">
+							          	  查看详情
+							          </a>
+							        #elseif(${authState} == 3)
+		                              <div class="icon step2"></div>
+							          <span class="explain">您的申诉请求正在审核中</span>
+							        #elseif(${authState} == 4)
+		                              <div class="icon step2"></div>
+							          <span class="explain">
+							          	  您的申诉请求已审核拒绝，
+							          </span>
+							          <a class="operation" href="/member/security/auth.htm?isMeFlag=true">
+							          	  继续认证
+							          </a>
+							        #elseif(${authState} == 5)
+		                              <div class="icon step2"></div>
+							          <span class="explain">您的申诉请求已审核通过，</span>
+							          <a class="operation" href="/member/security/auth.htm">
+							          	  继续认证
+							          </a>
+		                            #end
+		                            
+		                            
+							    </div>
+			              	</div>
+			            </div>
+		            </td>
+		            ##账户信息模块--------end
+		        </tr>
+		        <tr>
+		          	##红包模块--------end
+	 			    <td class="index-coupon">
+	  				  	<div class="wrap">
+	  				    	<div class="index-member-container">
+	  					  		<div class="index-member-content">
+					        		<div class="index-member-header clearfix">
+					          			#if($!{iousFlag} && $!{iousFlag}==1)
+					        				<h3>
+						          				<span class="left-line"></span>
+						          				信任付
+						          			</h3>
+					        			#else
+					        				<h3>
+						          				<span class="left-line"></span>
+						          				红包
+						          			</h3>
+								          	<a class="more hide" href="/member/asset/coupon/">
+								          		添加
+								          	</a>
+					        			#end
+					        		</div>
+	    				  			<div class="index-member-body clearfix">
+					        			#if($!{iousFlag} && $!{iousFlag}==1)
+	    				  					#if($!{iousOpenStatus} && $!{iousOpenStatus}==1)
+		    				  						<div class="ious-text">待还金额</div>
+		    				  						<input type="hidden" value="$!{iouBackAmount}" id="iousAmount" >
+		    				  						<div class="ious-container">
+		    				  							<span class="ious-amout">
+		    				  								<label class="ious-amout-integer">0</label>
+		    				  								<label class="ious-amout-decimal">.00</label>
+		    				  								<label class="ious-amout-company">元</label>
+		    				  								#if(${iousUnRepayDay} && ${iousUnRepayDay}>0)
+		    				  									<label class="ious-timeout">（有逾期）</label>
+		    				  								#end
+		    				  							</span>
+		    				  							<a class="button button-o ious-btn" href="/member/asset/ious/">还款</a>
+		    				  							#if($!{iousAmount})
+			    				  							<span class="ious-amout-use">
+			    				  								<label>可用额度</label>
+			    				  								$!{iousAmount}
+			    				  								<label>元</label>
+			    				  							</span>
+		    				  							#end
+		    				  						</div>
+		    				  					</div>
+		    				  				#else
+		    				  					<div class="ious-open-not">
+		    				  						想先出行，后还款？<a class="ious-tip" href="/member/asset/ious/">立即开通</a>信任付
+		    				  					</div>
+		    				  				#end
+
+	    				  				#else
+		    				  				<ul class="index-member-hongbao-main">
+						        			#if($couponJson.num > 0)
+							        			#foreach($hongbao in $couponJson.data)
+											      	<li>
+											      		<i class="icon"></i>
+											      		<a class="text" 
+											      		   href="/member/asset/coupon/">
+											      		   
+											      		   $!{hongbao.name}
+											      		 </a>
+											      	</li>
+								    			#end
+							    			#else
+										    	<li class="text-align-c">
+											      	暂无红包
+											    </li>
+							    			#end
+						        			</ul>
+	    				  				#end
+	    				  			</div>
+	  				    		</div>
+					  		</div>
+	  				  	</div>
+	 			    </td>
+		        </tr>
+		    </tbody>
+		</table>
+	</div>
+
+	##小贴士模块--------start
+	<div class="index-trade-help-main clearfix">
+	    <div class="index-trade trade trade-main-detail">
+	     	<div class="box">
+            	<div class="box-container">
+              		<table>
+		                <colgroup>
+		                  <col width="19%">
+		                  <col width="28%">
+		                  <col width="15%">
+		                  <col width="19%">
+		                  <col width="17%">
+		                </colgroup>
+		                <thead>
+		                  <tr class="index-trade-title">
+		                    <th colspan="5">
+		                    <h3>最近充值记录</h3>
+		                    <a class="more" href="/member/trade/index.htm">更多</a>
+		                    </th>
+		                  </tr>
+		                </thead>
+		                <tbody>
+		                  <tr class="loading-con">
+		                    <td colspan="5"><div class="loading"></div></td>
+		                  </tr>
+		                </tbody>
+              		</table>
+            	</div>
+        	</div>
+	    </div>
+	    <div class="index-helptips wrap">
+	      	<div class="index-member-container">
+				<div class="clearfix">
+				  <h3><span class="left-line"></span>小贴士</h3>
+				  <a class="more hide" href="/member/help/index.htm">更多</a>
+			    </div>
+	    		<div class="index-member-body clearfix">
+	    		  <p>使用余额支付，可解决您大额支付限额问题。</p>
+				  <p>只有返现资金可以申请提现。</p>
+				  <p>申请充值退还的资金将原路退还到您的充值账户。</p>
+			      <p>常用卡支付可享受便捷的支付及极速退款到账服务。</p>
+				  <p>充值退还到账时间由各银行受理能力决定。</p>
+	    		</div>
+    		</div>
+	    </div>
+	</div>
+	</div>
+	##小贴士模块--------end
+	</div>
+	<script type="text/javascript" 
+    src="${qzzUrl}${jsPath}/index/entry.js" ></script>
+ 	#parse("widget/footer/footer.vm")
+</body>
+</html>

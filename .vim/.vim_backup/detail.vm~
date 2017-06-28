@@ -1,0 +1,235 @@
+## @Describe: 详情页面
+## @wiki: http://wiki.corp.qunar.com/pages/viewpage.action?pageId=88019828
+## @author ming.zhou@qunar.com
+
+#parse("widget/_include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/_include/headMeta.vm")
+    <title>CRM -  去哪儿网 Qunar.com</title>
+    <link rel="stylesheet" href="${qzzUrl}/${cssPath}/resource/detail@0768b7209997852b92dba27897e04a0c.css" />
+    #parse("widget/_include/headScript.vm")
+</head>
+<body>
+    #set($data = $tplData.houseDetailData)
+    <div class="crm-container">
+        <header class="crm-header">
+            <a href="/resource/list.htm"
+             class="yo-ico regret" id="backBtn">&#xf07d;</a>
+            <h2 class="title">
+                #if($!{data.hotelName.length} && $!{data.hotelName.length} > 10)
+                <span class="title-txt title-txt-long">$!{data.hotelName}</span>
+                #else
+                <span class="title-txt">$!{data.hotelName}</span>
+                #end
+            </h2>
+        </header>
+        <div class="crm-content">
+            <section class="detail-wrap">
+                <ul class="crm-list">
+                    <li class="crm-list-item">
+                        <span class="item-label">公寓联系人</span>
+                        <div class="item-cont">$!{data.hotelContact}</div>
+                    </li>
+                    <li class="crm-list-item">
+                        <span class="item-label">电话</span>
+                        <div class="item-cont">$!{data.telephone}</div>
+                    </li>
+                    <li class="crm-list-item">
+                        <span class="item-label">城市</span>
+                        <div class="item-cont">$!{data.city}</div>
+                    </li>
+                    <li class="crm-list-item">
+                        <span class="item-label">地址</span>
+                        <div class="item-cont">$!{data.address}</div>
+                    </li>
+                    #if($!{data.BizChance})
+                    <li class="crm-list-item">
+                        <span class="item-label">商机</span>
+                        <div class="item-cont">
+                            <span class="font-highlight">是</span>
+                        </div>
+                    </li>
+                    #end
+                    #if($!{data.needCertify})
+                    <li class="crm-list-item">
+                        <span class="item-label">房源审核</span>
+                        <div class="item-cont">
+                            <span class="font-highlight">是</span>
+                        </div>
+                    </li>
+                    #end
+                    #if($!{data.houseCertifyState} == 2
+                        || $!{data.houseCertifyState} == 3
+                        || $!{data.houseCertifyState} == 4
+                        || $!{data.houseCertifyState} == 5)
+                    <li class="crm-list-item js-auth-status">
+                        <span class="item-label">资质审核状态</span>
+                        #if($!{data.qualifCertifyStatus} == 2)
+                        <div class="item-cont">已提交</div>
+                        #elseif($!{data.qualifCertifyStatus} == 3)
+                        <div class="item-cont">已通过</div>
+                        #elseif($!{data.qualifCertifyStatus} == 4)
+                        <div class="item-cont">未通过</div>
+                        #elseif($!{data.qualifCertifyStatus} == 5)
+                        <div class="item-cont">被退回</div>
+                        #else
+                        <div class="item-cont">待提交</div>
+                        #end
+                    </li>
+                    #if($!{data.houseCertifyState} == 3
+                        || $!{data.houseCertifyState} == 4
+                        || $!{data.houseCertifyState} == 5)
+                    <li class="crm-list-item">
+                        <span class="item-label">审批时间</span>
+                        <div class="item-cont">$!{data.approvalDate}</div>
+                    </li>
+                    <li class="crm-list-item">
+                        <span class="item-label">审批意见</span>
+                        <div class="item-cont">
+                            $!{data.qualifComment}
+                        </div>
+                    </li>
+                    #end
+                    <li class="crm-list-item js-auth-status">
+                        <span class="item-label">房屋信息审核状态</span>
+                        #if($!{data.detailCertifyStatus} == 2)
+                        <div class="item-cont">已提交</div>
+                        #elseif($!{data.detailCertifyStatus} == 3)
+                        <div class="item-cont">已通过</div>
+                        #elseif($!{data.detailCertifyStatus} == 4)
+                        <div class="item-cont">未通过</div>
+                        #elseif($!{data.detailCertifyStatus} == 5)
+                        <div class="item-cont">被退回</div>
+                        #else
+                        <div class="item-cont">待提交</div>
+                        #end
+                    </li>
+                    #if($!{data.houseCertifyState} == 3
+                        || $!{data.houseCertifyState} == 4
+                        || $!{data.houseCertifyState} == 5)
+                    <li class="crm-list-item">
+                        <span class="item-label">审批时间</span>
+                        <div class="item-cont">$!{data.approvalDate}</div>
+                    </li>
+                    <li class="crm-list-item">
+                        <span class="item-label">审批意见</span>
+                        <div class="item-cont">
+                            $!{data.detailComment}
+                        </div>
+                    </li>
+                    #end
+                    <li class="crm-list-item js-auth-status">
+                        <span class="item-label">房源图片审核状态</span>
+                        #if($!{data.imgCertifyStatus} == 2)
+                        <div class="item-cont">已提交</div>
+                        #elseif($!{data.imgCertifyStatus} == 3)
+                        <div class="item-cont">已通过</div>
+                        #elseif($!{data.imgCertifyStatus} == 4)
+                        <div class="item-cont">未通过</div>
+                        #elseif($!{data.imgCertifyStatus} == 5)
+                        <div class="item-cont">被退回</div>
+                        #else
+                        <div class="item-cont">待提交</div>
+                        #end
+                    </li>
+                    #if($!{data.houseCertifyState} == 3
+                        || $!{data.houseCertifyState} == 4
+                        || $!{data.houseCertifyState} == 5)
+                    <li class="crm-list-item">
+                        <span class="item-label">审批时间</span>
+                        <div class="item-cont">$!{data.approvalDate}</div>
+                    </li>
+                    <li class="crm-list-item">
+                        <span class="item-label">审批意见</span>
+                        <div class="item-cont">
+                            $!{data.imgComment}
+                        </div>
+                    </li>
+                    #end
+                    #if($!{data.houseCertifyState} != 0)
+                    <li class="crm-list-item js-auth-status">
+                        <span class="item-label">房源审核状态</span>
+                        <div class="item-cont">$!{data.houseCertifyStateText}</div>
+                    </li>
+                    #end
+                    #end
+                    #if($!{data.BizChance})
+                    #else
+                    <li class="crm-list-item">
+                        <span class="item-label">商户申请审核日期</span>
+                        <div class="item-cont">$!{data.applyCertifyDate}</div>
+                    </li>
+                    #end
+                    <li class="crm-list-item">
+                        <span class="item-label">分配日期</span>
+                        <div class="item-cont">$!{data.allocDate}</div>
+                    </li>
+                    #if($!{data.houseCertifyState} == 2)
+                    <li class="crm-list-item js-submit-time">
+                        <span class="item-label">提交日期</span>
+                        <div class="item-cont">$!{data.certifyCommitDate}</div>
+                    </li>
+                    #end
+                    <li class="crm-list-item">
+                        <span class="item-label">负责人</span>
+                        <div class="item-cont">$!{data.owner}</div>
+                    </li>
+                    #if(($!{data.houseCertifyState} == 0
+                        || $!{data.houseCertifyState} == 1)
+                        && $!{data.needCertify})
+                    <li class="crm-list-item">
+                        <span class="item-label">房源审核剩余天数</span>
+                        <div class="item-cont">
+                            <span class="font-highlight">$!{data.certifyRemainingDays}</span>
+                        </div>
+                    </li>
+                    #else
+                    #end
+                    <li class="crm-list-item">
+                        <a href="/resource/remark.htm?houseId=$!{data.houseId}">
+                            <span class="item-label">备注</span>
+                            <div class="item-cont">
+                                <span class="remark-cont">$!{data.remark}</span>
+                                <i class="yo-ico">&#xf03e;</i>
+                            </div>
+                        </a>
+                    </li>
+                    #if($!{data.houseCertifyState} == 2)
+                    <li class="crm-list-item js-data-show">
+                        <a href="/resource/auth.htm?houseId=$!{data.houseId}">
+                            <span class="item-label">查看上传资料</span>
+                            <div class="item-cont">
+                                <i class="yo-ico">&#xf03e;</i>
+                            </div>
+                        </a>
+                    </li>
+                    #end
+                </ul>
+            </section>
+        </div>
+        #if($!{data.needCertify})
+        <div class="btn-wrap" id="btnWrap">
+            #if($!{data.houseCertifyState} == 2)
+            <a id="cancelAuth" href="javascript:void(0);" data-type="0"
+             class="crm-btn crm-btn-stacked">取消审核</a>
+
+            #elseif($!{data.houseCertifyState} == 5)
+            <a id="applyAuthAgain" href="/resource/auth.htm?houseId=$!{data.houseId}"
+            class="crm-btn crm-btn-stacked">再次申请审核</a>
+
+            #elseif($!{data.houseCertifyState} == 0 || $!{data.houseCertifyState} == 1)
+            <a id="applyAuth" href="/resource/auth.htm?houseId=$!{data.houseId}"
+            class="crm-btn crm-btn-stacked">申请审核</a>
+            #end
+        </div>
+        #else
+        #end
+    </div>
+    <input type="hidden" id="houseId" value="$!{data.houseId}"/>
+    <script src="${qzzUrl}/${jsPath}/resource/detail/entry@4df6fc26e1f0c817f3d3344a1045a3e2.js"></script>
+    <p style="display:none;">${data}</p>
+    #parse("widget/_include/footScript.vm")
+</body>
+</html>

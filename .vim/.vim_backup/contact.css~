@@ -1,0 +1,8 @@
+.g-big-main .m-workspace{ padding: 30px 46px 30px; zoom: 1; min-width: 1040px;}
+.g-main-header {height: 25px;}
+.g-main-header .integral-title {font-size: 14px; font-weight: bold;}
+.help h1 {font-size: 20px; font-weight: bold;}
+.help .ui-grid th, .help .ui-grid td{border-right: 1px solid #e5e5e5;}
+.help .rules {line-height: 25px; padding: 10px 0;}
+.help .rules .rules-title {font-weight: bold; font-size: 13px;}
+.eBookingURL {margin-left: 10px;}

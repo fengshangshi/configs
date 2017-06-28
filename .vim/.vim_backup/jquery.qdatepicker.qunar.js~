@@ -1,0 +1,333 @@
+﻿(function($){
+    /*
+     Event :
+     q-datepicker-error
+     */
+    var HolidayData ={"2010-12-25":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"圣诞节"},"2011-04-05":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"清明节"},"2011-10-01":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"国庆节"},"2011-06-06":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"端午节"},"2011-02-17":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"元宵节"},"2011-11-24":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"感恩节"},"2011-08-01":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"建军节"},"2011-06-19":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"父亲节"},"2011-03-08":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"妇女节"},"2011-05-08":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"母亲节"},"2011-09-12":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"中秋节"},"2011-01-11":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"腊八节"},"2011-06-01":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"儿童节"},"2011-01-01":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"元旦节"},"2011-05-01":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"劳动节"},"2011-08-06":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"七夕节"},"2011-02-03":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"春节"},"2011-02-14":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"情人节"},"2011-12-25":{"afterTime":3,"beforeTime":3,"dayindex":0,"holidayName":"圣诞节"}};
+    var calcTime = $.qdatepicker.calcTime;
+    var ROOT_KEY = $.qdatepicker.ROOT_KEY
+    var TransDateEx = {
+		week : "周",
+		day : "天",
+		before : "前",
+		after : "后"
+	};
+    $.qdatepicker.createUI('qunar').implement({
+        init: function(){
+            this.parent.apply(this, arguments);
+            var self = this, picker = this.picker;
+            var customClass = picker.get("customActiveClass");
+            var triggerEl = this.triggerEl = picker.activeEl.wrap('<div class="qunar-dp' + (customClass ? ' ' + customClass : '') + '"></div>').before('<div class="dp-info"><b/><span class="dp-text"></span></div>').parent();
+            picker.set('container', triggerEl[0]);
+            this.attachedEl = this.attachedEl.add( triggerEl.find('.dp-info > b , .dp-info') ).add( triggerEl.find('.dp-info > b , .dp-info > .dp-text ') );
+            picker.activeEl.attr('maxlength', 10);
+            picker.activeEl.addClass('textbox');
+            picker.activeEl.bind('keyup.' + picker.ns, function(evt){
+                self.updateTip(self.validate.call(self));
+            }).bind('blur.' + picker.ns, function(evt){
+                self.autoCheck.call(self);
+            });
+            
+            if (picker.get('defaultDay') != null) {
+                this.setDate(this.getDefaultDate());
+                this.updateTip(this.validate());
+            }
+            
+            this.selectedDate = null;
+            this.checkLinked();
+			this.forIframe(picker);
+        },
+		forIframe : function(picker){
+			$(window).bind('blur',function(){
+				picker.hide();
+			});
+		},	
+        getDefaultDate: function(){
+            var picker = this.picker;
+            var date = calcTime(picker.get('defaultDay'));
+            var minDate = picker.get('minDate'), maxDate = picker.get('maxDate');
+            if (minDate && minDate.getTime() > date.getTime() || maxDate && maxDate.getTime() < date.getTime()) 
+                date = minDate || maxDate;
+            return date;
+        },
+        getDefaultArgs: function(){
+            return {
+                LANG: {
+                    prev: '',
+                    next: '',
+                    day_names: ['日', '一', '二', '三', '四', '五', '六'],
+                    OUT_OF_RANGE: '超出范围',
+                    ERR_FORMAT: '格式错误'
+                },
+                CLASS: {
+                    day_round: 'st-a-r'//add date round select style @kangjia
+                },
+                STARTDAY: 1,
+                showOtherMonths: false,
+                defaultDay: '',
+                customClass: '',
+                customActiveClass: '',
+                multi: 2,
+                showTip: true,
+                linkTo: null,
+                // defaultspan , mindate , maxdate 
+                linkRules: '',
+				refObj : null,	//add for round select @kangjia
+                forceCorrect: true,
+                formatTitle: function(date){
+                    return date.getFullYear() + '年' + (date.getMonth() + 1) + '月'
+                }
+            };
+        },
+        // check linked item and correct it
+        checkLinked: function(){
+            var picker = this.picker, linkedQDP;
+            if (!picker.get('linkTo') || !(linkedQDP = picker.get('linkTo').data($.qdatepicker.ROOT_KEY)) || linkedQDP.ui.name.indexOf('qunar') !== 0) 
+                return;
+            var linkRules = (picker.get('linkRules') || "").split(",");
+            var date = this.getDate();
+            if (date == null) 
+                return;
+            
+            var df = {};
+            $.each(['ds', 'mind', 'maxd'], function(ind, v){
+                if (linkRules[ind]) 
+                    df[v] = calcTime(linkRules[ind], date)
+            });
+            var minDate = linkedQDP.get('strictMinDate'), maxDate = linkedQDP.get('strictMaxDate');
+
+            if ( df['mind'] || minDate ){
+				var _t = ( df['mind'] ? df['mind'].getTime() : -1 ) > ( minDate ? minDate.getTime() : -1 ) ? df['mind'] : minDate;
+                linkedQDP.set('minDate', _t , false);
+			}
+            if ( df['maxd'] || maxDate ) {
+				var _t = ( df['maxd'] ? df['maxd'].getTime() : Number.MAX_VALUE ) > ( maxDate ? maxDate.getTime() : Number.MAX_VALUE ) ? maxDate : df['maxd'];
+                linkedQDP.set('maxDate', _t , false);
+			}
+						/*
+            if (df['ds']){
+ 				linkedQDP.select(df['ds']);
+ 			}
+			*/
+            linkedQDP.set(null, null, true);
+            
+            
+            var rlt = linkedQDP.ui.validate();
+            
+            if (!rlt['success'] && picker.get('forceCorrect')) {
+                linkedQDP.select(df['ds']);
+				linkedQDP.ui.drawDate = null;
+                rlt = linkedQDP.ui.validate();
+            }
+            linkedQDP.ui.updateTip(rlt);
+            var linkedFlag = 'Y';
+            return linkedFlag;
+        },
+        onSet: function(){
+            this.selectedDate = null;
+        },
+        select: function(date, nocheck){
+            var picker = this.picker;
+            this.parent.apply(this, arguments);
+            this.selectedDate = date;
+            if (!nocheck) 
+                this.autoCheck();
+        },
+        // show tip in the trigger box
+        showText: function(text){
+            var tip = this.triggerEl.find('.dp-text');
+            tip.removeClass('errtext').html( text );
+        },
+        // show error tip in the trigger box
+        showErrText: function(text){
+            var tip = this.triggerEl.find('.dp-text');
+            tip.addClass('errtext').html( text );
+        },
+        // fire it automatically to check its value
+        autoCheck: function(){
+            var picker = this.picker;
+            var rlt = this.validate();
+            if (!rlt['success'] && picker.get('forceCorrect')) {
+                this.setDate(this.getDefaultDate());
+                this.updateTip(this.validate());
+            }
+            else {
+                if (rlt['formatted']) 
+                    picker.activeEl.val(rlt['formatted']);
+                this.updateTip(rlt);
+            }
+            this.checkLinked();
+        },
+        // show the tip , the argument comes from this.validate()
+        updateTip: function(rlt){
+            if (!this.picker.get('showTip')) 
+                return;
+            
+            if (!rlt.success) 
+                this.showErrText(rlt.errmsg);
+            else 
+                this.showText(rlt.daytip);
+        },
+		parseStrToDate : function(dateStr){
+			var datas = dateStr.split("-");
+			return new Date(datas[0], datas[1]-1, datas[2]);
+		},
+        // validate the input value
+		parseSpeciaDate : function(HolidayData){
+			var speciaDateTable = {};
+			for(var key in HolidayData) {
+				var _speciaDay = key;
+				var _speciaDayEx = HolidayData[key];
+				speciaDateTable[key] = _speciaDayEx;
+				var _sDay = "";
+				var _sName = "";
+				if(_speciaDayEx.beforeTime > 0){
+					for(var i = 1; i <= _speciaDayEx.beforeTime;i++){
+						var _dex = {};
+						var _beforDay = new Date(this.parseStrToDate(_speciaDay).getTime() - i*24*3600*1000);
+						var _beforDayStr = this.format(_beforDay);
+						_dex.holidayName = _speciaDayEx.holidayName + TransDateEx.before + i + TransDateEx.day;
+						_dex.dayindex = _speciaDayEx.dayindex;
+						if(!speciaDateTable[_beforDayStr]){
+							speciaDateTable[_beforDayStr] = _dex;
+						}else{
+							if((_speciaDayEx.dayindex > speciaDateTable[_beforDayStr].dayindex) && speciaDateTable[_beforDayStr].beforeTime == null){
+								speciaDateTable[_beforDayStr] = _dex;
+							}
+						}
+					}
+				}
+				if(_speciaDayEx.afterTime > 0){
+					for(var i = 1; i <= _speciaDayEx.afterTime;i++){
+						var _dex = {};
+						var _afterDay = new Date(this.parseStrToDate(_speciaDay).getTime() + i*24*3600*1000);
+						var _afterDayStr = this.format(_afterDay);
+						_dex.holidayName = _speciaDayEx.holidayName + TransDateEx.after + i + TransDateEx.day;
+						_dex.dayindex = _speciaDayEx.dayindex;
+						if(!speciaDateTable[_afterDayStr]){
+							speciaDateTable[_afterDayStr] = _dex;
+						}else{
+							if((_speciaDayEx.dayindex > speciaDateTable[_afterDayStr].dayindex ) && speciaDateTable[this.format(new Date(_beforDay))].afterTime == null){
+								speciaDateTable[_afterDayStr] = _dex;
+							}
+						}
+					}
+				}
+			}
+			return speciaDateTable;
+		},
+		format: function(date) {
+		    if ( typeof date == "number" ) {
+		        date = new Date( date );
+		    }
+			return date.getFullYear()+"-"+this.convert2digit(date.getMonth()+1)+"-"+this.convert2digit(date.getDate());
+		},
+		convert2digit: function(str){
+			return str <10 ? "0"+str : str;
+		},
+        validate: function(){
+            var picker = this.picker;
+            var val = this.picker.activeEl.val();
+            var date = this.getDate();
+			var self = this;
+            //remove last selected date if user type the date .
+            if (this.selectedDate && this.selectedDate.getTime() != date.getTime()) 
+                this.selectedDate = null;
+            
+            var errmsg = '';
+            if (date == null) {
+                errmsg = picker.get('LANG.ERR_FORMAT');
+                picker._trigger('q-datepicker-error', ['FORMAT', val]);
+            }
+            else {
+                var minDate = picker.get('minDate'), maxDate = picker.get('maxDate');
+                if (minDate && minDate.getTime() > date.getTime() || maxDate && maxDate.getTime() < date.getTime()) {
+                    errmsg = picker.get('LANG.OUT_OF_RANGE');
+                    picker._trigger('q-datepicker-error', ['RANGE', val]);
+                }
+            }
+            
+            var rlt = {
+                success: !errmsg,
+                errmsg: errmsg,
+                formatted: null,
+                daytip: null
+            };
+            
+            if (rlt['success']) {
+                var ds = picker.get('formatDate')(date);
+				var holidayDate = self.parseSpeciaDate(HolidayData);
+                rlt['daytip'] = holidayDate[ds] ? holidayDate[ds]['holidayName'] : '周' + picker.get('LANG.day_names')[date.getDay()];
+                rlt['formatted'] = ds;
+            }
+            
+            return rlt;
+        },
+        onBeforeDraw: function(date){
+            var _compareMonth = function(d1, d2){
+                if (d1.getFullYear() > d2.getFullYear()) 
+                    return 1;
+                else 
+                    if (d1.getFullYear() === d2.getFullYear()) 
+                        return (d1.getMonth() - d2.getMonth()) / (Math.abs(d1.getMonth() - d2.getMonth()) || 1);
+                    else 
+                        return -1;
+            }
+            if (this.selectedDate && this.drawDate) 
+                date.setTime(this.drawDate.getTime());
+            else {
+                var picker = this.picker, minDate = picker.get('minDate'), maxDate = picker.get('maxDate'), multi = picker.get('multi');
+                var nD = new Date(date.getFullYear(), date.getMonth() + multi - 1, 1);
+                if (maxDate && _compareMonth(nD, maxDate) > 0) 
+                    for (var i = 1; maxDate && multi && multi > 1 && multi - i > 0; i++) {
+                        nD = new Date(date.getFullYear(), date.getMonth() + multi - i - 1, 1);
+                        if (_compareMonth(nD, maxDate) <= 0) {
+                            nD.setMonth(nD.getMonth() - multi + 1);
+                            break;
+                        }
+                    }
+                else 
+                    nD = null;
+                
+                if (nD && (!minDate || nD.getTime() >= minDate.getTime())) 
+                    date.setTime(nD.getTime());
+            }
+        },
+        draw: function(date){
+            this.drawDate = date;
+            return this.parent.apply(this, arguments);
+        },
+        addRoundClass: function(type){
+            if (type == 'FROM') 
+                return this.picker.get('CLASS')['day_selected'];
+            else 
+                if (type == 'BACK') 
+                    return this.picker.get('CLASS')['day_round'];
+        },
+		
+        _getDateClass: function(date){
+            var getDate = this.picker.args.formatDate(date);
+            var backInfo = '';
+			if (this.picker.get('linkTo')) {
+				if (linkedQDP = this.picker.get('linkTo').data($.qdatepicker.ROOT_KEY)) {
+					if (typeof(linkedQDP.activeEl.val()) != 'undefined' && getDate == linkedQDP.activeEl.val()) {
+						backInfo = this.addRoundClass('BACK');
+					}
+             	}
+			}else if(this.picker.get('refObj')){
+ 				if (typeof(this.picker.activeEl.val()) != 'undefined' && getDate == this.picker.activeEl.val()) {
+						backInfo = this.addRoundClass('BACK');
+				}
+				if (refQDP = this.picker.get('refObj').data($.qdatepicker.ROOT_KEY)) {
+					if (typeof(refQDP.activeEl.val()) != 'undefined' && getDate == refQDP.activeEl.val()) {
+						backInfo = this.addRoundClass('FROM');
+					}
+             	}				
+			}
+			if( HolidayData[ getDate ] )
+				backInfo += ' ' + 'holi';
+
+            return $.trim( backInfo );
+        }
+    });
+})(jQuery);

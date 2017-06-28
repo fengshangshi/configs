@@ -1,0 +1,87 @@
+/*[export]*/
+/**
+ * 实名认证结果页面（成功或失败）
+ */
+require("../base.css");
+require("../../common/step.css");
+require("../../common/box.css");
+
+.auth-main > .box{
+	border: 16px solid #f3f3f3;
+}
+
+.box-container{
+	width: 100%;
+	font-size: 15px;
+}
+
+.appeal-state-main{
+	width: 800px;
+	margin: 36px auto;
+}
+
+.box-container .success-icon{
+	width: 64px;
+	height: 64px;
+	float: left;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/success-icon.png);
+	_background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/success-icon.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	margin-right: 15px;
+}
+
+.box-container .fail-icon{
+	width: 64px;
+	height: 64px;
+	float: left;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/fail-icon.png);
+	_background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/fail-icon.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	margin-right: 15px;
+}
+
+.box-container .title h3{
+	font-size: 28px;
+}
+
+.box-container .auto-jump{
+	color: #999;
+	text-indent: 78px;
+}
+
+.f-c-blue{
+	color: #0066ff;
+	padding-left: 10px;
+}
+/*   申诉结果记录显示表-------start*/
+.appeal-box{
+	width: 96%;
+	margin: 30px auto;
+}
+
+table{
+	width: 100%;
+	color: #666;
+}
+
+tbody td{
+	vertical-align: top;
+	padding: 10px 20px;
+	border-bottom: none;
+}
+
+table thead{
+	height: 35px;
+	line-height: 35px;
+	background-color: #fbfbfb;
+	font-size: 16px;
+	font-weight: bold;
+	border-top: 1px solid #e8ecee;
+}
+
+thead th{
+	padding-left: 20px;
+}
+/*   申诉结果记录显示表-------end*/

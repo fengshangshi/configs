@@ -1,0 +1,10 @@
+{%*继承layout.tpl*%}
+
+{%*新房页面*%}
+
+{%block name="page-title"%}
+	zoomController-百度房地产预测
+{%/block%}
+{%block name="page-container"%}
+fsfdsf
+{%/block%}

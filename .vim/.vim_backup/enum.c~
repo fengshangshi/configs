@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main()
+{
+		enum Weekday {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday} today, tomorrow;
+
+		today = "Thursday";
+		tomorrow = today + 1;
+
+		printf("today is %s", today);
+		printf("tomorrow is %s", tomorrow);
+
+		return 0;
+}

@@ -1,0 +1,60 @@
+/**
+ * 获取红包使用详情
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+require("handlebars/handlebars.js");
+var couponRecordsTemplate = require("../template/couponRecords.handlebars");
+var pageHtml = require("module/page/page.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchCouponRecords", function(e) {
+	var args = e.args,
+		couponNo = args.couponNo,
+		page = args.page || 1,
+		step = args.step || 10;
+
+	var data = {
+		pageNum: page,
+		pageSize: step,
+		couponNo: couponNo
+	};
+
+	service.ajax({
+		url: "/member/asset/coupon/fetchCouponRecordsApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			// 对数据列表的判断
+			Handlebars.registerHelper("if", function(list, options) {
+				return list.length > 0 ? 
+					options.fn(this) : options.inverse(this);
+			});
+
+			// 交易类型
+			Handlebars.registerHelper("type", function(type) {
+				var types = {
+					"pay": "支付",
+					"refund": "退款"
+				};
+				return types[type];
+			});
+
+			// 正负号
+			Handlebars.registerHelper("minus", function(type) {
+				var types = {
+					"pay": "-",
+					"refund": "+"
+				};
+				return types[type];
+			});
+
+			$(".coupon-records .data-list tbody").html(couponRecordsTemplate(data));
+			$(".coupon-records .page-wrap").html(pageHtml(data.data.page));
+		}
+	});
+});
+
+message.fire("fetchCouponRecords", {
+	couponNo: $("#couponNo").val()
+});

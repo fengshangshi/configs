@@ -1,0 +1,17 @@
+#include <iostream>
+int main()
+{
+	std::cout << "请输入两个数字，并回车: " << std::endl;
+	
+	int v1, v2;
+	std::cin >> v1 >> v2;
+
+	std::cout << "你输入的两个数字是: ";
+		<< v1
+		<< v2
+		<< "他们的乘积为: "
+		<< v1 * v2
+		<< std::endl;
+
+	return 0;
+}

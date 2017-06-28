@@ -1,0 +1,51 @@
+<script type="text/template" id="template-search-flight-list">
+<div class="search-result-label">
+	<span>共<em><%:=tplData.length%></em>架次航班</span>
+</div>
+<% if (tplData.length > 0) { %>
+<ul class="search-result-list">
+	<% for (var i = 0, l = tplData.length; i < l; i++) { %>
+	<li data-flight-no="<%:=tplData[i].flight_no%>">
+		<div class="flight">
+			<img src="<%:=tplData[i].base_info.company.icon%>" alt=""/>
+			<%:=tplData[i].base_info.company.name%>
+			<em><%:=tplData[i].flight_no%></em>
+		</div>
+		<div class="flight-info clearfix">
+			<div class="flight-start">
+				<div class="city">
+					<%:=tplData[i]
+						.take_off_and_land[0]
+						.departure
+						.city_name%>
+				</div>
+				<div class="time">
+					<%:=tplData[i]
+						.take_off_and_land[0]
+						.plan
+						.lauch%>
+				</div>
+			</div>
+			<div class="flight-status">
+				<strong></strong>
+			</div>
+			<div class="flight-end">
+				<div class="city">
+					<%:=tplData[i]
+						.take_off_and_land[0]
+						.destination
+						.city_name%>
+				</div>
+				<div class="time">
+					<%:=tplData[i]
+						.take_off_and_land[0]
+						.plan
+						.landing%>
+				</div>
+			</div>
+		</div>
+	</li>
+	<% } %>
+</ul>
+<% } %>
+</script>

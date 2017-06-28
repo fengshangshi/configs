@@ -1,0 +1,30 @@
+{
+    "code": "0",
+    "msg": "处理成功",
+    "data": [
+		{
+			"id": 1,
+			"accountName": "门店",
+			"isCustomize": true,
+			"accountType": 55
+		},
+		{
+			"id": 2,
+			"accountName": "OTA",
+			"isCustomize": true,
+			"accountType": 1
+		},
+		{
+			"id": 3,
+			"accountName": "公司代收",
+			"isCustomize": false,
+			"accountType": 1
+		},
+		{
+			"id": 4,
+			"accountName": "公司收入",
+			"isCustomize": false,
+			"accountType": 1
+		}
+	]
+}

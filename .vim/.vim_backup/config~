@@ -1,0 +1,13 @@
+Host github.com
+	IdentityFile ~/.ssh/id_rsa.github
+	User git
+
+Host cn6
+	Hostname l-rtools1.ops.cn6.qunar.com
+
+Host *.cn6
+	User ss.feng
+	ProxyCommand ssh cn6 exec nc %h %p 2 > dev/null
+	ControlMaster auto
+	ControlPath ~/.ssh/sockets/socket-%r@%h:%p
+	ControlPersist yes

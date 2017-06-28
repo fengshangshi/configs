@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+            <title>登录 - Qunar.com engineer wiki</title>
+    
+        
+
+                        
+    
+
+            
+<meta id="confluence-context-path" name="confluence-context-path" content="">
+<meta id="atlassian-token" name="atlassian-token" content="bReWwkxDfX">
+
+<script type="text/javascript">
+    // Deprecated global variables. To be removed in a future version of Confluence.
+    var contextPath = '';
+</script>
+
+    
+
+<!-- include system css resources -->
+<link type="text/css" rel="stylesheet" href="/s/1810/124/2/_/download/superbatch/css/batch.css" media="all">
+<!--[if IE]>
+<link type="text/css" rel="stylesheet" href="/s/1810/124/2/_/download/superbatch/css/batch.css?ieonly=true" media="all">
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="/s/1810/124/2/_/download/superbatch/css/batch.css?media=print" media="print">
+<link type="text/css" rel="stylesheet" href="/s/1810/124/1.0/_/download/resources/confluence.web.resources:aui-forms/confluence-forms.css" media="all">
+<!--[if IE]>
+<link type="text/css" rel="stylesheet" href="/s/1810/124/1.0/_/download/batch/confluence.web.resources:aui-forms/confluence.web.resources:aui-forms.css?ieonly=true" media="all">
+<![endif]-->
+
+<!-- end system css resources -->
+
+    <link rel="stylesheet" href="/s/1810/124/124/_/styles/combined.css" type="text/css">
+
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="robots" content="noarchive">
+    <meta name="confluence-request-time" content="1486966499418">
+
+<meta name="loggedInUsername" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/s/1810/124/_/images/logo/confluence_16.png">
+
+<link rel="search" type="application/opensearchdescription+xml" href="/opensearch/osd.action" title="Qunar.com engineer wiki"/>
+
+        <!-- include system javascript resources -->
+                        
+    
+    <script type="text/javascript" src="/s/1810/124/2/_/download/superbatch/js/batch.js" ></script>
+<script type="text/javascript" src="/s/1810/124/1.0.7/_/download/batch/com.atlassian.confluence.plugins.doctheme:splitter/com.atlassian.confluence.plugins.doctheme:splitter.js" ></script>
+
+    <!-- end system javascript resources -->
+
+    
+
+    
+</head>
+
+<body             onload="placeFocus()"
+     id="com-atlassian-confluence" class="login">
+<div id="full-height-container">
+
+
+
+<fieldset class="hidden parameters">
+    <input type="hidden" id="statusDialogHeading" value="What are you working on?">
+    <input type="hidden" id="statusDialogLatestLabel" value="Last update:">
+    <input type="hidden" id="statusDialogUpdateButtonLabel" value="Update">
+    <input type="hidden" id="statusDialogCancelButtonLabel" value="取消">
+</fieldset>
+
+<fieldset class="hidden parameters">
+    <input type="hidden" id="globalSettingsAttachmentMaxSize" value="104857600">
+    <input type="hidden" id="userLocale" value="zh_CN">
+    <input type="hidden" id="staticResourceUrlPrefix" value="/s/1810/124/_">
+    <input type="hidden" id="contextPath" value="">
+</fieldset>
+
+    
+<div id="header" class="sectionbottom ">
+        <form id="quick-search" class="quick-search" method="get" action="/dosearchsite.action">
+        <fieldset>
+            <legend>Quick Search</legend>
+            <input class="quick-search-query" id="quick-search-query" type="text" accessKey="s" autocomplete="off" name="queryString" size="25" />
+            <input class="quick-search-submit" id="quick-search-submit" type="submit" value="搜索" />
+            <div class="aui-dd-parent quick-nav-drop-down"><!-- Quick nav appears here --></div>
+        </fieldset>
+        <fieldset class="hidden parameters">
+            <input type="hidden" id="quickNavEnabled" value="true" />
+                    </fieldset>
+    </form>
+    <ul id="header-menu-bar" class="ajs-menu-bar">
+                        
+            <li class="normal ajs-menu-item">
+        <a id="browse-menu-link" class="browse trigger ajs-menu-title" href="#"><span><span>Browse</span></span></a>         <div class="hidden ajs-drop-down">
+                        <ul  id="browse-menu-link-global"                 class="section-global first">
+                                        <li>
+        
+        
+    
+    <a  id="people-directory-link" href="/peopledirectory.action"  class=""  >
+                   <span>人员目录</span></a>        </li>
+                                        <li>
+    
+            
+    
+    <a  id="gadget-directory-link" href="#"  class="user-item administration-link"   title="Browse gadgets provided by Confluence">
+                   <span>Confluence Gadgets</span></a>        </li>
+                            </ul>
+                    </div>
+    </li>
+                                                             <li class="ajs-menu-item normal">
+    
+        
+    
+    <a  id="login-link" href="/login.action"  class="user-item login-link"   title="Browse gadgets provided by Confluence">
+                   <span>登录</span></a>        </li>
+                                <li class="normal ajs-menu-item">
+            <div id="splitter-button" class="hidden" title="Sidebar"></div>
+        </li>
+
+    </ul>
+    
+</div>
+
+
+<div id="main"  >
+    
+    
+    
+    <h1 id="title-heading" class="pagetitle">
+                    <a href="/homepage.action"><img class="global logo"  src="/download/attachments/131074/global.logo?version=2&amp;modificationDate=1272557156000" alt=""></a>        
+		<span id="title-text">
+					            <a href="/homepage.action">Qunar.com engineer wiki</a>
+    				</span>
+    </h1>
+
+    
+
+    
+    
+
+    <div id="login-container">
+                    <a id="qsso-login" href="#">QSSO登录</a>
+<br><br>
+<a href="/dashboard.action">返回首页</a>
+                            </div>
+        <script src="//qsso.corp.qunar.com/lib/qsso-auth.js?1.1"></script>
+<script>
+	QSSO.attach('qsso-login', 'dologin.action?os_password=&os_destination=/download/attachments/88030853/uri2vm.js', {'os_username':'{userId}'});
+</script>
+    <br class="clear">
+</div>
+
+<div id="footer">
+                        
+    <ul id="poweredby">
+        <li class="noprint">Powered by <a href="http://www.atlassian.com/wiki/?clicked=footer" class="smalltext">Atlassian Confluence</a>, the <a href="http://www.atlassian.com/wiki/?clicked=footer" class="smalltext">Enterprise Wiki</a>. (Version: http://www.atlassian.com/software/confluence Build:#3.2 http://www.atlassian.com/software/confluence/tour/enterprise-wiki.jsp)</li>
+        <li class="noprint"> &nbsp; |&nbsp; <a href="http://jira.atlassian.com/secure/BrowseProject.jspa?id=10470" class="hover-footer-link">错误报告或功能请求</a></li>
+        <li class="noprint"> &nbsp;|&nbsp; <a href="http://www.atlassian.com/about/connected.jsp?s_kwcid=Confluence-stayintouch" class="hover-footer-link">Atlassian News</a></li>
+    </ul>
+
+    
+
+            <script>
+//作者 li.sun@qunar.com
+//wiki支持思维导图
+function mindRender(){
+    jQuery.getScript("http://s.qunarzz.com/wiki/kityminder.core.min.js",function(data, textStatus, jqxhr ){
+        jQuery("pre.minder").each(function(){
+        
+                //组装脑图数据
+                var content=jQuery('<pre id="minder-view'+containerId+'" minder-data-type="markdown" style="overflow:hidden">'+jQuery(this).text()+'</pre>');
+                jQuery(this).html(content);
+                var km = window.km = new kityminder.Minder();
+                var renderTimes=0;
+                km.on("layoutfinish",function(){
+                    if(renderTimes<2){
+                        var mindHeight=content.find("g").get(0).getBBox().height;
+                        console.log(renderTimes);
+                        content.height(mindHeight);
+
+
+                        km.fire("paperrender");
+                    }
+                    renderTimes++;
+                });
+                km.setup('#minder-view'+containerId);
+                km.disable();
+                km.execCommand('hand');
+                containerId++;
+          
+        });
+
+    });
+
+}
+
+
+if(jQuery(".wiki-content").length>0 &&jQuery.browser.msie==false){
+    
+    var containerId=1;
+    jQuery(document).ready(function(){
+        jQuery('head').append( jQuery('<link rel="stylesheet" type="text/css" />').attr('href', 'http://s.qunarzz.com/wiki/kityminder.css') );
+        jQuery.getScript("http://s.qunarzz.com/wiki/kity.min.js",function(data, textStatus, jqxhr){
+            mindRender();
+        });
+
+    });
+}
+
+</script>
+    </div>    <!-- include system javascript resources -->
+                        
+    
+    
+    <!-- end system javascript resources -->
+</div>
+</body>
+</html>

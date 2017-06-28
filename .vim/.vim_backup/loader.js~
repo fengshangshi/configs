@@ -1,0 +1,43 @@
+/**
+ * CONF/MODEL加载器
+ * @author: ss.feng
+ */
+var fs = require('fs');
+var _ = require('lodash');
+var path = require('path');
+
+var utils = require(path.join(LIB, 'utils'));
+
+// 定义类别限制范围
+var categories = ['CONF', 'MODEL'];
+
+/**
+ * 递归所有文件
+ */
+function scan(configs, root) {
+	fs.readdirSync(root).forEach(function(i) {
+		var file = path.join(root, i);
+		if (/\.toml$/.test(i)) {
+			console.log('file===>', file);
+			console.log(i.slice(0, -3));
+			return file;
+		}
+
+		if (utils.isDirectory(file)) {
+			console.log('dir===>', file);
+			configs[i] = {};
+			return scan(configs[i], file);
+		}
+	});
+}
+
+/**
+ * @params: category 类别, root 路径
+ */
+module.exports = function(category, root) {
+	if (!_.includes(categories, category)) return '类别不合法'; 
+
+	var configs = {};
+
+	console.log(scan(configs, root));
+};

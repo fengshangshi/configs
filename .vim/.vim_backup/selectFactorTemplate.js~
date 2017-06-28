@@ -1,0 +1,90 @@
+/**
+ * 展现银行填写要素
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+require("handlebars/handlebars.js");
+var debitHasLessTpl = require("template/bankList/debitHasLess.handlebars");
+var debitHasNameTpl = require("template/bankList/debitHasName.handlebars");
+var debitHasCredTypeTpl = require("template/bankList/debitHasCredType.handlebars");
+var debitHasAllTpl = require("template/bankList/debitHasAll.handlebars");
+var creditHasLessTpl = require("template/bankList/creditHasLess.handlebars");
+var creditHasNameTpl = require("template/bankList/creditHasName.handlebars");
+var creditHasCredTypeTpl = require("template/bankList/creditHasCredType.handlebars");
+var creditHasAllTpl = require("template/bankList/creditHasAll.handlebars");
+var creditHasCvvTpl = require("template/bankList/creditHasCvv.handlebars");
+var creditHasCvvAllTpl = require("template/bankList/creditHasCvvAll.handlebars");
+var creditHasValideTpl = require("template/bankList/creditHasValide.handlebars");
+var creditHasValideAllTpl = require("template/bankList/creditHasValideAll.handlebars");
+var creditHasNoNameTpl = require("template/bankList/creditHasNoName.handlebars");
+var creditHasCNameTpl = require("template/bankList/creditHasCName.handlebars");
+
+message.register("fetchFactorTemplateSuccess", function(e) {
+	var args = e.args,
+		bankCode = args.bankCode,
+		picUrl = args.picUrl,
+		type = args.bankType,
+		username = args.username,
+		idCard = args.idCard,
+		tpl = args.tpl;
+
+	var bankTypes = {
+		"credit": "信用卡",
+		"debit": "储蓄卡"
+	};
+
+	var bankType = bankTypes[type];
+
+	var templates = {
+		"debit_hasLess": debitHasLessTpl,
+		"debit_hasName": debitHasNameTpl,
+		"debit_hasCredType": debitHasCredTypeTpl,
+		"debit_hasAll": debitHasAllTpl,
+		"credit_hasLess": creditHasLessTpl,
+		"credit_hasName": creditHasNameTpl,
+		"credit_hasCredType": creditHasCredTypeTpl,
+		"credit_hasAll": creditHasAllTpl,
+		"credit_hasCvv": creditHasCvvTpl,
+		"credit_hasCvvAll": creditHasCvvAllTpl,
+		"credit_hasValide": creditHasValideTpl,
+		"credit_hasValideAll": creditHasValideAllTpl,
+		"credit_hasNoName": creditHasNoNameTpl,
+		"credit_hasCName": creditHasCNameTpl
+	};
+
+	var monthes = [], years = [], data = {}, i,
+		currentYear = new Date().getFullYear();
+	for (i = 1; i <= 12; i++) {
+		monthes.push(i);
+	}
+
+	for (i = currentYear; i <= currentYear + 11; i++) {
+		years.push(i);
+	}
+
+	data["monthes"] = monthes;
+	data["years"] = years;
+
+	data["username"] = username;
+	data["idCard"] = idCard;
+
+	Handlebars.registerHelper("fillZero", function(num) {
+		return num < 10 ? "0" + num : num;
+	});
+
+	Handlebars.registerHelper("if", function(str, options) {
+		return str != "" ?
+			options.fn(this) : options.inverse(this);
+	});
+
+	message.fire("bankElementTemplate", {
+		html: templates[tpl](data),
+		data: {
+			picUrl: picUrl,
+			bankType: bankType,
+			bankCode: bankCode,
+			type: type
+		}
+	});
+});

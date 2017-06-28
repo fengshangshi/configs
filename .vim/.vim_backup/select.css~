@@ -1,0 +1,86 @@
+/**
+ * 选择组件样式
+ * author water.li
+ * Date 2014-12-19
+ */
+.select {
+	position: relative;
+	display: inline-block;
+	background: #fff;
+	color: #7d7d7d;
+	font-size: 14px;
+	_display: inline;
+	zoom:1;
+}
+
+.select-trigger {
+	position: relative;
+	display: inline-block;
+	border: 1px solid #ccc;
+	height: 30px;
+	line-height: 30px;
+	text-indent: 15px;
+	text-align: center;
+}
+
+.select-trigger label{
+	display: inline-block;
+	border-right: 1px solid #bbb;
+	padding-right: 15px;
+}
+
+.select-trigger i {
+	position: absolute;
+	top: 12px;
+	right: 8px;
+	line-height: 28px;
+	cursor: pointer;
+	background-image: url(http://source.qunarzz.com/site/images/pay/useraccount/page/security/xiasanjiao.png);
+	width: 11px;
+	height: 6px;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+
+.select a, .select-trigger {
+	color: #7d7d7d;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.select .select-trigger {
+	display: block;
+}
+
+.select-content {
+	background-color: #fff;
+	position: absolute;
+	min-height: 200px;
+	width: 98%;
+	margin: -1px 0 0;
+	padding: 0;
+	overflow: auto;
+	height: 100%;
+	list-style: none;
+	border: 1px solid #ccc;
+	_float: left;
+}
+
+.select-item {
+	display: block;
+	padding: 10px 15px;
+	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.select-item.cur {
+	background-color: #eee;
+}
+
+.select-item-disabled,
+.select-item-disabled a {
+	cursor: not-allowed;
+	color: #ccc;
+}

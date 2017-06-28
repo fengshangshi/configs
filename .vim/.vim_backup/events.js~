@@ -1,0 +1,8 @@
+var $ = require("jquery/jquery");
+$(".claim-rules").on("mouseenter", "em", function(e) {
+	$(".claim-rules").addClass("show-rules");
+});
+
+$(".claim-rules").on("mouseleave", "em", function(e) {
+	$(".claim-rules").removeClass("show-rules");
+});

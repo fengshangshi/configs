@@ -1,0 +1,38 @@
+/*[export]*/
+/**
+ * 错误页样式
+ */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #f2f1ec;
+}
+
+.error-info {
+	width: 320px;
+	height: 180px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -100px 0 0 -250px;
+	background: 
+		url(http://source.qunarzz.com/site/images/pay/useraccount/page/error/camel.png)
+		no-repeat;
+	padding-left: 180px;
+}
+
+h1 {
+	font: 400 24px "microsoft yahei";
+	padding: 75px 0 15px;
+}
+
+.error-info p {
+	font: 14px "simsun";
+}
+
+.error-info a {
+	color: #06f;
+}

@@ -1,0 +1,10 @@
+let constNumber = 10
+var variableNumber = 11
+var hello = "Hello World! Hello Swift!")
+
+print(hello)
+print(constNumber)
+print(variableNumber)
+
+//constNumber = constNumber + 1
+variableNumber = variableNumber + 1

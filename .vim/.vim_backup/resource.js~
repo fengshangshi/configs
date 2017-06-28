@@ -1,0 +1,43 @@
+/**
+ * http请求封装-http://www.doc00.com/doc/1001004eg
+ * @param  {[type]} options [配置参数]
+ * @return {[type]}         [ajax]
+ * @author jie.pi@qunar.com
+ */
+
+module.exports = function(options) {
+    require('libs/vue-resource');
+
+    var settings = {
+        url: options.url,
+        data: options.data || {},
+        type: options.type || 'POST',
+        success: options.success || function() {},
+        error: options.error || function() {},
+        before: options.before || function() {}
+    }
+
+    // 定义action
+    var actions = {
+        rest: {
+            method: settings.type,
+            url: settings.url
+        }
+    };
+
+    var self = settings.self,
+        data = settings.data;
+
+    var resource = Vue.resource(
+        settings.url, 
+		{},
+        actions, {
+            before: settings.before
+        }
+	);
+
+    return resource.rest(data).then(function(response) {
+        settings.success(response.data);
+    });
+}
+

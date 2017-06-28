@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>账单查询-账户</title>
+	</head>
+	<body>
+
+		<!--公共js文件-->
+		<script src="/scripts/common/common.js"></script>
+
+		<!--页面js文件-->
+		<script src="../../output/static/scripts/pages/account/pages/bills/index.bundle.js"></script>
+	</body>
+</html>

@@ -1,0 +1,15 @@
+/*[export]*/
+require('jquery');
+
+require('libs/vue');
+require('libs/bootstrap/datepicker');
+
+// vue
+require('vue/filter');
+
+// 基础组件
+var dialog = require('libs/artDialog/dialog');
+
+// 挂载G
+window.G = window.G || {};
+G.dialog = dialog;

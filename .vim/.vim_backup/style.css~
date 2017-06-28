@@ -1,0 +1,68 @@
+/**
+ * common
+ */
+
+.fn-left {
+    float: left;
+}
+
+.fn-right {
+    float: right;
+}
+
+.fn-clear:after {
+    visibility:hidden;
+    display:block;
+    font-size:0;
+    content:" ";
+    clear:both;
+    height:0;
+}
+
+.fn-clear {
+    zoom:1;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.main.container {
+    margin: 5em 0 3em 0;
+}
+
+.ui.horizontal.divider.header {
+    padding: 1em 0;
+}
+
+/**
+ * footer
+ */
+/*
+.ui.inverted.segment {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+}
+*/
+
+.ui.form .inline.field > label {
+		width: 120px;
+}
+
+.q-copyright {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+/**
+ * 活动列表
+ */
+.q-activity-list.ui.items > .item {
+    border-bottom: 1px solid #ddd;
+    padding: 2em 0;
+    margin: 0;
+}
+
+.q-activity-list.ui.items > .item:first-child {
+    padding-top: 0;
+}

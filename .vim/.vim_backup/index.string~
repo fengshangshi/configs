@@ -1,0 +1,53 @@
+<div class="search-list-panel">
+	{{{billTitle|showDetailTitle}}}
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="80">业务类型</th>
+				<th width="100">订单号</th>
+				<th width="100">渠道</th>
+				<th>门店名称</th>
+				<th width="80">客人名称</th>
+				<th width="80">入离时间</th>
+				<th width="80">预定时间</th>
+				<th width="60">城市</th>
+				<th width="70">交易状态</th>
+				<th width="70">订单金额</th>
+				<th width="70">退款金额</th>
+				<th width="60" v-if="isShowIncome">收入</th>
+				<th width="60">BD</th>
+				<th width="40">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="item in dataList">
+				<td>{{item.orderTypeName}}</td>
+				<td>{{item.channelOrderNo}}</td>
+				<td>{{item.channelName}}</td>
+				<td>{{item.hotelName}}</td>
+				<td>{{item.customerName}}</td>
+				<td>
+					{{item.checkInTime|dateFormat 'yyyy-MM-dd'}}
+					<br />
+					{{item.checkOutTime|dateFormat 'yyyy-MM-dd'}}
+				</td>
+				<td>{{item.orderTime|dateFormat 'yyyy-MM-dd'}}</td>
+				<td>{{item.cityName}}</td>
+				<td>{{item.tradingStatus}}</td>
+				<td>{{item.orderAmount}}</td>
+				<td>{{item.refundAmount}}</td>
+				<td v-if="isShowIncome">{{item.income}}</td>
+				<td>{{item.bdName}}</td>
+				<td><a href="#" @click.stop.prevent="showDetail(item.orderId)">详情</a></td>
+			</tr>
+
+			<!--无数据-->
+			<tr v-if="isEmpty">
+				<td colspan="12" class="q-not-data"><i class="q-icon"></i> 暂无数据</td>
+			</tr>
+			<!--/无数据-->
+		</tbody>
+	</table>
+
+	<v-paging :paging.sync="paging" v-if="!isEmpty"></v-paging>
+</div>

@@ -1,0 +1,82 @@
+#parse("widget/include/global.vm")
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>【去哪儿】我的账户-账户资产-信任付引导</title>
+	<meta name="keywords" content="$!{keywords}" />
+	<meta name="description" content="$!{description}" />
+	<link rel="stylesheet" 
+		href="${qzzUrl}${cssPath}/asset/ious/signIous.css" />
+	#parse("widget/include/scriptHeader.vm")
+</head>
+<body class="asset asset-ious">
+	#parse("widget/header/header.vm")
+	#parse("widget/nav/nav.vm")
+	<div class="container clearfix">
+		<div class="side-bar">
+			#parse("widget/menu/menuForAsset.vm")
+		</div>
+		<div class="main">
+            <div class="main-content">
+				<div class="signIous-wrap">
+					<div class="signIous-intro">
+						<div class="signIous-intro-banner"></div>
+						<ul class="signIous-intro-content">
+							<li class="ious-apply-quota split-line">
+								<h3>申请额度</h3>
+								<p>200元-5万元的额度申请</p>
+							</li>
+							<li class="ious-refund-way split-line">
+								<h3>还款方式</h3>
+								<p>按月还息,到期还本</p>
+							</li>
+							<li class="ious-refund-rate split-line">
+								<h3>还款利率</h3>
+								<p>8%的年还款利率</p>
+							</li>
+							<li class="ious-open">
+								<h3>快速开通</h3>
+								<p>一分钟免费为为您开通</p>
+							</li>
+						</ul>
+					</div>
+					<div class="signIous-apply-wrap">
+						<form id="signIous-form" target="_blank"
+							method="post" action="/member/asset/ious/signIousSubmit.htm">
+							<div class="item">
+								<label for="">贷款提供商</label>
+								<div class="field">
+									<img src="//source.qunarzz.com/site/images/pay/useraccount/page/asset/ious/bank_ms.jpg" alt="" />
+								</div>
+							</div>
+							<div class="item">
+								<label for=""></label>
+								<div class="field">
+									<input type="checkbox" 
+											name="agree"
+											checked="checked" value="1" />
+									<a href="/member/asset/ious/contract.htm" target="_blank">已阅读并同意《服务协议》</a>
+								</div>
+							</div>
+							<div class="item">
+								<label for=""></label>
+								<div class="field">
+									<a class="button button-o button-submit" href="\#\#\#">
+									同意协议并签约
+									</a>
+									<input type="hidden" name="csrfToken" value="$!{csrfToken}" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("widget/footer/footer.vm")
+	<script 
+		src="${qzzUrl}${jsPath}/asset/ious/signIous/entry.js">
+	</script>
+</body>
+</html>

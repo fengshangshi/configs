@@ -1,0 +1,253 @@
+/*[export]*/
+/**
+ * 申诉页面样式
+ */
+require("../base.css");
+require("../../common/step.css");
+require("../../common/box.css");
+require("../../common/poptip.css");
+require("../../common/form.css");
+require("../../common/jquery-ui.css");
+
+.appeal .box{
+	border: 16px solid #f3f3f3;
+}
+
+.appeal .poptip{
+	margin: 20px auto;
+	width: 980px;
+}
+
+.appeal .appeal-form{
+	position: relative;
+	width: 86%;
+	margin: 20px auto;
+	font-size: 14px;
+}
+
+.button{
+	width: 100px;
+	background-color: #ff8201;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 14px;
+	color: #fff;
+}
+
+.appeal-1 .button{
+	margin-left: 186px;
+}
+
+.appeal .p-input{
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	padding: 2px 10px;
+}
+
+.title-underline{
+	height: 38px;
+}
+
+.title-underline span{
+	display: inline-block;
+	height: 38px;
+	font-size: 16px;
+	line-height: 38px;
+}
+
+.title-underline .title-under-text{
+	float: left;
+	width: 17%;
+	text-align: right;
+	color: #fc641b;
+	font-weight: bold;
+	border-bottom: 1px solid #999;
+}
+
+.title-underline .title-under-line{
+	width: 70%;
+	border-bottom: 1px solid #eee;
+}
+
+
+.idcards-u{
+	margin-top: 30px;
+	margin-left: 120px;
+}
+.tip{
+	width: 400px;
+	margin: 20px auto;
+	padding: 10px;
+	line-height: 20px;
+	background-color: #fffdee;
+	border: 1px solid #ebd290;
+	color: #f3a800;
+}
+
+.appeal2-title{
+	position: relative;
+	z-index: 3;
+	border-top: 1px solid #f0f3f5;
+	padding-top: 26px;
+	height: 30px;
+	line-height: 30px;
+}
+
+.appeal2-title h3{
+	font-weight: bold;
+	float: left;
+}
+
+.appeal2-title .appeal2-title-detail{
+	/*position: relative;
+	z-index: 3;*/
+	font-size: 12px;
+	color: #666;
+	text-indent: 10px;
+}
+
+.appeal2-title-detail .appeal-bank-poptip{
+	color: #1470f2;
+	cursor: pointer;
+}
+
+.appeal-bank-poptip-con{
+	position: absolute;
+	width: 300px;
+	border: 1px solid #999;
+	padding: 10px;
+	right: 270px;
+	top: 60px;
+	color: #666;
+	z-index: 90;
+	background-color: #fff;
+}
+
+.left-line{
+	color: #0088a4;
+	font-size: 13px;
+}
+
+.appeal label.radio{
+	display: inline-block;
+	margin-top: 6px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 20px;
+	margin-right: 32px;
+}
+
+.upload-img-con{
+	float: left;
+	width: 190px;
+	margin-right: 30px;
+	font-size: 12px;
+}
+
+.appeal .upload-btn{
+	display: block;
+	text-align: center;
+	background-color: blue;
+	border-radius: 5px;
+	width: 108px;
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+	margin: 2px auto 26px auto;
+	cursor: pointer;
+}
+
+.appeal .pre-img{
+	position: relative;
+	width: 190px;
+	height: 110px;
+	border: 2px solid #c7cbcc;
+	background-color: #f3f3f3;
+	background-repeat: no-repeat;
+	background-size: 64px 41px;
+	background-position: center 38%;
+}
+
+.pre-img.z{
+	background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/page/security/idcard-z.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/idcard-z.png);
+}
+
+.pre-img.f{
+	background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/page/security/idcard-f.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/idcard-f.png);
+}
+
+.pre-img.h{
+	background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/page/security/huji.png);
+	_background-image: url(
+		http://source.qunarzz.com/site/images/pay/useraccount/common/20150123-008/huji.png);
+}
+
+.pre-img img{
+	display: none;
+}
+
+.appeal .upload-info{
+	position: absolute;
+	bottom: 13px;
+	left: 0px;
+	width: 190px;
+	text-align: center;
+	color: #666;
+}
+
+.other-cards-u{
+	margin-top: 10px;
+	margin-left: 120px;
+}
+
+#h-idContainer-z{
+	width: 190px;
+	float: left;
+	margin-right: 50px;
+}
+
+.appeal-2-next{
+	margin-left: 186px;
+}
+
+.upload-img-btn{
+	position: relative;
+	margin-top: 20px;
+}
+
+.upload-img-btn .input-file{
+	position: absolute;
+	top: -11px;
+	width: 200px;
+	height: 50px;
+	left: -36px;
+	filter: alpha(opacity=0);
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+	zoom: 1;
+	left: -65px\9;
+	*left: -65px;
+	_left: -65px;
+
+}
+
+.appeal-bank-title-l{
+	font-weight: bold;
+	padding: 16px 0px;
+	border-bottom: 1px solid #f0f3f5;
+	margin-bottom: 20px;
+}
+
+.lanxi .p-label{
+	width: 100px;
+}

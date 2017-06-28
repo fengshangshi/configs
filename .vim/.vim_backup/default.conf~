@@ -1,0 +1,23 @@
+server {
+		charset utf-8;
+		client_max_body_size 128M;
+
+		listen       8080;
+		server_name  localhost;
+
+		root /Users/fengshangshi/Documents/learn/PHP;
+		index index.php;
+
+		access_log /Users/fengshangshi/Documents/learn/PHP/basic/log/access.log main;
+		error_log /Users/fengshangshi/Documents/learn/PHP/basic/log/error.log;
+
+		location / {
+				try_files $uri $uri/ /index.php?$args;
+		}
+
+		location ~ \.php$ {
+				include fastcgi.conf;
+				fastcgi_pass 127.0.0.1:9000;
+				try_files $uri = 404;
+		}
+}

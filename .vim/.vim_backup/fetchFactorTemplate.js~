@@ -1,0 +1,49 @@
+/**
+ * 获取银行要素模板
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchFactorTemplate", function(e) {
+	var args = e.args,
+		target = args.target,
+		username = $(target).data("username"),
+		idCard = $(target).data("idcard"),
+		bankType = $(target).data("banktype"),
+		picUrl = $(target).data("picurl"),
+		bankCode = $(target).data("bankcode"),
+		pmCode = $(target).data("pmcode");
+
+	var data = {
+		bankType: bankType,
+		bankCode: bankCode,
+		pmCode: pmCode
+	};
+	
+	service.ajax({
+		url: "/member/security/bankCard/fetchFactorTemplateApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			if (data.errorCode == 0) {
+				message.fire("closeBankList");
+				message.fire("fetchFactorTemplateSuccess", {
+					tpl: data.modeType,
+					picUrl: picUrl,
+					bankType: bankType,
+					bankCode: bankCode,
+					username: username,
+					idCard: idCard
+				});
+			} else {
+				message.fire("fetchFactorTemplateFail", {
+					data: {
+						errorCode: data.errorCode,
+						errorMsg: data.errorMsg
+					}
+				});
+			}
+		}
+	});
+});

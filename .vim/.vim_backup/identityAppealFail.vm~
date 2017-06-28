@@ -1,0 +1,55 @@
+#parse("/widget/include/global.vm")
+#set($pageTitle = "申诉")
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>【去哪儿】申诉</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+    href="${qzzUrl}${cssPath}/security/authResult.css" />
+  </head>
+  <body>
+      #parse("widget/header/headerForSecurity.vm")
+      <div class="auth">
+          <div class="auth-main container">
+              <div class="box auth-box auth-fail">
+                  <div class="box-head">
+                      <div class="step">
+                          <ul class="step-3 step-main clearfix">
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="box-container">
+                      <div class="fail-icon"></div>
+                      <div>
+                          <h3 class="title">抱歉，申诉失败！</h3>
+                          <div class="info">
+                              <p>$!{tplData.errorMsg}</p>
+                              <p> 
+                                  您现在到可以到
+                                  <a href="index.htm" class="f-c-blue">
+                                      安全管理
+                                  </a>
+                                  查看详情
+                              </p>
+                              <div class="auto-jump">
+                                  <span class="jump-time">3</span>
+                                  秒后自动跳转
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      #parse("widget/footer/footer.vm")
+      <script type="text/javascript">
+          stepTextConfig = ["","填写身份信息","上传双证","等待人工审核"];
+      </script>
+      <script type="text/javascript" 
+          src="${qzzUrl}${jsPath}/security/authResult/entry.js" >
+      </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+module.exports = {
+    colors: [{
+        key: '',
+        value:'#ffffff'
+    },{
+        key: 'ChinaRed',
+        value:'#ffc5c4'
+    },{
+        key: 'SunshineOrange',
+        value:'#ffb86a'
+    },{
+        key: 'LemonYellow',
+        value:'#fff2b4'
+    },{
+        key: 'GrassGreen',
+        value:'#d5fc8f'
+    },{
+        key: 'BottleGreen',
+        value:'#c6f1d9'
+    },{
+        key: 'BlueGreen',
+        value:'#53e6de'
+    },{
+        key: 'CtripBlue',
+        value:'#cbeeff'
+    },{
+        key: 'Violet',
+        value:'#b6c5ff'
+    },{
+        key: 'Drab',
+        value:'#e2c3ff'
+    },{
+        key: 'RoseRed',
+        value:'#ffe0f5'
+    }],
+
+     getSortData: function(sortableDom) {
+        var sortArr = [];
+
+        $(sortableDom).find('.sort-item').each(function(index) {
+            var self = $(this),
+                code = self.attr('data-code');
+
+            if (!!code) {
+                sortArr.push({
+                    channelCode: code,
+                    sortIndex: index + 1
+                })
+            }
+        });
+
+        return JSON.stringify(sortArr);
+    },
+
+    // 校验是否重名
+    isNameRepeat: function(list, index) {
+        var name = list[index].channelName,
+            n = 0;
+
+       list.forEach(function(item) {
+            if (item.channelName === name) {
+                n++;
+            }
+        });
+        return n > 1;
+    },
+
+
+    // 数据处理
+    dealList: function(data) {
+        var temp = [];
+        data.forEach(function(item) {
+            temp.push($.extend(true, {
+                isEdit: false
+            }, item));
+        });
+        return temp;
+    }
+}

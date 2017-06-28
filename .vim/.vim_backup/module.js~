@@ -1,0 +1,910 @@
+/**
+ * @description: 拖拽业务模块
+ * @author     : guoyun.hu@qunar.com
+ */
+var pl = Q.sug.privilege,
+    config = require('./config'),
+    conversion = require('./conversion'),
+    dateUtil = require('utils/dateUtil'),
+    coordinates = require('./orderCoordinates');
+
+var vm = avalon.define({
+    $id: 'dragDropModule'
+})
+
+// 拖拽对象数据
+var opts = {};
+
+var mod = {
+
+    /************************** s-start ************************************/
+    start: function(event, ui) {
+        var helper = ui.helper,
+            data = helper.data();
+        opts = {
+            position: ui.position,
+            helper: helper,
+            offset: ui.offset,
+            startPoint: {},
+            stopPoint: {},
+            type: data.type,
+            staystate: data.staystate,
+            dataLeft: data.left,
+            dataTop: data.top,
+            dataWidth: data.width,
+            dataHeight: data.height,
+            index: data.index,
+            stayInfo: Q.hub.stayList[data.index],
+            scrollT: 0,
+            scrollL: 0,
+            todayFormat: Q.hub.todayFormat,
+            startDate: Q.hub.startDate,
+            endDate: Q.hub.endDate,
+            diffWL: 0, // check-no 截断宽度
+            diffHL: 0, // check-no 截断高度度
+            collisionType: '', // 碰撞stay类型
+            conflictShow: false,
+            cellSplitMoveFlag: false, // 未入住截断
+            colliFlag: false,
+            stayInSplit: false, // 在店订单截断状态
+            speek: 1
+        };
+        this.styleInt();
+        this.scrollStart();
+        this.closeHover(event);
+        this.borderAndShadowInit();
+        if (opts.type == 'hourly') {
+            this.hourlyInit();
+        } else {
+            this.stayCheckInDeal();
+        }
+        this.cursorInit();
+        this.tipsInit();
+        this.addBoxShadow();
+        this.startPosition();
+    },
+
+    // 根据房态风格配置数据
+    styleInt: function() {
+        if (Q.hub.roomStyle == 'y') {
+            config.hourlyDiffL = 2;
+            config.hourlyDiffW = 0;
+        } else {
+            config.hourlyDiffT = 0;
+            config.hourlyDiffH = 0;
+        }
+    },
+
+    // 记录初始scroll
+    scrollStart: function() {
+        var $scrollWrap = $(config.scrollWrap);
+        opts.scrollT = $scrollWrap.scrollTop();
+        opts.scrollL = $scrollWrap.scrollLeft();
+    },
+
+    // 关闭房态订单交互
+    closeHover: function(event) {
+        vm.$fire('all!room.hide.hideDateRoomHover');
+        vm.$fire('all!room.hide.hideHourRoomHover');
+        vm.$fire('all!room.set.hideFade');
+        vm.$fire('all!room.cancel.emptyRoomSelect', event)
+        vm.$fire('all!room.set.dragStopPropagation', true);
+        Q.hub.stopHover = true;
+    },
+
+
+    // 处理在店ci<t<co订单
+    stayCheckInDeal: function(event) {
+        var channelName = opts.stayInfo.channelName,
+            customerName = opts.stayInfo.customerName,
+            stayClass = 'stay-' + (opts.stayInfo.orderIcon - 1),
+            diffCiCo = this.diffCi(opts.stayInfo.occupyCiDate,
+                opts.stayInfo.occupyCoDate, opts.todayFormat);
+
+        if (opts.type == 'daily' && opts.staystate == 'checked_in' && diffCiCo) {
+            var $stay = $(config.cellBorder).find('.j-stay-daily').addClass(stayClass);
+            $stay.find('p').eq(0)
+                .html(channelName);
+            $stay.find('p').eq(1)
+                .html(customerName);
+
+            // stay分离
+            opts.stayInSplit = true;
+
+            // 纵向风格拖拽
+            if (Q.hub.roomStyle == 'y') {
+                opts.diffHL = diffCiCo * (config.cellH + config.diffH);
+                $stay.css({
+                        height: opts.diffHL - config.diffH
+                    })
+                    .addClass('stay-in')
+                    .show();
+
+                opts.dataTop += opts.diffHL;
+                opts.dataHeight -= opts.diffHL;
+                opts.helper.css({
+                        top: opts.dataTop,
+                        height: opts.dataHeight
+                    })
+                    .data({
+                        top: opts.dataTop,
+                        height: opts.dataHeight
+                    })
+                    .find('.order-stay').css({
+                        height: opts.dataHeight
+                    })
+                    .show();
+                // 投影
+                $(config.cellShadow).css({
+                        height: opts.dataHeight
+                    })
+                    .show();
+                return;
+            }
+
+
+            // 横向风格拖拽
+            opts.diffWL = diffCiCo * config.cellW;
+            $stay.css({
+                    width: opts.diffWL - config.diffW
+                })
+                .addClass('stay-in')
+                .show();
+            opts.dataLeft += opts.diffWL;
+            opts.dataWidth -= opts.diffWL;
+            opts.helper.css({
+                    left: opts.dataLeft,
+                    width: opts.dataWidth
+                })
+                .data({
+                    left: opts.dataLeft,
+                    width: opts.dataWidth
+                })
+                .find('.order-stay').css({
+                    width: opts.dataWidth
+                })
+                .show();
+            // 投影
+            $(config.cellShadow).css({
+                    width: opts.dataWidth
+                })
+                .show();
+        }
+    },
+
+    // 判断ci<t<co
+    diffCi: function(ci, co, t) {
+        var dci = dateUtil.daysDiff(ci, t),
+            cci = dateUtil.compare(t, ci),
+            cco = dateUtil.compare(co, t);
+        if (cci == 1 && cco == 1) {
+            return dci;
+        } else {
+            return false;
+        }
+    },
+
+    // 边框，投影初始化
+    borderAndShadowInit: function() {
+        var diffL, diffT, width, height;
+        if (opts.type == 'hourly') {
+            diffL = config.hourlyDiffL;
+            diffT = config.hourlyDiffT;
+
+            height = config.cellH;
+            width = config.cellW - config.diffW;
+
+            opts.dataTop = opts.position.top + config.hourlyDiffT;
+            opts.dataLeft = opts.position.left + config.hourlyDiffL - config.diffL;
+        } else {
+            diffL = config.diffL;
+            diffT = config.diffT;
+            width = opts.dataWidth;
+            height = opts.dataHeight;
+        }
+        // 边框
+        $(config.cellBorder).css({
+                left: opts.position.left + diffL,
+                top: opts.position.top + diffT,
+                width: width + opts.diffWL,
+                height: height + opts.diffHL
+            })
+            .show();
+        // 投影
+        $(config.cellShadow).css({
+                left: opts.position.left + diffL + opts.diffWL,
+                top: opts.position.top + config.diffT,
+                width: width,
+                height: height
+            })
+            .show();
+    },
+
+    // 钟点房初始化
+    hourlyInit: function() {
+        opts.helper.addClass('max-hour-order');
+        opts.helper.find('.order-stay')
+            .animate({
+                width: config.cellW - config.diffW,
+                height: config.cellH
+            }, 'swing')
+        this.hourlySCell();
+        opts.diffWL = -config.hourlyDiffW;
+        opts.diffHL = -config.hourlyDiffH;
+    },
+
+    // 多钟点房场景
+    hourlySCell: function() {
+        var count = parseInt(opts.helper.find('.order-count').text(), 10),
+            $stayHourly = $(config.cellBorder).find('.j-stay-hourly');
+        if (count > 2) {
+            count -= 1;
+            $stayHourly.show();
+            $stayHourly.find('.order-count').text(count).show();
+        } else if (count == 2) {
+            $stayHourly.show();
+        }
+    },
+
+    // 鼠标样式初始化
+    cursorInit: function() {
+        if (opts.staystate === 'checked_out') {
+            opts.helper.css('cursor', 'no-drop');
+        } else {
+            opts.helper.css('cursor', 'move');
+        }
+    },
+
+    // 提示tips初始化
+    tipsInit: function() {
+        $(config.cellTips).css({
+            top: opts.position.top - config.tipsH,
+            left: opts.position.left
+        });
+    },
+
+    // 添加投影效果
+    addBoxShadow: function() {
+        opts.helper.find(config.orderStay)
+            .addClass('shadow');
+        opts.helper.find('.order-count')
+            .hide();
+        opts.helper.addClass('draging');
+    },
+
+    // start定位
+    startPosition: function() {
+        var diffL = 0,
+            diffT = 0;
+        if (opts.type == 'hourly') {
+            diffL = config.hourlyDiffW;
+            diffT = config.hourlyDiffH;
+        }
+        opts.startPoint = {
+            left: opts.position.left - diffL,
+            top: opts.position.top - diffT
+        }
+    },
+
+    /******************************** e-start ***************************************/
+
+    /******************************** s-drag ****************************************/
+    drag: function(event, ui) {
+        opts = $.extend(true, {}, opts, {
+            position: ui.position,
+            helper: ui.helper,
+            offset: ui.offset
+        })
+        this.shadowPosition();
+        this.dragTips(event);
+    },
+
+    // 投影定位
+    shadowPosition: function() {
+        var cellW = 100,
+            cellH = 60,
+            stepX = Math.round(opts.position.left / cellW),
+            stepY = Math.round(opts.position.top / (cellH + 1)),
+            left = stepX * cellW,
+            top = stepY * cellH + stepY;
+        if (opts.type == 'daily' && opts.staystate == 'not_arrived') {
+            $(config.cellShadow).css({
+                left: left + config.diffL,
+                top: top + config.diffT,
+                width: opts.dataWidth,
+                height: opts.dataHeight
+            });
+            // 结束定位
+            opts.stopPoint = {
+                left: left,
+                top: top
+            };
+        } else {
+            var _shadowT = top + config.diffT,
+                _shadowL = opts.dataLeft + 2,
+                _pointT = top,
+                _pointL = opts.dataLeft;
+            // 纵向轴拖拽
+            if (Q.hub.roomStyle == 'y') {
+                _shadowT = opts.dataTop + 2;
+                _shadowL = left + config.diffL;
+                _pointT = opts.dataTop;
+                _pointL = left;
+            }
+
+            $(config.cellShadow).css({
+                top: _shadowT,
+                left: _shadowL
+            });
+            // 结束定位
+            opts.stopPoint = {
+                top: _pointT,
+                left: _pointL
+            };
+        }
+
+        // 碰撞判断
+        if (opts.staystate != 'checked_out') {
+            Q.hub.roomStyle == 'x' && this.collision(top, opts.stopPoint.left);
+            Q.hub.roomStyle == 'y' && this.collision(opts.stopPoint.top, left);
+        }
+        vm.$fire('all!room.hide.hideHourRoomHover');
+        vm.$fire('all!room.hide.hideDateRoomHover');
+    },
+
+    // 检测碰撞订单类型
+    collision: function(top, left) {
+        var data = coordinates.getCoord(opts.index, opts.type, opts.staystate),
+            len = Math.round(opts.dataWidth / config.cellW),
+            colliIdx = -1,
+            keys;
+
+        if (Q.hub.roomStyle == 'y') {
+            len = Math.round(opts.dataHeight / config.cellH);
+        }
+
+        // 拖拽前先清空
+        opts.collisionType = '';
+        for (var i = 0; i < len; i++) {
+            var tops = top,
+                lefts = left + config.cellW * i,
+                key = '';
+            // 纵向轴
+            if (Q.hub.roomStyle == 'y') {
+                lefts = left;
+                tops = top + 61 * i;
+            }
+
+            key = tops + "*" + lefts;
+
+            if (data[key] && opts.type == data[key]) {
+                opts.collisionType = data[key];
+                colliIdx = i;
+                keys = key;
+            }
+        }
+        if (colliIdx > -1) {
+            opts.colliFlag = true;
+        } else {
+            opts.colliFlag = false;
+        }
+        if (opts.staystate == 'not_arrived' && pl.orderAddUpdate) {
+            this.cutNotArrived(colliIdx, keys);
+        }
+    },
+
+
+    // 未入住截断
+    cutNotArrived: function(colliIdx, keys) {
+        var diff = conversion.conver(opts.helper, opts.startPoint, colliIdx),
+            forbid = false;
+        // ci co变化禁止截断
+        if ((Q.hub.roomStyle == 'x' && opts.stopPoint.left == opts.dataLeft) ||
+            (Q.hub.roomStyle == 'y' && opts.stopPoint.top == opts.dataTop)) {
+            forbid = true;
+        }
+        // 截断条件
+        if (diff && this.parsing(keys) && forbid) {
+            opts.collisionType = '';
+            opts.conflictShow = true;
+            this.conflictCut(diff);
+            opts.cellSplitMoveFlag = true;
+        } else {
+            opts.conflictShow = false;
+            opts.cellSplitMoveFlag = false;
+            $(config.cellSplit).hide();
+            opts.helper.find('.order-stay').css({
+                width: opts.dataWidth,
+                height: opts.dataHeight,
+                marginLeft: 0,
+                marginTop: 0
+            })
+        }
+    },
+
+    // 解析key值
+    parsing: function(keys) {
+        var pos = keys.split('*'),
+            keyTop = pos[0],
+            keyLeft = pos[1],
+            keyData = '';
+
+        if (Q.hub.roomStyle == 'x') {
+            keyData = dateUtil.getDisDate(opts.startDate, keyLeft / 100);
+        } else {
+            keyData = dateUtil.getDisDate(opts.startDate, keyTop / 61);
+        }
+
+        if (dateUtil.compare(keyData, opts.todayFormat) == -1) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    // 冲突stay截取
+    conflictCut: function(diffCiCo) {
+        var channelName = opts.stayInfo.channelName,
+            customerName = opts.stayInfo.customerName,
+            diffWL = diffCiCo * config.cellW,
+            diffHL = diffCiCo * 61,
+            cellShadowCss, stayCss, stayPluralCss,
+            $p = $(config.cellSplit).find('.order-stay-plural p'),
+            stayClass = 'stay-' + (opts.stayInfo.orderIcon - 1);
+
+        if (Q.hub.roomStyle == 'x') {
+            cellShadowCss = {
+                width: opts.dataWidth - diffWL,
+                left: opts.dataLeft + diffWL + 2
+            }
+            stayCss = {
+                width: opts.dataWidth - diffWL,
+                marginLeft: diffWL
+            }
+            stayPluralCss = {
+                width: diffWL - 5
+            }
+        } else {
+            cellShadowCss = {
+                height: opts.dataHeight - diffHL,
+                top: opts.dataTop + diffHL + 2
+            }
+            stayCss = {
+                height: opts.dataHeight - diffHL,
+                marginTop: diffHL
+            }
+            stayPluralCss = {
+                height: diffHL - 5
+            }
+        }
+
+        $(config.cellShadow).css(cellShadowCss)
+        opts.helper.find('.order-stay').css(stayCss)
+        $(config.cellSplit).css({
+                top: opts.position.top,
+                left: opts.position.left
+            }).show()
+            .find('.order-stay-plural').css(stayPluralCss)
+            .addClass(stayClass);
+
+        $p.eq(0).html(channelName);
+        $p.eq(1).html(customerName);
+    },
+
+
+    // tips drag
+    dragTips: function(event) {
+        var outerWidth = $(config.cellTips).find('.smui-tip-inner')
+            .outerWidth(),
+            cellW = opts.helper.width(),
+            cellH = opts.helper.height(),
+            tFlag = Math.abs(opts.dataTop - opts.position.top) > config.cellH / 2,
+            lFlag = Math.abs(opts.dataLeft - opts.position.left) > config.cellW / 2,
+            hTFlag = Math.abs(opts.dataTop - opts.position.top) > config.cellH,
+            hLFlag = Math.abs(opts.dataLeft - opts.position.left) > config.cellW;
+        // 无权限
+        if (!pl.orderAddUpdate) {
+            $(config.cellTips).find('.smui-tip-inner')
+                .text(config.noPrivilegeTips);
+            opts.tipsShow = true;
+        }
+        // 离店订单
+        else if (opts.staystate == 'checked_out') {
+            if (lFlag || tFlag) {
+                $(config.cellTips).find('.smui-tip-inner')
+                    .text(config.leaveTips);
+                opts.tipsShow = true;
+            }
+        } else {
+            // 截断提示
+            if (opts.conflictShow) {
+                $(config.cellTips).find('.smui-tip-inner')
+                    .text(config.conflictTips);
+                opts.tipsShow = true;
+            } else
+            // 订单冲突
+            if ((opts.staystate == 'checked_in' || opts.staystate == 'not_arrived') &&
+                opts.colliFlag) {
+                $(config.cellTips).find('.smui-tip-inner')
+                    .text(config.occupyTips);
+                opts.tipsShow = true;
+            } else
+            // 小时订单,日租已入住
+            if ((opts.staystate == 'checked_in' && opts.type == 'hourly' &&
+                    (Q.hub.roomStyle == 'x' && hLFlag || Q.hub.roomStyle == 'y' && hTFlag)) ||
+                (opts.staystate == 'checked_in' && opts.type == 'daily' &&
+                    (Q.hub.roomStyle == 'x' && lFlag || Q.hub.roomStyle == 'y' && tFlag))) {
+                $(config.cellTips).find('.smui-tip-inner')
+                    .text(config.hourlyTips);
+                opts.tipsShow = true;
+            } else {
+                opts.tipsShow = false;
+            }
+        }
+
+        var boxLeft = $(config.containment).offset().left,
+            maxLeft = $(config.containment).width(),
+            tipsL = event.clientX - boxLeft - outerWidth / 2,
+            tipsT = opts.position.top - config.tipsH,
+            boxW = $(config.containment).width();
+        if (tipsL < 0) {
+            tipsL = 0;
+        } else if (tipsL > maxLeft - outerWidth - 30) {
+            tipsL = maxLeft - outerWidth;
+        }
+
+        if (tipsT < 40) {
+            $(config.cellTips).find('.smui-tip')
+                .removeClass('top')
+                .addClass('bottom');
+            tipsT = opts.position.top + config.cellH + 7;
+        } else {
+            $(config.cellTips).find('.smui-tip')
+                .removeClass('bottom')
+                .addClass('top');
+        }
+
+
+        if (opts.tipsShow) {
+            $(config.cellTips).css({
+                top: tipsT,
+                left: tipsL
+            }).show();
+        } else {
+            $(config.cellTips).hide();
+        }
+    },
+
+
+
+    /******************************* e-drag **********************************/
+
+    /****************************** s-stop **********************************/
+    stop: function(event, ui) {
+        opts = $.extend(true, {}, opts, {
+            position: ui.position,
+            helper: ui.helper,
+            offset: ui.offset
+        })
+        this.openHover();
+        this.cursorRestore(ui);
+        this.tipsStop();
+        this.stopMove();
+        this.shadowStop();
+        if (opts.type == 'hourly')
+            this.hourlyStop();
+    },
+
+    // 开启hover
+    openHover: function() {
+        Q.hub.stopHover = false;
+    },
+
+    // 鼠标样式初始化
+    cursorRestore: function() {
+        opts.helper.css('cursor', 'pointer');
+    },
+
+    // 提示结束
+    tipsStop: function() {
+        $(config.cellTips).hide();
+        opts.tipsShow = false;
+    },
+
+    // 结束运动
+    stopMove: function() {
+        if (opts.type == opts.collisionType ||
+            opts.staystate == 'checked_out' || !pl.orderAddUpdate) {
+            this.dragMove(opts.startPoint);
+        } else {
+            this.dragMove(opts.stopPoint);
+        }
+        opts.cellSplitMoveFlag && this.cellSplitMove();
+    },
+
+    // 拆分拖拽运动
+    cellSplitMove: function() {
+        var point = opts.startPoint;
+        $(config.cellSplit).animate({
+            top: point.top,
+            left: point.left
+        })
+    },
+
+    // 拖拽运动
+    dragMove: function(position) {
+        var than = this,
+            diffL = 0,
+            diffT = 0,
+            flag,
+            diffH = opts.dataHeight,
+            diffW = opts.dataWidth;
+        flag = this.compareSEPoint(position);
+        if (flag && opts.type == "daily") {
+            diffL = Math.abs(opts.startPoint.left - position.left);
+            diffT = Math.abs(opts.startPoint.top - position.top);
+            if (opts.cellSplitMoveFlag || opts.conflictShow || opts.stayInSplit) {
+                diffW = opts.dataWidth + Math.abs(opts.startPoint.left - opts.stopPoint.left);
+                diffH = opts.dataHeight + Math.abs(opts.startPoint.top - opts.stopPoint.top);
+            }
+            if (Q.hub.roomStyle == 'x') {
+                opts.helper.data({
+                        'width': diffW,
+                        'left': opts.startPoint.left
+                    }).css('width', diffW + config.diffW)
+                    .find('.order-stay').css('width', diffW);
+
+                opts.dataLeft = opts.startPoint.left;
+                opts.dataWidth = diffW;
+            } else {
+                opts.helper.data({
+                        'height': diffH,
+                        'top': opts.startPoint.top
+                    }).css('height', diffH + config.diffH)
+                    .find('.order-stay').css('height', diffH);
+
+                opts.dataTop = opts.startPoint.top;
+                opts.dataHeight = diffH;
+            }
+        }
+
+        if (flag) {
+            this.scrollStop();
+        }
+        opts.helper.animate({
+            top: position.top - diffT,
+            left: position.left - diffL
+        }, 400, function() {
+            than.removeBoxShadow();
+            vm.$fire('all!room.set.dragStopPropagation', false);
+            // 钟点房
+            if (opts.type == "hourly") {
+                than.hourlyMove(flag);
+                return false;
+            }
+            // 日租房
+            if (flag) {
+                than.borderStop();
+            } else {
+                than.changeRoom();
+            }
+        })
+    },
+
+
+    // 检测是否回到开始点
+    compareSEPoint: function(position) {
+        if (!pl.orderAddUpdate) return true;
+        // 在店日租入住
+        if (opts.type == 'daily' &&
+            opts.staystate == 'checked_in' &&
+            (Q.hub.roomStyle == 'x' &&
+                position.top == opts.startPoint.top ||
+                Q.hub.roomStyle == 'y' &&
+                position.left == opts.startPoint.left)) {
+            return true;
+            // 日租未入住
+        } else if (opts.type == 'daily' &&
+            opts.staystate == 'not_arrived' &&
+            position.top == opts.startPoint.top &&
+            position.left == opts.startPoint.left) {
+            return true;
+            // 在店钟点入住
+        } else if (
+            opts.type == 'hourly' &&
+            opts.staystate == 'checked_in' &&
+            (Q.hub.roomStyle == 'x' &&
+                position.top == opts.startPoint.top ||
+                Q.hub.roomStyle == 'y' &&
+                position.left == opts.startPoint.left)) {
+            return true;
+        } else if (opts.staystate == 'checked_out') {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    // 去掉投影效果
+    removeBoxShadow: function() {
+        opts.helper.find(config.orderStay)
+            .removeClass('shadow');
+        opts.helper.removeClass('draging');
+    },
+
+    // 钟点房淡入
+    hourlyMove: function(flag) {
+        var $count = opts.helper.find('.order-count'),
+            count = parseInt($count.text(), 10);
+        opts.helper.fadeOut(function() {
+            var left = opts.dataLeft + config.hourlyDiffW,
+                top = opts.dataTop + config.hourlyDiffH,
+                stayCss = {
+                    width: opts.dataWidth
+                },
+                helperCss = {
+                    left: left,
+                    zIndex: 101
+                },
+                helperData = {
+                    left: left
+                },
+                pos = 'dataLeft',
+                dataPos = left;
+
+            if (Q.hub.roomStyle == 'y') {
+                stayCss = {
+                        height: opts.dataHeight
+                    },
+                    helperCss = {
+                        top: top,
+                        zIndex: 101
+                    },
+                    helperData = {
+                        top: top
+                    },
+                    pos = 'dataTop',
+                    dataPos = top;
+            }
+            opts.helper.find('.order-stay').css(stayCss);
+            opts.helper.css(helperCss).data(helperData).show()
+            opts[pos] = dataPos;
+            flag && count && $count.show();
+        })
+        if (flag) {
+            this.borderStop();
+        } else {
+            this.changeRoom();
+        }
+    },
+
+    // 边框结束
+    borderStop: function() {
+        $(config.cellBorder).css({
+            left: -9999,
+            top: -9999
+        }).hide();
+        $(config.cellBorder).find('.order-stay')
+            .hide();
+    },
+
+    //调用换房
+    changeRoom: function() {
+        var stayInfo = {
+                operateType: '4',
+                changeData: false,
+                changeDoor: false
+            },
+            height = 61,
+            width = 100,
+            roomList = Q.hub.roomList,
+            ci, co, idx;
+        // 获取信息
+        if (Q.hub.roomStyle == 'y') {
+            ci = Math.round(opts.stopPoint.top / height);
+            co = Math.ceil(opts.helper.height() / height);
+            idx = opts.stopPoint.left / width;
+            // 是否修改时间
+            if (opts.stopPoint.top != opts.dataTop) {
+                stayInfo.changeData = true;
+            }
+        } else {
+            ci = opts.stopPoint.left / width;
+            co = Math.ceil(opts.helper.width() / width);
+            idx = opts.stopPoint.top / height;
+            // 是否修改时间
+            if (opts.stopPoint.left != opts.dataLeft) {
+                stayInfo.changeData = true;
+            }
+        }
+        stayInfo.stayNo = opts.stayInfo.stayNo;
+        stayInfo.roomNo = roomList[idx].roomNo;
+        stayInfo.oldRoomNo = opts.stayInfo.roomNo;
+        stayInfo.staystate = opts.staystate;
+        stayInfo.doorNo = roomList[idx].doorNo;
+        stayInfo.orderNo = opts.stayInfo.orderNo;
+        stayInfo.type = opts.type;
+
+        // cico
+        var realityCi = dateUtil.getDisDate(opts.startDate, ci),
+            realityCo = dateUtil.getDisDate(realityCi, co),
+            diffRealityCi, diffRealityCo;
+        // 长stay ci < startDate
+        if (dateUtil.compare(opts.startDate, opts.stayInfo.realityCi) == '1') {
+            diffRealityCi = dateUtil.daysDiff(opts.stayInfo.realityCi, opts.startDate);
+            realityCi = dateUtil.getDisDate(realityCi, -diffRealityCi);
+        }
+        // 长stay co > endDate
+        if (dateUtil.compare(opts.stayInfo.realityCo, opts.endDate) == '1') {
+            diffRealityCo = dateUtil.daysDiff(opts.stayInfo.realityCo, opts.endDate);
+            realityCo = dateUtil.getDisDate(realityCo, diffRealityCo);
+        }
+        // 日租修改时间，取修改后的
+        if (opts.type == 'daily' && stayInfo.changeData) {
+            stayInfo.estimateCiDate = realityCi;
+            stayInfo.estimateCoDate = realityCo;
+            // 日租未修改时间，取opts.stayInfo信息
+        } else if (opts.type == 'daily' && !stayInfo.changeData) {
+            stayInfo.estimateCiDate = opts.stayInfo.realityCi;
+            stayInfo.estimateCoDate = opts.stayInfo.realityCo;
+        }
+        stayInfo.startDate = realityCi;
+        stayInfo.endDate = realityCo;
+        stayInfo.occupyCiDate = opts.stayInfo.occupyCiDate;
+        stayInfo.occupyCoDate = opts.stayInfo.occupyCoDate;
+        // 是否修改房间
+        if (stayInfo.roomNo != opts.stayInfo.roomNo) {
+            stayInfo.changeDoor = true;
+        }
+        vm.$fire('all!room.post.changeRoom', stayInfo);
+    },
+
+    // 投影结束
+    shadowStop: function() {
+        $(config.cellShadow).css({
+            left: -9999,
+            top: -9999
+        }).hide();
+    },
+
+    hourlyStop: function() {
+        opts.helper.removeClass('max-hour-order');
+    },
+
+    //scrollStop
+    scrollStop: function() {
+        var than = this;
+        $(config.scrollWrap).animate({
+            scrollTop: opts.scrollT,
+            scrollLeft: opts.scrollL
+        })
+    },
+
+    // 自定义修改click.left
+    Modify: function(ui) {
+        var click = ui.offset.click,
+            containment = ui.containment;
+        while (opts.speek-- > 0) {
+            click.left -= opts.diffWL;
+            click.left = click.left > 0 ? click.left : 30;
+            // 修改x2-left
+            containment[2] += opts.diffWL;
+        }
+    }
+
+    /******************************** e-stop *********************************/
+
+
+}
+
+module.exports = mod;
+
+// 消失边框
+vm.$watch('room.set.stopDrag', function() {
+    mod.borderStop();
+})
+
+// 滚轮还原
+vm.$watch('room.set.stopScroll', function() {
+    mod.scrollStop();
+})

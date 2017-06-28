@@ -1,0 +1,274 @@
+#parse("page/www/_include/global.vm")
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf8">
+		<title>无忧改签险【去哪儿网】</title>
+		<link rel="stylesheet"
+			href="${qzz}${cssPath}/suggest/alterTicket/entry.css">
+	</head>
+	<body>
+		#set($orderInfo = ${tplData.orderInfo})
+		#set($insurInfo = ${tplData.insurInfo})
+		#set($claimInfo = ${tplData.claimInfo})
+		#set($guestInfo = ${tplData.guestInfo})
+		#set($metaInfo = ${tplData.metaInfo})
+		#parse("widget/www/header/header.vm")
+		<div class="container outter-wrap">
+			<div class="inner-wrap clearfix">
+				<div class="aside">
+					<div class="md order-info">
+						<div class="md-hd">
+							<h4>
+								<span>${orderInfo.productName}</span><em>${orderInfo.busNo}</em>
+							</h4>
+						</div>
+						<div class="md-bd">
+							<div class="order-start-info">
+								<h5>${orderInfo.departureCity}</h5>
+								<p><span>${orderInfo.departureArea}</span></p>
+								<p><strong>$!dateTool.format("yyyy/MM/dd", ${orderInfo.departureDate})</strong></p>
+								<p><span>$!dateTool.format("HH:mm", ${orderInfo.departureDate})</span></p>							
+							</div>
+							<div class="order-end-info">
+								<h5>${orderInfo.arrivalCity}</h5>
+								<p><span>${orderInfo.arrivalArea}</span></p>
+								<p><strong>$!dateTool.format("yyyy/MM/dd", ${orderInfo.arrivalDate})</strong></p>
+								<p><span>$!dateTool.format("HH:mm", ${orderInfo.arrivalDate})</span></p>							
+							</div>
+						</div>
+						<div class="md-ft">
+							<p>
+								<label>订单号：</label><span>${orderInfo.orderNo}</span>
+							</p>
+							<p>
+								<label>总金额：</label><span>￥${orderInfo.price}</span>
+							</p>
+							<p>
+								<label>乘机人：</label><span>${orderInfo.passengers}</span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="main">
+					<div class="insurance-wrap">
+						<div class="insurance-md">
+							<div class="insurance-hd hr">
+								<h2>无忧改签险</h2>
+								<h3>畅享改签无忧</h3>
+								<span class="tips">全程预定保障 去哪儿都放心</span>
+							</div>
+							<div class="insurance-bd">
+								<div class="price-wrap clearfix hr">
+									<div class="insurance-price">
+										<div class="price-title">
+											<h3>保费金额</h3>
+											<p><em>${insurInfo.purchase}</em>人已购买</p>
+										</div>
+										<div class="price-content">
+											<strong>${insurInfo.price}</strong>元/份
+										</div>
+										<div class="price-content">
+											<span class="price-tag">线上灵活理赔</span>
+											<span class="price-tag">改签无忧</span>
+											<span class="price-tag">小保单大保障</span>
+										</div>
+									</div>
+									<div class="claim-price">
+										<div class="price-title">
+											<h3>赔付金额</h3>
+										</div>
+										<div class="price-content">
+											<strong>${claimInfo.amount}</strong>元/起
+										</div>
+										<div class="price-content">
+											<div class="claim-rules">
+												具体金额以您机票<em>改签费用标准</em>全额赔付(上限1000元)
+												<div class="claim-rules-info">
+													<table>
+														<thead>
+															<tr>
+																<th>改签时间点</th>
+																<th>改期加手续费</th>
+																<th>签转</th>
+															</tr>
+														</thead>
+														<tbody>
+															#foreach( $item in $claimInfo.rules )
+															<tr>
+																<td>${item.timeText}</td>
+																<td><em>￥${item.changeFee}</em>/人</td>
+																<td>${item.signText}</td>
+															</tr>
+															#end
+														</tbody>
+													</table>
+													<span class="arrow-outter">
+														<span></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="insurance-md">
+							<div class="insurance-hd">
+								<h2>选择被保人</h2>
+							</div>
+							<div class="insurance-bd">
+								<form action="/suggest/submitAlterTicket" 
+										method="post" id="insuranceForm">
+									<div class="guests-wrap">
+										<ul class="guests">
+											#set($totalAmount = 0)
+											#set($Double = 0.0)
+											#foreach( $item in $guestInfo )
+												#if ($item.status == 0)
+												<li class="guest guest-selected">
+													<div class="guest-info">
+														<h3>${item.insurNm}</h3>
+														<div class="guest-id">${item.insurIdNo}</div>
+														<div class="insur-price"><strong>${insurInfo.price}</strong>元</div>
+														<input type="checkbox" style="display: none" 
+															data-price="${insurInfo.price}"
+															name="guestsCk" checked="true" value="${item.token}" />
+													</div>
+													<div class="guest-insur-count">1份</div>
+													<div class="guest-selected-tips"></div>
+												</li>
+													#set($totalAmount = $totalAmount + ($insurInfo.price - 0))
+												#else
+												<li class="guest disable">
+													<div class="guest-info">
+														<h3>${item.insurNm}</h3>
+														<div class="guest-id">${item.insurIdNo}</div>
+														<div class="insur-price">
+														#if ($item.status == 1)
+														未成年人无法购买
+														#elseif ($item.status == 2)
+														已购买
+														#end
+														</div>
+													</div>
+												</li>
+												#end
+											#end
+										</ul>
+									</div>
+									<div class="post-wrap">
+										<dl class="insurance-form">
+											<dt>
+												<h3>电子保单</h3>
+												<p>用于接收电子保单</p>
+											</dt>
+											<dd>
+												<input type="hidden" name="isEmail" value="false" />
+												<div class="item">
+													<label for="email">电子邮箱</label>
+													<div class="field">
+														<input type="text" id="email" 
+																data-jvalidator-pattern=""
+															name="email" />
+													</div>
+												</div>
+											</dd>
+										</dl>
+									</div>
+									<!--
+									<div class="invoice-wrap">
+										<dl class="insurance-form">
+											<dt>
+												<h3>开具发票</h3>
+												<p>发票将有保险公司为您邮寄(5元邮寄费)</p>
+											</dt>
+											<dd>
+												<input type="hidden" name="isInvoice" value="false" />
+												<div class="item item-radio">
+													<label for="invoiceTitleType">发票抬头</label>
+													<div class="field">
+														<input type="radio" name="invoiceTitleType" id="invoiceTitleType" checked="checked" value="1" /> 
+														<span>公司</span>
+														<input type="radio" name="invoiceTitleType" value="0" /> 
+														<span>个人</span>
+													</div>
+												</div>
+												<div class="item company">
+													<label for="company">公司全称</label>
+													<div class="field">
+														<input type="text" id="company" name="company" />
+													</div>
+												</div>
+												<div class="item">
+													<label for="addressee">收件人</label>
+													<div class="field">
+														<input type="text" id="addressee" name="addressee" />
+													</div>
+												</div>
+												<div class="item">
+													<label for="address">收件地址</label>
+													<div class="field">
+														<input type="text" class="long-input" id="address" name="address" />
+													</div>
+												</div>
+												<div class="item">
+													<label for="zip">邮政编码</label>
+													<div class="field">
+														<input type="text" id="zip" name="zip" />
+													</div>
+												</div>
+												<div class="item">
+													<label for="phone">联系电话</label>
+													<div class="field">
+														<input type="text" id="phone" name="phone" />
+													</div>
+												</div>
+											</dd>
+										</dl>
+									</div>
+									-->
+									<div class="submit-wrap">
+										<p class="amount-wrap">
+											合计保费
+											#numSplit(${totalAmount} 2)
+											<strong>$numret[0].$numret[1]</strong>元<em></em>
+											<input type="hidden" id="totalAmount" name="totalAmount" value="$numret[0].$numret[1]" />
+											<input type="hidden" id="prdNo" name="prdNo" value="${insurInfo.prdNo}" />
+											<input type="hidden" id="sysCode" name="sysCode" value="${metaInfo.sysCode}" />
+											<input type="hidden" id="busiType" name="busiType" value="${metaInfo.busiType}" />
+											<input type="hidden" id="orderNo" name="orderNo" value="${orderInfo.orderNo}" />
+										</p>
+										<p class="submit-buttons">
+											#if ($totalAmount > 0)
+											<a id="submit" class="submit-button" href="\#\#\#">同意协议并投保</a>
+											#else
+											<a id="submit" class="submit-button disable-button" href="\#\#\#">同意协议并投保</a>
+											#end
+											<a class="submit-link" href="\#\#\#">《保险条款及协议》</a>
+										</p>
+									</div>
+								</form>
+							</div>
+							<div class="insurance-ft">
+								<div class="explain-wrap">
+									<h3>保险须知</h3>
+									<div class="insurance-explain">
+										#foreach($item in $insurInfo.explain)
+										<div class="explain-item">
+											<h4>${item.title}:</h4>
+											<p>${item.content}</p>
+										</div>
+										#end
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="${qzz}${jsPath}/suggest/alterTicket/entry.js"></script>
+		#parse("widget/www/footer/footer.vm")
+	</body>
+</html>

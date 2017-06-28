@@ -1,0 +1,58 @@
+.common-tips-wrap {
+	width: 100%;
+	background: #fff;
+}
+
+.common-problem-wrap {
+	padding: 40px 40px 30px;
+}
+
+.common-problem-wrap h3 {
+	font-size: 18px;
+	padding-bottom: 10px;
+}
+
+.common-problem-wrap .question {
+	font-size: 14px;
+	padding-bottom: 5px;
+}
+
+.common-problem-wrap .answer {
+	color: #616161;
+}
+
+.common-problem-wrap li {
+	padding-bottom: 10px;
+	background: url(//source.qunarzz.com/site/images/pay/insurance/www/common/question.png)
+		no-repeat;
+	padding-left: 30px;
+}
+
+.common-info-wrap {
+	width: 100%;
+	background: #fff;
+	border-top: 3px solid #607d8b;
+	margin-bottom: 20px;
+}
+
+.common-info {
+	padding: 20px;
+}
+
+.md-hd {
+	border-bottom: 2px solid #ddd;
+	padding-bottom: 10px;
+	width: 100%;
+}
+
+.md-bd {
+	padding: 25px 0 15px;
+	color: #616161;
+}
+
+.md-hd h3 {
+	font-size: 18px;
+	float: left;
+	padding-right: 40px;
+}
+

@@ -1,0 +1,63 @@
+/**
+ * 获取证件类型
+ * @author PJ
+ */
+
+module.exports = function(options) {
+    var opts = options || {};
+    var $domItem = $(opts.domItem);
+    var isModify = opts.isModify || false;
+    var index = opts.curentIndex || 0;
+    var optsData = opts.defaultData;
+    var callback = opts.callback || function() {};
+
+    G.ajax({
+        url: '/api/common/certificateTypes',
+        type: 'POST',
+        success: function(res) {
+            if (res.code !== '0000') {
+                G.toast(res.msg);
+                return;
+            }
+
+            var tempList = [];
+
+            G._.each(res.data, function(item) {
+                tempList.push({
+                    value: item.code,
+                    text: item.name
+                });
+            });
+
+            initSelectList(tempList);
+        }
+    });
+
+    var initSelectList = function(arr) {
+        $domItem.mobiscroll().select({
+            data: arr,
+            onInit: function(inst) {
+                if (isModify) {
+                    var self = $(this),
+                        id = self.attr('id');
+                    $('#' + id + '_dummy').addClass("input-transparent");
+                } else {
+                    inst.show();
+                    $(this).mobiscroll('select');
+                }
+            },
+            onSelect: function(value, inst) {
+                var self = $(this),
+                    id = self.attr('id');
+
+                $('#' + id + '_dummy').addClass("input-transparent");
+
+                callback && callback({
+                    _index: index,
+                    activeCode: inst.getVal(),
+                    activeName: value
+                });
+            }
+        });
+    }
+}

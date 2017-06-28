@@ -1,0 +1,126 @@
+/**
+ * @file agent.html
+ * @author ss.feng
+ */
+
+function Agent() {}
+
+// 收集代理数据
+Agent.prototype.collectData = function() {
+	var querys = this.search2query(window.location.search);
+
+	return {
+		width: querys.width || '0',
+		height: querys.height || '0',
+		options: querys.options || {}
+};
+
+// location.search转换成json
+Agent.prototype.search2query(search) {
+	search = search.slice(1);
+
+	if (!search) return {};
+
+	var searchs = search.split('&');
+	var querys = {};
+
+	searchs.forEach && searchs.forEach(function(item) {
+		var items = item.split('=');
+		querys[items[0]] = items[1];
+	});
+
+	return querys;
+};
+
+// 数据代理
+Agent.prototype.proxy = function(data, proxyName) {
+	var proxy = window.parent.parent.window;
+	if (!proxy) return '父级对象不存在';
+
+	proxyName = proxyName || 'setProxy';
+
+	return proxy[proxyName](data);
+};
+
+/*
+ * 使用案例
+ * url: http://example.com/agent.htm?width=1000&height=2000000&options=%7B%22a%22%3A123%2C%22b%22%3A%5B1%2C2%2C3%5D%2C%22c%22%3A%7B%22c1%22%3A1%2C%22c2%22%3A2%7D%7D
+ * options后面为json格式，json格式需要先转移成字符串，然后再encodeURIComponent编码
+ */
+
+var proxyName = 'setProxy';
+
+// 实例化
+var agent = new Agent();
+var data = agent.collectData();
+
+// 数据代理
+agent.proxy(agent.collectData(), proxyName);
+
+
+
+
+
+
+
+/**
+ * @method 数据收集()
+    return {
+        height: height,
+        width: width,
+        options: {额外的参数}
+    }
+ */
+function collect() {
+    var querys = search2query(window.location.search);
+    var width = querys.width || '0';
+    var height = querys.height || '0';
+    var options = querys.options || {};
+
+    return {
+        width: width,
+        height: height,
+        options: options
+    };
+}
+
+/**
+ * @method 数据转换(searchStr)
+ return {
+     height: height,
+     width: width,
+     options: {额外的参数}
+ }
+ */
+function search2query(searchStr) {
+    searchStr = searchStr.slice(1);
+
+    if (!searchStr) {
+        return {};
+    }
+
+    var searchArr = searchStr.split('&');
+    var querys = {};
+
+    searchArr.forEach(function(item) {
+        var itemArr = item.split('=');
+
+        querys[itemArr[0]] = itemArr[1];
+    });
+
+    return querys;
+}
+
+/**
+ * @method 代理()
+ */
+function proxy() {
+	var proxy = window.parent.parent.window;
+	if (!proxy) return '父级对象不存在';
+
+	var data = collect();
+    // 判断代理页面的setProxy方法是否存在
+	if (!proxy.setProxy) return '父级方法setProxy不存在';
+
+    proxy.setProxy(data);
+}

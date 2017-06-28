@@ -1,0 +1,3 @@
+<div class="qn_footer">
+#parse("/include_html/footer/footer_public.html")
+</div>

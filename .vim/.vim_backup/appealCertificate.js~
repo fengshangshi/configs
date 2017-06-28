@@ -1,0 +1,107 @@
+
+var $ = require("jquery/jquery");
+var message = require("message/message.js");
+var ajax = require("module/service/ajax.js");
+var form = require("common/module/formValidator/formValidator.js");
+var createForm = require("module/service/createForm.js").createForm;
+
+var DOM = {
+    "BOXTYPE" : ".appeal-box",
+    "FORMCON":".cards-form",
+    "SUBMITBTN": ".appeal-2-next",
+    //用于表单提交参数的收集整理
+    "REALNAME" : ".userNameText",
+    "IDNUMBER" : ".idCardText",
+    "CARDTYPE" : "input[name='cardType']",
+    "OTHERCARDTYPE" : "input[name='otherCertifyType']",
+    "CARDFRONT" : "input[name='certifyFront']",
+    "CARDBACK" : "input[name='certifyBack']",
+    "OTHERCARD" : "input[name='otherCertify']",
+    "EMAIL" : "input[name='email']",
+    "USERNAME" : "input[name='userName']",
+    "IDCARD" : "input[name='idCard']",
+    "IDCARDINDEX" : "input[name='idCardIndex']",
+    "APPLYNO" : "input[name='applyNo']",
+    "QUNARTRADENO" : "input[name='qunarTradeNo']",
+    "LOGINNAME" : "input[name='appealLoginNames']" ,
+    "APPEALUIDS": "input[name='appealUids']" ,
+    "MOBILE" : "input[name='mobile']",
+    //使用于证件验证的提示
+    "IDCARDSU" : ".idcards-u",
+    "OTHERCARDSU": ".other-cards-u"
+};
+
+var AJAXURL = "/member/security/identityAppealSubmit.htm";
+
+//身份信息保存
+var idInfo;
+
+var successStr = "<span class='form-other'><i class='ok'></i></span>",
+    failStr = "<span class='form-other'><i class='err'></i>请上传证件照</span>";
+
+var moveTop = function(dom){
+        $('html, body').animate({
+            scrollTop: $(dom).offset().top - 50
+        }, 500);
+};
+
+//form提交所需参数收集处理
+var paramsMaker = function(){
+
+    var opts = {
+        cardType: $(DOM.CARDTYPE).val(),
+        otherCertifyType : $(DOM.OTHERCARDTYPE).val(),
+        certifyFront: $(DOM.CARDFRONT).val(),
+        certifyBack: $(DOM.CARDBACK).val(),
+        otherCertify : $(DOM.OTHERCARD).val(),
+        email: $(DOM.EMAIL).val(),
+        userName: $.trim($(DOM.REALNAME).html()),
+        idCard: $.trim($(DOM.IDNUMBER).html()),
+        idCardIndex: $(DOM.IDCARDINDEX).val(),
+        applyNo: $(DOM.APPLYNO).val(),
+        qunarTradeNo: $(DOM.QUNARTRADENO).val(),
+        appealLoginNames: $(DOM.LOGINNAME).val(),
+        appealUids: $(DOM.APPEALUIDS).val(),
+        mobile: $(DOM.MOBILE).val()
+    };
+    return opts;
+};
+
+form.initForm(DOM.FORMCON ,DOM.SUBMITBTN,{
+    events : ['blur'],
+    successCallback: function(){
+        //单独对上传证件部分验证
+        var certifyF = $(DOM.CARDFRONT).val(), 
+            certifyB = $(DOM.CARDBACK).val(),
+            otherCertify = $(DOM.OTHERCARD).val();
+        if(!certifyF || !certifyB){
+            $(DOM.IDCARDSU).find(".form-other").remove();
+            $(DOM.IDCARDSU).append(failStr);
+            moveTop(DOM.IDCARDSU);
+        }
+        else if(!otherCertify){
+            $(DOM.OTHERCARDSU).find(".form-other").remove();
+            $(DOM.OTHERCARDSU).append(failStr);
+            moveTop(DOM.OTHERCARDSU);
+        }
+        else{
+            //证件部分验证ok通过
+            var opts = paramsMaker();
+            //后端进行跳转，更加安全
+            var form = createForm({
+                inputData: opts,
+                url: AJAXURL
+            });
+        
+            $(form).submit();
+        }
+    }
+});
+
+//身份填写完，“下一步”按钮的操作
+message.register("appealIdentityOKNext",function(e){
+    idInfo = e.args;
+    $(DOM.FORMCON).find(DOM.REALNAME).html(idInfo.userName);
+    $(DOM.FORMCON).find(DOM.IDNUMBER).html(idInfo.idCards);
+});
+

@@ -1,0 +1,42 @@
+/**
+ *@file 控制loading状态
+ *@author fengshangshi@baidu.com
+ */
+define(function(require, exports) {
+	var $ = require("libs/zepto/zepto");
+	var message = require("libs/message/message").MessageCenter;
+
+	message.register("loading-status-show", function(e) {
+		$(".loading-wrap").show();
+	});
+
+	message.register("loading-status-hide", function(e) {
+		$(".loading-wrap").hide();
+	});
+
+
+	var message_timer = null;
+	message.register("show-message", function(e) {
+		clearTimeout(message_timer);
+		var args = e.args,
+			msg = args.message;
+
+		$(".message-wrap").text(msg).show();
+		message_timer = setTimeout(function() {
+			message.fire("hide-message");
+		}, 3 * 1000);
+	});
+
+	message.register("hide-message", function(e) {
+		$(".message-wrap").animate(
+			{
+				opacity: 0
+			},
+			100,
+			'ease-out',
+			function() {
+				$(".message-wrap").hide();
+			}
+		);
+	});
+});

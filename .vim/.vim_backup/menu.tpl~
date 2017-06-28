@@ -1,0 +1,13 @@
+<ul class="menu clearfix">
+	<li>
+		<a href="/realestate/new" class="current">
+			<span>新房</span>
+		</a>
+	</li>
+	<li>
+		<a href="/realestate/used">
+			<span>二手房</span>
+		</a>
+	</li>
+</ul>
+{%require name="realestate:widget/header/menu/menu.css"%}

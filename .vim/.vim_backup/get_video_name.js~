@@ -1,0 +1,61 @@
+var request = require('superagent');
+var cheerio = require('cheerio');
+var fs = require('fs');
+
+var EventProxy = require('eventproxy');
+
+// 分页url
+var pageUrl = "http://www.pond5.com/index.php?page=ajax_search&version=v3&bmtext=stock-video-footage&pagenum=$$page$$&bm=18447&q=&qorg=sr&sb=";
+
+var video_name = "0$$id$$_main_xl.mp4";
+
+// 分页范围
+var pageRange = [1, 10];
+
+var ep = new EventProxy();
+
+// 分页链接
+var pageUrls = [];
+var video_name_map = [];
+var video_name_list = 'videoNameList.txt';
+
+for (var i = pageRange[0]; i <= pageRange[1]; i++) {
+	pageUrls.push(pageUrl.replace(/\$\$page\$\$/i, i));
+}
+
+ep.after('page_html', pageUrls.length, function(topics) {
+	topics = topics.map(function(topic) {
+		var url = topic[0];
+		var html = topic[1];
+		var $ = cheerio.load(html);
+
+
+		var items = $('.js-searchResult');
+		for (var i = 0, l = items.length; i < l; i++) {
+			var itemId = $(items[i]).attr('item_id');
+			var name = $(items[i]).attr('href');
+			var video_name_key = video_name.replace(/\$\$id\$\$/i, itemId);
+			var re = /\d\/(.+)\.html/i;
+			if (name.match(re) && name.match(re)[1]) {
+				video_name_map.push(video_name_key + '\t' + name.match(re)[1]);
+			}
+		}
+		console.log(video_name_map.join('\r\n'));
+		fs.appendFileSync(video_name_list, video_name_map);
+	});
+});
+
+pageUrls.forEach(function(url, i) {
+	request
+		.get(url)
+		.timeout(20*1000)
+		.set('Referer', 'http://www.pond5.com/index.php')
+		.end(function(err, res) {
+			if (err) {
+				console.log(err);
+				return false;
+			}
+			console.log(i + ' fetch ' + url + ' successful');
+			ep.emit('page_html', [url, res.text]);
+		});
+});

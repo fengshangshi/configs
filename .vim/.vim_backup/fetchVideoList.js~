@@ -1,0 +1,62 @@
+var superagent = require('superagent');
+var eventproxy = require('eventproxy');
+var cheerio = require('cheerio');
+var fs = require('fs');
+
+
+var fileName = 'urls_video_list.txt';
+var videosFileName = 'urls_mp4_list_$$paging$$.txt';
+var videosTitleFileName = 'title_flv_list_$$paging$$.txt';
+
+var cookie = 'PHPSESSID=s7pt2rt9b1le89q7mok19ilrt0; _ga=GA1.2.2022428986.1475040709; _gat=1';
+
+var files = fs.readFileSync(fileName, 'utf-8');
+files = files.split(/\r\n/);
+
+var pageRange = [5000, 5000];
+files = files.slice(pageRange[0], pageRange[1]);
+
+files = files.filter(function(item) {
+	return item != '';
+});
+
+var ep = new eventproxy();
+
+ep.after('page_fetch_finished', files.length, function(topics) {
+	topics = topics.map(function(topicPair) {
+		var url = topicPair[0];
+		var html = topicPair[1];
+
+		var $ = cheerio.load(html);
+
+		var videoUrl = $('#downloadOriginal').attr('href');
+		var videoTitle = $('#clipText h1').text();
+
+
+		var videoUrlFileName = videosFileName.replace(/\$\$paging\$\$/, pageRange.join('-'));
+		var videoTitleFileName = videosTitleFileName.replace(/\$\$paging\$\$/, pageRange.join('-'));
+
+		fs.appendFileSync(videoUrlFileName, '\r\n');
+		fs.appendFileSync(videoUrlFileName, videoUrl);
+
+		fs.appendFileSync(videoTitleFileName, '\r\n');
+		fs.appendFileSync(videoTitleFileName, videoUrl + '$$$$$$$$' + videoTitle);
+
+		console.log('[保存成功][' + videoTitle + '] ' + videoUrl);
+	});
+
+});
+
+files.forEach(function(url, i) {
+	superagent
+		.get(url)
+		.timeout(50 * 1000)
+		.set('Referer', 'http://catersnews.clipservers.com/index/index/')
+		.set('Cookie', cookie)
+		.end(function(err, res) {
+			if (err)  return console.log(err);
+
+			console.log('[获取成功] ' + url);
+			ep.emit('page_fetch_finished', [url, res.text]);
+		});
+});

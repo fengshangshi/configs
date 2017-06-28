@@ -1,0 +1,74 @@
+<div class="room-detail lock-box">
+    <h3>门锁信息 <span>客服电话：4006812010</span></h3>
+    <ul>
+        {{#is lockState '0'}}
+            <li class="color-grey">
+                <i class="yo-ico">&#xe61e;</i>
+                <strong>该房间没有安装智能门锁</strong>
+            </li>
+        {{else}}
+            {{#is lockState '1'}}
+            <li class="color-normal">
+                <i class="yo-ico">&#xe61a;</i>
+                <strong>通讯正常</strong>
+            </li>
+            {{/is}}
+            {{#is lockState '3'}}
+                <li class="color-grey">
+                    <i class="yo-ico">&#xe61c;</i>
+                    <div>
+                        <h4>通讯异常</h4>
+                        <p>1.检查路由器网络连接是否正常</p>
+                        <p>2.检查通讯盒电源适配器指示灯是否点亮</p>
+                    </div>
+                </li>
+            {{/is}}
+            {{#is lockState '1'}}
+                <li class="color-normal">
+                    <i class="yo-ico">&#xe619;</i>
+                    <strong>电量正常</strong>
+                </li>
+            {{/is}}
+            {{#is lockState '2'}}
+            <li class="color-warn">
+                <i class="yo-ico">&#xe618;</i>
+                <div>
+                    <h4>电量低</h4>
+                    <p>1.您可以购买5号南孚电池进行更换<p>
+                    <p>2.您可以使用外接电源开门后更换电池</p>
+                </div>
+            </li>
+            {{/is}}
+            {{#is lockState '3'}}
+                <li class="color-grey">
+                    <i class="yo-ico">&#xe61b;</i>
+                    <div>
+                        <h4>电量未知</h4>
+                        <p>1.您可以购买5号南孚电池进行更换<p>
+                        <p>2.您可以使用外接电源开门后更换电池</p>
+                    </div>
+                </li>
+            {{/is}}
+            <li class="color-pwd js-modifyPwd">
+                <i class="yo-ico">&#xe602;</i>
+                <div>
+                    <h4>管家密码 {{hzkPwd}}</h4>
+                    <p>1.管家密码修改后将在下次启用时生效<p>
+                    <p>2.门锁通讯不佳,管家密码可能无法 使用</p>
+                </div>
+                <i class="yo-ico link">&#xe604;</i>
+            </li>
+        {{/is}}
+    </ul>
+</div>
+<div class="room-detail dirty-box">
+    <h3>脏净状态</h3>
+    <ul>
+        <li class="js-clearRoom" data-isclean="{{isClean}}" {{#is isClean 'false'}}style="display: none;"{{/is}}>
+            <span>净</span><i class="js-cleanRoomBtn">置为脏房</i>
+        </li>
+        <li class="js-dirtyRoom" data-isclean="{{isClean}}" {{#is isClean 'true'}}style="display: none;"{{/is}}>
+            <span>脏</span><i class="js-cleanRoomBtn">置为净房</i>
+        </li>
+    </ul>
+</div>

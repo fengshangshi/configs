@@ -1,0 +1,19 @@
+## @Describe: 修改审核列表
+## @author ming.zhou@qunar.com
+
+#parse("widget/include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("widget/include/headMeta.vm")
+    <title>修改审核</title>
+    <link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/resubmission/resubmission.css" />
+    #parse("widget/include/headScript.vm")
+</head>
+<body>
+    <div ms-controller="layout" ms-include-src="content" data-include-replace="true" data-include-rendered="rendered"></div>
+    <div id="dataLoading" class="js-loading"></div>
+    <script src="${qzzUrl}/${jsPath}/common/base.js"></script>
+    <script src="${qzzUrl}/${jsPath}/pages/resubmission/entry.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+/**
+ * tab切换
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+
+message.register("tabChange", function(e) {
+	var args = e.args,
+		target = args.target;
+
+	$(target).parent()
+		.find("a")
+		.removeClass("current");
+
+	$(".dialog-tab-content")
+		.find("ol")
+		.removeClass("current");
+
+	var titleClass = $(target).attr("class");
+	var contentClass = 
+			titleClass.replace(/^([a-z-]+)(title)([a-z-]+)$/, "$1content$3");
+
+
+	titleClass = "." + titleClass;
+	contentClass = "." + contentClass;
+
+	$(titleClass).addClass("current");
+	$(contentClass).addClass("current");
+
+	console.log(titleClass);
+});

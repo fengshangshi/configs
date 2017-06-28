@@ -1,0 +1,190 @@
+/**
+ * velocity模板静态资源版本号管理
+ * @author ss.feng@qunar.com
+ * @version 0.1.1
+ */
+
+var fs = require('fs');
+var path = require('path');
+
+var VERSION = '0.1.1';
+
+/**
+ * 目录扫描
+ */
+function Scan(dir) {
+	this.files = [];
+	this.folders = [];
+
+	this._init(dir);
+}
+
+Scan.prototype._getStats = function(dir) {
+	try {
+		return fs.statSync(dir);
+	} catch(e) {
+		return false;
+	}
+};
+
+Scan.prototype._walk = function(dir) {
+	var _this = this;
+	var stats = _this._getStats(dir);
+	if (stats && stats.isDirectory()) {
+		var dirs = fs.readdirSync(dir);
+		dirs.forEach(function(d) {
+			var p = path.join(dir, d),
+				s = _this._getStats(p);
+			if (s.isDirectory()) {
+				_this._walk(p, _this);
+				_this.folders.push(p);
+			} else {
+				_this.files.push(p);
+			}
+		});
+	}
+};
+
+Scan.prototype.getFiles = function() {
+	return this.files;
+};
+
+Scan.prototype.getFolders = function() {
+	return this.folders;
+};
+
+Scan.prototype._init = function(dir) {
+	this._walk(dir);
+};
+
+
+
+
+/**
+ * velocity模板静态资源版本号替换
+ */
+function VersionManage(files) {
+	this.files = files;
+	this.init(files);
+}
+
+VersionManage.prototype._replace = function(content, options) {
+	var domRe = options.domRe,
+		srcRe = options.srcRe,
+		splitRe = options.splitRe,
+		preDir = options.preDir;
+
+	if (domRe.test(content)) {
+		var matches = content.match(domRe);
+		for (var i = 0, l = matches.length; i < l; i++) {
+			var match = matches[i];
+			if (srcRe.test(match)) {
+				var mp = match.match(srcRe)[1];
+				mp = mp.split(splitRe)[1];
+				var verPath = preDir + mp + '.ver';
+				verPath = './refs/ver' + verPath;
+				if (fs.existsSync(verPath)) {
+					var ver = fs.readFileSync(verPath, 'utf-8');
+					var srcSplits = mp.split('.');
+					var replaceSrc = srcSplits[0]
+						+ '@' + ver + '.'
+						+ srcSplits[1];
+					content = content.replace(mp, replaceSrc);
+				}
+			}
+		}
+	}
+
+	return content;
+};
+
+VersionManage.prototype._replaceJS = function(content) {
+	return this._replace(content, {
+		'domRe': /<script.*src=["']\S*["'][^>]*>\S*<\/script>/ig,
+		'srcRe': /src=['"](\S*)['"]/i,
+		'splitRe': /\${jsPath}/,
+		'preDir': '/scripts'
+	});
+};
+
+VersionManage.prototype._replaceCSS = function(content) {
+	return this._replace(content, {
+		'domRe': /<link.*href=["']\S*["'][^>]*>/ig,
+		'srcRe': /href=['"](\S*)['"]/i,
+		'splitRe': /\${cssPath}/,
+		'preDir': '/styles'
+	});
+};
+
+VersionManage.prototype.replace = function(file) {
+	var content = fs.readFileSync(file, 'utf-8');
+	content = this._replaceJS(content);
+	content = this._replaceCSS(content);
+
+	fs.writeFileSync(file, content, "utf-8");
+};
+
+VersionManage.prototype._filter = function(files, ext) {
+	var fileList = [];
+	files.forEach(function(file) {
+		if (path.extname(file) === ext) {
+			fileList.push(file);
+		}
+	});
+	return fileList;
+};
+
+VersionManage.prototype._vmFilter = function(files) {
+	return this._filter(files, '.vm');
+};
+
+VersionManage.prototype._jsonFilter = function(files) {
+	return this._filter(files, '.json');
+};
+
+VersionManage.prototype.deleteJSONFiles = function(files) {
+	files = this._jsonFilter(files);
+	files.forEach(function(file) {
+		if (fs.existsSync(file)) {
+			fs.unlinkSync(file);
+		}
+	});
+};
+
+VersionManage.prototype.init = function(files) {
+	_this = this;
+	_this.deleteJSONFiles(files);
+	files = _this._vmFilter(files);
+	files.forEach(function(file) {
+		_this.replace(file);
+	});
+	_this.files = files;
+};
+
+
+/**
+ * 打印头部文案
+ */
+function printHead() {
+	console.log('==================================');
+	console.log('=== 🍺  静态资源版本号管理器 🍺  ===');
+	console.log('============ v '+VERSION+' =============');
+	console.log('==================================');
+}
+
+/**
+ * 入口函数
+ */
+function main(dir) {
+	printHead();
+	var scan = new Scan(dir);
+	var files = scan.getFiles();
+	var vm = new VersionManage(files);
+	
+	console.log('共处理' + vm.files.length + '个文件：');
+	vm.files.forEach(function(file) {
+		console.log("[LOG] " + file);
+	});
+}
+
+main('./refs/vm/page');

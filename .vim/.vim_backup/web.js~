@@ -1,0 +1,81 @@
+/**
+ * @file 服务器
+ * @author ss.feng@qunar.com
+ */
+var express = require('express');
+var morgan = require('morgan');
+var hbs = require('hbs');
+
+var fileStream = require('file-stream-rotator');
+var header = require('connect-header');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var timeout = require('connect-timeout');
+var auth = require('basic-auth');
+
+var controller = require('./controller');
+
+// instace of express
+var app = module.exports = express();
+
+// response timeout
+var delay = sugar.timeout || 10;
+app.use(timeout(delay * 1000));
+app.use(function(req, res, next) {
+	setTimeout(function() {
+		if (req.timedout) {
+			logger.error('request timeout');
+		}
+	}, (delay + 1) * 1000);
+	next();
+});
+
+// set access log
+var accessLogStream = fileStream.getStream({
+	filename: sugar.logDir + '/access_%DATE%.log',
+	date_format: 'YYYYMMDD',
+	frequency: 'daily',
+	verbose: false
+});
+
+app.use(morgan('combined', { 
+	stream: accessLogStream 
+}));
+
+// set static resources
+var staticOpts = {
+	dotfiles: 'ignore',
+	etag: false,
+	extensions: ['html', 'css', 'png', 'gif', 'jpg', 'js'],
+	index: false,
+	maxAage: 0,
+	lastModified: false,
+	redirect: true
+};
+var staticDir = sugar.staticDir;
+app.use(express.static(staticDir, staticOpts));
+
+// 配置模板引擎
+app.set('views', sugar.viewsDir);
+app.set('view engine', 'html');
+app.engine('html', hbs.__express);
+
+// set response header
+app.set('x-powered-by', false);
+app.use(header({
+	'Server': sugar.env.server,
+	'X-Powered-By': sugar.env.support
+}));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride());
+
+// controller 路由器
+controller.boot(app);
+
+// handle 404
+app.all('*', function(req, res) {
+	res.status(404);
+	res.send('404, The server to flirt with hot chicks.');
+});

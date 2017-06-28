@@ -1,0 +1,13 @@
+界面划分：
+顶部功能区
+地图：视窗大部分区域，还包含一个月份的列表
+列表：右侧列表，对信息的补充，详细数据等
+
+组件划分：
+smarty组件：header、map、calendar、sidebar
+
+header: logo、nav、share、about、feedback、partnership
+map: suggestion、filter
+filter: location、property、price、environment、house
+
+

@@ -1,0 +1,27 @@
+<div class="share">
+	<div class='dpshare'>
+		<span class="quatation"></span>
+		<span class="dpshare-note">通过分享出去的链接下单预付，是无佣金的，<br/>您可在【直销-价格设置】页面设置该价格（建议设置低于其他渠道的价格）</span>
+	</div>
+	<div class="dpsharephonemethod">
+		<div class="dpsharephonetextdiv">
+		     <input id="mobil" type="text" class="dpsharephonetext"value="请输入顾客手机号码"/>
+			 <input id="hidden" type="hidden" value="<%=sharePageData.data.isCanSendSms%>" />
+			 <span class="dpsharephonewarn">请输入正确的手机号码</span>
+			 <span class="clear-icon"></span>
+		</div>
+		<button id="dpsharephonebuttonid" class="smui-btn btn-primary smui-btn-auto  sharestore" >免费发送短信</button>
+		<div class="success-content"><span class="success-tip"></span>已发送</div>
+	</div>
+	<div class="dpshareeditmessage">
+		<span class="dpshareeditinfo">短信会带上您的店铺链接，顾客可通过该链接了解房间详情和预订付款</span>
+		<span class="dpshareeditlink" id="dpshareeditlink">查看或编辑短信内容</span>
+	</div>
+	<div class="dpsharetwodire">
+	    <div class="dpsharetwodirdetail">
+			<img id='dptwodire' alt="more" src="<%="data:image/png;base64,"+sharePageData.data.erCodeStandard%>"/>
+			<p><span id="dpgetdiffer">获取不同尺寸的二维码</span></p>
+		</div>
+		<div class="sharetext"></div>
+	</div>
+</div>

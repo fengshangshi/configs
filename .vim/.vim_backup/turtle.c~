@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+typedef struct {
+	const char *name;
+	const char *species;
+	int age;
+} trutle;
+
+void happy_birthday(trutle *t)
+{
+	//(*t).age = (*t).age + 1;
+	t->age = t->age + 1;
+	//printf("Happy Birthday %s! You are now %i years old!\n", (*t).name, (*t).age);
+	printf("Happy Birthday %s! You are now %i years old!\n", t->name, t->age);
+}
+
+int main(int argc, char *argv[])
+{
+	trutle myrtle = {"Myrtle", .species = "Leatherback sea turtle", .age = 99};
+	happy_birthday(&myrtle);
+	printf("%s's age is now %i\n", myrtle.name, myrtle.age);
+
+	return 0;
+}

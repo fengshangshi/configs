@@ -1,0 +1,28 @@
+/**
+ * @file 校验ral必要配置
+ * @author fengshangshi
+ */
+var _ = require('lodash');
+
+module.exports = function(type, config) {
+		switch (type) {
+				case 'http':
+						return httpValidCheck(config);
+						break;
+				
+				default:
+						return false;
+						break;
+		}
+};
+
+function httpValidCheck(config) {
+		var defaultConfig = {
+				upstream: '',
+				port: '80',
+				method: 'GET',
+				timeout: 10
+		};
+
+		return _.assign(defaultConfig, config);
+}

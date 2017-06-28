@@ -1,0 +1,130 @@
+/**
+ * localStorage操作
+ */
+function Options() {
+	this.key = config.domainsKey;
+}
+
+Options.prototype.getDomainTemplate = function(domain) {
+	var template =[
+		"<p class='domain-item'>",
+			"<label>Domain:</label>",
+			"<input name='domain' type='text' value='$$domain$$' />",
+			"<span class='add-input-button'>+</span>",
+			"<span class='reduce-input-button'>-</span>",
+		"</p>"
+	].join("\r\n");
+
+	return template.replace(/\$\$domain\$\$/mg, domain);
+};
+
+Options.prototype.getDomainsTemplate = function(domains) {
+	var allTemplate = [],
+		self = this;
+	if (domains.length > 0) {
+		domains.forEach(function(item, i) {
+			allTemplate.push(self.getDomainTemplate(item));
+		});
+	} else {
+		allTemplate.push(self.getDomainTemplate(""));
+	}
+
+	return allTemplate.join("");
+};
+
+Options.prototype.saveDomains = function(domains) {
+	var key = this.key,
+		storage = utils.localStorage,
+		domainsArr = [],
+		domain,
+		temp;
+
+	/**
+	 * 对domains进行处理
+	 */
+	domains = domains.split("&");
+
+	domains.forEach(function(item) {
+		temp = item.split("=");
+		domain = temp[1];
+		if (domain) {
+			domainsArr.push(domain);
+		}
+	});
+	
+	/**
+	 * 写入localstorage
+	 */
+	if (domainsArr.length > 0) {
+		storage.set(key, JSON.stringify(domainsArr));
+	}
+};
+
+Options.prototype.removeDomain = function(domain) {
+	var key = this.key,
+		storage = utils.localStorage;
+
+	var domains = storage.get(key);
+	domains = JSON.parse(domains);
+
+	domains.splice(domains.indexOf(domain), 1);
+	if (domains.length > 0) {
+		storage.set(key, JSON.stringify(domains));
+	} else {
+		this.removeAll();
+	}
+};
+
+Options.prototype.removeAll = function() {
+	var storage = utils.localStorage;
+	storage.removeAll();
+};
+
+
+Options.prototype.renderDomains = function() {
+	var key = this.key,
+		domains = utils.localStorage.get(key);
+
+	domains = JSON.parse(domains);
+	if (!domains) {
+		$("#domain-options-editor .domain-item").remove();
+		return false;
+	}
+
+	var template = this.getDomainsTemplate(domains);
+	$("#domain-options-editor fieldset").append(template);
+};
+
+Options.prototype.init = function() {
+	this.renderDomains();
+};
+
+
+var ops = new Options();
+ops.init();
+
+
+
+$(document).on("click", ".add-input-button", function(e) {
+	var template = ops.getDomainTemplate("");
+	$("#domain-options-editor fieldset").append(template);
+});
+
+$(document).on("click", ".reduce-input-button", function(e) {
+	var domain = $(this).parent().find(".domain").val();
+	domain = $.trim(domain);
+	ops.removeDomain(domain);
+	$(this).parent().remove();
+});
+
+$(document).on("click", ".submit", function(e) {
+	e.preventDefault();
+	var domains = $("#domain-options-editor").serialize();
+	ops.saveDomains(domains);
+});
+
+$(document).on("click", ".clear", function(e) {
+	e.preventDefault();
+	ops.removeAll();
+	ops.init();
+});

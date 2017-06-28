@@ -1,0 +1,14 @@
+/**
+ * @file favicon
+ */
+var favicon = require('serve-favicon');
+var icon = LIBROOT + '/favicon.ico';
+if (config['favicon']) {
+		icon = STATICROOT + '/' + config['favicon'];
+}
+var icon = config['favicon'] || 'favicon.ico';
+icon = STATICROOT + '/' + icon;
+
+module.exports = function() {
+		return favicon(icon);
+};

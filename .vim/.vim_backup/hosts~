@@ -1,0 +1,101 @@
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1	localhost
+255.255.255.255	broadcasthost
+::1             localhost 
+
+#10.86.164.93 aspwork.corp.qunar.com
+#192.168.235.70  qunarzz.com q.qunarzz.com
+
+#127.0.0.1 qunarzz.com q.qunarzz.com
+#127.0.0.1 sivir.corp.qunar.com
+#10.87.232.88 pms.beta.corp.qunar.com
+#10.89.130.151 q.qunarzz.com
+#192.168.237.71 s.qunarzz.com 
+#45.120.31.81 qunarzz.com q.qunarzz.com
+#192.168.2.92 qsmsboss.beta.qunar.com
+
+#192.168.235.69  qunarzz.com q.qunarzz.com
+#192.168.235.66    corp.qa.qunarman.com
+#10.86.36.89 dev1.qunarman.com 
+#192.168.228.57 www.kemanman.com
+#10.86.36.161 mobile.kemanman.com
+#10.86.50.89 mobile.kemanman.com
+#127.0.0.1 qunarzz.com
+#192.168.228.59    www.kemanman.com
+
+127.0.0.1	activate.adobe.com
+127.0.0.1	practivate.adobe.com
+127.0.0.1	ereg.adobe.com
+127.0.0.1	wip3.adobe.com
+127.0.0.1	activate.wip3.adobe.com
+127.0.0.1	3dns-3.adobe.com
+127.0.0.1	3dns-2.adobe.com
+127.0.0.1	adobe-dns.adobe.com
+127.0.0.1	adobe-dns-2.adobe.com
+127.0.0.1	adobe-dns-3.adobe.com
+127.0.0.1	ereg.wip3.adobe.com
+127.0.0.1	activate-sea.adobe.com
+127.0.0.1	wwis-dubc1-vip60.adobe.com
+127.0.0.1	activate-sjc0.adobe.com
+127.0.0.1	hl2rcv.adobe.com
+127.0.0.1	lm.licenses.adobe.com
+127.0.0.1	na2m-pr.licenses.adobe.com
+
+127.0.0.1	ims-na1-prprod.adobelogin.com
+
+127.0.0.1	na4r.services.adobe.com
+
+127.0.0.1	na1r.services.adobe.com
+
+#10.86.219.38 help.quhuhu.com
+#10.86.219.38 static.quhuhu.com
+#10.86.219.38 topic.quhuhu.com
+#
+#127.0.0.1 qunarzz.com
+#192.168.235.69 q.qunarzz.com
+
+#10.89.129.53 qunarzz.com q.qunarzz.com
+
+#10.86.42.195 fex.dev.quhuhu.com
+10.86.41.91    activity.tuanyy.corp.qunar.com
+#192.168.237.72    qunarzz.com
+192.168.237.72    douxingdev.qunar.com
+#192.168.237.72    q.qunarzz.com
+192.168.237.72    dx.dev.qunar.com
+10.86.36.109    tuanyy.corp.qunar.com
+
+127.0.0.1 windows10.microdone.cn
+
+
+##10.89.130.105 q.qunarzz.com
+#10.89.130.58 sivir.beta.qunar.com
+
+
+#127.0.0.1 aspwork.corp.qunar.com
+#127.0.0.1 static.kztpms.com
+#10.88.171.35 static.kztpms.com
+#192.168.237.71 q.qunarzz.com
+#192.168.228.23 qzz.beta.qunar.com qunarzz.com img.qunarzz.com zz.qunar.com q.qunarzz.com q.beta.qunarzz.com common.qunarzz.com cm.qunarzz.com mobileqzz.beta.qunar.com
+#10.89.130.79 q.qunarzz.com
+#127.0.0.1 q.qunarzz.com
+#100.84.140.56 srmweb.beta.qunar.com
+#100.84.140.12  q.qunarzz.com
+#127.0.0.1 source.qunarzz.com
+#120.132.35.206 static.kztpms.com
+#192.168.228.23 static.kztpms.com
+#192.168.228.23 q.qunarzz.com qunarzz.com
+#10.88.171.35 static.kztpms.com
+#127.0.0.1 static.kztpms.com
+#120.132.35.207 static.kztpms.com
+#192.168.228.23 qunarzz.com q.qunarzz.com
+#10.88.171.35 static.kztpms.com
+100.84.140.12 apollo.beta.qunar.com
+192.168.237.72 q.qunarzz.com
+100.84.140.8 market.beta.qunar.com
+
+#100.84.140.11 static.kztpms.com

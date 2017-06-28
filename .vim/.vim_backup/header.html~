@@ -1,0 +1,24 @@
+<div class="ui fixed inverted menu">
+	<div class="ui container">
+		<a href="/config/history" class="header item">
+			<img src="/images/logo.png">
+		</a>
+		<a href="/config/add" class="item <%if (active=='add') {%>active<%}%>">发布</a>
+		<a href="/config/history" class="item <%if (active=='history') {%>active<%}%>">发布历史</a>
+		<% if (userType == 2) { %>
+		<div class="ui simple dropdown item">
+        用户
+			<i class="dropdown icon"></i>
+			<div class="menu">
+				<a class="item" href="/account/user/add">新增用户</a>
+				<a class="item" href="/account/user/list">用户管理</a>
+			</div>
+		</div>
+		<% } %>
+		<div class="right menu">
+				<span class="item">哈喽，<%=userName%></span>
+			<a class="item" href="/account/logout"><i class="sign out icon"></i>退出</a>
+		</div>
+	</div>
+</div>
+

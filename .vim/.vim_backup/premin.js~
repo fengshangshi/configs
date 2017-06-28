@@ -1,0 +1,95 @@
+var fs = require("fs");
+var path = require("path");
+
+//扫描目标目录下所有文件
+function scanFolder(path) {
+	var fileList = [],
+		folderList = [];
+
+	var getStats = function(path) {
+		try {
+			return fs.statSync(path);
+		} catch (e) {
+			return e;
+		}
+	};
+
+	var walk = function(path, fileList, folderList) {
+		var stats = getStats(path);
+		if (stats.isFile || stats.isDirectory) {
+			if (stats.isFile() || stats.isDirectory()) {
+				var files = fs.readdirSync(path);
+				files.forEach(function(item) {
+					var tmpPath = path + "/" + item,
+						stats = getStats(tmpPath);
+				
+					//如果是目录递归
+					if (stats.isDirectory()) {
+						walk(tmpPath, fileList, folderList);
+						folderList.push(tmpPath);
+					} else {
+						fileList.push(tmpPath);
+					}
+				});
+			}
+		} else {
+			console.log("未完成扫描，原因：" + stats);
+		}
+	};
+
+	walk(path, fileList, folderList);
+	return {
+		"files": fileList,
+		"folders": folderList
+	};
+}
+
+function jsFilter(fileList) {
+	var extname = ".js";
+	var list = [];
+	fileList.forEach(function(item) {
+		if (path.extname(item) === extname) {
+			list.push(item);
+		}
+	});
+
+	return list;
+}
+
+function modifyFile(file) {
+	//过滤带//符号的正则
+	var re1 = /\/{2,}.*console.*(\n)?/ig;
+	var re2 = /[^\"\'\/\*]console[^\*\/]*(\n)?/ig;
+
+	var content = fs.readFileSync(file, "utf-8");
+	if (re1.test(content) || re2.test(content)) {
+		content = content.replace(re1, "");
+		content = content.replace(re2, "");
+		fs.writeFileSync(file, content, "utf-8");
+		return true;
+	}
+	return false;
+}
+
+function modifyFileList(fileList) {
+	var modified = [];
+	fileList.forEach(function(item) {
+		if (modifyFile(item)) {
+			modified.push(item);
+		}
+	});
+	return modified;
+}
+
+function main(argv) {
+	var fileList = scanFolder(argv).files;
+	var jsFileList = jsFilter(fileList);
+	var modifiedFileList = modifyFileList(jsFileList);
+	console.log("共扫描到" + modifiedFileList.length + "个文件有console信息");
+	console.log("文件列表如下：");
+	modifiedFileList.forEach(function(item) {
+		console.log(item);
+	});
+}
+
+main("./src.bak");

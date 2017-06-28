@@ -1,0 +1,38 @@
+<div class="item">
+    <label for="" class="middle-label">姓名</label>
+    <div class="field">
+        <input class="middle-input {{#if username}}readonly{{/if}}" id="userName"
+			{{#if username}}
+			readonly="readonly"
+			{{else}}
+            data-jvalidator-pattern="required"
+			{{/if}}
+            type="text" name="userName" value="{{username}}" />
+    </div>
+</div>
+<div class="item">
+    <label for="" class="middle-label">
+		{{#if idCard}}
+		身份证号
+		{{else}}
+		证件
+		{{/if}}
+	</label>
+    <div class="field">
+		{{#if idCard}}
+		{{else}}
+        <select name='identityType' id='identityType'>
+            <option value='IDENTITYCARD'>身份证</option>
+            <option value='PASSPORT'>护照</option>
+            <option value='OFFICERCERT'>军官证</option>
+        </select>
+		{{/if}}
+        <input class="middle-input {{#if idCard}}readonly{{/if}}" id="identityNum"
+			{{#if idCard}}
+			readonly="readonly"
+			{{else}}
+            data-jvalidator-pattern="required&idcard"
+			{{/if}}
+            type="text" name="identityNum" value="{{idCard}}" />
+    </div>
+</div>

@@ -1,0 +1,9 @@
+const os = require('os');
+const rollers = require('streamroller');
+const stream = new rollers.DateRollingFileStream('myfile', 'yyyy-MM-dd hh:mm', {
+	alwaysIncludePattern: true	
+});
+stream.write('stuff' + os.EOL);
+stream.end(function() {
+	console.log(arguments.length);	
+});

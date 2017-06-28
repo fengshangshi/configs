@@ -1,0 +1,22 @@
+/**
+ * @filename dir.js
+ * @description 遍历目录
+ * @author ss.feng@qunar.com
+ */
+var fs = require('fs');
+
+var folders = [], files;
+
+var scan = exports.scan = function(path) {
+	files = fs.readdirSync(path);
+	files.forEach(function(item) {
+		var tmpPath = path + '/' + item,
+			stats = fs.statSync(tmpPath);
+
+		if (stats.isDirectory()) {
+			scan(tmpPath);
+			folders.push(tmpPath);
+		}
+	});
+	return folders;
+};

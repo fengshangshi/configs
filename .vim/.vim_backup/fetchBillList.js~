@@ -1,0 +1,24 @@
+/**
+ * @desc 获取账单数据
+ * @author ss.feng
+ */
+
+// ajax
+var ajax = require('service/resource');
+
+var api = function(options) {
+	var data = options.data || {};
+	var onsuccess = options.onsuccess || function() {};
+	console.log(11);
+
+	ajax({
+		url: '/accountBill/listBill.do',
+		type: 'GET',
+		data: data,
+		success: function(res) {
+			onsuccess(res);
+		}
+	});
+};
+
+module.exports = api;

@@ -1,0 +1,35 @@
+/**
+ * 绑定红包
+ * @author ss.feng@
+ */
+var $ = require("jquery/jquery.js");
+var dialog = require("module/dialogTips/dialogTips.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+message.register("bindCoupon", function(e) {
+	var args = e.args,
+		couponNo = args.couponNo;
+
+	if (couponNo.length > 0) {
+		var data = {
+			couponNo: couponNo
+		};
+
+		service.ajax({
+			url: "/member/asset/coupon/bindCouponApi.htm",
+			data: data,
+			onsuccess: function(data) {
+				var text = data.errorCode == 0 ? "红包绑定成功" : data.errorMsg;
+				dialog.showDialogTips({
+					content: text
+				});
+				if (data.errorCode == 0) {
+					message.fire(["fetchCouponList", "fetchCouponTotal"]);
+					$("#couponNo").val("");
+					$("#couponNo").parent().find(".form-other").remove();
+				}
+			}
+		});
+	}
+});

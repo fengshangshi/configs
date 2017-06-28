@@ -1,0 +1,66 @@
+var fs = require("fs");
+var syspath = require("path");
+var cjson = require("cjson");
+var sysurl = require("url");
+
+var cfgpath = syspath.join(process.cwd(),"server.json");
+var webConf = cjson.load(cfgpath);
+
+webConf.forEach(function (cfg, i) {
+    cfg.patterns = [];
+    cfg.patterns.push("\\/" + cfg.context + "\\/");
+    cfg.patterns.push("\\/" + cfg.context + "\\/*");
+    cfg.patterns.push("\\/" + cfg.name + "\\/");
+    cfg.patterns.push("\\/" + cfg.name + "\\/*");
+    cfg.urlPattern = cfg.patterns.join("|");
+    cfg.testUrlReg = new RegExp("^(" + cfg.urlPattern + ")");
+    cfg.replaceReg = new RegExp("^\\/" + cfg.context + "\\/");
+});
+
+webConf.getCfg = function (url) {
+    var ret;
+	console.log(this);
+    this.forEach(function (cfg, i) {
+        if (cfg.testUrlReg.test(url)) {
+            ret = cfg;
+            return false;
+        }
+    });
+    return ret;
+}
+
+module.exports = function(options){
+    return function(req,res,next){
+        //针对.vm .htm结尾的url进行 context替换,直接修改req对象的url
+        //因为这个url不仅仅影响vm模板取法，还影响dir目录的读取,因此只能从这个源头上进行拦截了
+        
+        var url = sysurl.parse(req.url);
+        var cfg = webConf.getCfg(url.pathname);
+        //1.有配置的项目
+        //2.以/结尾或者以/xxx结尾或者以vm等结尾的url，也就是有明确vm后缀的和没有后缀的url
+        //3.在配置的context和name名单之内
+        if(cfg && /\/[^\.]+$|\/$|\.(vm|htm|vmhtm|html|vmhtml)\b/.test(url.pathname) && cfg.testUrlReg.test(url.pathname)){
+            //把htm替换为vm
+            //if (!/Api.htm/.test(req.url)) {
+                req.url = req.url.replace(/.html/, ".vm");
+                
+                //替换member等为useraccount
+                req.url = req.url.replace(cfg.replaceReg, cfg.root + "/");
+                //尝试增加index.vm
+                url = sysurl.parse(req.url);
+                var file = syspath.join(process.cwd(),url.pathname);
+                if(fs.existsSync(file)){
+                    var stat = fs.statSync(file);
+                    if (stat.isDirectory()) {
+                        var filepath = syspath.join(file,"/index.vm");
+                        if(fs.existsSync(filepath)){
+                            req.url = req.url + "/index.vm";
+                        }
+                    }
+                }
+            //}
+        }
+        console.log("return next " ,req.url);
+        return next();
+    }
+}

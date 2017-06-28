@@ -1,0 +1,27 @@
+/**
+ * @file 路径转换
+ * @author ss.feng
+ */
+'use strict'
+
+module.exports = function(path, append, isFirstLetterCapital) {
+    append = append || 'Controller';
+    isFirstLetterCapital = isFirstLetterCapital || true;
+
+    // 归一化
+    path = path.toLowerCase();
+
+    let paths = path.split('/');
+    let lastPath = paths[paths.length - 1];
+    let pathname = (lastPath === '' || lastPath === 'index') ? 'index' : lastPath;
+
+    // 处理首字母大写
+    if (isFirstLetterCapital) {
+        pathname = pathname.charAt(0).toUpperCase() + pathname.slice(1);
+    }
+
+    pathname += append;
+    paths[paths.length - 1] = pathname;
+
+    return paths.join('/');
+}

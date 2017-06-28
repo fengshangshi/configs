@@ -1,0 +1,46 @@
+<ol class="card-list clearfix">
+	{{#each data.cardList}}
+	<li>
+		<div class="card-wrap">
+			<div class="card-info-panel">
+				<div class="card-name-type">
+					<div class="card-name">
+						<img src="https://source.qunarzz.com{{cardIcon}}" 
+							alt="{{cardName}}" />
+						<span>{{cardName}}</span>
+					</div>
+					<div class="card-type card-type-{{cardType}}">
+						<span>{{cardTypeHelper cardType}}</span>
+					</div>
+				</div>
+				<div class="card-number">
+					{{cardNo}}
+				</div>
+				<div class="card-holder-name">
+					{{cardHolderName}}
+				</div>
+			</div>
+			<div class="card-operate-panel clearfix">
+				<div class="open-status open-status-{{cardStatus}}">
+					<span>
+					{{cardStatusHelper cardStatus}}
+					</span>
+				</div>
+				<div class="card-manage">
+					<a href="###" class="card-operate-button"
+							data-mobile="{{../data.mobile}}"		
+							data-card-name="{{cardName}}"
+							data-card-no="{{cardNo}}"
+							data-card-id="{{cardId}}"
+							data-operate-id="2">
+						解绑
+					</a>
+				</div>
+			</div>
+		</div>
+	</li>
+	{{/each}}
+	<li class="add-bank-card">
+		<a href="/member/asset/bankCard/addBankCard.htm">添加银行卡</a>
+	</li>
+</ol>

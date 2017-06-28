@@ -1,0 +1,105 @@
+#parse("/widget/include/global.vm")
+#set($pageTitle = "申诉结果")
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>【去哪儿】申诉结果</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+    href="${qzzUrl}${cssPath}/security/appealResultShow.css" />
+  </head>
+  <body>
+    #parse("widget/header/headerForSecurity.vm")
+    <div class="auth">
+        <div class="auth-main container">
+        <div class="box auth-box auth-success">
+          <div class="box-head">
+            <div class="step">
+                <ul class="step-3 step-main clearfix">
+                </ul>
+              </div>
+          </div>
+          <div class="box-container">
+            <div class="appeal-state-main">
+            #if($!{tplData.appealState} == 0)
+                <div class="success-icon"></div>
+                #elseif($!{tplData.appealState} == 1)
+                <div class="fail-icon"></div>
+                #elseif($!{tplData.appealState} == 2)
+                <div class="fail-icon"></div>
+                #else
+                <div class="success-icon"></div>
+            #end
+            <div class="title">
+            #if($!{tplData.appealState} == 0)
+                <h3>我们已收到您的申诉，请您耐心等待人工审核。</h3>
+                #elseif($!{tplData.appealState} == 1)
+                <h3>经电话核实，拒绝该申诉请求。</h3>
+                <p>如有疑问，请联系去哪儿网客服，10101234。</p>
+                #elseif($!{tplData.appealState} == 2)
+                <h3>您上传的附件不符合要求，请重新上传。</h3>
+                <p>您可以 <span class="f-c-blue">继续申诉</span></p>
+                #else
+                <h3>您的申诉已通过，您可以继续进行实名认证。</h3>
+                <p>您可以继续 <a class="f-c-blue" href="auth.htm">实名认证</a></p>
+            #end 
+            </div>
+            </div>
+            <div class="appeal-box">
+                  <table>
+                    <colgroup>
+                      <col width="17%">
+                      <col width="27%">
+                      <col width="11%">
+                      <col width="13%">
+                      <col width="17%">
+                      <col width="15%">
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th class="createTime-th">申诉单号</th>
+                        <th>申诉时间</th>
+                        <th>被申诉账户名</th>
+                        <th>审核时间</th>
+                        <th>审核结果</th>
+                        <th class="oper-th">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    #foreach($appealUser in $list)
+                      #if($appealUser.refuseReason == 1)
+                        #set($reason = "拒绝(上传附件不符合要求)")
+                        #if($velocityCount == 1)
+                          #set($oper = "继续申诉")
+                        #end
+                      #elseif($appealUser.refuseReason == 2)
+                        #set($reason = "拒绝(经电话核实拒绝该申诉请求)")
+                      #elseif($appealUser.refuseReason == 3)
+                        #set($oper = "继续实名认证")
+                      #end
+                      <tr>
+                          <td>$!{appealUser.appealNo}</td>
+                          <td>$!{appealUser.appealTime}</td>
+                          <td>$!{appealUser.appealUid}</td>
+                          <td>$!{appealUser.updatetime}</td>
+                          <td>$!{reason}</td>
+                          <td>$!{oper}</td>
+                      </tr>
+                    #end
+                    </tbody>
+                  </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("widget/footer/footer.vm")
+    <script type="text/javascript">
+      stepTextConfig = ["","填写身份信息","上传双证","等待人工审核"];
+    </script>
+    <script type="text/javascript" 
+    src="${qzzUrl}${jsPath}/security/appealResultShow/entry.js" ></script>
+  </body>
+</html>

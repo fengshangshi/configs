@@ -1,0 +1,24 @@
+#include <stdio.h>
+#define PI 3.1415926
+#define S(r) PI * (r) * (r)
+#define SWAP(a, b) ({(a) += (b); (b) = (a) - (b); (a) = (a) - (b);})
+int main()
+{
+	/*
+	float l, s, r, v;
+	printf("input radius: ");
+	scanf("%f", &r);
+	l = 2.0 * PI * r;
+	s = PI * r * r;
+	v = 4.0/3 * PI * r * r * r;
+	printf("l=%10.4f\ns=%10.4f\nv=%10.4f\n", l, s, v);
+	return 0;
+	*/
+	float a, b, area, t;
+	a = 3.6;
+	b = 5.2;
+	t = SWAP(a, b);
+	printf("t=%f\n", t);
+	area = S(a + b);
+	printf("r=%f\narea=%f\n", a, area);
+}

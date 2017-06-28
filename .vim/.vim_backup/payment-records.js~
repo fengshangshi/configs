@@ -1,0 +1,87 @@
+/**
+ *	对页面的一个初始化
+ *
+ *	调用范围	payment-records-srclist.js & recharge-records-srclist.js & refund-srclist.js
+ *
+ *	逻辑范围	搜索的日历框 & 分页 & 排序
+ *
+ *	标志位		无
+ *
+ *	@Requires	-jquery
+ *				-classes/pagination.js
+ *				-classes/timeout.js
+ *				-util/datepicker/qdatepicker.js
+ *				-util/csSelect/jquery.select.js
+ *
+ *	@notice		#account-type的csSelect只在支付中心首页中使用, 所以加了判断是否有
+ *				根据时间排序是一个小坑，要弄清楚逻辑，分页是form post，sort也是form post
+ *
+ **/
+$(function(){
+
+	//8是GMT+8时区, -%24*3600*1000
+	/*
+	var _maxd=(QNR._maxd+8*3600*1000);
+	_maxd-=_maxd%(24*3600*1000)+8*3600*1000;
+	*/
+	var _maxd=parseStrToDate(QNR._maxd);
+	
+	function parseStrToDate (dateStr){
+		var datas = dateStr.split("-");
+		if(!datas||datas.length<3){
+			return null;
+		}
+		
+		return new Date(datas[0], datas[1]-1, datas[2]);
+	}
+	
+	$("#enddate").qdatepicker({ui:"qunar", customClass: 'qunar-dp-toD',refObj:$("#startdate"),strictMaxDate:_maxd,defaultDay:parseStrToDate($("#enddate").val())});
+	$("#startdate").qdatepicker({ui:"qunar",customClass: 'qunar-dp-fromD',linkTo:$("#enddate"),linkRules: '+1M,+0D,+1M',maxDate:_maxd,defaultDay:parseStrToDate($("#startdate").val())});
+	
+	
+	//if($("#account-type").length){此处的判断多余了
+	$("#account-type").csSelect();
+	//}
+	
+	//分页和排序
+	var fm=$("#account-form");
+	
+	var oiip=$('<input type="hidden" name="order" value="" />');
+	var sort=$("#sort-key-order");
+	sort.bind("click",function(e){
+		if(sort.attr("value")=="DESC"){
+			oiip.val("ASC");
+		}else{
+			oiip.val("DESC");
+		}
+		
+		oiip.appendTo(fm);
+		fm.submit();
+		e.preventDefault();
+	});
+	oiip.val(sort.attr("value"));
+	
+	var cpip=$('<input type="hidden" name="currentPage" value="" />');
+	
+	var callback=function(v){
+		cpip.val(v);
+		cpip.appendTo(fm);
+		oiip.appendTo(fm);
+		fm.submit();
+	}
+	
+	
+	if(QNR.pagiData&&QNR.pagiData.count>10){
+		var p=new QNR.pagination($.extend(QNR.pagiData,{parent:$("[js-place-holder='pagination']"),callback: callback}));
+	}
+});
+
+
+$(function(){
+	$(".det_table tbody tr,.re_table tbody tr,.cz_table tbody tr").each(function(i,v){
+		if(i%2){
+			$(this).addClass("even");
+		}
+	});
+
+});

@@ -1,0 +1,210 @@
+var areaObj = require("../common/areaJson.js");
+var DOM = {
+	YEAR : "[data-year='year']",
+	MONTH : "[data-month='month']",
+	DAY : "[data-day='day']",
+	IDCARD : "[data-type='card']",
+	DATE : "[data-change='date']",
+	SEX : "[data-change='sex']",
+	INSUREDINFO: "[data-box = 'insuredBox']",
+	USRUALLSITBTN: "#pepleList a",
+	USRUALLSIT : "#pepleList",
+	BORTH : "[data-type='birth']",
+	PROVICE : "[data-area='provice']",
+	CITY : "[data-area='city']" ,
+	INSURIDNO: "[data-name='insurIdNo']",
+	ASSIGNEEPROV: "select[name=assigneeProv]",
+	ASSIGNEECITY: "select[name=assigneeCity]"
+}
+function FillInfo(){
+
+}
+FillInfo.prototype = {
+	fillYear : function(ctx){
+		var y = (new Date()).getFullYear();
+		var html = "";
+		for(var i = y; i >= 1930; i--){
+			html += "<option value='" + i + "' data-index='"+ i +"'>" + i;
+		}
+		$(DOM.YEAR, ctx).append(html);
+	},
+	fillMonth : function(ctx){
+		var m = 12;
+		var html = "";
+		for(var i = 1; i <= m; i++){
+			if(i < 10){
+				i = "0" + i;
+			}
+			html += "<option value='" + i + "' data-index='"+ i +"'>" + i;
+		}
+		$(DOM.MONTH, ctx).append(html);
+	},
+	fillDay : function(ctx, end){
+        var d = $(DOM.DAY, ctx)
+            , childrens = d.children()
+            , start = childrens.length + 1
+            ;
+        end = end || 31
+
+        if(start > end){
+            var v = parseInt(d.val(), 10) > end ? end : void 0;
+            childrens.slice(end).remove();
+            if(v){
+                d.val(v);
+            }
+        }else if(start <= end){
+            var html = [];
+            for(var i = start; i <= end; i++){
+                if(i < 10){
+                    i = "0" + i;
+                }
+                html.push("<option value='" + i + "' data-index='"+ i +"'>" + i);
+            }
+            d.append(html.join(''));
+        }
+	},
+	fillFullDate : function(obj){
+		var y = obj.y;
+		var m = obj.m;
+		var d = obj.d;
+		var s = Number(obj.sex);
+		var ele = obj.ele;
+		var date = ele.parents("li").siblings(DOM.DATE);
+		var sexRadio = ele.parents("li").siblings(DOM.SEX);
+		date.find(DOM.YEAR).find("[data-index='"+ y +"']").prop("selected", "selected");
+		date.find(DOM.MONTH).find("[data-index='"+ m +"']").prop("selected", "selected").trigger('change');
+        date.find(DOM.DAY).find("[data-index='"+ d +"']").prop("selected", "selected").trigger('change');
+		if(s % 2 === 0){
+			sexRadio.find("input[type='radio']").eq(1).click();
+		} else {
+			sexRadio.find("input[type='radio']").eq(0).click();
+		}
+	},
+	fillCont : function(data){
+        if(data.success){
+            var fmt = function(n){
+                return ('' + n).replace(/^\d$/, '$&');
+            };
+
+    		var ctx = $('#pepleList').closest('.safe-order-info').add('#insuredBox .safe-order-be:first');
+    		
+            //出生日期
+    		var birth = new Date(data.obj.insurBirth);
+    		birth = [birth.getFullYear(), fmt(birth.getMonth() + 1), fmt(birth.getDate())];
+    		$('[data-year], [data-month], [data-day]', ctx).val(function(i){
+    			return birth[i % 3];
+    		});
+
+    		for(var key in data.obj){
+                var v = data.obj[key];
+    			var ele = $('[data-name=' + key + ']', ctx);
+    			if(ele.is('input[type=radio]')){
+                    ele.each(function(){
+                        $('[name="' + this.name + '"][value="' + v + '"]').prop('checked', true);
+                    });
+    			}else{
+    				ele.val(v).siblings('[data-tip]').hide();
+    			}
+    		}
+
+            //省市联动 证件类型效验 日期隐藏域联动 事件触发
+    		$('[data-area="provice"], [data-name="insurIdType"], [data-day]', ctx).trigger('change');
+    		setTimeout(function(){
+    			$('[data-area="city"]', ctx).val(data.obj.insurCity);	
+    		}, 1);
+    	}
+	},
+	areaSelect : function(selector) {
+        var html = '<option value="">请选择省份</option>';
+        for (var i = 0; i < areaObj.areaJson.length; i++) {
+            html += '<option value="' + areaObj.areaJson[i]['t'] + '" data-index="' + areaObj.areaJson[i]['t'] + '" id="' + i + '">' + areaObj.areaJson[i]['t'] + '</option>';
+        }
+        $(selector || DOM.PROVICE).html(html);
+    },
+    secondSelect : function(id, selector) {
+        var html = '<option value="">请选择城市</option>';
+        var obj = id ? areaObj.areaJson[id]['s'] : null;
+        if(!obj){
+            return;
+        }
+        for (var i = 0; i < obj.length; i++) {
+            html += '<option value="' + obj[i]['t'] + '" data-index="' + obj[i]['t'] + '">' + obj[i]['t'] + '</option>';
+        }
+        $(selector || DOM.CITY).html(html);
+    },
+	fillForm : function(){
+		var me = FillInfo.prototype;
+		$(DOM.USRUALLSITBTN).removeClass("cur");
+		$(this).addClass("cur");
+		$.ajax({
+			url : "../insure/queryApplicant.do",
+			type : "POST",
+			dataType : "json",
+			data : {
+				id : $(this).attr("data-id")
+			},
+			success : me.fillCont
+		});
+	},
+	fillBirthDay: function(ctx) {
+		var me = this;
+		me.fillYear(ctx);
+		me.fillDay(ctx);
+		me.fillMonth(ctx);
+
+        $(DOM.YEAR + ',' + DOM.MONTH, ctx).change(function(){
+            var curCtx = $(this).closest('.safe-order-input')
+                , y = $(DOM.YEAR, curCtx)
+                , m = $(DOM.MONTH, curCtx)
+                , year = parseInt(y.val(), 10);
+                ;
+            var leapProc = function(){
+                if(year % 100 === 0 && year % 400 === 0 || year % 100 !== 0 && year % 4 === 0){
+                    me.fillDay(curCtx, 29);
+                }else{
+                    me.fillDay(curCtx, 28);
+                }
+            };
+            if($(this).is(m)){
+                if(~',01,03,05,07,08,10,12'.indexOf(',' + m.val())){
+                    me.fillDay(curCtx, 31);
+                }else if(m.val() === '02'){
+                    leapProc();
+                }else{
+                    me.fillDay(curCtx, 30);
+                }
+            }else if(m.val() === '02'){
+                leapProc();
+            }
+        });
+		$(DOM.YEAR + "," + DOM.MONTH + "," + DOM.DAY, ctx).bind("change", function(){
+            var curCtx = $(this).closest('.safe-order-input');
+			var date = $(DOM.YEAR, curCtx).val() + "-" + $(DOM.MONTH, curCtx).val() + "-" + $(DOM.DAY, curCtx).val();
+			$(DOM.BORTH, curCtx).val(date);
+		});
+        $(DOM.YEAR, ctx).trigger('change');
+	},
+	initEvent :function(ctx){
+		var me = this;
+		me.fillBirthDay(ctx);
+		$(DOM.USRUALLSITBTN).bind("click", me.fillForm);
+		$(DOM.PROVICE).bind("change", function(){
+			var item = $(this).val();
+			//获取对应value的index信息
+			var index = $(this).find("option[value='"+item+"']").attr("id");
+			me.secondSelect(index);
+		});
+		me.areaSelect();
+
+	},
+	initInvoiceEvent: function(){
+		var me = this;
+		$(DOM.ASSIGNEEPROV).change(function(){
+			var item = $(this).val();
+			var id = $('option[value="'+item+'"]', this).attr('id');
+			me.secondSelect(id, DOM.ASSIGNEECITY)
+		});
+		me.areaSelect(DOM.ASSIGNEEPROV);		
+	}
+}
+exports.FillInfo = FillInfo;

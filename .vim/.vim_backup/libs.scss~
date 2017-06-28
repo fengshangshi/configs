@@ -1,0 +1,27 @@
+/**
+ * @file libs.scss 基础样式加载
+ * @description 基础样式的入口文件，其中包括：
+ *   样式重置 全局链接 清除浮动 全局字体
+ *   这里基本无需修改，在项目制定之初需要跟设计师约定的规范
+ * @author ss.feng@qunar.com
+ */
+/**
+ * @base.scss 定义全局的变量
+ */
+@import url("./base.scss");
+/**
+ * @reset.scss 所有浏览器样式统一
+ */
+@import url("./reset.scss");
+/**
+ * @link.scss 定义全局链接
+ */
+@import url("./link.scss");
+/**
+ * @font.scss 定义全局字体
+ */
+@import url("./font.scss");
+/**
+ * @clearfix.scss 定义清除浮动功能样式
+ */
+@import url("./clearfix.scss");

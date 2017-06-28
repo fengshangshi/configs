@@ -1,0 +1,18 @@
+/**
+ * 清除浮动 clearfix
+ */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height:0;
+	height:0;
+	font-size:0;
+}
+/**
+ * clearfix for ie6
+ */
+.clearfix {
+	*zoom:1;
+}

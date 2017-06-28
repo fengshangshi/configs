@@ -1,0 +1,57 @@
+/**
+ *小票打印样式
+ *@auhtor jie.pi@qunar.com
+ */
+.q-print {
+    .print-A4 {
+        font-size: 14px;
+    }
+
+    .min-bill-print {
+        width: 150pt;
+        padding:7pt 7pt 15pt;
+        font-size: 10pt;
+
+        td{
+            word-break:break-all;
+            word-wrap: break-word;
+        }
+        .letter-space {
+            letter-spacing: 24px;
+        }
+        .table td {
+            height: auto;
+        }
+        .room-info {
+
+        }
+        .order-finance {
+            padding-left: 10px;
+            ul {
+                float: left;
+            }
+            .finance-name {
+                width: auto;
+                text-align: left;
+            }
+        }
+
+        .page-info {
+            padding-left: 10px;
+        }
+        .print-time {
+            padding-top: 25px;
+        }
+    }
+}
+
+@media print{
+    //.min-bill-print {
+    //    font: normal 12px arial !important;
+    //}
+    //.title {
+    //    font-size: 14px;
+    //    font-weight: bold;
+    //    font-family: arial;
+    //}
+}

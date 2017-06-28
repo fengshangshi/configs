@@ -1,0 +1,76 @@
+/**
+ * 获取市区
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchCity", function(e) {
+	var args = e.args,
+		provinceId = args.provinceId,
+		form = args.form,
+		bankCode = args.bankCode;
+
+	message.fire("resetCity", {
+		form: form
+	});
+	message.fire("resetBranch", {
+		form: form
+	});
+
+	var data = {
+		provinceCode: provinceId,
+		bankCode: bankCode
+	};
+
+	service.ajax({
+		url: "/member/asset/balance/fetchCityApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			var dataList = [];
+			dataList.push("<option value='0'>请选择市</option>");
+
+			if (data.errorCode == 0) {
+				var list = data.data.list;
+				for (var i = 0, l = list.length; i < l; i++) {
+					var html = [
+						"<option value='" + list[i].citycode,
+						"|" + list[i].cityname +"'>",
+						"<option value='" + list[i].citycode+"'>",
+						list[i].cityname + "</option>"
+					];
+					dataList.push(html.join(""));
+				}
+			}
+
+			form = form + " select[name=cityName]";
+			
+			$(form).html(dataList);
+
+			var options = {
+				selectors: {}
+			};
+			options.selectors[form] = "";
+			message.fire("initSelector", options);
+		}
+	});
+});
+
+// 重置市
+message.register("resetCity", function(e) {
+	var args = e.args,
+		form = args.form;
+
+	var dataList = [];
+	dataList.push("<option value='0'>请选择市</option>");
+
+	form = form + " select[name=cityName]";
+	$(form).html(dataList);
+
+	var options = {
+		selectors: {}
+	};
+	options.selectors[form] = "";
+	message.fire("initSelector", options);
+});

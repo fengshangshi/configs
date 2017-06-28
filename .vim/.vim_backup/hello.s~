@@ -1,0 +1,5 @@
+assume cs:code, ss:stack, ds:data
+
+data segment
+		db 'Hello World!', 0
+data ends

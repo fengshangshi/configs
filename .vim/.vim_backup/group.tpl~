@@ -1,0 +1,141 @@
+{%widget%}
+<div class="events_card">
+	<div class="events_card_wrap"></div>
+	{%widget name="main/events/right_sidebar" view="group"%}
+</div>
+<script type="text/template" id="template_group_card">
+	<div class="events_card_hd">
+		<div class="hd_title">
+			<h2><strong class=""><%:=tplData.head.group%></strong>组</h2>
+		</div>
+		<ul class="hd_nav">
+			<% for (var i = 0, l = tplData.head.sub_tag_list.length; i < l; i++) { %>
+				<% if (i == 0) { %>
+					<li class="country_head_<%=i%> current" data-index="<%=i%>">
+				<% }else{ %>
+					<li class="country_head_<%=i%>" data-index="<%=i%>">
+				<% } %>
+			
+				<a href="###"><span><%:=tplData.head.sub_tag_list[i]%></span></a>
+			</li>
+			<% } %>
+		</ul>
+	</div>
+	<div class="events_card_bd">
+		<div class="card_item_wrap"  >		
+			<% var country_id = 0; %>
+			<% for (var k in tplData.body) { %>
+			<ul class="event_list country_<%=country_id%>" id="event_list_<%=k%>" <% if (k == tplData.head.title) { %>style="display:block;"<% } %>>
+				<% for (var i = 0, l = tplData.body[k].length; i < l; i++) { %>
+				<li>
+					<div class="item_guess">
+						<div class="country_info">
+							<a id="country_link" href="/worldcup/events/country?query=<%=tplData.body[k][i].home_team%>">
+							<img src="http://sfile.baidu.com/worldcup/icon/<%=tplData.body[k][i].home_logo%>.png" alt="">
+							<span>
+							<%=tplData.body[k][i].home_team%>
+							</span>
+							</a>
+						</div>
+						<div class="guess_ratio <%if (tplData.body[k][i].equal_rate == 0) { %>not_draw<% } %>">
+							<div class="ratio_title">
+								<div class="left_bar_title" style="width:<%=tplData.body[k][i].win_rate%>%">
+								<%if (tplData.body[k][i].win_rate >= 16) { %>
+									<span>胜率</span>
+								<% } %>
+								</div>
+								<div class="middle_bar_title" style="width:<%=tplData.body[k][i].equal_rate%>%;">
+								<%if (tplData.body[k][i].equal_rate >= 13) { %>
+									<span>平局率</span>
+								<% } %>
+								</div>
+								<div class="right_bar_title" style="width:<%=tplData.body[k][i].fail_rate%>%;">
+								<%if (tplData.body[k][i].fail_rate >= 16) { %>
+									<span>胜率</span>
+								<% } %>
+								</div>
+							</div>
+							<div class="ratio_content">
+								<div class="left_bar" style="width:<%=tplData.body[k][i].win_rate%>%" title="胜率:<%=tplData.body[k][i].win_rate%>%">
+									<%if (tplData.body[k][i].win_rate >= 16) { %>
+										<span><%=tplData.body[k][i].win_rate%>%</span>
+									<% } %>
+									<i <%if (tplData.body[k][i].equal_rate < 8) { %>style="right:0;"<% } %>></i>
+								</div>
+								<div class="middle_bar" style="width:<%=tplData.body[k][i].equal_rate%>%;" title="平局率:<%=tplData.body[k][i].equal_rate%>%">
+									<%if (tplData.body[k][i].equal_rate >= 13) { %>
+										<span><%=tplData.body[k][i].equal_rate%>%</span>
+									<% } %>
+								</div>
+								<div class="right_bar" style="width:<%=tplData.body[k][i].fail_rate%>%;" title="胜率:<%=tplData.body[k][i].fail_rate%>%">
+									<%if (tplData.body[k][i].fail_rate >= 16) { %>
+										<span><%=tplData.body[k][i].fail_rate%>%</span>
+									<% } %>
+									<i <%if (tplData.body[k][i].equal_rate < 8) { %>style="left:0;"<% } %>></i>								
+								</div>
+							</div>
+						</div>
+						<div class="country_info right_country_info">
+							<a href="/worldcup/events/country?query=<%=tplData.body[k][i].away_team%>">
+								<span>
+								<%=tplData.body[k][i].away_team%>
+								</span>
+								<img src="http://sfile.baidu.com/worldcup/icon/<%=tplData.body[k][i].away_logo%>.png" alt="">
+							</a>
+						</div>
+					</div>
+					<div class="item_info" style="overflow:hidden;posistion:relative;">
+						<%if (tplData.body[k][i].if_game_over == 1) { %>
+							<div class="item_info_result">
+								<p>
+									<span >最终比赛结果</span>
+									<span class="r_line "></span>
+									<a href="<%=tplData.body[k][i].play_addr%>" target="_blank">赛事点播</a>
+								</p>
+								<p style="font-size:14px;"><%=tplData.body[k][i].home_team%><span style="margin:0 10px;"><%=tplData.body[k][i].home_score%>&nbsp;:&nbsp;<%=tplData.body[k][i].away_score%></span><%=tplData.body[k][i].away_team%></p>
+							</div>
+							<%if (tplData.body[k][i].if_predict_correct == 1) { %>
+								<div class="info_radius info_radius_blue"><span>准确预测</span></div>
+							<% } %>
+						<% } else { %>
+							<p class="item_info_time" 
+								<% if (tplData.body[k][i].home_pos != "") { %>
+								style="padding-top:10px;"
+								<% } %>
+							>
+								<span style="font-size:16px;">
+								北京时间：<%=tplData.body[k][i].timewise.month%>.<%=tplData.body[k][i].timewise.day%> <%=tplData.body[k][i].timewise.hour%>:<%=tplData.body[k][i].timewise.min%>
+								</span>
+							</p>
+							<% if (tplData.body[k][i].home_pos == "") { %>
+							<p class="item_info_link">
+									<% if(tplData.body[k][i]['play_addr'].length > 0){ %>
+										<a href="<%=tplData.body[k][i].play_addr%>" target="_blank">赛事点播</a>
+										<% if(tplData.body[k][i]['bet_addr'].length > 0){ %>
+											<span class="r_line"></span>
+										<% } %>
+									<% } %>
+									<% if(tplData.body[k][i]['bet_addr'].length > 0){ %>
+										<a href="<%=tplData.body[k][i].bet_addr%>" target="_blank">乐彩投注</a>
+										<% if(tplData.body[k][i]['insurance_addr'].length > 0){ %>
+											<span class="r_line"></span>
+										<% } %>
+									<% } %>
+									<% if(tplData.body[k][i]['insurance_addr'].length > 0){ %>
+										<a href="<%=tplData.body[k][i].insurance_addr%>" target="_blank">平安投注</a>
+										<span class="hot-item"></span>
+									<% } %>
+							</p>
+							<% } %>
+						<% } %>
+					</div>
+				</li>
+				<% } %>
+			</ul>
+			<% country_id += 1; %>
+			<% } %>
+		</div>
+	</div>
+</script>
+<script>F.use("./group.js");</script>
+{%/widget%}

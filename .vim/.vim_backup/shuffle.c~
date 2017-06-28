@@ -1,0 +1,29 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include "deck.h"
+
+static time_t seed = 0;
+
+void shuffle(deck_t *pdeck)
+{
+		int drawn[DECKSIZE] = {0};
+		int i;
+
+		if (0 == seed) {
+				seed = time(NULL);
+				srand(seed);
+		}
+
+		for(i = 0; i < DECKSIZE; i++) {
+				int value = -1;
+				do {
+						value = rand() % DECKSIZE;
+				} while (drawn[value] != 0);
+
+				drawn[value] = 1;
+
+				printf("%i\n", value);
+				pdeck->card[i] = value;
+		}
+}

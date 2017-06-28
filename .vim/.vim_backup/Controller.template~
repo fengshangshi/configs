@@ -1,0 +1,38 @@
+/**
+ * @file 控制器模板
+ * @author ss.feng
+ */
+'use strict'
+
+// 类必须继承自Controller
+class Index extends Controller {
+	// 必须实现构造器方法
+	constructor(req, res, err) {
+		// 首行必须是super方法
+		super(req, res, err);
+	}
+
+	// 必须实现类的入口方法
+	exec() {
+		// 类的业务逻辑入口
+		// 如果通过URI传递的参数会放在这里
+
+		// 渲染模板
+		this.display('index.html');
+	}
+
+	// 前置处理器
+	get preProcessor() {
+		// 前置处理器队列
+		return [];
+	}
+
+	// 后置处理器
+	get postProcessor() {
+		// 后置处理器队列
+		return [];
+	}
+}
+
+// exports对象挂载http method
+exports.GET = Index;

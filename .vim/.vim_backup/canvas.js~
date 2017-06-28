@@ -1,0 +1,43 @@
+"use strict"
+
+var f = function(x) {
+	this.x = x;
+	//console.log(this.x);
+	console.log(this.x);
+};
+
+window.configurable = true;
+
+var ff = new f(5);
+ff.configurable = true;
+
+delete ff.x;
+
+console.log(ff.x);
+/*
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+var image = document.createElement("img");
+image.src = "./flights.png";
+image.addEventListener("load", function(e) {
+	console.log("ok");
+	//context.drawImage(image, 0, 220, 220, 220, 0, 0, 110, 110);
+	//context.drawImage(image, 0, 0);
+	//context.drawImage(image, 0, 0, 220, 220);
+	context.drawImage(image, 0, 0, 220, 220, 0, 0, 80, 80);
+	context.drawImage(image, 220, 0, 220, 220, 80, 80, 80, 80);
+	context.drawImage(image, 0, 0, 220, 220, 80, 0, 80, 80);
+	context.drawImage(image, 220, 220, 220, 220, 0, 80, 70, 70);
+}, false);
+var RECTANGLE_WIDTH = 100,
+	RECTANGLE_HEIGHT = 100;
+
+
+context.strokeRect((canvas.width - RECTANGLE_WIDTH)/2, 
+		(canvas.height-RECTANGLE_HEIGHT)/2, 
+			RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
+
+context.translate(50, 50);
+context.fillRect(0, 0, 100, 100);
+console.log(context);
+*/

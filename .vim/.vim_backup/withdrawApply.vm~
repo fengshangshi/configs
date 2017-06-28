@@ -1,0 +1,289 @@
+#parse("widget/include/global.vm")
+#set($resetPasswordUrl = "/member/security/resetPassword.htm")
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>【去哪儿】我的账户-账户资产-账户余额-提现</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+        href="${qzzUrl}${cssPath}/asset/balance/withdrawApply.css" />
+	#parse("widget/include/scriptHeader.vm")
+	<script>
+		window.common = window.common || {};
+		window.common["cardSize"] = "$tplData.cardList.size()";
+		window.common["maxAmount"] = "$tplData.withdrawcashRule.maxamount";
+		window.common["minAmount"] = "$tplData.withdrawcashRule.minamount";
+	</script>
+</head>
+<body class="asset asset-balance">
+    #parse("widget/header/header.vm")
+    #parse("widget/nav/nav.vm")
+    <div class="container clearfix">
+        <div class="side-bar">
+            #parse("widget/menu/menuForAsset.vm")
+        </div>
+        <div class="main">
+            <div class="main-content">
+                <div class="module">
+                    <div class="module-hd clearfix">
+                        <h3>提现</h3>
+                    </div>
+                    <div class="module-bd">
+						<div class="balance-wrap">
+							<div class="balance-title">
+								<span>
+									可提现金额
+									<strong>${tplData.withdrawBalance}</strong>
+									元
+								</span>
+							</div>
+							<div class="balance-content">
+								<div class="item overflow-hidden clearfix">
+									<label for="">提现金额</label>
+									<div class="field">
+										<input type="text" 
+											data-balance="${tplData.withdrawBalance}" 
+											class="short-input" name="amount" value="" />
+										<b class="unit">元</b>
+									</div>
+								</div>
+								<div class="item clearfix">
+									<label for=""></label>
+									<div class="field gray">
+										##这里的字段名不为驼峰格式，请注意
+										只有返现资金可以申请提现，
+										限额
+										${tplData.withdrawcashRule.minamount}-${tplData.withdrawcashRule.maxamount}元/次，
+										${tplData.withdrawcashRule.nums}次/日
+									</div>
+								</div>
+							</div>
+							<div class="tab-wrap">
+								<div class="tab-hd">
+									#if ($tplData.cardList.size() > 0)
+										<span class="current" data-type="cardList">提现到常用卡</span>
+										<span data-type="no-cardList">提现到其他银行卡</span>
+									#else
+										<span class="current">提现到银行卡</span>
+									#end
+								</div>
+								<div class="tab-bd">
+									#if ($tplData.cardList.size() > 0)
+									<div class="tab-bd-item cardList current">
+										<form method="post" id="cardList-form"
+												accept-charset="utf-8"
+												action="/member/asset/balance/withdrawApplySubmit.htm">
+										<ul class="bankCard-list">
+											#foreach($item in $tplData.cardList)
+											#if ($velocityCount == 1)
+											<li>
+											#else
+											<li class="hidden">
+											#end
+												<a  href="javascript:void(0)"
+													data-bankCode="$!{item.bankCode}"
+													data-storeIndex="$!{item.storeIndex}"
+													data-cardNo="$!{item.cardNo}"
+													data-bankName="$!{item.bankShortName}"
+													#if ($velocityCount == 1)
+													class="current"
+													#end
+													>
+													<div class="bankCard-info-wrap">
+														<input type="radio" name="bankCard" 
+															#if ($velocityCount == 1)
+															checked="checked" 
+															#end
+															value="${velocityCount}" />
+														<div class="bankCard-info">
+															<div class="bankCard-icon">
+																<img src="https://source.qunarzz.com${item.picUrl}" alt="" />
+															</div>
+															<div class="bankCard-text">
+																<span>
+																#if ($item.cardType == 1)
+																信用卡
+																#else
+																储蓄卡
+																#end
+																</span>
+																<strong>${item.cardNo}</strong>
+															</div>
+														</div>
+													</div>
+												</a>
+											</li>
+											#end
+											#if ($tplData.cardList.size() > 1)
+											<li>
+												<div class="bankCard-more">
+													<span>全部展开</span>
+												</div>
+											</li>
+											#end
+										</ul>
+											<div class="item clearfix">
+												<label for="">姓名</label>
+												<div class="field">
+													<input type="text" 
+															data-jvalidator-pattern="required"
+															class="middle-input" name="customerName" value="" />
+												</div>
+											</div>  
+											<div class="item clearfix">
+												<label for="">开户地区</label>
+												<div class="field">
+													<select name="provinceName" 
+															data-jvalidator-pattern="select-non-zero"
+															class="province">
+														<option value="0">请选择省</option>
+													</select>
+													<select name="cityName" 
+															data-jvalidator-pattern="select-non-zero"
+															class="city">
+														<option value="0">请选择市</option>
+													</select>
+												</div>
+											</div>  
+											<div class="item clearfix">
+												<label for="">支行名称</label>
+												<div class="field">
+													<select name="branchBankCode" 
+															data-jvalidator-pattern="select-non-zero"
+															class="brach">
+														<option value='0'>请选择支行</option>
+													</select>
+												</div>
+											</div>    
+											<div class="item clearfix">
+												<label for="">交易密码</label>
+												<div class="field">
+													<input type="password" 
+															data-jvalidator-pattern="required"
+															class="middle-input" name="password" value="" />
+													<a class="forget" target="_blank"
+														href="${resetPasswordUrl}">忘记交易密码?</a>
+												</div>
+											</div> 
+											<div class="item clearfix">
+												<a href="\#\#\#" 
+														class="button button-o button-submit">确认提现</a>
+												<input type="hidden" name="bankCode"
+														 value="$!{tplData.cardList[0].bankCode}" />
+												<input type="hidden" name="storeIndex"
+														 value="$!{tplData.cardList[0].storeIndex}" />
+												<input type="hidden" name="bankName"
+														 value="$!{tplData.cardList[0].bankShortName}" />
+												<input type="hidden" name="cardNo"
+														 value="$!{tplData.cardList[0].cardNo}" />
+												<input type="hidden" name="amount" value="" />
+												<input type="hidden" name="csrfToken" value="$!{csrfToken}" />
+											</div>                                            
+										</form>
+									</div>
+									#end
+									#if ($tplData.cardList && $tplData.cardList.size() > 0)
+									<div class="tab-bd-item no-cardList">
+									#else
+									<div class="tab-bd-item no-cardList current">
+									#end
+										<form method="post" id="no-cardList-form"
+												accept-charset="utf-8"
+												action="/member/asset/balance/withdrawApplySubmit.htm">
+											<div class="item clearfix">
+												<label for="">选择银行</label>
+												<div class="field">
+													<select name="bankCode" 
+															data-jvalidator-pattern="select-non-zero"
+															class="bankCode">
+														<option value="0">请选择银行</option>
+														#foreach($item in $tplData.bankList)
+														<option value="${item.bankcode}">${item.bankname}</option>
+														#end
+													</select>
+												</div>
+											</div>  
+											<div class="item clearfix">
+												<label for="">银行卡号</label>
+												<div class="field">
+													<input type="text" 
+															data-jvalidator-pattern="required&numeric&cleanLengthMore[12]&cleanLengthSmall[19]"
+															class="middle-input" name="bankCardNoShow" value="" />
+													<input type="hidden" name="bankCardNo" />
+												</div>
+											</div>  
+											<div class="item clearfix">
+												<label for="">姓名</label>
+												<div class="field">
+													<input type="text" 
+															data-jvalidator-pattern="required"
+															class="middle-input" name="customerName" value="" />
+												</div>
+											</div>  
+											<div class="item clearfix">
+												<label for="">开户地区</label>
+												<div class="field">
+													<select name="provinceName" 
+															data-jvalidator-pattern="select-non-zero"
+															class="province">
+														<option value="0">请选择省</option>
+													</select>
+													<select name="cityName" 
+															data-jvalidator-pattern="select-non-zero"
+															class="city">
+														<option value="0">请选择市</option>
+													</select>
+												</div>
+											</div>  
+											<div class="item clearfix">
+												<label for="">支行名称</label>
+												<div class="field">
+													<select name="branchBankCode" 
+															data-jvalidator-pattern="select-non-zero"
+															class="branch">
+														<option value='0'>请选择支行</option>
+													</select>
+												</div>
+											</div>    
+											<div class="item clearfix">
+												<label for="">交易密码</label>
+												<div class="field">
+													<input type="password" 
+															data-jvalidator-pattern="required"
+															class="middle-input" name="password" value="" />
+													<a class="forget" target="_blank"
+														href="${resetPasswordUrl}">忘记交易密码?</a>
+												</div>
+											</div> 
+											<div class="item">
+												<a href="\#\#\#" 
+														class="button button-o button-submit">确认提现</a>
+												<input type="hidden" name="amount" value="" />
+												<input type="hidden" name="bankName" value="" />
+											</div>                                            
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+				<div class="qr-card-wrap">
+					<div class="qr-card-image">
+						<img src="//source.qunarzz.com/site/images/pay/useraccount/common/qr_code_new.png" alt="" />
+					</div>
+					<div class="qr-card-text">扫描下载去哪儿客户端</div>
+					<i class="arrow-left"></i>
+					<i class="arrow-right"></i>
+				</div>
+            </div>
+        </div>
+    </div>
+    #parse("widget/footer/footer.vm")
+    <script 
+        src="${qzzUrl}${jsPath}/asset/balance/withdrawApply/entry.js">
+    </script>
+</body>
+</html>

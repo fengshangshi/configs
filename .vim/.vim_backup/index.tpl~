@@ -1,0 +1,25 @@
+{%extends file="./layout.tpl"%}
+
+{%*顶部页面级样式*%}
+{%block name="block_head_page_style"%}
+	{%require name="sky-mobile:static/index/index.css"%}
+	{%require name="sky-mobile:static/index/marker.css"%}
+{%/block%}
+
+{%*底部页面级脚本*%}
+{%block name="block_body_page_script"%}
+	{%require name="sky-mobile:static/index/index.js"%}
+{%/block%}
+
+{%*底部页面级脚本*%}
+{%block name="block_body_content"%}
+<div class="container"> 
+	{%widget name="sky-mobile:widget/map/map.tpl"%}
+	{%widget name="sky-mobile:widget/header/header.tpl"%}
+	{%widget name="sky-mobile:widget/controller/controller.tpl"%}
+	{%widget name="sky-mobile:widget/search/search.tpl"%}
+	{%widget name="sky-mobile:widget/about/about.tpl"%}
+	{%widget name="sky-mobile:widget/detail/detail.tpl"%}
+	{%widget name="sky-mobile:widget/loading/loading.tpl"%}
+</div>
+{%/block%}

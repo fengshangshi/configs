@@ -1,0 +1,14 @@
+/**
+ * @file base
+ * @author fengshangshi
+ */
+var Base = function(req, res, app) {
+		this.req = req;
+		this.res = res;
+};
+
+Base.prototype.display = function(tpl, data) {
+		this.res.render(tpl, data);
+};
+
+global.Base_Controller = Base;

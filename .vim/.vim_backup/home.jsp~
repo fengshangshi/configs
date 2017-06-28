@@ -1,0 +1,200 @@
+<%
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Cache-Control","no-store");
+	response.setDateHeader("Expires", 0);
+	response.setHeader("Pragma","no-cache");
+%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net/el" %>
+<%@ page import="java.util.Map" %>
+<%@ page session="false" %>
+<%
+	Map date = (Map)request.getAttribute("date");
+	//获得当前home页的request_id
+	String homeRequestId = request.getAttribute("_APT_HOME_REQUESTID").toString();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>【去哪儿公寓】公寓预订,公寓查询,日租,长租-去哪儿网Qunar.com</title>
+	<meta name="keywords" content="公寓预订,公寓查询,日租房预订,日租价格查询,低价酒店预订,低价日租房预订,日租房,日租房查询,短租预订,短租查询" />
+	<meta name="description" content="去哪儿公寓为你找到方便快捷、最有特色的公寓,更全的设施,更低的价格,星级酒店般享受,省心放心,更多惊喜,去哪儿公寓寻找旅行中的家。" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<link rel="stylesheet" href="http://qunarzz.com/apt_web/prd/styles/home@<%@include file="ver/styles/home.css.ver" %>.css" />
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "//hm.baidu.com/hm.js?1dac56f5532e14d5fd9e94b9f306d334";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+	<script>
+		var _apt_home_request_id = '<%=homeRequestId%>';
+		var _apt_search_request_id = '';
+		var _apt_detail_request_id = '';
+	</script>
+	<!--[if IE 6]>
+	<script type="text/javascript" src="http://qunarzz.com/js/compatibilityUtils/build/DD_belatedPNG-min.js"></script>
+	<script type="text/javascript">
+		DD_belatedPNG.fix('.png24');
+	</script>
+	<![endif]-->
+</head>
+<body class="page page-home">
+<div class="g-header">
+    <%@include file="/include_html/prd/gongyu/header_styles.html"%>
+    <div class="q_header q_header_gongyu">
+    <%@include file="/include_html/prd/gongyu/header_main.html"%>
+    </div>
+</div>
+
+<div class="g-wrapper">
+	<!-- recommend:s -->
+	<div class="g-recommend">
+		<!-- banner:s -->
+		<div id="homeBanner"></div>
+		<!-- banner:e -->
+	</div>
+	<!-- recommend:e -->
+
+	<!-- search:s -->
+	<div class="g-search-bg png24">
+		<div class="g-search">
+			<div class="g-search-content png24 fn-clear">
+				<div  class="g-search-slogan png24">开启居家之旅</div>
+				<form action="/roomType/t/list" method="get" id="searchForm">
+					<div class="g-search-item fn-left space-left-num space-right-num">
+						<input type="text" autocomplete="off" class="g-search-input g-search-city" id="toCity" name="cityName" <c:forEach items="${cityList}" var="item" varStatus="status"><c:if test="${item.code == city.cityCode}"> value="${item.name}" </c:if></c:forEach>readonly="readonly">
+						<input type="hidden" autocomplete="off" name="cityCode"  value="${city.cityCode}" id="toCityCode">
+						<span class="g-search-icon-city" id="toCityIcon"></span>
+						<div class="g-city-layer fn-hide" id="cityLayer">
+							<div class="g-city-nav" id="cityNav">
+
+							</div>
+							<a class="g-city-close" id="cityClose" title="关闭"></a>
+							<div class="g-city-content">
+								<ul class="fn-clear" id="cityList" >
+
+								</ul>
+							</div>
+						</div>
+
+					</div>
+					<div class="g-search-item fn-left space-right-num">
+						<div class="g-search-text">入住</div>
+						<input type="text" autocomplete="off" name="checkInTime" class="g-search-input g-search-date" value="${date.checkInTime}" readonly="readonly" id="checkInDate">
+					</div>
+					<div class="g-search-item fn-left space-right-num">
+						<div class="g-search-text">退房</div>
+						<input type="text" autocomplete="off" name="checkOutTime" class="g-search-input g-search-date" value="${date.checkOutTime}" readonly="readonly" id="checkOutDate">
+					</div>
+					<div class="g-search-item fn-left space-right-num">
+						<input type="hidden" name="searchType" id="searchType"  value="0">
+						<input type="hidden" name="searchQuery" id="searchQuery" value="">
+						<input type="hidden" name="from"  value="home">
+						<input type="hidden" name="aptHomeId" id="aptHomeId" value="<%=homeRequestId%>">
+						<input type="hidden" name="aptSearchId" id="aptSearchId"  value="">
+						<input type="hidden" name="aptDetailId" id="aptDetailId"  value="">
+						<input type="text"  class="g-search-input g-search-position" id="search" maxlength="20" autocomplete="off" value="请输入公寓名、位置" data-change="0">
+						<div class="hotArea none">
+
+						</div>
+					</div>
+					<div class="g-search-item fn-right">
+						<button type="submit" class="g-search-submit png24" id="searchSubmit"></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- search:e -->
+
+	<!-- topic:s -->
+	<div id="homeTopic"></div>
+	<!-- topic:e -->
+
+	<!-- theme rooms:s -->
+	<div class="g-theme" id="hotContent">
+	</div>
+	<div class="g-theme" id="longContent">
+	</div>
+	<div class="g-theme" id="multiContent">
+	</div>
+	<div class="g-theme" id="homeContent">
+	</div>
+	<!-- theme rooms:e -->
+
+	<!-- service:s -->
+	<div class="g-service">
+		<div class="quhuhu-ins">
+			<ul>
+				<li>
+					<h3 class="safe">预订保障</h3>
+					<p><a href="http://hotel.qunar.com/bao/" target="_blank" class="blue">担保通</a>全力维护用户的资金安全，<br>并确保房源信息真实有效</p>
+				</li>
+				<li>
+					<h3 class="privacy">私密验证</h3>
+					<p>智能保障房型经过去呼呼平台验证，<br>您可通过专属6位密码进入房间</p>
+				</li>
+				<li>
+					<h3 class="favorable">优惠方案</h3>
+					<p>同等面积，我们总有更低价格。<br>希望您的每一次入住都愉悦</p>
+				</li>
+			</ul>
+		</div>
+		<div class="g-service-wrapper">
+			<div class="g-reserve">
+				<div class="g-reserve-step">
+				</div>
+			</div>
+			<div class="g-appdown">
+				<div class="g-appdown-title">
+					<p>手机APP开门</p>
+					<p>超炫体验</p>
+				</div>
+				<div class="g-appdown-code">扫描二维码</div>
+			</div>
+		</div>
+	</div>
+	<!-- service:e -->
+
+	<!-- contact:s -->
+	<div class="g-contact">
+		<h2 class="g-contact-slogan">智能您的房间，聪明你的旅行</h2>
+		<p class="g-contact-info"><span class="mr15">招商合作</span><span class="mr20">邮箱：asp_bd@qunar.com（请留下您的名字、手机、城市）</span><span></span></p>
+	</div>
+	<!-- contact:e -->
+
+</div>
+<div class="g-icons">
+	<ul>
+		<li class="g-icons-text">智能安心住，乐享去呼呼</li>
+		<li class="g-icons-weixin" id="g-icons-weixin"><a><span></span></a></li>
+		<li class="g-icons-weibo"><a href="http://weibo.com/quhuhu" target="_blank" title="去呼呼的微博"><span></span></a></li>
+		<li class="g-icons-youku"><a href="http://i.youku.com/u/UMTYyNjk3Njg3Mg==" target="_blank" title="去呼呼梦想家"><span></span></a></li>
+	</ul>
+	<div class="g-icons-weixinpng" id="g-icons-weixinpng"></div>
+</div>
+<div class="g-footer">
+	<div class="g-footer-partner">去呼呼是去哪儿网旗下非标准住宿品牌，致力于打造全国最大的住宿预订平台，该平台由北京云端漫行软件科技有限公司负责运营</div>
+	<div class="qn_footer">
+    	<%@include file="/include_html/footer/footer_public.html"%>
+    </div>
+</div>
+
+
+<!-- script:s -->
+<script type="text/javascript">
+	var BASE_PATH = '<%=request.getContextPath()%>';
+	var SERVER_DATE = '<%=date.get("current")%>';
+</script>
+<script type="text/javascript" src="http://qunarzz.com/apt_web/prd/scripts/base@<%@include file="ver/scripts/base.js.ver" %>.js"></script>
+<script type="text/javascript" src="http://qunarzz.com/apt_web/prd/scripts/home@<%@include file="ver/scripts/home.js.ver" %>.js"></script>
+<!-- script:e -->
+</body>
+</html>

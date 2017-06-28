@@ -1,0 +1,20 @@
+function Smile() {
+	const INSTANCE = Symbol.for('hello world');
+
+	if (Smile[INSTANCE]) {
+		return Smile[INSTANCE];
+	} else {
+		var countSmile = 0;
+		var smile = () => {
+			console.log('Big smile: ' + countSmile++);
+		}
+		return Smile[INSTANCE] = {smile};
+	}
+}
+
+var a = Smile();
+var b = Smile();
+a.smile();
+b.smile();
+a.smile();
+console.log(a === b);

@@ -1,0 +1,41 @@
+/**
+ * @file 数据业务逻辑
+ * @author ss.feng@qunar.com
+ */
+var Schema = mongoose.Schema,
+	ObjectId = Schema.ObjectId;
+
+var schema = new Schema({
+	version: String,
+	zipPath: String,
+	loadMode: String,
+	isForce: String,
+	updateInfo: {
+		date: Date,
+		packageSize: String,
+		message: String
+	},
+	craeteTime: { type: Date, default: Date.now }
+});
+
+var configModel = mongoose.model('Config', schema, 'config');
+
+// 查询所有资源包配置
+exports.getAllConfig = function(callback) {
+	var fields = '-_id';
+	var options = {sort: 'createTime'};
+	configModel.find({})
+		.sort({craeteTime: -1}).limit(2).exec(callback);
+};
+
+// 增加新增配置
+exports.saveConfig = function(data, callback) {
+	configModel.create(data, callback);
+};
+
+// 查询最新的资源包配置
+exports.getLastConfig = function(callback) {
+	var fields = '-_id -__v';
+	configModel.findOne({})
+		.sort({craeteTime: 'asc'}).exec(callback);
+};

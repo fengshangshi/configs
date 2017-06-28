@@ -1,0 +1,32 @@
+var superagent = require('superagent');
+
+var url = "http://qunarmeeting.corp.qunar.com/entry/addRepeat";
+
+var cookie = 'JSESSIONID=9CEE58C6B924FE2CE28DECA35CA62605; login_id=ss.feng; login_time=1476867264570; login_token=66788a32887ecbef2ceb3f467d3f7b0b;';
+
+var data = {
+	bookerRtx: 'ss.feng',
+	bookerPhone: '13717996733',
+	conferenceName: '前端周例会',
+	description: '前端周例会',
+	startDate: '2016-10-24',
+	endDate: '2016-11-18',
+	startTime: '15:00',
+	endTime: '15:30',
+	roomID: 129,
+	type: 'I',
+	repeatType: 1,
+	weekArray: 1
+};
+
+superagent.post(url)
+	.send(data)
+	.set('Referer', 'http://qunarmeeting.corp.qunar.com/')
+	.set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36')
+	.set('Origin', 'http://qunarmeeting.corp.qunar.com')
+	.set('X-Requested-With', 'XMLHttpRequest')
+	.set('Host', 'qunarmeeting.corp.qunar.com')
+	.set('Cookie', cookie)
+	.end(function(res) {
+		console.log(res);
+	});

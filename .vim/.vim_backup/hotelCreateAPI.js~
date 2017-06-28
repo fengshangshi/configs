@@ -1,0 +1,36 @@
+/**
+ * 新增门店接口
+ * @author water.li
+ */
+
+module.exports = function(options) {
+    var ajax = require('biz/ajax'),
+        error = require('biz/error'),
+        loading = Q.hub.loading || require('common/action/loading/index');
+
+    var data = options.data ? options.data : {},
+        callback = options.callback,
+        failcallback = options.failcallback;
+
+	data['source'] = 'KEZHANTONG';
+	debugger;
+
+    ajax({
+        url: '/api/hotel/create',
+        type: 'POST',
+        data: data,
+        success: function(res) {
+            if (error(res)) {
+                loading.hide();
+                if (failcallback && typeof failcallback === 'function') {
+                    failcallback(res.data);
+                }
+                return;
+            }
+
+            if (callback && typeof callback === 'function') {
+                callback(res.data);
+            }
+        }
+    });
+};

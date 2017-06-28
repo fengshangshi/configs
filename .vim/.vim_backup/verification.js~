@@ -1,0 +1,33 @@
+/**
+ * @file 登录验证
+ * @author yingran.wang
+ */
+var md5 = require('crypto-md5');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:6228/test', {
+		user: 'test',
+		pass: '111111'
+});
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+var User = require('../../model/user');
+module.exports = function(userId, password, callback) {
+		var status = false;
+
+		User.findOne({userName: userId}, function(err, user) {
+				console.log(user);
+				if (!err && user != null) {
+						if (user['password'] == password) {
+								status = true;
+						}
+				}
+
+				callback && callback(status, {
+						userId: userId,
+						userName: user['nickName'],
+						userType: user['userType'] 
+				});
+		});
+};

@@ -1,0 +1,85 @@
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+let DEV = process.env.NODE_ENV === 'DEV';
+let PRD = process.env.NODE_ENV === 'PRD';
+
+let entry = PRD ?  ['./src/index.js'] : [
+	'./src/index.js',
+	'webpack-dev-server/client?htpp://localhost:8080',
+	'webpack/hot/only-dev-server',
+];
+
+let plugins = PRD ? [
+	new webpack.optimize.UglifyJsPlugin({
+		comments: true,
+		mangle: false,
+		compress: {
+			warnings: true,
+		}
+	}),
+	new ExtractTextPlugin('style.css'),
+] : [
+	new webpack.HotModuleReplacementPlugin(),
+	new webpack.DefinePlugin({
+		DEVELOPMENT: JSON.stringify(DEV),
+		PRODUCTION: JSON.stringify(PRD),
+	}),
+];
+
+let cssIdentName = PRD ? '[hash:base64:10]' : '[path][name]-[local]-[hash:base64:24]';
+let cssLoader = PRD ? ExtractTextPlugin.extract({
+	fallbackLoader: 'style-loader',
+	loader: 'css-loader?localIdentName=' + cssIdentName,
+}) : [
+	'style-loader',
+	'css-loader?localIdentName=' + cssIdentName,
+];
+
+module.exports = {
+	devtool: 'source-map',
+	entry: entry,
+	output: {
+		filename: 'bundle.js',
+		path: path.join(__dirname, 'dist'),
+		publicPath: '/dist/',
+	},
+	plugins: plugins,
+	module: {
+		loaders: [
+			{
+				test: /\.js$/,
+				exclude: '/node_modules/',
+				loader: 'babel-loader',
+			},
+			{
+				test: /\.(jpg|gif|png)$/,
+				exclude: '/node_modules/',
+				loader: 'url-loader?limit=512&name=[path][name].[ext]?[hash]',
+			},
+			{
+				test: /\.css$/,
+				exclude: '/node_modules/',
+				loader: cssLoader,
+			},
+		]
+	},
+	resolve: {
+		modules: [
+			"node_modules",
+			path.join(__dirname, 'src'),
+		],
+		extensions: ['.js', '.json', '.jsx', '.css', '.gitf'],
+	},
+	devServer: {
+		hot: true,
+		publicPath: '/dist/',
+		stats: {
+			colors: true,
+		},
+	},
+	performance: {
+		hints: false,
+	},
+};

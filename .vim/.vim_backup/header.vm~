@@ -1,0 +1,18 @@
+<div class="psp-header fn-clear">
+	<div class="header">
+		<a href="javascript:;" class="psp-logo">
+			<div class="psp-log-icon"></div>
+		</a>
+		<a href="javascript:;" class="psp-title">
+			<div class="psp-icon psp-header-copy"></div>
+		</a>
+        <div class="psp-aLink">
+            <ul>
+                <li>
+										<span>!${_USER_INFO.loginAccount}</span>
+                    <a href="javascript:;" class="psp-out">登出</a>
+                </li>
+            </ul>
+        </div>
+	</div>
+</div>

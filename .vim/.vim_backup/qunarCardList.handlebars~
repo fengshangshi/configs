@@ -1,0 +1,26 @@
+{{#if data.list}}
+    {{#each this.data.list}}
+    <tr>
+        <td>{{couponName}}</td>
+        <td>{{couponNoDecode}}</td>
+        <td>{{obtainTime}}</td>
+        <td>{{disableTime}}</td>
+        <td>￥{{amount}}</td>
+        <td>￥{{balance}}</td>
+        <td>
+            <span class="status-{{couponStatus}}">
+                {{status couponStatus}}
+            </span>
+        </td>
+        <td>
+            <a href="/member/asset/qunarCard/qunarCardDetail.htm?couponNo={{couponNo}}">
+                查看详情
+            </a>
+        </td>
+    </tr>
+    {{/each}}
+{{else}}
+    <tr>
+        <td colspan="8">暂无旅行卡</td>
+    </tr>
+{{/if}}

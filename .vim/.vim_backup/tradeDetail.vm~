@@ -1,0 +1,51 @@
+#parse("/widget/include/global.vm")
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+    <title>【去哪儿】交易记录详情</title>
+    <meta name="keywords" content="$!{keywords}" />
+    <meta name="description" content="$!{description}" />
+    <link rel="stylesheet" 
+    href="${qzzUrl}${cssPath}/trade/tradeDetail.css" />
+  </head>
+  <body>
+    #parse("widget/header/header.vm")
+	  #parse("widget/nav/nav.vm")
+    <div class="trade container">
+        <div class="trade-main">
+            <div class="trade-main-title">
+                <h3>
+                    交易记录详情
+                </h3>
+            </div>
+            <div class="trade-main-detail">
+                <div class="trade-main-detail-con trade">
+                    <table class="">
+                        <colgroup>
+                            <col width="30%">
+                                <col width="70%">
+                        </colgroup>
+                        <tbody>
+                            #foreach( $item in $tplData.tradeDetail );
+                            <tr>
+                                <td class="center">
+                                    {{ $item.name }}
+                                </td>
+                                <td>
+                                    {{ $item.value }}
+                                </td>
+                            </tr>
+                            #end
+                        </tbody>
+                    </table>
+                    <a href="index.htm" class="back">
+                        返回
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+	  #parse("widget/footer/footer.vm")
+  </body>
+</html>

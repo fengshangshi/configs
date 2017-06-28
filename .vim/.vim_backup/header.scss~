@@ -1,0 +1,115 @@
+/**
+ * 头部样式
+ * @auhtor yingran.wang@qunar.com
+ */
+.q-header {
+     position: fixed;
+     min-width: 1200px;
+     height: 60px;
+     top: 0;
+     z-index: 999;
+     width: 100%;
+     background: #5aad6e url(http://source.qunarzz.com/qhh_crm_web/layout/header-bg.png) repeat-y;
+     background-size: 100%;
+
+     .logo {
+         float: left;
+         height: 60px;
+         margin: 0 20px 0 15px;
+
+         a {
+             display: inline-block;
+             position: relative;
+             width: 230px;
+             line-height: 60px;
+             background: url(http://source.qunarzz.com/qhh_crm_web/logo/logo.png) left center no-repeat;
+             background-size: 108px 40px;
+             vertical-align: middle;
+             text-align: right;
+             color: #fff;
+             font-size: 24px;
+
+             &:after {
+                position: absolute;
+                left: 122px;
+                top: 12px;
+                content: '';
+                width: 2px;
+                height: 35px;
+                background: #89C69E;
+             }
+         }
+     }
+
+
+     .nav-top {
+         float: left;
+         li {
+             float: left;
+             height: 60px;
+             line-height: 60px;
+             padding: 0 10px;
+             font-size: 14px;
+
+             &.active {
+                 background-color:rgba(0,0,0,0.2);
+                 a {
+                     color: #fff;
+                 }
+             }
+         }
+
+         a {
+             display: block;
+             color: #fff;
+             &:hover {
+                 color: rgba(255,255,255,0.7);
+             }
+         }
+     }
+
+     .login-info {
+        margin-right: 15px;
+        margin-top: 24px;
+        color: #fff;
+        float: left;
+
+        a{
+            color: #fff;
+            &:hover {
+                color: rgba(255,255,255,0.7);
+            }
+            & + a {
+                &:before {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin: 0 8px;
+                    content: '';
+                    background: #fff;
+                    width: 1px;
+                    height: 12px;
+                }
+            }
+        }
+     }
+
+}
+.nav-other {
+    float: left;
+    margin: 0 30px 0 0;
+    font-size: 14px;
+    line-height: 60px;
+
+    & > li {
+        float: left;
+        margin-left: 20px;
+    }
+
+    a {
+        color: #fff;
+    }
+}
+
+a:hover, a:active {
+		text-decoration: none;
+}

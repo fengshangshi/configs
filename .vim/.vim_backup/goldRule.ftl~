@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+        <meta name="description" content="去呼呼管家是非标准住宿市场广为使用的客房管理系统，帮助管理者智能规划不同房型的占房计划，及价格计划，提供强有力的数据报表及收益分析，帮助管理者做出正确的决策。去呼呼管家不仅提供了房态，订单，账务，客史等基本功能，还提供渠道直连，店铺直销等协助管理者增加宣传和销售的整套解决方案。">
+        <meta name="keywords" content="非标住宿，智能门锁，密码开门，客栈管理系统，免费公寓管理系统，公寓管理，OTA数据同步，房态管理，免费PMS，房态管理系统">
+        <title>赚呼豆赢豪礼 - 去呼呼管家</title>
+        <link rel="shortcut icon" href="/resources/static/images/base/bitbug_favicon.ico">
+        <style type="text/css">
+            /* 页面背景默认为白色 */
+            html {
+                background:#fff;
+            }
+            /* 全局字体设置 */
+            body {
+                font:12px/1.5 tahoma,arial,simsun,sans-serif;
+                color:#555;
+            }
+            /* 去除浏览器不一致的内外间距 */
+            body,p,dl,dd,ul,ol,form,caption,h1,h2,h3,h4,h5,h6 {
+                margin: 0;
+                padding: 0;
+            }
+            /* 去掉列表前的标识 */
+            ol,ul {
+                list-style:none;
+            }
+            /* 去除默认情况下img的边框，并让图片居中对齐 */
+            img {
+                border: none 0;
+                vertical-align: middle;
+            }
+            h1,h2,h3,h4,h5,h6 {
+                font-size:100%;
+                font-weight:500;
+            }
+            a {text-decoration:none;color: #333;}
+            a:hover {text-decoration:underline}
+            .act-banner {
+                background: #D24033 url(http://source.qunar.com/srm/act/goldCoins/goldHead5.png) top center no-repeat;
+                height: 302px;
+                position: relative;
+                margin: 0 auto 20px;
+            }
+            .coins-tip {
+                background: url(http://source.qunar.com/srm/act/goldCoins/mask.png) repeat-x;
+                color: #fff;
+                text-align: center;
+                height: 25px;
+                line-height: 24px;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+            }
+            .act-cont-wrap {
+                background: #fff;
+                padding: 20px 0 30px;
+            }
+            .act-even-wrap {
+                background: #F6F6F6;
+            }
+            .act-cont {
+                margin: 0 auto;
+                width: 990px;
+            }
+            .act-rule {
+                display: inline-block;
+                *display: inline;
+                *zoom: 1;
+                vertical-align: middle;
+                width: 400px;
+                margin: 0 100px 0 10px;
+            }
+            .act-even-wrap .act-rule {
+                margin: 0 0 0 75px;
+            }
+            .rule-head {
+                font-size: 20px;
+                border-bottom: 2px solid #c1f0fa;
+                font-weight: 700;
+                font-family: "Microsoft YaHei";
+                margin-bottom: 15px;
+                margin-top: -20px;
+            }
+            .coins-num {
+                font-size: 42px;
+                color: #ff6228;
+                font-weight: 400;
+                font-family: tahoma;
+            }
+            .rule-cont {
+                line-height: 2;
+            }
+            .act-img {
+                display: inline-block;
+                *display: inline;
+                *zoom: 1;
+                width: 440px;
+                text-align: center;
+            }
+            .act-img .rule-confirm{
+                width: 420px;
+            }
+            .backtop {
+                position:fixed;
+                left:50%;
+                bottom:80px;
+                margin-left:520px;
+                z-index:1000;
+                display:none;
+                width:45px;
+                height:45px;
+                overflow:hidden;
+            }
+            .act-footer {
+                background: #f6f6f6;
+                color: #888;
+                text-align: center;
+                padding: 8px;
+            }
+            .backtop-button {
+                display:block;
+                width:45px;
+                height:45px;
+                background:url(http://source.qunar.com/apt_q_web/common/icon-backtop.png) no-repeat;
+            }
+            .backtop-button:hover {
+                background-position:-45px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="coinsContainer" class="coins-container">
+            <div class="act-banner">
+                <div class="coins-tip">呼豆是对商户使用去呼呼管家的一种奖励。呼豆不具有实际的市场价值，不得进行交易或转让，仅可用于兑换去呼呼管家中提供的礼品。</div>
+            </div>
+            <div class="act-cont-wrap act-even-wrap">
+                <div class="act-cont">
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule10_new.jpg" />
+                    </div>
+                    <div class="act-rule">
+                        <h3 class="rule-head">分享“我的店铺”最高可赚<span class="coins-num">3000</span>呼豆</h3>
+                        <div
+                            class="rule-cont">消费者通过“我的店铺”下单，形成有效订单即可计入呼豆奖励范围，该奖励要求商家真实办理消费者入住或离店，奖励账号为操作分享的账号。每周一结算上周订单，并发放呼豆。快到【网上开店】中的【分享我的店铺】将店铺分享给客人吧！</div>
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap">
+                <div class="act-cont">
+                    <div class="act-rule">
+                        <h3 class="rule-head">首次开通渠道直连赚<span class="coins-num">300</span>呼豆</h3>
+                        <div class="rule-cont">开通渠道直连后，对于每个与去呼呼管家的门店完成匹配的渠道公寓，从当天开始，每天奖励10呼豆，如果中途解除直连或取消公寓匹配，则停止奖励，重新匹配后可继续获取剩余奖励，最多奖励300呼豆，奖励账号为最新操作账号，仅限去哪儿网、携程、艺龙、美团。</div>
+                    </div>
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule1_new.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap act-even-wrap">
+                <div class="act-cont">
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule2_new.png" />
+                    </div>
+                    <div class="act-rule">
+                        <h3 class="rule-head">首次开通自动确认赚<span class="coins-num">300</span>呼豆</h3>
+                        <div class="rule-cont">开通渠道直连后，对于每个与去呼呼管家的门店完成匹配的渠道公寓，如开通自动确认，从当天开始，每天奖励10呼豆，如果中途解除直连、取消公寓匹配或关闭自动确认，则停止奖励，重新开通或匹配后可继续获取剩余奖励，最多奖励300呼豆，奖励账号为最新操作账号，仅限去哪儿网、携程、艺龙。</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="act-cont-wrap">
+                <div class="act-cont">
+                    <div class="act-rule">
+                        <h3 class="rule-head">首次开通自动住店审核赚<span class="coins-num">300</span>呼豆</h3>
+                        <div class="rule-cont">开通渠道直连后，对于每个与去呼呼管家的门店完成匹配的渠道公寓，如开通自动住店审核，从当天开始，每天奖励10呼豆，如果中途解除直连、取消公寓匹配或关闭自动住店审核，则停止奖励，重新开通或匹配后可继续获取剩余奖励，最多奖励300呼豆，奖励账号为最新操作账号，仅限去哪儿网、携程、艺龙。</div>
+                    </div>
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule3_new.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap act-even-wrap">
+                <div class="act-cont">
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/4.png" />
+                    </div>
+                    <div class="act-rule">
+                        <h3 class="rule-head">首次开通自动分房赚<span class="coins-num">300</span>呼豆</h3>
+                        <div class="rule-cont">开通渠道直连后，对于每个与去呼呼管家的门店完成匹配的渠道公寓，如开通自动分房（开启任意选项即算开通），从当天开始，每天奖励10呼豆，如果中途解除直连、取消公寓匹配或关闭自动分房，则停止奖励，重新开通或匹配后可继续获取剩余奖励，最多奖励300呼豆，奖励账号为最新操作账号，仅限去哪儿网、携程、艺龙。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap">
+                <div class="act-cont">
+                    <div class="act-rule">
+                        <h3 class="rule-head">自动确认订单赚<span class="coins-num">20</span>呼豆</h3>
+                        <div class="rule-cont">消费者下单后，如果完成自动确认，直接奖励20呼豆，奖励账号为开通自动确认的账号，仅限去哪儿网、携程、艺龙。</div>
+                    </div>
+                    <div class="act-img">
+                        <img class="rule-confirm" src="http://source.qunar.com/srm/act/goldCoins/rule_confirm_v2.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap act-even-wrap">
+                <div class="act-cont">
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule7_new.png" />
+                    </div>
+                    <div class="act-rule">
+                        <h3 class="rule-head">自动分房赚<span class="coins-num">10</span>呼豆</h3>
+                        <div class="rule-cont">设置自动分房，渠道订单自动分房成功后，该去呼呼管家账户获得10呼豆。该奖励要求商家真实办理消费者入住或离店，并在渠道确认消费者入住或离店。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap">
+                <div class="act-cont">
+
+                    <div class="act-rule">
+                        <h3 class="rule-head">手动分房赚<span class="coins-num">10</span>呼豆</h3>
+                        <div class="rule-cont">商家对渠道直连的订单进行分房操作，可获取10呼豆奖励。该奖励要求商家真实办理消费者入住或离店，并在渠道确认消费者入住或离店。</div>
+                    </div>
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule8_new.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="act-cont-wrap act-even-wrap">
+                <div class="act-cont">
+                    <div class="act-img">
+                        <img src="http://source.qunar.com/srm/act/goldCoins/rule9_new.png" />
+                    </div>
+                    <div class="act-rule">
+                        <h3 class="rule-head">自动住店审核赚<span class="coins-num">100</span>呼豆</h3>
+                        <div class="rule-cont">商户在去呼呼管家办理离店，如对应渠道订单完成自动住店审核，奖励100呼豆，奖励账号为最新操作账号，仅限去哪儿网、携程、艺龙。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="act-footer">
+                说明：仅支持处理真实订单所获得的呼豆，诸如取消订单、非真实入住订单、零佣金订单等非真实订单，不支持兑换，且将被扣除所获得的呼豆。在法律许可范围内，以上活动解释权归去呼呼管家所有。
+            </div>
+        </div>
+        <div id="backTop" class="backtop"><a href="#coinsContainer" class="backtop-button"></a></div>
+        <script type="text/javascript">
+            (function(){
+                var backTop = document.getElementById("backTop");
+                var winHeight = document.documentElement.clientHeight || document.body.clientHeight;
+                window.onscroll = function (){
+                    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                    if (scrollTop == 0) {
+                        backTop.style.display = "none";
+                    }
+                    if(scrollTop>=100) {
+                        backTop.style.display = "block";
+                    }
+                }
+            })();
+        </script>
+    </body>
+</html>

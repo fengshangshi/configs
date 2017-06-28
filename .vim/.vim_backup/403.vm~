@@ -1,0 +1,28 @@
+## @Describe: 无权限页面
+## @author ss.feng@qunar.com
+## @date  2016.05.05
+
+#parse("widget/_include/global.vm")
+<!DOCTYPE html>
+<html>
+<head>
+	<title>403，你无权限操作</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<link rel="stylesheet" href="${qzzUrl}/${cssPath}/pages/privilege.css" />
+	#parse("widget/_include/headScript.vm")
+</head>
+<body>
+#parse("widget/_include/header.vm")
+
+<div class="container">
+		<div class="content">
+				<p>对不起，您没有操作此系统的权限！</p>
+				<p><span id="countdown">5</span>秒钟后将自动跳转至权限导航页面</p>
+				<p><a href="/privilege/list.htm">点击此处</a>直接跳转</p>
+		</div>
+</div>
+
+<script src="${qzzUrl}/${jsPath}/pages/privilege/403/entry.js"></script>
+</body>
+</html>

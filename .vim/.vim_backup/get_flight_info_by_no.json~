@@ -1,0 +1,59 @@
+{
+    "__info__": {
+        "description": "根据输入的航班号获取航班信息",
+        "params": {
+            "flight_no": {
+                "description": "航班号",
+                "type": "string",
+                "additional_remarks": ""
+            }
+        }
+    },
+
+    "error": 0,
+
+    "data": {
+        "flight_no": "CA6688",
+        "status": 2,
+        "base_info": {
+            "flight_no": "CA6688",
+            "pic": "/static/flight_pic_CA6688.png",
+            "age": 9,
+            "model": "波音767",
+            "company": {
+                "name": "中国航空",
+                "icon": ""
+            }
+        },
+        "take_off_and_land": [
+            {
+                "departure": {
+                    "byname": "首都机场",
+                    "terminal": "T3",
+                    "city_name": "北京",
+					"point": {
+						"lng": 116.29234,
+						"lat": 36.9992
+					}
+                },
+                "destination": {
+                    "byname": "浦东机场",
+                    "terminal": "T2",
+                    "city_name": "上海",
+					"point": {
+						"lng": 116.29234,
+						"lat": 36.9992
+					}
+                },
+                "plan": {
+                    "launch": 1408783299482,
+                    "landing": 1408786000000
+                },
+                "actual": {
+                    "launch": 1408783299482,
+                    "landing": null
+                }
+            }
+        ]
+    }
+}

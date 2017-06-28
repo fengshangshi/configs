@@ -1,0 +1,75 @@
+/**
+ * 获取支行
+ * @author ss.feng@qunar.com
+ */
+var $ = require("jquery/jquery.js");
+require("jquery/jquery.selector.js");
+var message = require("message/message.js");
+var service = require("module/service/ajax.js");
+
+message.register("fetchBranch", function(e) {
+	var args = e.args,
+		form = args.form,
+		provinceId = args.provinceId,
+		cityId = args.cityId,
+		bankCode = args.bankCode;
+
+	message.fire("resetBranch", {
+		form: form
+	});
+
+	var data = {
+		provinceCode: provinceId,
+		cityCode: cityId,
+		bankCode: bankCode
+	};
+
+	service.ajax({
+		url: "/member/asset/balance/fetchBranchApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			var dataList = [];
+			dataList.push("<option value='0'>请选择支行</option>");
+
+			if (data.errorCode == 0) {
+				var list = data.data.list;
+				for (var i = 0, l = list.length; i < l; i++) {
+					var html = [
+						"<option value='" + list[i].subbranchcode,
+						"|" + list[i].subbranchname+"'>",
+						list[i].subbranchname + "</option>"
+					];
+					dataList.push(html.join(""));
+				}
+			}
+
+
+			form = form + " select[name=branchBankCode]";
+			$(form).html(dataList);
+
+			var options = {
+				selectors: {}
+			};
+			options.selectors[form] = "";
+			message.fire("initSelector", options);
+		}
+	});
+});
+
+// 重置支行
+message.register("resetBranch", function(e) {
+	var args = e.args,
+		form = args.form;
+
+	var dataList = [];
+	dataList.push("<option value='0'>请选择支行</option>");
+
+	form = form + " select[name=branchBankCode]";
+	$(form).html(dataList);
+
+	var options = {
+		selectors: {}
+	};
+	options.selectors[form] = "";
+	message.fire("initSelector", options);
+});

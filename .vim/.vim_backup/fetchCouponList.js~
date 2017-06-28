@@ -1,0 +1,93 @@
+/**
+ * 获取红包列表
+ * @author ss.feng@qunar.com
+ */
+require("handlebars/handlebars.js");
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var template = require("../template/couponList.handlebars");
+var pageHtml = require("module/page/page.js");
+var service = require("module/service/ajax.js");
+var dateMaker = require("utils/dateFormat.js");
+
+// 获取红包
+message.register("fetchCouponList", function(e) {
+	var args = e.args,
+		page = args.page || 1,
+		step = args.step || 10,
+		type = args.type || 3,
+		sortName = args.sortName || "obtainTime",
+		sortOrder = args.sortOrder || "desc";
+
+	var data = {
+		pageNum: page,
+		pageSize: step,
+		type: type,
+		sortName: sortName,
+		sortOrder: sortOrder
+	};
+	
+	//更新列表数据
+	service.ajax({
+		url: "/member/asset/coupon/fetchCouponListApi.htm",
+		data: data,
+		onsuccess: function(data) {
+			// 对期权红包的判断
+			// 判断策略：红包号为18位 
+			Handlebars.registerHelper("option", function(couponNo, options) {
+				return couponNo.length === 18 ? 
+					options.fn(this) : options.inverse(this);
+			});
+
+			// 对数据列表的判断
+			Handlebars.registerHelper("if", function(list, options) {
+				return list.length > 0 ? 
+					options.fn(this) : options.inverse(this);
+			});
+
+			// 状态
+			Handlebars.registerHelper("status", function(status) {
+				var text = "";
+				switch (status) {
+					case 0:
+						text = "可使用";
+						break;
+					case 1:
+						text = "已用完";
+						break;
+					case 2:
+						text = "已过期";
+						break;
+				}
+				return text;
+			});
+
+			// 时间戳格式化
+			// Handlebars.registerHelper("dateformat", function(item) {
+			// 	var date = new Date( item );
+			// 	return dateMaker.formatDate( date );
+			// });
+
+			$(".detail-wrap .data-list tbody").html(template(data));
+			$(".detail-wrap .page-wrap").empty().append(pageHtml(data.data.page));
+		}
+	});
+});
+
+message.register("fetchCouponTotal", function(e) {
+	//更新金额总数
+	service.ajax({
+		url: "/member/asset/coupon/couponTotalApi.htm",
+		onsuccess: function(data) {
+			//更新旅行卡总额，可用金额，可用个数
+			if(data.errorCode == 0){
+				$(".summary-left strong").html(data.data.usableMoney || "0.00");
+				$(".summary-middle strong").html(data.data.usableMoney || "0.00");
+				$(".summary-right strong").html(data.data.usableCount || "0");
+			}
+		}
+	});
+
+});
+
+message.fire(["fetchCouponList", "fetchCouponTotal"]);

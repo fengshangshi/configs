@@ -1,0 +1,35 @@
+/**
+ * @file mysql 数据库连接
+ * @author fengshangshi
+ */
+var orm = require('orm');
+
+module.exports = function() {
+		var host = config.db['host'];
+		var port = config.db['port'];
+		var user = config.db['user'];
+		var pass = config.db['pass'];
+		var db = config.db['db'];
+		
+		var options = {
+				host: host,
+				database: db,
+				protocol: 'mysql',
+				port: port,
+				user: user,
+				password: pass,
+				query: {pool: true}
+		};
+
+		var db = global.conn = orm.connect(options);
+
+		db.on('connect', function(err) {
+				if (err) {
+						logger.error('mysql数据库连接错误, error: ' + err);
+				}
+		});
+
+		return function(req, res, next) {
+				next();
+		};
+};

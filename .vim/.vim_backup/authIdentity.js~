@@ -1,0 +1,127 @@
+/**
+ * 验证身份信息操作
+ */
+var $ = require("jquery/jquery.js");
+var message = require("message/message.js");
+var form = require("common/module/formValidator/formValidator.js").formValidater;
+
+var DOM = {
+	"FORMCON" : ".identity-form",
+	"SUBMITBTN": ".authIdentityNext",
+	"ACCOUNTNAME": ".id-account-name",
+	"REALNAME" : ".id-real-name",
+	"IDNUMBER" : ".id-number",
+	"BOXTYPE" : ".auth-box",
+	"AUTHIDENTITY": ".auth-identity",
+	"BOXCONTAINER" : ".box-container",
+	"AUTHBANK": ".auth-bankCard",
+	"INFOPROMPT": ".id-info-prompt",
+	"SHOWINFO": ".show-info-con"
+};
+
+var AJAXURL = "/member/security/identityInfoCheckApi.htm";
+
+//保存Form参数信息
+var identityOpts = {};
+
+var ajax = function(url, opts, successCallback){
+     $.ajax({
+        type: "POST",
+        url: url,
+        data: opts,
+        dataType: "json",
+        success: function(data){
+            if( successCallback && 
+                (typeof successCallback ==="function")  ){
+               successCallback(data);
+            }
+        }
+    });
+};
+
+//身份验证成功处理
+var authIdentityOKHandle = function( data ){
+	$(DOM.BOXTYPE).hide();
+	//trigger弹出银行列表
+	$(".form-card-item").trigger("click");
+
+	$(DOM.AUTHBANK).show();
+
+};
+
+//身份占用处理
+var authIdentityOCHandle = function(data){
+	$(DOM.AUTHIDENTITY).find(DOM.BOXCONTAINER).hide();
+	$(DOM.AUTHIDENTITY).find(DOM.INFOPROMPT).show();
+	var str = [],
+		len = data.length;
+
+	for(var i=0; i<len; i++){
+		str += "<p><span>账号"+(i+1)+":</span>"+data[i].uid+"</p>";
+	}
+	$(DOM.AUTHIDENTITY).find(DOM.SHOWINFO).empty().append(str);
+};
+
+//系统出错 or 身份验证失败
+var authIdentityEHandle = function(errorCode, msg){
+	//跳转不同的错误页面
+	if(errorCode === 1){
+		//系统错误
+	}
+	else{
+
+	}
+};
+
+var authIdentityHandle = function( data ){
+	switch( data.errorCode ){
+		case "0" : 
+				  authIdentityOKHandle(identityOpts);
+				  break;
+
+		case "2": 
+				 authIdentityOCHandle(
+				   data.appealQunaruserList
+				 );
+				 break;
+
+		default: authIdentityEHandle(
+								data.errorCode, 
+								data.errorMag
+				 			);
+				 break;
+	}
+};
+
+form.initForm(DOM.FORMCON ,DOM.SUBMITBTN,{
+	events : ['blur'],
+	successCallback: function(){
+		//向后端发起请求，验证身份信息
+		//隐藏第一步，填充显示身份信息是否被占用面板
+		identityOpts = {
+			userName: $(DOM.REALNAME).val(),
+			idCards: $(DOM.IDNUMBER).val()
+		};
+		ajax(AJAXURL, identityOpts, authIdentityHandle);
+	}
+});
+
+
+//"账号是我的"监听处理
+//进入第二步，银行卡信息验证
+message.register("idInfoIsMy", function(e) {
+	identityOpts["isMeFlag"] = true;
+	ajax(AJAXURL, identityOpts, authIdentityHandle);
+});
+
+//"账号不是我的"监听处理
+//带入该用户身份信息进入申诉流程
+message.register("idInfoIsNotMy", function(e) {
+
+	//message.fire("authIdInfoPushToAppeal",identityOpts);
+	//新建一个form，将身份信息传入identityAppeal.htm页面
+	ajax(AJAXURL, identityOpts, function(){
+		window.location = "identityAppeal.htm";
+	});
+	
+});

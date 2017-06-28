@@ -1,0 +1,89 @@
+/*[export]*/
+/**
+ * 充值退还样式
+ */
+require("../../base.css");
+require("../common.css");
+require("../../../common/menu.css");
+require("../../../common/loading.css");
+require("../../../common/jquery-ui.css");
+
+.data-list {
+    margin-top: 0;
+}
+
+.module-ft .page {
+    padding: 20px 0;
+}
+
+/*
+ * ui-dialog css patch
+ */
+.dialog p {
+	text-align: center;
+}
+
+.dialog .tips {
+	padding: 20px 0;
+}
+
+.dialog .dialog-button {
+	display: inline-block;
+	padding: .4em 2.2em;
+	text-decoration: none;
+	margin: 0 5px;
+}
+
+.dialog .dialog-button-submit {
+	background: #ff8001;
+	color: #fff;
+}
+
+.dialog .dialog-button-submit:hover {
+	background: #ff7900;
+}
+
+.dialog .dialog-button-cancel {
+	background: #c1c1c1;
+	color: #333;
+}
+
+.dialog .dialog-button-cancel:hover {
+	background: #c2c2c2;
+}
+
+
+.loading {
+	margin: 20px auto;
+}
+
+.tips{
+	color: #666;
+	padding-bottom: 5px;
+}
+
+.wenxin-tips{
+	padding-top: 36px;
+}
+
+.wenxin-tips h3{
+	font-size: 14px;
+	font-weight: 700;
+	margin-bottom: 8px;
+	color: #333;
+}
+
+.wenxin-tips p{
+	color: #666;
+	line-height: 20px;
+}
+
+.wenxin-tips p label{
+	display: inline-block;
+	padding-right: 3px;
+	font-size: 13px;
+}
+
+.ask-wrap {
+	margin-top: 0;
+}
